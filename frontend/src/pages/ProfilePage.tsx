@@ -1,328 +1,645 @@
-import { useState } from 'react';
-import { Mail, Phone, MapPin, Briefcase, GraduationCap, Compass, Settings, Camera, PenSquare, ArrowRight, Bookmark, MoveRight, FileText, CheckCircle2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { Helmet } from 'react-helmet-async';
+import { motion } from 'motion/react';
+import {
+    ArrowRight,
+    BadgeCheck,
+    BookOpen,
+    Camera,
+    GraduationCap,
+    ImageUp,
+    Link2,
+    MapPin,
+    Phone,
+    Sparkles,
+    UserRound,
+} from 'lucide-react';
+import { toast } from 'sonner';
+import { Avatar } from '../components/ui/Avatar';
+import { Badge } from '../components/ui/Badge';
+import { Button, buttonVariants } from '../components/ui/Button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
+import { EmptyState } from '../components/ui/EmptyState';
+import { Input } from '../components/ui/Input';
+import { Skeleton } from '../components/ui/Skeleton';
+import { useAuth } from '../contexts/AuthContext';
+import { toApiAssetUrl, type AuthUser, type Gender } from '../lib/authApi';
+import { getErrorMessage } from '../lib/appError';
+import { assessmentApi } from '../lib/assessmentApi';
+import { assessmentQueryKeys } from '../lib/assessmentQueryKeys';
+import { mentorApi, formatMentorHourlyRate, getMentorHeadline } from '../lib/mentorApi';
+import { mentorQueryKeys } from '../lib/mentorQueryKeys';
+import { getRoleBadge } from '../lib/userDisplay';
+import { userApi } from '../lib/userApi';
+import { cn } from '../lib/utils';
 
-const mockUser = {
-  name: "Nguyễn Trần Sinh Viên",
-  title: "Sinh viên năm 3 - Đại học Bách Khoa TP.HCM",
-  bio: "Đam mê lập trình Frontend, yêu thích tạo ra các sản phẩm web có giao diện đẹp mắt và trải nghiệm người dùng tuyệt vời. Đang tìm kiếm cơ hội thực tập ReactJS trong một môi trường năng động.",
-  avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=256&h=256", // Thay bằng URL avatar thực tế
-  coverImage: "https://images.unsplash.com/photo-1550439062-609e1531270e?auto=format&fit=crop&q=80&w=1200&h=400", // Thay bằng URL ảnh bìa
-  email: "sinhvien.nguyen@hcmut.edu.vn",
-  phone: "0912 345 678",
-  location: "TP. Hồ Chí Minh",
-  social: {
-    github: "github.com/nguyensinhvien",
-    linkedin: "linkedin.com/in/nguyensinhvien",
-  },
-  skills: ["ReactJS", "TypeScript", "Tailwind CSS", "Node.js", "Figma", "UI/UX Design", "Git"],
-  education: [
-    {
-      id: 1,
-      degree: "Kỹ sư Kỹ thuật Phần mềm",
-      school: "Đại học Bách Khoa TP.HCM",
-      year: "2021 - Hiện tại",
-      gpa: "3.5/4.0"
-    }
-  ],
-  testResult: {
-    type: "INTJ - Kiến Trúc Sư",
-    score: 85,
-    matchedCareers: ["Software Architect", "Backend Engineer", "Data Scientist"],
-    description: "Bạn là người có tư duy logic sắc bén, thích cấu trúc lại các hệ thống phức tạp và lên kế hoạch dài hạn. Bạn phù hợp nhất với những vai trò đòi hỏi sự phân tích chuyên sâu."
-  },
-  savedJobs: [
-    { id: 1, title: "Thực tập sinh Frontend (ReactJS)", company: "Tech Unicorn", location: "Quận 1, TP.HCM", salary: "5 - 7 Triệu" },
-    { id: 2, title: "Junior UI/UX Designer", company: "Creative Agency", location: "Quận 3, TP.HCM", salary: "Thỏa thuận" }
-  ],
-  savedMentors: [
-    { id: 5, name: "Hoàng Anh E", role: "Frontend Lead @ TikTok", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=256&h=256" },
-  ]
+type ProfileFormState = {
+    fullName: string;
+    avatarUrl: string;
+    coverImageUrl: string;
+    phoneNumber: string;
+    location: string;
+    birthYear: string;
+    gender: '' | Gender;
+    province: string;
+    schoolOrCompany: string;
+    department: string;
+    bio: string;
+    githubUrl: string;
+    linkedinUrl: string;
+    jobTitle: string;
 };
 
-export function ProfilePage() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'jobs' | 'mentors'>('overview');
+const HISTORY_LIMIT = 5;
+const RECOMMENDED_LIMIT = 3;
 
-  return (
-    <div className="min-h-screen pt-20 pb-24 bg-background relative overflow-hidden">
-      
-      {/* Decorative Blur Backgrounds */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[120px] pointer-events-none -z-10" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10" />
+const inputClassName =
+    'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
+const textAreaClassName =
+    'flex min-h-[132px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
 
-      {/* 1. COVER PHOTO SECTION */}
-      <div className="w-full h-[250px] md:h-[350px] relative">
-        <div className="absolute inset-0 bg-muted/30">
-          <img src={mockUser.coverImage} alt="Cover" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-        </div>
-        
-        {/* Edit Cover Action */}
-        <button className="absolute top-6 right-6 md:right-12 bg-background/50 backdrop-blur-md border border-border/50 text-foreground p-3 rounded-full hover:bg-background/80 hover:text-secondary transition-all shadow-lg active:scale-95 group">
-          <Camera className="w-5 h-5 group-hover:scale-110 transition-transform" />
-        </button>
-      </div>
+const formatDateTime = (value: string | null | undefined) => {
+    if (!value) return 'Chưa có dữ liệu';
+    return new Date(value).toLocaleString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+};
 
-      <div className="container mx-auto px-4 md:px-8 relative z-10 -mt-20 md:-mt-32">
-        {/* Profile Info Header Panel */}
-        <div className="bg-card/80 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] p-6 md:p-10 shadow-xl shadow-secondary/5 mb-8">
-          <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-end">
-            
-            {/* Avatar */}
-            <div className="relative -mt-16 md:-mt-24">
-              <div className="w-32 h-32 md:w-48 md:h-48 rounded-[2rem] border-8 border-card overflow-hidden bg-muted shadow-2xl relative group">
-                <img src={mockUser.avatar} alt={mockUser.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
-                  <Camera className="w-8 h-8 text-white" />
+const normalizeNullable = (value: string) => {
+    const normalized = value.trim();
+    return normalized ? normalized : null;
+};
+
+const createFormState = (user: AuthUser): ProfileFormState => ({
+    fullName: user.fullName ?? '',
+    avatarUrl: user.profile?.avatarUrl ?? '',
+    coverImageUrl: user.profile?.coverImageUrl ?? '',
+    phoneNumber: user.profile?.phoneNumber ?? '',
+    location: user.profile?.location ?? '',
+    birthYear: user.profile?.birthYear ? String(user.profile.birthYear) : '',
+    gender: user.profile?.gender ?? '',
+    province: user.profile?.province ?? '',
+    schoolOrCompany: user.profile?.schoolOrCompany ?? '',
+    department: user.profile?.department ?? '',
+    bio: user.profile?.bio ?? '',
+    githubUrl: user.profile?.githubUrl ?? '',
+    linkedinUrl: user.profile?.linkedinUrl ?? '',
+    jobTitle: user.profile?.jobTitle ?? '',
+});
+
+function ProfileSkeleton() {
+    return (
+        <main className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
+            <div className="space-y-8">
+                <Skeleton className="h-72 rounded-[36px]" />
+                <div className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_380px]">
+                    <Skeleton className="h-[760px] rounded-[32px]" />
+                    <div className="space-y-6">
+                        <Skeleton className="h-56 rounded-[32px]" />
+                        <Skeleton className="h-72 rounded-[32px]" />
+                    </div>
                 </div>
-              </div>
-              <div className="absolute bottom-0 right-0 md:bottom-2 md:right-2 bg-green-500 w-6 h-6 md:w-8 md:h-8 border-4 border-card rounded-full animate-pulse-slow"></div>
             </div>
+        </main>
+    );
+}
 
-            {/* Basic Info */}
-            <div className="flex-1 space-y-2">
-              <h1 className="text-3xl md:text-5xl font-black">{mockUser.name}</h1>
-              <p className="text-lg md:text-xl font-bold text-secondary">{mockUser.title}</p>
-              <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-muted-foreground pt-2">
-                <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> {mockUser.location}</span>
-                <span className="flex items-center gap-1.5"><GraduationCap className="w-4 h-4" /> {mockUser.education[0].school}</span>
-              </div>
-            </div>
+export default function ProfilePage() {
+    const { user, refreshUser } = useAuth();
+    const [form, setForm] = useState<ProfileFormState | null>(user ? createFormState(user) : null);
+    const [formError, setFormError] = useState<string | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const [uploadingTarget, setUploadingTarget] = useState<'avatar' | 'cover' | null>(null);
 
-            {/* Actions */}
-            <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
-              <button className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-secondary text-primary-foreground px-8 py-3 rounded-xl font-bold hover:shadow-lg hover:shadow-secondary/20 transition-all active:scale-95">
-                <PenSquare className="w-4 h-4" />
-                Chỉnh Sửa
-              </button>
-              <button className="bg-background border border-border/50 p-3 rounded-xl hover:bg-muted hover:text-secondary transition-colors text-foreground shadow-sm">
-                <Settings className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
+    useEffect(() => {
+        if (user) {
+            setForm(createFormState(user));
+        }
+    }, [user]);
 
-        {/* 2. MAIN GRID LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* ================= LEFT SIDEBAR ================= */}
-          <div className="lg:col-span-4 space-y-8">
-            
-            {/* Giới thiệu */}
-            <div className="bg-card/80 backdrop-blur-xl border border-border/50 rounded-3xl p-6 shadow-sm">
-              <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><FileText className="w-5 h-5 text-secondary" /> Giới thiệu</h3>
-              <p className="text-muted-foreground font-medium leading-relaxed">
-                {mockUser.bio}
-              </p>
-            </div>
+    const latestAttemptQuery = useQuery({
+        queryKey: assessmentQueryKeys.latestAttempt,
+        queryFn: () => assessmentApi.getLatestAttempt(),
+        initialData: user?.assessment ? { attempt: user.assessment.latestAttempt } : undefined,
+    });
 
-            {/* Thông tin liên hệ */}
-            <div className="bg-card/80 backdrop-blur-xl border border-border/50 rounded-3xl p-6 shadow-sm">
-              <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Phone className="w-5 h-5 text-secondary" /> Thông tin liên hệ</h3>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3 text-muted-foreground">
-                  <div className="p-2 bg-background rounded-full border border-border/50">
-                    <Mail className="w-4 h-4 text-foreground" />
-                  </div>
-                  <span className="font-medium">{mockUser.email}</span>
-                </li>
-                <li className="flex items-center gap-3 text-muted-foreground">
-                  <div className="p-2 bg-background rounded-full border border-border/50">
-                    <Phone className="w-4 h-4 text-foreground" />
-                  </div>
-                  <span className="font-medium">{mockUser.phone}</span>
-                </li>
-                <li className="flex items-center gap-3 text-muted-foreground">
-                  <div className="p-2 bg-background rounded-full border border-border/50">
-                    <svg className="w-4 h-4 text-foreground" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg>
-                  </div>
-                  <a href={`https://${mockUser.social.github}`} className="font-medium hover:text-secondary transition-colors underline-offset-4 hover:underline">{mockUser.social.github}</a>
-                </li>
-                <li className="flex items-center gap-3 text-muted-foreground">
-                  <div className="p-2 bg-background rounded-full border border-border/50">
-                    <svg className="w-4 h-4 text-foreground" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                  </div>
-                  <a href={`https://${mockUser.social.linkedin}`} className="font-medium hover:text-secondary transition-colors underline-offset-4 hover:underline">{mockUser.social.linkedin}</a>
-                </li>
-              </ul>
-            </div>
+    const historyQuery = useQuery({
+        queryKey: assessmentQueryKeys.history(1, HISTORY_LIMIT),
+        queryFn: () => assessmentApi.getHistory(1, HISTORY_LIMIT),
+    });
 
-            {/* Kỹ năng */}
-            <div className="bg-card/80 backdrop-blur-xl border border-border/50 rounded-3xl p-6 shadow-sm">
-              <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Briefcase className="w-5 h-5 text-secondary" /> Kỹ năng IT</h3>
-              <div className="flex flex-wrap gap-2">
-                {mockUser.skills.map(skill => (
-                  <span key={skill} className="px-3 py-1.5 bg-secondary/10 border border-secondary/20 text-secondary rounded-xl font-bold text-sm hover:bg-secondary hover:text-secondary-foreground transition-colors cursor-default">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
+    const recommendedMentorsQuery = useQuery({
+        queryKey: mentorQueryKeys.recommended(RECOMMENDED_LIMIT),
+        queryFn: () => mentorApi.getRecommended(RECOMMENDED_LIMIT),
+        enabled: user?.role === 'STUDENT',
+    });
 
-          </div>
+    const roleBadge = useMemo(() => getRoleBadge(user?.role), [user?.role]);
+    const latestAttempt = latestAttemptQuery.data?.attempt ?? null;
+    const history = historyQuery.data?.attempts ?? [];
+    const recommendations = recommendedMentorsQuery.data?.mentors ?? [];
+    const matchedExpertise = recommendedMentorsQuery.data?.matchedExpertise ?? [];
+    const coverImage = toApiAssetUrl(form?.coverImageUrl || user?.profile?.coverImageUrl);
 
-          {/* ================= RIGHT MAIN CONTENT ================= */}
-          <div className="lg:col-span-8 space-y-8">
-            
-            {/* Tabs Navigation */}
-            <div className="flex items-center gap-2 border-b border-border/50 pb-px overflow-x-auto no-scrollbar">
-              <button
-                onClick={() => setActiveTab('overview')}
-                className={`flex-shrink-0 px-6 py-4 font-bold text-sm transition-all border-b-2 whitespace-nowrap ${
-                  activeTab === 'overview' ? 'border-secondary text-secondary' : 'border-transparent text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Tổng Quan Tiến Độ
-              </button>
-              <button
-                onClick={() => setActiveTab('jobs')}
-                className={`flex-shrink-0 px-6 py-4 font-bold text-sm transition-all border-b-2 whitespace-nowrap flex items-center gap-2 ${
-                  activeTab === 'jobs' ? 'border-secondary text-secondary' : 'border-transparent text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Việc Làm Đã Lưu <span className="bg-muted px-2 py-0.5 rounded-full text-xs font-black text-foreground">{mockUser.savedJobs.length}</span>
-              </button>
-              <button
-                onClick={() => setActiveTab('mentors')}
-                className={`flex-shrink-0 px-6 py-4 font-bold text-sm transition-all border-b-2 whitespace-nowrap flex items-center gap-2 ${
-                  activeTab === 'mentors' ? 'border-secondary text-secondary' : 'border-transparent text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Mentor Của Tôi <span className="bg-muted px-2 py-0.5 rounded-full text-xs font-black text-foreground">{mockUser.savedMentors.length}</span>
-              </button>
-            </div>
+    if (!user || !form) {
+        return <ProfileSkeleton />;
+    }
 
-            {/* Tab Panels */}
-            <div className="min-h-[400px]">
-              
-              {/* TAB 1: OVERVIEW */}
-              {activeTab === 'overview' && (
-                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  
-                  {/* Test Results Summary Box */}
-                  <div className="bg-gradient-to-br from-primary/5 via-secondary/5 to-background border border-secondary/20 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden group">
-                    <div className="relative z-10 w-full md:w-2/3">
-                      <div className="inline-flex items-center gap-2 px-3 py-1 bg-background border border-border/50 rounded-full text-xs font-bold text-muted-foreground mb-4">
-                        <Compass className="w-4 h-4 text-secondary" /> Mới nhất
-                      </div>
-                      <h2 className="text-2xl font-black mb-2">Định Hướng: {mockUser.testResult.type}</h2>
-                      <p className="text-muted-foreground font-medium mb-6 leading-relaxed">
-                        {mockUser.testResult.description}
-                      </p>
-                      
-                      <div className="space-y-3 mb-8">
-                        <h4 className="font-bold text-sm">Gợi ý lộ trình nghề nghiệp:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {mockUser.testResult.matchedCareers.map(career => (
-                            <span key={career} className="flex items-center gap-1.5 px-3 py-1.5 bg-background border border-border/50 rounded-lg text-sm font-bold shadow-sm">
-                              <CheckCircle2 className="w-4 h-4 text-secondary" /> {career}
-                            </span>
-                          ))}
+    const handleFieldChange = <K extends keyof ProfileFormState>(field: K, value: ProfileFormState[K]) => {
+        setForm((current) => (current ? { ...current, [field]: value } : current));
+    };
+
+    const applyUserResponse = async (nextUser: AuthUser) => {
+        setForm(createFormState(nextUser));
+        await refreshUser();
+    };
+
+    const handleSaveProfile = async () => {
+        setFormError(null);
+
+        if (form.fullName.trim().length < 2) {
+            setFormError('Họ và tên cần có ít nhất 2 ký tự.');
+            return;
+        }
+
+        const birthYear = form.birthYear.trim() ? Number(form.birthYear) : null;
+        if (birthYear !== null && (!Number.isInteger(birthYear) || birthYear < 1900 || birthYear > new Date().getFullYear())) {
+            setFormError('Năm sinh không hợp lệ.');
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            const result = await userApi.updateProfile({
+                fullName: form.fullName.trim(),
+                avatarUrl: normalizeNullable(form.avatarUrl),
+                coverImageUrl: normalizeNullable(form.coverImageUrl),
+                phoneNumber: normalizeNullable(form.phoneNumber),
+                location: normalizeNullable(form.location),
+                birthYear,
+                gender: form.gender || null,
+                province: normalizeNullable(form.province),
+                schoolOrCompany: normalizeNullable(form.schoolOrCompany),
+                department: normalizeNullable(form.department),
+                bio: normalizeNullable(form.bio),
+                githubUrl: normalizeNullable(form.githubUrl),
+                linkedinUrl: normalizeNullable(form.linkedinUrl),
+                jobTitle: normalizeNullable(form.jobTitle),
+            });
+
+            await applyUserResponse(result.user);
+            toast.success('Đã cập nhật hồ sơ cá nhân.');
+        } catch (error) {
+            setFormError(getErrorMessage(error, 'Không thể cập nhật hồ sơ lúc này.'));
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleAssetUpload = async (field: 'avatarUrl' | 'coverImageUrl', target: 'avatar' | 'cover', file: File | null) => {
+        if (!file) return;
+
+        setFormError(null);
+        setUploadingTarget(target);
+        try {
+            const uploaded = await userApi.uploadImage(file);
+            const result = await userApi.updateProfile({ [field]: uploaded.url });
+            await applyUserResponse(result.user);
+            toast.success(target === 'avatar' ? 'Đã cập nhật ảnh đại diện.' : 'Đã cập nhật ảnh bìa.');
+        } catch (error) {
+            setFormError(getErrorMessage(error, 'Không thể tải ảnh lên lúc này.'));
+        } finally {
+            setUploadingTarget(null);
+        }
+    };
+
+    const handleAssetClear = async (field: 'avatarUrl' | 'coverImageUrl', target: 'avatar' | 'cover') => {
+        setFormError(null);
+        setUploadingTarget(target);
+        try {
+            const result = await userApi.updateProfile({ [field]: null });
+            await applyUserResponse(result.user);
+            toast.success(target === 'avatar' ? 'Đã gỡ ảnh đại diện.' : 'Đã gỡ ảnh bìa.');
+        } catch (error) {
+            setFormError(getErrorMessage(error, 'Không thể cập nhật ảnh lúc này.'));
+        } finally {
+            setUploadingTarget(null);
+        }
+    };
+
+    return (
+        <>
+            <Helmet>
+                <title>Hồ sơ cá nhân — IT Compass</title>
+                <meta
+                    name="description"
+                    content="Quản lý hồ sơ cá nhân IT Compass, cập nhật thông tin học tập, xem lịch sử assessment và các mentor được gợi ý từ kết quả mới nhất."
+                />
+            </Helmet>
+
+            <main className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
+                <div className="space-y-8">
+                    <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-background shadow-lg shadow-primary/5">
+                        <div
+                            className="h-44 w-full bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.22),transparent_28%),radial-gradient(circle_at_top_right,rgba(16,185,129,0.18),transparent_26%),linear-gradient(135deg,#0f172a,#1e293b_45%,#2563eb)] bg-cover bg-center"
+                            style={coverImage ? { backgroundImage: `linear-gradient(rgba(15,23,42,0.38), rgba(15,23,42,0.38)), url(${coverImage})` } : undefined}
+                        />
+                        <div className="relative px-6 pb-6 sm:px-8 lg:px-10">
+                            <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                                <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+                                    <div className="-mt-16 sm:-mt-20 shrink-0">
+                                        <Avatar src={form.avatarUrl || user.profile?.avatarUrl} alt={user.fullName} size="xl" className="h-24 w-24 sm:h-32 sm:w-32 border-4 border-background bg-background shadow-lg shadow-primary/10" />
+                                    </div>
+                                    <div className="space-y-3 pt-2 sm:pt-0 sm:pb-2">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            {roleBadge && <Badge className={roleBadge.color}>{roleBadge.label}</Badge>}
+                                            <Badge variant="outline" className="border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary/80">
+                                                {user.status}
+                                            </Badge>
+                                            {user.emailVerifiedAt ? (
+                                                <Badge variant="outline" className="border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-700">
+                                                    Email đã xác minh
+                                                </Badge>
+                                            ) : (
+                                                <Badge variant="outline" className="border-amber-500/20 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-700">
+                                                    Email chưa xác minh
+                                                </Badge>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <h1 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl">{user.fullName}</h1>
+                                            <p className="mt-1 text-sm font-medium text-muted-foreground">{user.email}</p>
+                                            {form.bio && (
+                                                <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground">
+                                                    {form.bio}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col gap-3 sm:flex-row">
+                                    <label className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'cursor-pointer')}>
+                                        {uploadingTarget === 'cover' ? 'Đang tải ảnh bìa...' : 'Tải ảnh bìa'} <ImageUp size={16} />
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="sr-only"
+                                            onChange={(event) => {
+                                                const file = event.currentTarget.files?.[0] ?? null;
+                                                void handleAssetUpload('coverImageUrl', 'cover', file);
+                                                event.currentTarget.value = '';
+                                            }}
+                                        />
+                                    </label>
+                                    <label className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'cursor-pointer')}>
+                                        {uploadingTarget === 'avatar' ? 'Đang tải ảnh đại diện...' : 'Tải ảnh đại diện'} <Camera size={16} />
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="sr-only"
+                                            onChange={(event) => {
+                                                const file = event.currentTarget.files?.[0] ?? null;
+                                                void handleAssetUpload('avatarUrl', 'avatar', file);
+                                                event.currentTarget.value = '';
+                                            }}
+                                        />
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                      </div>
+                    </section>
 
-                      <Link to="/test" className="inline-flex items-center gap-2 font-bold text-secondary hover:text-secondary/80 bg-secondary/10 px-6 py-3 rounded-xl transition-all hover:bg-secondary/20 group-hover:px-8">
-                        Làm lại bài Test <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
+                    <div className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_380px] xl:items-start">
+                        <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+                            <Card className="rounded-[32px] border-border/70 shadow-xl shadow-primary/5">
+                                <CardHeader className="space-y-3">
+                                    <CardTitle className="text-3xl font-black tracking-tight">Thông tin hồ sơ</CardTitle>
+                                    <CardDescription className="text-sm leading-6">
+                                        Cập nhật thông tin nền tảng để kết quả định hướng và mentor recommendation sát hơn với mục tiêu hiện tại của bạn.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-8">
+                                    <section className="space-y-4">
+                                        <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+                                            <UserRound size={16} /> Nhận diện cá nhân
+                                        </div>
+                                        <div className="grid gap-4 md:grid-cols-2">
+                                            <Input
+                                                label="Họ và tên"
+                                                value={form.fullName}
+                                                onChange={(event) => handleFieldChange('fullName', event.target.value)}
+                                            />
+                                            <Input label="Email" value={user.email} disabled />
+                                            <Input
+                                                label="Chức danh hiện tại"
+                                                value={form.jobTitle}
+                                                onChange={(event) => handleFieldChange('jobTitle', event.target.value)}
+                                            />
+                                            <Input
+                                                label="Số điện thoại"
+                                                value={form.phoneNumber}
+                                                onChange={(event) => handleFieldChange('phoneNumber', event.target.value)}
+                                                icon={<Phone size={16} />}
+                                            />
+                                            <Input
+                                                label="Địa điểm"
+                                                value={form.location}
+                                                onChange={(event) => handleFieldChange('location', event.target.value)}
+                                                icon={<MapPin size={16} />}
+                                            />
+                                            <Input
+                                                label="Tỉnh / thành"
+                                                value={form.province}
+                                                onChange={(event) => handleFieldChange('province', event.target.value)}
+                                            />
+                                            <Input
+                                                label="Năm sinh"
+                                                type="number"
+                                                value={form.birthYear}
+                                                onChange={(event) => handleFieldChange('birthYear', event.target.value)}
+                                            />
+                                            <div className="space-y-1.5">
+                                                <label className="text-sm font-medium text-foreground">Giới tính</label>
+                                                <select
+                                                    className={inputClassName}
+                                                    value={form.gender}
+                                                    onChange={(event) => handleFieldChange('gender', event.target.value as '' | Gender)}
+                                                >
+                                                    <option value="">Chưa chọn</option>
+                                                    <option value="MALE">Nam</option>
+                                                    <option value="FEMALE">Nữ</option>
+                                                    <option value="OTHER">Khác</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </section>
 
-                    {/* Decorative large compass icon */}
-                    <div className="absolute -right-10 -bottom-10 opacity-5 group-hover:scale-110 group-hover:-rotate-12 transition-transform duration-700 pointer-events-none">
-                      <Compass className="w-64 h-64" />
-                    </div>
-                  </div>
+                                    <section className="space-y-4">
+                                        <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+                                            <GraduationCap size={16} /> Học tập & công việc
+                                        </div>
+                                        <div className="grid gap-4 md:grid-cols-2">
+                                            <Input
+                                                label="Trường học / công ty"
+                                                value={form.schoolOrCompany}
+                                                onChange={(event) => handleFieldChange('schoolOrCompany', event.target.value)}
+                                            />
+                                            <Input
+                                                label="Khoa / bộ phận"
+                                                value={form.department}
+                                                onChange={(event) => handleFieldChange('department', event.target.value)}
+                                            />
+                                            <Input
+                                                label="GitHub URL"
+                                                type="url"
+                                                value={form.githubUrl}
+                                                onChange={(event) => handleFieldChange('githubUrl', event.target.value)}
+                                                icon={<Link2 size={16} />}
+                                            />
+                                            <Input
+                                                label="LinkedIn URL"
+                                                type="url"
+                                                value={form.linkedinUrl}
+                                                onChange={(event) => handleFieldChange('linkedinUrl', event.target.value)}
+                                                icon={<Link2 size={16} />}
+                                            />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-sm font-medium text-foreground">Giới thiệu ngắn</label>
+                                            <textarea
+                                                className={textAreaClassName}
+                                                placeholder="Bạn đang học gì, quan tâm mảng nào, muốn phát triển ra sao..."
+                                                value={form.bio}
+                                                onChange={(event) => handleFieldChange('bio', event.target.value)}
+                                            />
+                                        </div>
+                                    </section>
 
-                  {/* Education History */}
-                  <div className="bg-card/80 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-8 md:p-10 shadow-sm">
-                    <h2 className="text-2xl font-black mb-6 flex items-center gap-3">
-                      <GraduationCap className="w-6 h-6 text-foreground" /> Học vấn
-                    </h2>
-                    <div className="relative pl-6 border-l-2 border-muted">
-                      {mockUser.education.map(edu => (
-                        <div key={edu.id} className="relative mb-6 last:mb-0">
-                          <div className="absolute w-4 h-4 bg-secondary rounded-full -left-[35px] top-1.5 shadow-[0_0_0_4px_var(--tw-colors-background)]"></div>
-                          <h4 className="text-lg font-bold text-foreground">{edu.degree}</h4>
-                          <p className="font-medium text-secondary">{edu.school}</p>
-                          <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                            <span className="font-medium">{edu.year}</span>
-                            <span className="font-bold bg-background px-2 py-0.5 rounded-md border border-border/50">GPA: {edu.gpa}</span>
-                          </div>
+                                    {formError && (
+                                        <div className="rounded-2xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+                                            {formError}
+                                        </div>
+                                    )}
+
+                                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                        <div className="flex flex-wrap gap-3">
+                                            <Button type="button" size="lg" onClick={() => void handleSaveProfile()} isLoading={isSaving}>
+                                                Lưu thay đổi <ArrowRight size={16} />
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="lg"
+                                                disabled={!form.avatarUrl && !form.coverImageUrl}
+                                                onClick={() => {
+                                                    if (form.avatarUrl) {
+                                                        void handleAssetClear('avatarUrl', 'avatar');
+                                                    }
+                                                    if (form.coverImageUrl) {
+                                                        void handleAssetClear('coverImageUrl', 'cover');
+                                                    }
+                                                }}
+                                            >
+                                                Gỡ toàn bộ ảnh
+                                            </Button>
+                                        </div>
+                                        <p className="text-sm text-muted-foreground">
+                                            Cập nhật lần gần nhất: <span className="font-medium text-foreground">{formatDateTime(user.updatedAt ?? user.emailVerifiedAt)}</span>
+                                        </p>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </motion.section>
+
+                        <div className="space-y-6">
+                            <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.04 }}>
+                                <Card className="rounded-[32px] border-border/70 shadow-xl shadow-primary/5">
+                                    <CardHeader className="space-y-3">
+                                        <CardTitle className="text-2xl font-black tracking-tight">Assessment snapshot</CardTitle>
+                                        <CardDescription className="text-sm leading-6">
+                                            Tóm tắt nhanh kết quả gần nhất để nối tiếp sang mentor và lộ trình học phù hợp.
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        {latestAttemptQuery.isLoading ? (
+                                            <div className="space-y-3">
+                                                <Skeleton className="h-10 w-40 rounded-full" />
+                                                <Skeleton className="h-8 w-48" />
+                                                <Skeleton className="h-20 w-full rounded-[24px]" />
+                                            </div>
+                                        ) : latestAttemptQuery.error ? (
+                                            <div className="rounded-[24px] border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
+                                                {getErrorMessage(latestAttemptQuery.error, 'Không thể tải kết quả assessment gần nhất.')}
+                                            </div>
+                                        ) : latestAttempt ? (
+                                            <div className="space-y-4">
+                                                <Badge variant="outline" className="border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
+                                                    {latestAttempt.resultCode} · {latestAttempt.summary.title}
+                                                </Badge>
+                                                <div>
+                                                    <p className="text-sm text-muted-foreground">Hoàn tất lúc</p>
+                                                    <p className="mt-1 font-medium text-foreground">{formatDateTime(latestAttempt.submittedAt)}</p>
+                                                </div>
+                                                <p className="text-sm leading-6 text-muted-foreground">{latestAttempt.summary.headline}</p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {latestAttempt.summary.topTraits.map((trait) => (
+                                                        <Badge key={trait} variant="secondary" className="px-3 py-1 text-xs">
+                                                            {trait}
+                                                        </Badge>
+                                                    ))}
+                                                </div>
+                                                <Link to="/test/result" className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-center')}>
+                                                    Xem kết quả đầy đủ
+                                                </Link>
+                                            </div>
+                                        ) : (
+                                            <EmptyState
+                                                icon={<Sparkles size={24} />}
+                                                title="Chưa có kết quả assessment"
+                                                description="Làm bài trắc nghiệm đầu tiên để mở khóa gợi ý mentor và chuyên ngành phù hợp."
+                                                action={
+                                                    <Link to="/test" className={buttonVariants({ variant: 'outline' })}>
+                                                        Bắt đầu assessment
+                                                    </Link>
+                                                }
+                                            />
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            </motion.section>
+
+                            <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.08 }}>
+                                <Card className="rounded-[32px] border-border/70 shadow-xl shadow-primary/5">
+                                    <CardHeader className="space-y-3">
+                                        <CardTitle className="text-2xl font-black tracking-tight">Lịch sử assessment</CardTitle>
+                                        <CardDescription className="text-sm leading-6">
+                                            Các lượt làm gần đây để bạn so sánh xu hướng và kiểm tra mức ổn định của kết quả.
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        {historyQuery.isLoading ? (
+                                            <div className="space-y-3">
+                                                {Array.from({ length: 3 }).map((_, index) => (
+                                                    <Skeleton key={index} className="h-20 rounded-[24px]" />
+                                                ))}
+                                            </div>
+                                        ) : historyQuery.error ? (
+                                            <div className="rounded-[24px] border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
+                                                {getErrorMessage(historyQuery.error, 'Không thể tải lịch sử assessment.')}
+                                            </div>
+                                        ) : history.length ? (
+                                            <div className="space-y-3">
+                                                {history.map((attempt, index) => (
+                                                    <article key={attempt.id} className="rounded-[24px] border border-border/60 bg-background p-4">
+                                                        <div className="flex items-start justify-between gap-4">
+                                                            <div>
+                                                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Lần #{index + 1}</p>
+                                                                <h3 className="mt-2 text-base font-semibold text-foreground">{attempt.summary.title}</h3>
+                                                                <p className="mt-1 text-sm leading-6 text-muted-foreground">{attempt.summary.headline}</p>
+                                                            </div>
+                                                            <Badge variant="outline" className="border-border/70 bg-surface/55 px-3 py-1 text-xs">
+                                                                {attempt.resultCode}
+                                                            </Badge>
+                                                        </div>
+                                                        <div className="mt-3 flex items-center justify-between gap-4 text-sm text-muted-foreground">
+                                                            <span>{formatDateTime(attempt.submittedAt)}</span>
+                                                            <span>{attempt.quizVersion}</span>
+                                                        </div>
+                                                    </article>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <EmptyState
+                                                icon={<BookOpen size={24} />}
+                                                title="Chưa có lịch sử assessment"
+                                                description="Sau khi nộp bài, các lượt làm gần nhất sẽ xuất hiện ở đây."
+                                            />
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            </motion.section>
                         </div>
-                      ))}
                     </div>
-                  </div>
 
+                    {user.role === 'STUDENT' && (
+                        <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.12 }}>
+                            <Card className="rounded-[32px] border-border/70 shadow-xl shadow-primary/5">
+                                <CardHeader className="space-y-3">
+                                    <CardTitle className="text-3xl font-black tracking-tight">Mentor recommendation</CardTitle>
+                                    <CardDescription className="text-sm leading-6">
+                                        Gợi ý mentor được suy ra từ kết quả assessment gần nhất để bạn chuyển ngay sang bước hành động.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-5">
+                                    {recommendedMentorsQuery.isLoading ? (
+                                        <div className="grid gap-4 lg:grid-cols-3">
+                                            {Array.from({ length: 3 }).map((_, index) => (
+                                                <Skeleton key={index} className="h-52 rounded-[24px]" />
+                                            ))}
+                                        </div>
+                                    ) : recommendedMentorsQuery.error ? (
+                                        <div className="rounded-[24px] border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
+                                            {getErrorMessage(recommendedMentorsQuery.error, 'Không thể tải mentor gợi ý lúc này.')}
+                                        </div>
+                                    ) : recommendations.length ? (
+                                        <>
+                                            <div className="flex flex-wrap gap-2">
+                                                {matchedExpertise.map((tag) => (
+                                                    <Badge key={tag} variant="outline" className="border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
+                                                        {tag}
+                                                    </Badge>
+                                                ))}
+                                            </div>
+                                            <div className="grid gap-4 lg:grid-cols-3">
+                                                {recommendations.map((mentor) => (
+                                                    <article key={mentor.id} className="rounded-[24px] border border-border/60 bg-background p-5">
+                                                        <div className="flex items-start gap-4">
+                                                            <Avatar src={mentor.avatarUrl} alt={mentor.name} size="lg" />
+                                                            <div className="min-w-0">
+                                                                <h3 className="text-base font-semibold text-foreground">{mentor.name}</h3>
+                                                                <p className="mt-1 text-sm text-muted-foreground">{getMentorHeadline(mentor)}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="mt-4 space-y-2 text-sm text-muted-foreground">
+                                                            <p>{mentor.expertiseArea || 'Chưa cập nhật chuyên môn chính'}</p>
+                                                            <p>{formatMentorHourlyRate(mentor.hourlyRate)} / buổi</p>
+                                                            <p>{mentor.reviewCount} đánh giá</p>
+                                                        </div>
+                                                        <Link
+                                                            to={`/mentors/${mentor.slug}`}
+                                                            className={cn(buttonVariants({ variant: 'outline' }), 'mt-5 w-full justify-center')}
+                                                        >
+                                                            Xem hồ sơ mentor
+                                                        </Link>
+                                                    </article>
+                                                ))}
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <EmptyState
+                                            icon={<BadgeCheck size={24} />}
+                                            title="Chưa có mentor recommendation"
+                                            description="Hoàn thiện assessment hoặc cập nhật hồ sơ để hệ thống đề xuất mentor phù hợp hơn."
+                                            action={
+                                                <Link to="/mentors" className={buttonVariants({ variant: 'outline' })}>
+                                                    Xem toàn bộ mentor
+                                                </Link>
+                                            }
+                                        />
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </motion.section>
+                    )}
                 </div>
-              )}
-
-              {/* TAB 2: SAVED JOBS */}
-              {activeTab === 'jobs' && (
-                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  {mockUser.savedJobs.map(job => (
-                    <div key={job.id} className="group bg-card border border-border/50 hover:border-secondary/30 rounded-3xl p-6 transition-all duration-300 hover:shadow-lg flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold group-hover:text-secondary transition-colors line-clamp-1">{job.title}</h3>
-                        <p className="font-medium text-muted-foreground mt-1">{job.company}</p>
-                        <div className="flex items-center gap-4 mt-3 text-xs md:text-sm font-medium">
-                          <span className="bg-muted px-2.5 py-1 rounded-md text-foreground">{job.location}</span>
-                          <span className="bg-green-500/10 text-green-500 font-black px-2.5 py-1 rounded-md">{job.salary}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
-                        <Link to={`/jobs/${job.id}`} className="flex-1 md:flex-none text-center bg-foreground text-background font-bold px-6 py-2.5 rounded-xl hover:bg-secondary hover:text-white transition-colors">
-                          Ứng tuyển
-                        </Link>
-                        <button className="p-2.5 rounded-xl bg-secondary/10 text-secondary hover:bg-secondary hover:text-secondary-foreground transition-colors group/btn">
-                          <Bookmark className="w-5 h-5 fill-secondary" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                  
-                  {mockUser.savedJobs.length === 0 && (
-                    <div className="text-center py-20 border-2 border-dashed border-border/50 rounded-[2.5rem]">
-                      <Bookmark className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-                      <h3 className="text-xl font-bold text-foreground">Chưa lưu tin tuyển dụng nào</h3>
-                      <p className="text-muted-foreground font-medium mt-2">Hãy khám phá các cơ hội nghề nghiệp và lưu lại nhé!</p>
-                      <Link to="/jobs" className="inline-flex mt-6 font-bold text-secondary hover:underline underline-offset-4">Xem Việc Làm &rarr;</Link>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* TAB 3: SAVED MENTORS */}
-              {activeTab === 'mentors' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  {mockUser.savedMentors.map(mentor => (
-                    <div key={mentor.id} className="group flex items-center gap-4 bg-card border border-border/50 hover:border-secondary/30 rounded-[2rem] p-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer">
-                      <img src={mentor.avatar} alt={mentor.name} className="w-16 h-16 rounded-2xl object-cover bg-muted" />
-                      <div className="flex-1">
-                        <h3 className="font-black text-lg group-hover:text-secondary transition-colors">{mentor.name}</h3>
-                        <p className="text-sm font-medium text-muted-foreground line-clamp-1">{mentor.role}</p>
-                      </div>
-                      <button className="p-2 bg-background border border-border/50 rounded-full hover:bg-secondary/10 hover:text-secondary transition-colors mr-2">
-                        <MoveRight className="w-5 h-5" />
-                      </button>
-                    </div>
-                  ))}
-
-                  {mockUser.savedMentors.length === 0 && (
-                    <div className="col-span-full text-center py-20 border-2 border-dashed border-border/50 rounded-[2.5rem]">
-                      <Compass className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-                      <h3 className="text-xl font-bold text-foreground">Bạn chưa theo dõi Mentor nào</h3>
-                      <p className="text-muted-foreground font-medium mt-2">Tìm kiếm người đồng hành hoàn hảo cho sự nghiệp của bạn.</p>
-                      <Link to="/mentors" className="inline-flex mt-6 font-bold text-secondary hover:underline underline-offset-4">Khám phá Mentor &rarr;</Link>
-                    </div>
-                  )}
-                </div>
-              )}
-
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
+            </main>
+        </>
+    );
 }

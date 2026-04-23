@@ -1,0 +1,353 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// Prisma uses readable model names while still pointing to the legacy MySQL table names.
+enum UserRole {
+  STUDENT @map("hoc_vien")
+  MENTOR  @map("mentor")
+  ADMIN   @map("quan_tri")
+
+  @@map("vai_tro_nguoi_dung")
+}
+
+enum UserStatus {
+  ACTIVE    @map("hoat_dong")
+  SUSPENDED @map("tam_khoa")
+  BLOCKED   @map("khoa")
+
+  @@map("trang_thai_nguoi_dung")
+}
+
+enum UserAdminAuditAction {
+  UPDATE_ACCOUNT       @map("cap_nhat_tai_khoan")
+  UPDATE_PROFILE       @map("cap_nhat_ho_so")
+  UPDATE_STATUS        @map("cap_nhat_trang_thai")
+  UPDATE_ROLE          @map("cap_nhat_vai_tro")
+  REVOKE_SESSIONS      @map("thu_hoi_phien")
+  BULK_UPDATE_STATUS   @map("cap_nhat_trang_thai_hang_loat")
+  BULK_REVOKE_SESSIONS @map("thu_hoi_phien_hang_loat")
+
+  @@map("hanh_dong_nhat_ky_quan_tri_nguoi_dung")
+}
+
+enum AdminAuditAction {
+  CREATE_POST        @map("tao_bai_viet")
+  UPDATE_POST        @map("cap_nhat_bai_viet")
+  UPDATE_POST_STATUS @map("cap_nhat_trang_thai_bai_viet")
+  PUBLISH_POST       @map("xuat_ban_bai_viet")
+  SCHEDULE_POST      @map("len_lich_bai_viet")
+  DELETE_POST        @map("xoa_bai_viet")
+  RESTORE_POST       @map("khoi_phuc_bai_viet")
+  MODERATE_COMMENT   @map("kiem_duyet_binh_luan")
+  DELETE_COMMENT     @map("xoa_binh_luan")
+
+  @@map("hanh_dong_nhat_ky_quan_tri")
+}
+
+enum Gender {
+  MALE   @map("nam")
+  FEMALE @map("nu")
+  OTHER  @map("khac")
+
+  @@map("gioi_tinh_nguoi_dung")
+}
+
+enum MentorLevel {
+  STUDENT   @map("sinh_vien")
+  FRESHER   @map("fresher")
+  JUNIOR    @map("junior")
+  MIDDLE    @map("middle")
+  SENIOR    @map("senior")
+  LEAD      @map("lead")
+  ARCHITECT @map("architect")
+  MANAGER   @map("manager")
+
+  @@map("trinh_do_mentor")
+}
+
+enum MentorStatus {
+  ACTIVE @map("hoat_dong")
+  PAUSED @map("tam_dung")
+
+  @@map("trang_thai_mentor")
+}
+
+enum AssessmentQuizType {
+  IT_COMPASS_V1 @map("it_compass_v1")
+
+  @@map("loai_bai_danh_gia")
+}
+
+enum AssessmentAttemptStatus {
+  SUBMITTED @map("da_nop")
+
+  @@map("trang_thai_lan_lam_bai")
+}
+
+model User {
+  id              BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  fullName        String     @map("ho_ten") @db.VarChar(150)
+  email           String     @unique(map: "email") @db.VarChar(191)
+  passwordHash    String     @map("mat_khau_ma_hoa") @db.VarChar(255)
+  role            UserRole   @default(STUDENT) @map("vai_tro")
+  status          UserStatus @default(ACTIVE) @map("trang_thai")
+  emailVerifiedAt DateTime?  @map("email_xac_thuc_luc") @db.DateTime(0)
+  createdAt       DateTime   @default(now()) @map("tao_luc") @db.DateTime(0)
+  updatedAt       DateTime   @updatedAt @map("cap_nhat_luc") @db.DateTime(0)
+
+  profile                 UserProfile?
+  mentorProfile           Mentor?
+  authSessions            AuthSession[]
+  emailVerificationTokens EmailVerificationToken[]
+  passwordResetTokens     PasswordResetToken[]
+  blogPosts               BlogPost[]
+  blogComments            BlogComment[]
+  assessmentAttempts      AssessmentAttempt[]
+  userAdminAuditLogsAsActor   UserAdminAuditLog[] @relation("UserAdminAuditActor")
+  userAdminAuditLogsAsTarget  UserAdminAuditLog[] @relation("UserAdminAuditTarget")
+  adminAuditLogsAsActor       AdminAuditLog[]     @relation("AdminAuditActor")
+
+  @@map("nguoi_dung")
+}
+
+enum BlogPostStatus {
+  DRAFT     @map("nhap")
+  SCHEDULED @map("len_lich")
+  PUBLISHED @map("xuat_ban")
+
+  @@map("trang_thai_bai_viet")
+}
+
+model BlogPost {
+  id            BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  authorId      BigInt         @map("tac_gia_id") @db.UnsignedBigInt
+  title         String         @map("tieu_de") @db.VarChar(220)
+  slug          String         @unique(map: "slug") @db.VarChar(240)
+  excerpt       String?        @map("tom_tat") @db.VarChar(500)
+  content       String         @map("noi_dung") @db.Text
+  tag           String?        @map("the_loai") @db.VarChar(100)
+  coverImageUrl String?        @map("anh_bia_url") @db.VarChar(500)
+  readTimeText  String?        @map("thoi_gian_doc") @db.VarChar(50)
+  status        BlogPostStatus @default(PUBLISHED) @map("trang_thai")
+  isFeatured    Boolean        @default(false) @map("noi_bat") @db.TinyInt
+  metaTitle     String?        @map("meta_tieu_de") @db.VarChar(220)
+  metaDescription String?      @map("meta_mo_ta") @db.VarChar(320)
+  canonicalUrl  String?        @map("canonical_url") @db.VarChar(500)
+  ogImageUrl    String?        @map("og_image_url") @db.VarChar(500)
+  noIndex       Boolean        @default(false) @map("khong_lap_chi_muc") @db.TinyInt
+  keywords      String?        @map("tu_khoa_seo") @db.VarChar(500)
+  views         Int            @default(0) @map("luot_xem") @db.UnsignedInt
+  likes         Int            @default(0) @map("luot_thich") @db.UnsignedInt
+  publishedAt   DateTime?      @map("xuat_ban_luc") @db.DateTime(0)
+  scheduledAt   DateTime?      @map("len_lich_luc") @db.DateTime(0)
+  publishedBy   BigInt?        @map("xuat_ban_boi") @db.UnsignedBigInt
+  deletedAt     DateTime?      @map("xoa_luc") @db.DateTime(0)
+  deletedBy     BigInt?        @map("xoa_boi") @db.UnsignedBigInt
+  createdAt     DateTime       @default(now()) @map("tao_luc") @db.DateTime(0)
+  updatedAt     DateTime       @updatedAt @map("cap_nhat_luc") @db.DateTime(0)
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_bv_tac_gia")
+  comments BlogComment[]
+
+  @@index([authorId], map: "idx_bv_tac_gia_id")
+  @@index([status, publishedAt], map: "idx_bv_trang_thai_xuat_ban")
+  @@index([scheduledAt], map: "idx_bv_len_lich_luc")
+  @@index([deletedAt], map: "idx_bv_xoa_luc")
+  @@map("bai_viet_blog")
+}
+
+enum BlogCommentStatus {
+  VISIBLE @map("hien")
+  HIDDEN  @map("an")
+
+  @@map("trang_thai_binh_luan_blog")
+}
+
+model BlogComment {
+  id         BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  postId     BigInt            @map("bai_viet_id") @db.UnsignedBigInt
+  userId     BigInt?           @map("nguoi_dung_id") @db.UnsignedBigInt
+  guestName  String?           @map("ten_khach") @db.VarChar(120)
+  content    String            @map("noi_dung") @db.Text
+  status     BlogCommentStatus @default(VISIBLE) @map("trang_thai")
+  deletedAt  DateTime?         @map("xoa_luc") @db.DateTime(0)
+  deletedBy  BigInt?           @map("xoa_boi") @db.UnsignedBigInt
+  createdAt  DateTime          @default(now()) @map("tao_luc") @db.DateTime(0)
+  updatedAt  DateTime          @updatedAt @map("cap_nhat_luc") @db.DateTime(0)
+
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_blbv_bv")
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "fk_blbv_nd")
+
+  @@index([postId, status], map: "idx_blbv_bai_viet_trang_thai")
+  @@index([deletedAt], map: "idx_blbv_xoa_luc")
+  @@map("binh_luan_bai_viet")
+}
+
+model UserProfile {
+  id              BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  userId          BigInt   @unique @map("nguoi_dung_id") @db.UnsignedBigInt
+  avatarUrl       String?  @map("avatar_url") @db.VarChar(500)
+  coverImageUrl   String?  @map("anh_bia_url") @db.VarChar(500)
+  phoneNumber     String?  @map("so_dien_thoai") @db.VarChar(30)
+  location        String?  @map("dia_diem") @db.VarChar(120)
+  birthYear       Int?     @map("nam_sinh") @db.UnsignedSmallInt
+  gender          Gender?  @map("gioi_tinh")
+  province        String?  @map("tinh_thanh") @db.VarChar(120)
+  schoolOrCompany String?  @map("truong_hoc_cong_ty") @db.VarChar(191)
+  department      String?  @map("lop_khoa_phong_ban") @db.VarChar(191)
+  bio             String?  @map("gioi_thieu") @db.Text
+  githubUrl       String?  @map("github_url") @db.VarChar(500)
+  linkedinUrl     String?  @map("linkedin_url") @db.VarChar(500)
+  jobTitle        String?  @map("chuc_danh") @db.VarChar(150)
+  createdAt       DateTime @default(now()) @map("tao_luc") @db.DateTime(0)
+  updatedAt       DateTime @updatedAt @map("cap_nhat_luc") @db.DateTime(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_hsnd_nd")
+
+  @@map("ho_so_nguoi_dung")
+}
+
+model Mentor {
+  id                BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  userId            BigInt?      @unique @map("nguoi_dung_id") @db.UnsignedBigInt
+  name              String       @map("ten") @db.VarChar(150)
+  slug              String       @unique @db.VarChar(180)
+  avatarUrl         String?      @map("avatar_url") @db.VarChar(500)
+  title             String?      @map("tieu_de") @db.VarChar(191)
+  bio               String?      @map("gioi_thieu") @db.Text
+  level             MentorLevel? @map("trinh_do_mentor")
+  expertiseArea     String?      @map("mang_chuyen_mon") @db.VarChar(100)
+  yearsOfExperience Int?         @map("so_nam_kinh_nghiem") @db.UnsignedSmallInt
+  hourlyRate        Int?         @map("gia_theo_gio") @db.UnsignedInt
+  currentSchool     String?      @map("truong_hoc_hien_tai") @db.VarChar(191)
+  currentCompany    String?      @map("cong_ty_hien_tai") @db.VarChar(191)
+  currentJobTitle   String?      @map("chuc_danh_hien_tai") @db.VarChar(191)
+  consultationLang  String?      @map("ngon_ngu_tu_van") @db.VarChar(100)
+  reviewCount       Int          @default(0) @map("so_luong_danh_gia") @db.UnsignedInt
+  isVerified        Boolean      @default(false) @map("da_xac_thuc") @db.TinyInt
+  status            MentorStatus @default(ACTIVE) @map("trang_thai")
+  createdAt         DateTime     @default(now()) @map("tao_luc") @db.DateTime(0)
+  updatedAt         DateTime     @updatedAt @map("cap_nhat_luc") @db.DateTime(0)
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "fk_mentor_nd")
+
+  @@map("mentor")
+}
+
+/// Stores refresh-session state. Only hashed tokens are persisted for safety.
+model AuthSession {
+  id        BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  userId    BigInt    @map("nguoi_dung_id") @db.UnsignedBigInt
+  tokenHash String    @unique(map: "uq_pdn_token_hash") @map("token_hash") @db.Char(64)
+  userAgent String?   @map("user_agent") @db.VarChar(500)
+  ipAddress String?   @map("ip") @db.VarChar(45)
+  expiresAt DateTime  @map("het_han_luc") @db.DateTime(0)
+  revokedAt DateTime? @map("thu_hoi_luc") @db.DateTime(0)
+  createdAt DateTime  @default(now()) @map("tao_luc") @db.DateTime(0)
+  updatedAt DateTime  @updatedAt @map("cap_nhat_luc") @db.DateTime(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_pdn_nd")
+
+  @@index([userId], map: "idx_pdn_nguoi_dung_id")
+  @@index([expiresAt], map: "idx_pdn_het_han_luc")
+  @@map("phien_dang_nhap")
+}
+
+model EmailVerificationToken {
+  id        BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  userId    BigInt    @map("nguoi_dung_id") @db.UnsignedBigInt
+  tokenHash String    @unique(map: "uq_txt_email_token_hash") @map("token_hash") @db.Char(64)
+  expiresAt DateTime  @map("het_han_luc") @db.DateTime(0)
+  usedAt    DateTime? @map("da_dung_luc") @db.DateTime(0)
+  createdAt DateTime  @default(now()) @map("tao_luc") @db.DateTime(0)
+  updatedAt DateTime  @updatedAt @map("cap_nhat_luc") @db.DateTime(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_txt_email_nd")
+
+  @@index([userId], map: "idx_txt_email_nguoi_dung_id")
+  @@index([expiresAt], map: "idx_txt_email_het_han_luc")
+  @@map("token_xac_thuc_email")
+}
+
+model PasswordResetToken {
+  id        BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  userId    BigInt    @map("nguoi_dung_id") @db.UnsignedBigInt
+  tokenHash String    @unique(map: "uq_token_dlmk_hash") @map("token_hash") @db.Char(64)
+  expiresAt DateTime  @map("het_han_luc") @db.DateTime(0)
+  usedAt    DateTime? @map("da_dung_luc") @db.DateTime(0)
+  createdAt DateTime  @default(now()) @map("tao_luc") @db.DateTime(0)
+  updatedAt DateTime  @updatedAt @map("cap_nhat_luc") @db.DateTime(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_token_dlmk_nd")
+
+  @@index([userId], map: "idx_token_dlmk_nguoi_dung_id")
+  @@index([expiresAt], map: "idx_token_dlmk_het_han_luc")
+  @@map("token_dat_lai_mat_khau")
+}
+
+model AssessmentAttempt {
+  id             BigInt                  @id @default(autoincrement()) @db.UnsignedBigInt
+  userId         BigInt                  @map("nguoi_dung_id") @db.UnsignedBigInt
+  quizType       AssessmentQuizType      @default(IT_COMPASS_V1) @map("loai_bai")
+  quizVersion    String                  @map("phien_ban_bai") @db.VarChar(40)
+  status         AssessmentAttemptStatus @default(SUBMITTED) @map("trang_thai")
+  resultCode     String                  @map("ma_ket_qua") @db.VarChar(50)
+  topTraits      Json                    @map("nhom_noi_bat")
+  rawScoresJson  Json                    @map("diem_tho_json")
+  answersJson    Json                    @map("cau_tra_loi_json")
+  summaryJson    Json                    @map("tom_tat_json")
+  startedAt      DateTime?               @map("bat_dau_luc") @db.DateTime(0)
+  submittedAt    DateTime                @default(now()) @map("nop_luc") @db.DateTime(0)
+  createdAt      DateTime                @default(now()) @map("tao_luc") @db.DateTime(0)
+  updatedAt      DateTime                @updatedAt @map("cap_nhat_luc") @db.DateTime(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_kqdt_nd")
+
+  @@index([userId, submittedAt], map: "idx_kqdt_nguoi_dung_nop_luc")
+  @@index([userId, quizType], map: "idx_kqdt_nguoi_dung_loai_bai")
+  @@index([resultCode], map: "idx_kqdt_ma_ket_qua")
+  @@map("ket_qua_danh_gia")
+}
+
+model UserAdminAuditLog {
+  id           BigInt               @id @default(autoincrement()) @db.UnsignedBigInt
+  actorUserId  BigInt               @map("nguoi_thuc_hien_id") @db.UnsignedBigInt
+  targetUserId BigInt               @map("nguoi_bi_tac_dong_id") @db.UnsignedBigInt
+  action       UserAdminAuditAction @map("hanh_dong")
+  reason       String?              @map("ly_do") @db.VarChar(500)
+  beforeJson   Json?                @map("truoc_json")
+  afterJson    Json?                @map("sau_json")
+  createdAt    DateTime             @default(now()) @map("tao_luc") @db.DateTime(0)
+
+  actorUser  User @relation("UserAdminAuditActor", fields: [actorUserId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_nkqtnd_nguoi_thuc_hien")
+  targetUser User @relation("UserAdminAuditTarget", fields: [targetUserId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_nkqtnd_nguoi_bi_tac_dong")
+
+  @@index([actorUserId, createdAt], map: "idx_nkqtnd_nguoi_thuc_hien_tao_luc")
+  @@index([targetUserId, createdAt], map: "idx_nkqtnd_nguoi_bi_tac_dong_tao_luc")
+  @@index([action, createdAt], map: "idx_nkqtnd_hanh_dong_tao_luc")
+  @@map("nhat_ky_quan_tri_nguoi_dung")
+}
+
+model AdminAuditLog {
+  id          BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  actorUserId BigInt           @map("nguoi_thuc_hien_id") @db.UnsignedBigInt
+  action      AdminAuditAction @map("hanh_dong")
+  targetType  String           @map("loai_doi_tuong") @db.VarChar(50)
+  targetId    String?          @map("doi_tuong_id") @db.VarChar(191)
+  reason      String?          @map("ly_do") @db.VarChar(500)
+  metadataJson Json?           @map("du_lieu_json")
+  createdAt   DateTime         @default(now()) @map("tao_luc") @db.DateTime(0)
+
+  actorUser User @relation("AdminAuditActor", fields: [actorUserId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_nkqt_nguoi_thuc_hien")
+
+  @@index([actorUserId, createdAt], map: "idx_nkqt_nguoi_thuc_hien_tao_luc")
+  @@index([action, createdAt], map: "idx_nkqt_hanh_dong_tao_luc")
+  @@index([targetType, targetId], map: "idx_nkqt_loai_doi_tuong_id")
+  @@map("nhat_ky_quan_tri")
+}

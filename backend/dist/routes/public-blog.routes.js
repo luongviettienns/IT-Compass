@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import * as blogController from '../controllers/blog.controller.js';
+import { commentCreateLimiter } from '../middlewares/rate-limit.middleware.js';
+import { validate } from '../middlewares/validate.middleware.js';
+import { createCommentSchema, getBlogPostBySlugSchema, listCommentsSchema } from '../validators/blog.validator.js';
+const publicBlogRoutes = Router();
+publicBlogRoutes.get('/', blogController.listPublishedPosts);
+publicBlogRoutes.get('/:slug', validate(getBlogPostBySlugSchema), blogController.getPublishedPostBySlug);
+publicBlogRoutes.get('/:slug/comments', validate(listCommentsSchema), blogController.listCommentsBySlug);
+publicBlogRoutes.post('/:slug/comments', commentCreateLimiter, validate(createCommentSchema), blogController.createComment);
+export default publicBlogRoutes;

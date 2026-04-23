@@ -1,0 +1,67 @@
+import type { AssessmentResultProfile, AssessmentResultCode } from '../types/assessment.js';
+
+export const assessmentResultProfiles: Record<AssessmentResultCode, AssessmentResultProfile> = {
+  SE: {
+    title: 'Kỹ thuật phần mềm',
+    headline: 'Bạn phù hợp với nhóm Kỹ thuật phần mềm',
+    description:
+      'Bạn sở hữu tư duy hệ thống, khả năng phân tích và sự kiên trì cần thiết để biến các yêu cầu mơ hồ thành sản phẩm chạy được.',
+    matchedCareers: ['Frontend Developer', 'Backend Developer', 'Full-stack Engineer', 'Mobile Developer'],
+    majorSlugs: ['ky-thuat-phan-mem', 'cong-nghe-phan-mem'],
+    mentorExpertise: ['Frontend', 'Backend', 'Fullstack'],
+  },
+  Data: {
+    title: 'Dữ liệu và AI',
+    headline: 'Bạn phù hợp với nhóm Dữ liệu và AI',
+    description:
+      'Bạn mạnh ở tư duy phân tích, khả năng tìm quy luật từ dữ liệu và sự kiên nhẫn với các bài toán cần suy luận sâu.',
+    matchedCareers: ['Data Analyst', 'Data Engineer', 'Machine Learning Engineer', 'AI Engineer'],
+    majorSlugs: ['du-lieu-va-ai', 'khoa-hoc-du-lieu'],
+    mentorExpertise: ['Data', 'AI', 'Machine Learning'],
+  },
+  Cybersecurity: {
+    title: 'An toàn thông tin',
+    headline: 'Bạn phù hợp với nhóm An toàn thông tin',
+    description:
+      'Bạn có sự kết hợp giữa tò mò kỹ thuật và phản xạ thực chiến, rất hợp với công việc bảo vệ hệ thống và xử lý rủi ro.',
+    matchedCareers: ['Security Engineer', 'Pentester', 'Security Analyst', 'AppSec Engineer'],
+    majorSlugs: ['an-toan-thong-tin', 'an-ninh-mang'],
+    mentorExpertise: ['Security', 'Network', 'Blue Team'],
+  },
+  UXUI: {
+    title: 'Thiết kế UI/UX',
+    headline: 'Bạn phù hợp với nhóm Thiết kế UI/UX',
+    description:
+      'Bạn nhìn công nghệ qua lăng kính của con người, kết hợp được thẩm mỹ, sự đồng cảm và khả năng tổ chức trải nghiệm.',
+    matchedCareers: ['UI Designer', 'UX Designer', 'Product Designer', 'Frontend UI Engineer'],
+    majorSlugs: ['thiet-ke-ui-ux', 'thiet-ke-trai-nghiem'],
+    mentorExpertise: ['UXUI', 'Design System', 'Frontend'],
+  },
+  QLDA: {
+    title: 'Quản lý dự án và nghiệp vụ',
+    headline: 'Bạn phù hợp với nhóm Quản lý dự án và nghiệp vụ',
+    description:
+      'Bạn là cầu nối giữa nhu cầu kinh doanh và thực thi kỹ thuật, hợp với vai trò điều phối, phân tích và dẫn dắt sản phẩm.',
+    matchedCareers: ['Business Analyst', 'Project Manager', 'Product Owner', 'Scrum Master'],
+    majorSlugs: ['he-thong-thong-tin', 'phan-tich-nghiep-vu'],
+    mentorExpertise: ['Business Analysis', 'Project Management', 'Product'],
+  },
+  DevOps: {
+    title: 'DevOps và hệ thống',
+    headline: 'Bạn phù hợp với nhóm DevOps và hệ thống',
+    description:
+      'Bạn mạnh ở tự động hóa, sự ổn định và vận hành, phù hợp với công việc cloud, CI/CD và hạ tầng.',
+    matchedCareers: ['DevOps Engineer', 'Cloud Engineer', 'Platform Engineer', 'System Engineer'],
+    majorSlugs: ['devops-he-thong', 'dien-toan-dam-may'],
+    mentorExpertise: ['DevOps', 'Cloud', 'Infrastructure'],
+  },
+  Fallback: {
+    title: 'Hồ sơ đa năng',
+    headline: 'Bạn đang có một hồ sơ đa năng',
+    description:
+      'Điểm số của bạn trải đều trên nhiều nhóm. Đây là dấu hiệu tốt cho các hướng đi cần sự linh hoạt giữa kỹ thuật, sản phẩm và con người.',
+    matchedCareers: ['Full-stack Explorer', 'Technical Consultant', 'Product Generalist'],
+    majorSlugs: ['da-nganh-cong-nghe'],
+    mentorExpertise: ['Career Orientation', 'Fullstack', 'Product'],
+  },
+};

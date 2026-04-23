@@ -1,0 +1,38 @@
+import { Router } from 'express';
+
+import * as adminUserController from '../controllers/admin-user.controller.js';
+import { requireActiveUser, requireAuth, requireRole } from '../middlewares/auth.middleware.js';
+import { validate } from '../middlewares/validate.middleware.js';
+import {
+  adminBulkRevokeSessionsSchema,
+  adminBulkUpdateStatusSchema,
+  adminGetUserByIdSchema,
+  adminListAuditLogsSchema,
+  adminListUsersSchema,
+  adminRevokeUserSessionsSchema,
+  adminUpdateUserAccountSchema,
+  adminUpdateUserProfileSchema,
+  adminUpdateUserRoleSchema,
+  adminUpdateUserStatusSchema,
+  adminUserAuditLogsSchema,
+  adminUserStatsSchema,
+} from '../validators/admin-user.validator.js';
+
+const adminUserRoutes = Router();
+
+adminUserRoutes.use(requireAuth, requireActiveUser, requireRole('ADMIN'));
+
+adminUserRoutes.get('/users/stats', validate(adminUserStatsSchema), adminUserController.adminGetUserStats);
+adminUserRoutes.get('/users', validate(adminListUsersSchema), adminUserController.adminListUsers);
+adminUserRoutes.get('/users/audit-logs', validate(adminListAuditLogsSchema), adminUserController.adminListAuditLogs);
+adminUserRoutes.get('/users/:id', validate(adminGetUserByIdSchema), adminUserController.adminGetUserById);
+adminUserRoutes.get('/users/:id/audit-logs', validate(adminUserAuditLogsSchema), adminUserController.adminListUserAuditLogs);
+adminUserRoutes.patch('/users/:id/account', validate(adminUpdateUserAccountSchema), adminUserController.adminUpdateUserAccount);
+adminUserRoutes.patch('/users/:id/profile', validate(adminUpdateUserProfileSchema), adminUserController.adminUpdateUserProfile);
+adminUserRoutes.patch('/users/:id/status', validate(adminUpdateUserStatusSchema), adminUserController.adminUpdateUserStatus);
+adminUserRoutes.patch('/users/:id/role', validate(adminUpdateUserRoleSchema), adminUserController.adminUpdateUserRole);
+adminUserRoutes.post('/users/:id/revoke-sessions', validate(adminRevokeUserSessionsSchema), adminUserController.adminRevokeUserSessions);
+adminUserRoutes.post('/users/bulk-status', validate(adminBulkUpdateStatusSchema), adminUserController.adminBulkUpdateStatus);
+adminUserRoutes.post('/users/bulk-revoke-sessions', validate(adminBulkRevokeSessionsSchema), adminUserController.adminBulkRevokeSessions);
+
+export default adminUserRoutes;

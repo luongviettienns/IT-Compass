@@ -1,0 +1,19 @@
+import { Router } from 'express';
+
+import * as blogController from '../controllers/blog.controller.js';
+import { requireActiveUser, requireAuth, requireRole } from '../middlewares/auth.middleware.js';
+import { validate } from '../middlewares/validate.middleware.js';
+import {
+  adminListCommentsSchema,
+  deleteCommentSchema,
+  moderateCommentSchema,
+} from '../validators/blog.validator.js';
+
+const adminCommentRoutes = Router();
+
+adminCommentRoutes.use(requireAuth, requireActiveUser, requireRole('ADMIN'));
+adminCommentRoutes.get('/', validate(adminListCommentsSchema), blogController.adminListComments);
+adminCommentRoutes.patch('/:id/status', validate(moderateCommentSchema), blogController.moderateComment);
+adminCommentRoutes.delete('/:id', validate(deleteCommentSchema), blogController.deleteComment);
+
+export default adminCommentRoutes;

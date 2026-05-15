@@ -1,0 +1,178 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: IT Compass
+        - navigation [ref=e12]:
+          - link "Trang chủ" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - text: Trang chủ
+          - link "Trắc nghiệm" [ref=e15] [cursor=pointer]:
+            - /url: /test
+            - text: Trắc nghiệm
+          - link "Lĩnh vực IT" [ref=e17] [cursor=pointer]:
+            - /url: /majors
+            - text: Lĩnh vực IT
+          - link "Cố vấn" [ref=e19] [cursor=pointer]:
+            - /url: /mentors
+            - text: Cố vấn
+          - link "Blog" [ref=e21] [cursor=pointer]:
+            - /url: /blog
+            - text: Blog
+          - link "Giới thiệu" [ref=e23] [cursor=pointer]:
+            - /url: /about
+            - text: Giới thiệu
+        - button "QT vien" [ref=e110] [cursor=pointer]:
+          - generic [ref=e111]: QT
+          - generic [ref=e113]:
+            - generic [ref=e114]: vien
+            - img [ref=e115]
+    - generic [ref=e118]:
+      - generic [ref=e120]:
+        - img [ref=e122]
+        - generic [ref=e124]:
+          - heading "Bảng Quản Trị" [level=1] [ref=e125]
+          - paragraph [ref=e126]: Quản trị hệ thống IT Compass
+      - generic [ref=e127]:
+        - complementary [ref=e128]:
+          - generic [ref=e129]:
+            - button "Tổng quan" [ref=e130] [cursor=pointer]:
+              - generic [ref=e131]:
+                - img [ref=e132]
+                - text: Tổng quan
+            - button "Bài viết" [ref=e137] [cursor=pointer]:
+              - generic [ref=e138]:
+                - img [ref=e139]
+                - text: Bài viết
+            - button "Bình luận" [active] [ref=e142] [cursor=pointer]:
+              - generic [ref=e143]:
+                - img [ref=e144]
+                - text: Bình luận
+            - button "Người dùng" [ref=e146] [cursor=pointer]:
+              - generic [ref=e147]:
+                - img [ref=e148]
+                - text: Người dùng
+            - button "Nhật ký" [ref=e153] [cursor=pointer]:
+              - generic [ref=e154]:
+                - img [ref=e155]
+                - text: Nhật ký
+        - main [ref=e158]:
+          - generic [ref=e334]:
+            - generic [ref=e335]:
+              - generic [ref=e336]:
+                - button "Tất cả" [ref=e337] [cursor=pointer]
+                - button "Hiển thị" [ref=e338] [cursor=pointer]
+                - button "Đã ẩn" [ref=e339] [cursor=pointer]
+                - button "Đã xóa" [ref=e340] [cursor=pointer]
+              - generic [ref=e341]:
+                - generic [ref=e342]:
+                  - img [ref=e343]
+                  - textbox "Tìm bình luận..." [ref=e346]
+                - button [ref=e347] [cursor=pointer]:
+                  - img [ref=e348]
+            - generic [ref=e353]:
+              - generic [ref=e354]:
+                - img [ref=e356]
+                - generic [ref=e359]:
+                  - generic [ref=e360]:
+                    - generic [ref=e361]: Claude QA
+                    - generic [ref=e362]: Hiển thị
+                    - generic [ref=e363]: 09:27:30 20/4/2026
+                  - paragraph [ref=e364]: "[E2E ADMIN COMMENTS] temp 2026-04-20T02:24:30Z"
+                  - link "📄 Bài viết test RHF Zod hợp lệ đã cập nhật" [ref=e365] [cursor=pointer]:
+                    - /url: /blog/bai-viet-test-rhf-zod-hop-le-a-cap-nhat
+                - generic [ref=e366]:
+                  - button "Ẩn" [ref=e367] [cursor=pointer]:
+                    - img [ref=e368]
+                    - text: Ẩn
+                  - button "Xóa" [ref=e373] [cursor=pointer]:
+                    - img [ref=e374]
+                    - text: Xóa
+              - generic [ref=e377]:
+                - img [ref=e379]
+                - generic [ref=e382]:
+                  - generic [ref=e383]:
+                    - generic [ref=e384]: Claude Test
+                    - generic [ref=e385]: Hiển thị
+                    - generic [ref=e386]: 18:49:02 19/4/2026
+                  - paragraph [ref=e387]: Bình luận kiểm thử React Query được đồng bộ thành công.
+                  - link "📄 Bài viết test RHF Zod hợp lệ đã cập nhật" [ref=e388] [cursor=pointer]:
+                    - /url: /blog/bai-viet-test-rhf-zod-hop-le-a-cap-nhat
+                - generic [ref=e389]:
+                  - button "Ẩn" [ref=e390] [cursor=pointer]:
+                    - img [ref=e391]
+                    - text: Ẩn
+                  - button "Xóa" [ref=e396] [cursor=pointer]:
+                    - img [ref=e397]
+                    - text: Xóa
+    - contentinfo [ref=e33]:
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - img [ref=e41]
+            - generic [ref=e44]: IT Compass
+          - paragraph [ref=e45]: La bàn định vị sự nghiệp IT của bạn. Chúng tôi giúp thế hệ chuyên gia công nghệ Việt Nam tìm thấy đam mê và con đường phát triển phù hợp nhất.
+          - generic [ref=e46]:
+            - generic [ref=e47]:
+              - generic: Website
+              - link [ref=e48] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e49]
+            - generic [ref=e52]:
+              - generic: Email
+              - link [ref=e53] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e54]
+            - generic [ref=e57]:
+              - generic: Phone
+              - link [ref=e58] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e59]
+        - generic [ref=e62]:
+          - heading "Nền Tảng" [level=4] [ref=e63]
+          - list [ref=e64]:
+            - listitem [ref=e65]:
+              - link "Làm Bài Test" [ref=e66] [cursor=pointer]:
+                - /url: /test
+                - img [ref=e67]
+                - text: Làm Bài Test
+            - listitem [ref=e70]:
+              - link "Chuyên Ngành IT" [ref=e71] [cursor=pointer]:
+                - /url: /majors
+                - img [ref=e72]
+                - text: Chuyên Ngành IT
+            - listitem [ref=e75]:
+              - link "Blog" [ref=e76] [cursor=pointer]:
+                - /url: /blog
+                - img [ref=e77]
+                - text: Blog
+        - generic [ref=e80]:
+          - heading "Công Ty" [level=4] [ref=e81]
+          - list [ref=e82]:
+            - listitem [ref=e83]:
+              - link "Về Chúng Tôi" [ref=e84] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e85]
+                - text: Về Chúng Tôi
+            - listitem [ref=e88]:
+              - link "Điều Khoản Dịch Vụ" [ref=e89] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e90]
+                - text: Điều Khoản Dịch Vụ
+            - listitem [ref=e93]:
+              - link "Chính Sách Bảo Mật" [ref=e94] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e95]
+                - text: Chính Sách Bảo Mật
+            - listitem [ref=e98]:
+              - link "Liên Hệ" [ref=e99] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e100]
+                - text: Liên Hệ
+      - generic [ref=e106]:
+        - paragraph [ref=e107]: © 2026 IT Compass. Đã đăng ký bản quyền.
+        - paragraph [ref=e108]: Được xây dựng với ❤️ cho thế hệ IT Việt Nam
+  - region "Notifications alt+T"

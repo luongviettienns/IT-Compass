@@ -1,0 +1,120 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "IT Compass" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img [ref=e8]
+        - generic [ref=e11]: IT Compass
+      - navigation [ref=e12]:
+        - link "Trang chủ" [ref=e13] [cursor=pointer]:
+          - /url: /
+          - text: Trang chủ
+        - link "Trắc nghiệm" [ref=e15] [cursor=pointer]:
+          - /url: /test
+          - text: Trắc nghiệm
+        - link "Lĩnh vực IT" [ref=e17] [cursor=pointer]:
+          - /url: /majors
+          - text: Lĩnh vực IT
+        - link "Cố vấn" [ref=e19] [cursor=pointer]:
+          - /url: /mentors
+          - text: Cố vấn
+        - link "Blog" [ref=e21] [cursor=pointer]:
+          - /url: /blog
+          - text: Blog
+        - link "Giới thiệu" [ref=e23] [cursor=pointer]:
+          - /url: /about
+          - text: Giới thiệu
+      - button "QV User" [ref=e125] [cursor=pointer]:
+        - generic [ref=e126]: QV
+        - generic [ref=e128]:
+          - generic [ref=e129]: User
+          - img [ref=e130]
+  - generic [ref=e132]:
+    - generic [ref=e134]:
+      - button [ref=e135] [cursor=pointer]:
+        - img [ref=e136]
+      - generic [ref=e138]:
+        - generic [ref=e139]: Câu 26 / 29
+        - generic [ref=e140]: 86% hoàn thành
+      - button "Chuyển đến câu hỏi" [ref=e141] [cursor=pointer]:
+        - img [ref=e142]
+    - generic [ref=e149]:
+      - generic [ref=e150]:
+        - img [ref=e151]
+        - text: "Phần 2: Tình huống thực tế"
+      - generic [ref=e154]: Học tập và tiếp cận
+      - heading "Khi phải học một ngôn ngữ lập trình hoàn toàn mới, bạn thường làm gì trước tiên?" [level=2] [ref=e166]
+      - generic [ref=e156]:
+        - button "A Đọc kỹ tài liệu chính thức, hiểu rõ cú pháp nền tảng trước khi viết code." [active] [ref=e167] [cursor=pointer]:
+          - generic [ref=e158]: A
+          - generic [ref=e159]: Đọc kỹ tài liệu chính thức, hiểu rõ cú pháp nền tảng trước khi viết code.
+        - button "B Clone một project mẫu, chạy thử và sửa từng lỗi xuất hiện để học qua thực hành." [ref=e168] [cursor=pointer]:
+          - generic [ref=e161]: B
+          - generic [ref=e162]: Clone một project mẫu, chạy thử và sửa từng lỗi xuất hiện để học qua thực hành.
+  - contentinfo [ref=e48]:
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - img [ref=e56]
+          - generic [ref=e59]: IT Compass
+        - paragraph [ref=e60]: La bàn định vị sự nghiệp IT của bạn. Chúng tôi giúp thế hệ chuyên gia công nghệ Việt Nam tìm thấy đam mê và con đường phát triển phù hợp nhất.
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic: Website
+            - link [ref=e63] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e64]
+          - generic [ref=e67]:
+            - generic: Email
+            - link [ref=e68] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e69]
+          - generic [ref=e72]:
+            - generic: Phone
+            - link [ref=e73] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e74]
+      - generic [ref=e77]:
+        - heading "Nền Tảng" [level=4] [ref=e78]
+        - list [ref=e79]:
+          - listitem [ref=e80]:
+            - link "Làm Bài Test" [ref=e81] [cursor=pointer]:
+              - /url: /test
+              - img [ref=e82]
+              - text: Làm Bài Test
+          - listitem [ref=e85]:
+            - link "Chuyên Ngành IT" [ref=e86] [cursor=pointer]:
+              - /url: /majors
+              - img [ref=e87]
+              - text: Chuyên Ngành IT
+          - listitem [ref=e90]:
+            - link "Blog" [ref=e91] [cursor=pointer]:
+              - /url: /blog
+              - img [ref=e92]
+              - text: Blog
+      - generic [ref=e95]:
+        - heading "Công Ty" [level=4] [ref=e96]
+        - list [ref=e97]:
+          - listitem [ref=e98]:
+            - link "Về Chúng Tôi" [ref=e99] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e100]
+              - text: Về Chúng Tôi
+          - listitem [ref=e103]:
+            - link "Điều Khoản Dịch Vụ" [ref=e104] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e105]
+              - text: Điều Khoản Dịch Vụ
+          - listitem [ref=e108]:
+            - link "Chính Sách Bảo Mật" [ref=e109] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e110]
+              - text: Chính Sách Bảo Mật
+          - listitem [ref=e113]:
+            - link "Liên Hệ" [ref=e114] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e115]
+              - text: Liên Hệ
+    - generic [ref=e121]:
+      - paragraph [ref=e122]: © 2026 IT Compass. Đã đăng ký bản quyền.
+      - paragraph [ref=e123]: Được xây dựng với ❤️ cho thế hệ IT Việt Nam

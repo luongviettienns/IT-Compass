@@ -1,0 +1,49 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - main [ref=e8]:
+    - generic:
+      - generic:
+        - img
+        - text: Developer
+      - generic:
+        - img
+        - text: Data
+      - generic:
+        - img
+        - text: Security
+      - generic:
+        - img
+        - text: Design
+    - generic [ref=e9]:
+      - link [ref=e11] [cursor=pointer]:
+        - /url: /
+        - img [ref=e12]
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - heading "Đăng nhập" [level=3] [ref=e27]
+          - paragraph [ref=e28]: Bắt đầu hành trình IT của bạn
+        - generic [ref=e29]:
+          - generic [ref=e30]:
+            - generic [ref=e31]:
+              - text: Email
+              - generic [ref=e32]:
+                - img [ref=e34]
+                - textbox "Email" [ref=e37]:
+                  - /placeholder: ban@truonghoc.edu.vn
+                  - text: mentor@it.com
+            - generic [ref=e38]:
+              - text: Mật khẩu
+              - generic [ref=e39]:
+                - img [ref=e41]
+                - textbox "Mật khẩu" [active] [ref=e44]:
+                  - /placeholder: Tối thiểu 8 ký tự
+                  - text: mentor123
+            - button "Đăng nhập" [ref=e45] [cursor=pointer]:
+              - img [ref=e46]
+              - text: Đăng nhập
+          - generic [ref=e49]:
+            - link "Quên mật khẩu?" [ref=e50] [cursor=pointer]:
+              - /url: /forgot-password?redirect=%2Fmentor%2Fmessages
+            - generic [ref=e51]:
+              - text: Chưa có tài khoản?
+              - button "Đăng ký ngay" [ref=e52] [cursor=pointer]

@@ -34,8 +34,10 @@ const AuthPage = lazy(() => import('./pages/auth/AuthPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/auth/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('./pages/auth/ResetPasswordPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const MessagesPage = lazy(() => import('./pages/MessagesPage'));
+const StudentBookingsPage = lazy(() => import('./pages/StudentBookingsPage'));
 const AdminPage = lazy(() => import('./pages/admin/AdminPage'));
-const MentorDashboard = lazy(() => import('./pages/mentor/MentorDashboard'));
+const MentorPortal = lazy(() => import('./pages/mentor/MentorPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function PageLoader() {
@@ -48,7 +50,8 @@ function PageLoader() {
 
 function AppShell() {
   const { pathname } = useLocation();
-  const isAdmin = pathname.startsWith('/admin');
+  const isAdmin = pathname === '/admin' || pathname.startsWith('/admin/');
+  const isMentor = pathname === '/mentor' || pathname.startsWith('/mentor/');
   const isQuiz = pathname === '/test/quiz';
 
   // Quiz page: no header/footer for focused experience
@@ -75,13 +78,26 @@ function AppShell() {
     );
   }
 
+  // Mentor portal: dedicated layout shell
+  if (isMentor) {
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route element={<ProtectedRoute requireRoles={['MENTOR']} />}>
+            <Route path="/mentor/*" element={<MentorPortal />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    );
+  }
+
   // Student layout: header + content + footer + bottom nav
   const isAuth = pathname.startsWith('/auth') || pathname.startsWith('/forgot-password') || pathname.startsWith('/reset-password');
-  const showLayout = !isAdmin && !isQuiz && !isAuth;
+  const showLayout = !isAdmin && !isMentor && !isQuiz && !isAuth;
 
   return (
     <SmoothScroll>
-      <div className="min-h-screen bg-background font-sans pb-16 md:pb-0">
+      <div className="min-h-screen bg-background font-sans pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0">
         {showLayout && <Header />}
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -106,11 +122,8 @@ function AppShell() {
             {/* Protected: any logged-in user */}
             <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<ProfilePage />} />
-            </Route>
-
-            {/* Protected: mentor */}
-            <Route element={<ProtectedRoute requireRoles={['MENTOR']} />}>
-              <Route path="/mentor/dashboard" element={<MentorDashboard />} />
+              <Route path="/messages" element={<MessagesPage />} />
+              <Route path="/bookings" element={<StudentBookingsPage />} />
             </Route>
 
             {/* 404 */}

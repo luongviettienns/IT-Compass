@@ -43,7 +43,7 @@ const assertActiveUser = (user) => {
         throw new HttpError(403, 'Account is not active', undefined, 'AUTH_ACCOUNT_NOT_ACTIVE');
     }
 };
-export const register = async ({ fullName, email, password, role, userAgent, ipAddress }) => {
+export const register = async ({ fullName, email, password, userAgent, ipAddress }) => {
     // Chuẩn hóa input trước khi chạm DB để tránh lệch dữ liệu vì casing, khoảng trắng hoặc ký tự thừa.
     const sanitizedFullName = sanitizeSingleLineText(fullName);
     const normalizedEmail = sanitizeEmailAddress(email);
@@ -58,7 +58,7 @@ export const register = async ({ fullName, email, password, role, userAgent, ipA
             fullName: sanitizedFullName,
             email: normalizedEmail,
             passwordHash,
-            role,
+            role: 'STUDENT',
             profile: {
                 create: {},
             },

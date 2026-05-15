@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Save, Search, ImageIcon, Calendar, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, Save, Search, ImageIcon, Calendar, Eye, ChevronLeft, ChevronRight, FileText as FileTemplate } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { blogApi } from '../../lib/blogApi';
 import { adminQueryKeys } from '../../lib/adminQueryKeys';
+import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../ui/Loader';
 import { BlogContentRenderer } from '../blog/BlogContentRenderer';
 
@@ -39,6 +41,9 @@ const BLOG_STATUS_LABEL = {
     SCHEDULED: 'Lên lịch đăng',
     PUBLISHED: 'Đã xuất bản',
 } as const;
+
+const MIN_BLOG_TITLE_LENGTH = 3;
+const MIN_BLOG_CONTENT_LENGTH = 10;
 
 const EDITOR_TEMPLATES = [
     {
@@ -111,6 +116,292 @@ const EDITOR_TEMPLATES = [
     },
 ] as const;
 
+const ARTICLE_TEMPLATES = [
+    {
+        label: '📘 Hướng dẫn / Tutorial',
+        desc: 'Bài viết dạng hướng dẫn từng bước',
+        content: `## Giới thiệu
+
+Bài viết này hướng dẫn bạn [chủ đề cụ thể]. Sau khi đọc xong, bạn sẽ có thể [kết quả mong muốn].
+
+> **Dành cho ai?** Dành cho [đối tượng mục tiêu] đang tìm hiểu về [lĩnh vực].
+
+## Yêu cầu trước khi bắt đầu
+
+- Kiến thức cơ bản về [X]
+- Đã cài đặt [công cụ / môi trường]
+- Khoảng [Y] phút để hoàn thành
+
+## Bước 1: Chuẩn bị môi trường
+
+Mô tả bước chuẩn bị đầu tiên...
+
+\`\`\`bash
+# Lệnh cài đặt hoặc setup
+npm install example-package
+\`\`\`
+
+## Bước 2: Triển khai chức năng chính
+
+Hướng dẫn triển khai logic cốt lõi...
+
+\`\`\`ts
+const example = true;
+\`\`\`
+
+## Bước 3: Kiểm tra và tinh chỉnh
+
+Cách verify kết quả và xử lý edge case...
+
+## Lỗi thường gặp
+
+- **Lỗi A**: Nguyên nhân và cách fix
+- **Lỗi B**: Nguyên nhân và cách fix
+
+## Tổng kết
+
+Trong bài này, bạn đã học được:
+
+1. [Điểm chính 1]
+2. [Điểm chính 2]
+3. [Điểm chính 3]
+
+> 💡 **Bước tiếp theo**: Tìm hiểu thêm về [chủ đề liên quan] để nâng cao kỹ năng.
+`,
+    },
+    {
+        label: '🎯 Lộ trình nghề nghiệp',
+        desc: 'Bài viết định hướng career path',
+        content: `## Tổng quan ngành [Tên lĩnh vực]
+
+Ngành [X] hiện đang là một trong những lĩnh vực phát triển nhanh nhất trong công nghệ. Bài viết này sẽ giúp bạn hiểu rõ lộ trình phát triển và những kỹ năng cần thiết.
+
+## Tại sao nên theo đuổi [lĩnh vực này]?
+
+- **Nhu cầu tuyển dụng cao**: [Số liệu cụ thể]
+- **Mức lương hấp dẫn**: [Khoảng lương tham khảo]
+- **Cơ hội phát triển**: [Xu hướng tăng trưởng]
+
+## Lộ trình từ Fresher đến Senior
+
+### 🟢 Giai đoạn 1: Fresher (0-1 năm)
+
+- Học vững nền tảng [X, Y, Z]
+- Làm quen với workflow thực tế
+- Xây dựng portfolio 2-3 dự án cá nhân
+
+### 🔵 Giai đoạn 2: Junior (1-3 năm)
+
+- Thành thạo [framework/tool chính]
+- Tham gia dự án thực tế
+- Phát triển kỹ năng teamwork và communication
+
+### 🟣 Giai đoạn 3: Middle (3-5 năm)
+
+- Chủ động thiết kế giải pháp
+- Mentor junior developers
+- Hiểu sâu về architecture và system design
+
+### 🟡 Giai đoạn 4: Senior+ (5+ năm)
+
+- Định hướng kỹ thuật cho team/dự án
+- Đóng góp cho cộng đồng open-source
+- Chuyên sâu vào 1-2 domain cụ thể
+
+## Kỹ năng cần thiết
+
+| Kỹ năng | Mức độ quan trọng | Ghi chú |
+|---------|-------------------|---------|
+| [Kỹ năng 1] | ⭐⭐⭐⭐⭐ | Bắt buộc |
+| [Kỹ năng 2] | ⭐⭐⭐⭐ | Rất cần |
+| [Kỹ năng 3] | ⭐⭐⭐ | Nên có |
+
+## Tài nguyên học tập
+
+1. **Khóa học**: [Tên khóa học + link]
+2. **Sách**: [Tên sách]
+3. **Cộng đồng**: [Forum, Discord, Meetup]
+
+> 🎯 **Lời khuyên**: Đừng cố học tất cả cùng lúc. Hãy tập trung vào fundamental trước, rồi mở rộng dần.
+`,
+    },
+    {
+        label: '⚡ Đánh giá công nghệ',
+        desc: 'Bài review framework, tool, hoặc tech',
+        content: `## [Tên công nghệ] — Có đáng để sử dụng?
+
+[Tên công nghệ] là [mô tả ngắn]. Trong bài này, mình sẽ đánh giá chi tiết dựa trên trải nghiệm thực tế sau [X tháng/năm] sử dụng.
+
+## Tổng quan
+
+- **Phiên bản**: [v1.2.3]
+- **Giấy phép**: [MIT / Apache / ...]
+- **Ngôn ngữ**: [TypeScript / Python / ...]
+- **Stars trên GitHub**: [Số stars]
+
+## Điểm mạnh 👍
+
+### 1. [Ưu điểm đầu tiên]
+Mô tả chi tiết ưu điểm...
+
+### 2. [Ưu điểm thứ hai]
+Mô tả chi tiết ưu điểm...
+
+### 3. [Ưu điểm thứ ba]
+Mô tả chi tiết ưu điểm...
+
+## Điểm yếu 👎
+
+### 1. [Nhược điểm đầu tiên]
+Mô tả chi tiết nhược điểm...
+
+### 2. [Nhược điểm thứ hai]
+Mô tả chi tiết nhược điểm...
+
+## So sánh nhanh với đối thủ
+
+| Tiêu chí | [Công nghệ A] | [Công nghệ B] | [Công nghệ C] |
+|----------|---------------|---------------|---------------|
+| Performance | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| DX | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| Community | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
+
+## Nên dùng khi nào?
+
+- ✅ Khi bạn cần [use case 1]
+- ✅ Khi dự án yêu cầu [use case 2]
+- ❌ Không nên dùng khi [anti-pattern]
+
+## Kết luận
+
+> **Đánh giá tổng: [X/10]** — [Tóm tắt 1 dòng]
+
+[Tên công nghệ] phù hợp nhất cho [đối tượng cụ thể]. Nếu bạn đang tìm [giải pháp cụ thể], đây là lựa chọn đáng cân nhắc.
+`,
+    },
+    {
+        label: '🔄 So sánh A vs B',
+        desc: 'Bài so sánh 2 công nghệ / framework',
+        content: `## [A] vs [B] — Nên chọn cái nào?
+
+Đây là câu hỏi mà nhiều developer gặp phải khi bắt đầu dự án mới. Bài viết này so sánh [A] và [B] một cách khách quan trên nhiều khía cạnh.
+
+## Tổng quan nhanh
+
+| | [A] | [B] |
+|---|---|---|
+| Ra mắt | [Năm] | [Năm] |
+| Cộng đồng | [Lớn/Trung bình/Nhỏ] | [Lớn/Trung bình/Nhỏ] |
+| Learning curve | [Dễ/Trung bình/Khó] | [Dễ/Trung bình/Khó] |
+| Use case chính | [Loại dự án] | [Loại dự án] |
+
+## 1. Hiệu năng (Performance)
+
+### [A]
+Mô tả hiệu năng của A...
+
+### [B]
+Mô tả hiệu năng của B...
+
+> **Kết luận mục này**: [A/B] nhỉnh hơn về hiệu năng trong đa số trường hợp.
+
+## 2. Trải nghiệm phát triển (DX)
+
+### [A]
+Mô tả DX của A...
+
+### [B]
+Mô tả DX của B...
+
+## 3. Hệ sinh thái & Cộng đồng
+
+- **[A]**: [X] packages, [Y] stars, active community
+- **[B]**: [X] packages, [Y] stars, growing community
+
+## 4. Khi nào chọn [A]?
+
+- Dự án cần [đặc tính 1]
+- Team có kinh nghiệm với [related tech]
+- Scale [nhỏ/vừa/lớn]
+
+## 5. Khi nào chọn [B]?
+
+- Dự án cần [đặc tính 1]
+- Ưu tiên [tiêu chí quan trọng]
+- Scale [nhỏ/vừa/lớn]
+
+## Bảng điểm tổng kết
+
+| Tiêu chí | [A] | [B] |
+|----------|-----|-----|
+| Performance | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Developer Experience | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Ecosystem | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| Learning Curve | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Tổng** | **16/20** | **16/20** |
+
+> 💡 Không có lựa chọn "tốt nhất" — chỉ có lựa chọn "phù hợp nhất" cho dự án của bạn.
+`,
+    },
+    {
+        label: '💡 Top N Tips',
+        desc: 'Bài tổng hợp tips / best practices',
+        content: `## [N] Tips [chủ đề] mà mọi developer nên biết
+
+Dù bạn là fresher hay senior, những tips này sẽ giúp bạn [lợi ích cụ thể]. Cùng đi qua từng tip một!
+
+## 1. [Tip đầu tiên — ngắn gọn, dễ nhớ]
+
+Giải thích chi tiết tại sao tip này quan trọng...
+
+\`\`\`ts
+// Ví dụ minh họa
+const goodPractice = true;
+\`\`\`
+
+> ✅ **Takeaway**: [1 dòng tóm tắt]
+
+## 2. [Tip thứ hai]
+
+Giải thích chi tiết...
+
+> ✅ **Takeaway**: [1 dòng tóm tắt]
+
+## 3. [Tip thứ ba]
+
+Giải thích chi tiết...
+
+> ✅ **Takeaway**: [1 dòng tóm tắt]
+
+## 4. [Tip thứ tư]
+
+Giải thích chi tiết...
+
+> ✅ **Takeaway**: [1 dòng tóm tắt]
+
+## 5. [Tip thứ năm]
+
+Giải thích chi tiết...
+
+> ✅ **Takeaway**: [1 dòng tóm tắt]
+
+## Checklist nhanh
+
+- [ ] Áp dụng tip 1
+- [ ] Áp dụng tip 2
+- [ ] Áp dụng tip 3
+- [ ] Áp dụng tip 4
+- [ ] Áp dụng tip 5
+
+## Tổng kết
+
+Trên đây là [N] tips giúp bạn [cải thiện kỹ năng cụ thể]. Hãy bắt đầu với 1-2 tips trước, rồi dần dần áp dụng tất cả vào workflow hàng ngày.
+
+> 🔗 **Đọc thêm**: [Bài viết liên quan trên IT Compass]
+`,
+    },
+];
+
 export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, onClose, postId, initialMode = 'edit' }) => {
     const queryClient = useQueryClient();
     const isPreviewMode = initialMode === 'preview';
@@ -137,6 +428,7 @@ export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, 
 
     const [slugStatus, setSlugStatus] = useState<'IDLE' | 'CHECKING' | 'AVAILABLE' | 'CONFLICTED'>('IDLE');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [showTemplateSelector, setShowTemplateSelector] = useState(false);
 
     useEffect(() => {
         if (postToEdit) {
@@ -165,34 +457,98 @@ export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, 
         setCurrentStep('content');
         setSlugStatus('IDLE');
         setErrorMessage(null);
+        setShowTemplateSelector(false);
     }, [postToEdit, isOpen]);
+
+    const showFormError = (message: string) => {
+        setErrorMessage(message);
+        toast.error(message);
+    };
 
     const checkSlugMutation = useMutation({
         mutationFn: (slugToCheck: string) => blogApi.adminCheckSlug({ slug: slugToCheck, excludeId: postToEdit?.id }),
         onSuccess: (response) => {
             setSlugStatus(response.isAvailable ? 'AVAILABLE' : 'CONFLICTED');
-        }
+        },
+        onError: (error) => showFormError(getErrorMessage(error, 'Không thể kiểm tra đường dẫn bài viết.')),
     });
 
     const handleCheckSlug = () => {
-        if (!slug.trim() || isPreviewMode) return;
+        if (isPreviewMode) return;
+        const normalizedSlug = slug.trim();
+        if (!normalizedSlug) {
+            showFormError('Vui lòng nhập đường dẫn bài viết trước khi kiểm tra.');
+            return;
+        }
         setSlugStatus('CHECKING');
-        checkSlugMutation.mutate(slug);
+        setErrorMessage(null);
+        checkSlugMutation.mutate(normalizedSlug);
+    };
+
+    const validateForm = () => {
+        const normalizedTitle = title.trim();
+        const normalizedSlug = slug.trim();
+        const normalizedContent = content.trim();
+
+        if (!normalizedTitle) {
+            showFormError('Vui lòng nhập tiêu đề bài viết.');
+            return false;
+        }
+
+        if (normalizedTitle.length < MIN_BLOG_TITLE_LENGTH) {
+            showFormError('Tiêu đề bài viết cần ít nhất 3 ký tự.');
+            return false;
+        }
+
+        if (!normalizedSlug) {
+            showFormError('Vui lòng nhập đường dẫn bài viết.');
+            return false;
+        }
+
+        if (!normalizedContent) {
+            showFormError('Vui lòng nhập nội dung bài viết.');
+            return false;
+        }
+
+        if (normalizedContent.length < MIN_BLOG_CONTENT_LENGTH) {
+            showFormError('Nội dung bài viết cần ít nhất 10 ký tự.');
+            return false;
+        }
+
+        if (slugStatus === 'CONFLICTED') {
+            showFormError('Đường dẫn bài viết đã tồn tại, vui lòng đổi slug.');
+            return false;
+        }
+
+        if (status === 'SCHEDULED') {
+            if (!scheduledAt) {
+                showFormError('Vui lòng chọn thời điểm lên lịch đăng bài.');
+                return false;
+            }
+
+            const scheduledTime = new Date(scheduledAt).getTime();
+            if (!Number.isFinite(scheduledTime)) {
+                showFormError('Thời điểm lên lịch đăng bài không hợp lệ.');
+                return false;
+            }
+        }
+
+        return true;
     };
 
     const saveMutation = useMutation({
         mutationFn: async () => {
             const payload = {
-                title,
-                slug,
-                excerpt,
-                content,
-                tag,
-                coverImageUrl,
+                title: title.trim(),
+                slug: slug.trim(),
+                excerpt: excerpt.trim(),
+                content: content.trim(),
+                tag: tag.trim(),
+                coverImageUrl: coverImageUrl.trim(),
                 status,
                 scheduledAt: status === 'SCHEDULED' && scheduledAt ? new Date(scheduledAt).toISOString() : undefined,
-                metaTitle,
-                metaDescription,
+                metaTitle: metaTitle.trim(),
+                metaDescription: metaDescription.trim(),
             };
 
             if (postToEdit) {
@@ -210,7 +566,7 @@ export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, 
             setErrorMessage(null);
             onClose();
         },
-        onError: (err: Error) => setErrorMessage(err.message || 'Lưu bài viết thất bại')
+        onError: (error) => showFormError(getErrorMessage(error, 'Lưu bài viết thất bại.')),
     });
 
     const uploadMutation = useMutation({
@@ -224,7 +580,7 @@ export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, 
             }
             setErrorMessage(null);
         },
-        onError: (err: Error) => setErrorMessage(err.message || 'Tải ảnh thất bại')
+        onError: (error) => showFormError(getErrorMessage(error, 'Tải ảnh thất bại.')),
     });
 
     const focusEditor = (selectionStart: number, selectionEnd = selectionStart) => {
@@ -264,11 +620,32 @@ export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, 
         replaceEditorSelection((selectedText) => template.apply(selectedText));
     };
 
+    const handleApplyTemplate = (template: typeof ARTICLE_TEMPLATES[number]) => {
+        if (isPreviewMode) return;
+        setContent(template.content);
+        setShowTemplateSelector(false);
+        requestAnimationFrame(() => {
+            editorRef.current?.focus();
+            editorRef.current?.setSelectionRange(0, 0);
+            editorRef.current?.scrollTo(0, 0);
+        });
+    };
+
     const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>, target: UploadTarget) => {
         if (isPreviewMode) return;
-        if (e.target.files && e.target.files[0]) {
-            uploadMutation.mutate({ file: e.target.files[0], target });
+        const file = e.target.files?.[0];
+        if (!file) {
+            e.target.value = '';
+            return;
         }
+
+        if (!file.type.startsWith('image/')) {
+            showFormError('Vui lòng chọn đúng định dạng ảnh.');
+            e.target.value = '';
+            return;
+        }
+
+        uploadMutation.mutate({ file, target });
         e.target.value = '';
     };
 
@@ -401,6 +778,43 @@ export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, 
                                 </button>
                             ))}
                         </div>
+
+                        {/* ── Article Template Picker ── */}
+                        {!isPreviewMode && (
+                            <div className="rounded-2xl border bg-background">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowTemplateSelector(!showTemplateSelector)}
+                                    className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-secondary/30 rounded-2xl"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <FileTemplate className="w-4 h-4 text-primary" />
+                                        <span className="text-xs font-bold uppercase tracking-[0.15em] text-primary">Dùng mẫu bài viết có sẵn</span>
+                                        <span className="text-[10px] text-muted-foreground">(5 mẫu)</span>
+                                    </div>
+                                    <ChevronRight className={`w-4 h-4 text-muted-foreground transition-transform ${showTemplateSelector ? 'rotate-90' : ''}`} />
+                                </button>
+
+                                {showTemplateSelector && (
+                                    <div className="border-t p-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                                        {ARTICLE_TEMPLATES.map((tpl) => (
+                                            <button
+                                                key={tpl.label}
+                                                type="button"
+                                                onClick={() => {
+                                                    if (content.trim() && !window.confirm('Nội dung hiện tại sẽ bị thay thế bởi mẫu. Bạn có chắc?')) return;
+                                                    handleApplyTemplate(tpl);
+                                                }}
+                                                className="group rounded-xl border bg-background p-3 text-left transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-sm"
+                                            >
+                                                <div className="text-sm font-bold text-foreground">{tpl.label}</div>
+                                                <div className="mt-1 text-xs text-muted-foreground">{tpl.desc}</div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
                             <div className="flex flex-col gap-2 min-h-[320px]">
@@ -665,7 +1079,10 @@ export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, 
                                 {!isPreviewMode ? (
                                     <button
                                         disabled={saveDisabled}
-                                        onClick={() => saveMutation.mutate()}
+                                        onClick={() => {
+                                            if (!validateForm()) return;
+                                            saveMutation.mutate();
+                                        }}
                                         className="px-6 py-2.5 rounded-xl font-bold bg-primary text-primary-foreground flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform disabled:opacity-50"
                                     >
                                         {saveMutation.isPending ? 'Đang lưu...' : <><Save className="w-4 h-4" /> Lưu bài viết</>}

@@ -1,0 +1,366 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "IT Compass" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img [ref=e8]
+        - generic [ref=e11]: IT Compass
+      - navigation [ref=e12]:
+        - link "Trang chủ" [ref=e13] [cursor=pointer]:
+          - /url: /
+          - text: Trang chủ
+        - link "Trắc nghiệm" [ref=e15] [cursor=pointer]:
+          - /url: /test
+          - text: Trắc nghiệm
+        - link "Lĩnh vực IT" [ref=e17] [cursor=pointer]:
+          - /url: /majors
+          - text: Lĩnh vực IT
+        - link "Cố vấn" [ref=e19] [cursor=pointer]:
+          - /url: /mentors
+          - text: Cố vấn
+        - link "Blog" [ref=e21] [cursor=pointer]:
+          - /url: /blog
+          - text: Blog
+        - link "Giới thiệu" [ref=e23] [cursor=pointer]:
+          - /url: /about
+          - text: Giới thiệu
+      - button "QV User" [ref=e161] [cursor=pointer]:
+        - generic [ref=e162]: QV
+        - generic [ref=e164]:
+          - generic [ref=e165]: User
+          - img [ref=e166]
+  - main [ref=e168]:
+    - generic [ref=e170]:
+      - generic [ref=e171]: Nền Tảng Hướng Nghiệp IT Số 1
+      - heading "Chuyên ngành IT nào sinh ra dành cho bạn?" [level=1] [ref=e172]
+      - paragraph [ref=e173]: Khám phá chuyên ngành IT và lộ trình học tập lý tưởng của bạn chỉ trong 3 phút qua bài đánh giá năng lực và tính cách chính xác.
+      - generic [ref=e174]:
+        - button "Làm Bài Test" [ref=e175] [cursor=pointer]:
+          - text: Làm Bài Test
+          - img
+        - button "Tìm Hiểu Ngành" [ref=e176] [cursor=pointer]
+      - generic [ref=e179]:
+        - img [ref=e184]
+        - img [ref=e188]
+        - generic [ref=e192]: AI & Data Science
+        - generic [ref=e193]: Cloud & DevOps
+        - img [ref=e195]
+        - img [ref=e198]
+        - img [ref=e201]
+        - generic [ref=e207]: Frontend & UI
+        - generic [ref=e208]: Backend Systems
+        - generic [ref=e209]: Cyber Security
+        - generic [ref=e210]:
+          - img [ref=e214]
+          - generic [ref=e217]:
+            - heading "IT COMPASS" [level=2] [ref=e219]
+            - paragraph [ref=e220]: La Bàn Nghề Nghiệp
+    - generic [ref=e223]:
+      - generic [ref=e224]:
+        - generic [ref=e225]:
+          - img [ref=e227]
+          - generic [ref=e229]: Nhanh Chóng & Chính Xác
+        - paragraph [ref=e231]: Hoàn thành bài kiểm tra chuyên sâu dưới 3 phút để tìm ra định hướng công nghệ phù hợp nhất.
+      - generic [ref=e232]:
+        - generic [ref=e233]:
+          - img [ref=e235]
+          - generic [ref=e239]: Gợi Ý Cá Nhân Hóa
+        - paragraph [ref=e241]: Nhận đề xuất lộ trình nghề nghiệp được tinh chỉnh dựa trên thế mạnh riêng của bạn.
+      - generic [ref=e242]:
+        - generic [ref=e243]:
+          - img [ref=e245]
+          - generic [ref=e247]: Lộ Trình Học Tập Rõ Ràng
+        - paragraph [ref=e249]: Hướng dẫn từng bước từ con số 0 đến khi sẵn sàng làm việc trong lĩnh vực bạn chọn.
+    - generic [ref=e252]:
+      - generic [ref=e253]:
+        - heading "IT Compass là gì?" [level=2] [ref=e254]
+        - paragraph [ref=e255]: IT Compass là "la bàn" chỉ đường giúp bạn định hướng trong thế giới Công Nghệ Thông Tin rộng lớn. Dù bạn là học sinh cấp 3, sinh viên năm nhất hay Junior Developer, chúng tôi sẽ giúp bạn khám phá chuyên ngành IT và con đường sự nghiệp hoàn hảo nhất với tính cách và kỹ năng của riêng bạn.
+      - generic [ref=e256]:
+        - generic [ref=e261]:
+          - img [ref=e264]
+          - generic [ref=e267]:
+            - paragraph [ref=e268]: Độ Phù Hợp
+            - heading "Frontend Dev" [level=4] [ref=e269]
+          - generic [ref=e271]: 98%
+        - generic [ref=e280]:
+          - img [ref=e282]
+          - generic [ref=e286]:
+            - paragraph [ref=e287]: Kỹ năng tốt
+            - paragraph [ref=e288]: React & TS
+        - generic [ref=e289]:
+          - img [ref=e291]
+          - generic [ref=e296]:
+            - paragraph [ref=e297]: Phân tích tính cách
+            - paragraph [ref=e298]: Sáng tạo, Logic
+    - generic [ref=e302]:
+      - generic [ref=e303]:
+        - generic [ref=e304]: 5,000+
+        - generic [ref=e305]: Người Dùng Đã Test
+      - generic [ref=e306]:
+        - generic [ref=e307]: 20+
+        - generic [ref=e308]: Chuyên Ngành IT
+      - generic [ref=e309]:
+        - generic [ref=e310]: 100+
+        - generic [ref=e311]: Bài Viết Blog
+    - generic [ref=e313]:
+      - generic [ref=e314]:
+        - heading "Khám Phá Chuyên Ngành IT" [level=2] [ref=e315]
+        - paragraph [ref=e316]: Tìm môn chuyên ngành phù hợp hoàn hảo với sở thích và thế mạnh của bạn.
+      - generic [ref=e317]:
+        - generic [ref=e319] [cursor=pointer]:
+          - img [ref=e321]
+          - heading "Frontend" [level=3] [ref=e323]
+          - paragraph [ref=e324]: Xây dựng giao diện người dùng và trải nghiệm Web.
+          - generic [ref=e325]:
+            - text: Xem Chi Tiết
+            - img [ref=e326]
+        - generic [ref=e329] [cursor=pointer]:
+          - img [ref=e331]
+          - heading "Backend" [level=3] [ref=e334]
+          - paragraph [ref=e335]: Phát triển logic phía Server và API cho ứng dụng.
+          - generic [ref=e336]:
+            - text: Xem Chi Tiết
+            - img [ref=e337]
+        - generic [ref=e340] [cursor=pointer]:
+          - img [ref=e342]
+          - heading "Data Science" [level=3] [ref=e346]
+          - paragraph [ref=e347]: Phân tích dữ liệu phức tạp giúp doanh nghiệp ra quyết định.
+          - generic [ref=e348]:
+            - text: Xem Chi Tiết
+            - img [ref=e349]
+        - generic [ref=e352] [cursor=pointer]:
+          - img [ref=e354]
+          - heading "Artificial Intelligence" [level=3] [ref=e362]
+          - paragraph [ref=e363]: Tạo ra các hệ thống thông minh, tự động hóa và dự đoán.
+          - generic [ref=e364]:
+            - text: Xem Chi Tiết
+            - img [ref=e365]
+        - generic [ref=e368] [cursor=pointer]:
+          - img [ref=e370]
+          - heading "Cybersecurity" [level=3] [ref=e372]
+          - paragraph [ref=e373]: Bảo vệ hệ thống, mạng internet và phần mềm khỏi các cuộc tấn công.
+          - generic [ref=e374]:
+            - text: Xem Chi Tiết
+            - img [ref=e375]
+    - generic [ref=e378]:
+      - generic [ref=e379]:
+        - heading "Cách Thức Hoạt Động" [level=2] [ref=e380]
+        - paragraph [ref=e381]: Hành trình đến với sự nghiệp IT chỉ qua 3 bước đơn giản.
+      - generic [ref=e384]:
+        - generic [ref=e385]:
+          - img [ref=e387]
+          - 'heading "Bước 01: Làm Bài Test" [level=3] [ref=e391]':
+            - text: "Bước 01:"
+            - text: Làm Bài Test
+          - paragraph [ref=e392]: Bài đánh giá nhanh trong 3 phút để hiểu rõ tính cách và kỹ năng công nghệ của bạn.
+        - generic [ref=e393]:
+          - img [ref=e395]
+          - 'heading "Bước 02: Nhận Kết Quả" [level=3] [ref=e398]':
+            - text: "Bước 02:"
+            - text: Nhận Kết Quả
+          - paragraph [ref=e399]: Khám phá ngay các chuyên ngành IT phù hợp nhất cùng phân tích chi tiết.
+        - generic [ref=e400]:
+          - img [ref=e402]
+          - 'heading "Bước 03: Theo Lộ Trình" [level=3] [ref=e405]':
+            - text: "Bước 03:"
+            - text: Theo Lộ Trình
+          - paragraph [ref=e406]: Truy cập lộ trình học tập từng bước để làm chủ lĩnh vực bạn chọn.
+    - generic [ref=e408]:
+      - generic [ref=e409]:
+        - heading "Người Dùng Nói Gì Về Chúng Tôi" [level=2] [ref=e410]
+        - paragraph [ref=e411]: Cùng hàng ngàn học sinh và lập trình viên đã tìm thấy đam mê thực sự trong ngành công nghệ với IT Compass.
+      - generic [ref=e412]:
+        - generic [ref=e415]:
+          - img [ref=e417]
+          - generic [ref=e420]:
+            - generic [ref=e421]:
+              - img [ref=e422]
+              - img [ref=e424]
+              - img [ref=e426]
+              - img [ref=e428]
+              - img [ref=e430]
+            - paragraph [ref=e432]:
+              - generic [ref=e433]: "\""
+              - text: IT Compass đã giúp tôi chuyển hướng từ Khoa học máy tính chung sang Web Development. Bây giờ tôi đã tự tin hơn rất nhiều!
+            - generic [ref=e434]:
+              - img "Alex Nguyen" [ref=e437]
+              - generic [ref=e439]:
+                - heading "Alex Nguyen" [level=4] [ref=e440]
+                - paragraph [ref=e441]: Sinh Viên Năm Nhất
+        - generic [ref=e444]:
+          - img [ref=e446]
+          - generic [ref=e449]:
+            - generic [ref=e450]:
+              - img [ref=e451]
+              - img [ref=e453]
+              - img [ref=e455]
+              - img [ref=e457]
+              - img [ref=e459]
+            - paragraph [ref=e461]:
+              - generic [ref=e462]: "\""
+              - text: Bài Test 3 phút thực sự chính xác đáng kinh ngạc. Nó gợi ý Data Science dựa trên khả năng phân tích của tôi, và tôi đang theo đuổi nó.
+            - generic [ref=e463]:
+              - img "Mai Le" [ref=e466]
+              - generic [ref=e468]:
+                - heading "Mai Le" [level=4] [ref=e469]
+                - paragraph [ref=e470]: Học Sinh Cấp 3
+        - generic [ref=e473]:
+          - img [ref=e475]
+          - generic [ref=e478]:
+            - generic [ref=e479]:
+              - img [ref=e480]
+              - img [ref=e482]
+              - img [ref=e484]
+              - img [ref=e486]
+              - img [ref=e488]
+            - paragraph [ref=e490]:
+              - generic [ref=e491]: "\""
+              - text: Tôi từng lạc lối khi chọn giữa Backend và DevOps. Lộ trình của IT Compass đã làm mọi thứ trở nên rõ ràng hơn bao giờ hết.
+            - generic [ref=e492]:
+              - img "Kevin Tran" [ref=e495]
+              - generic [ref=e497]:
+                - heading "Kevin Tran" [level=4] [ref=e498]
+                - paragraph [ref=e499]: Junior Developer
+    - generic [ref=e501]:
+      - generic [ref=e502]:
+        - generic [ref=e503]:
+          - generic [ref=e504]:
+            - img [ref=e505]
+            - text: Mentor 1-1
+          - heading "Học Hỏi Từ Những Chuyên Gia" [level=2] [ref=e510]
+          - paragraph [ref=e511]: Đừng đi một mình. Hãy để những người đi trước dẫn dắt, chia sẻ kinh nghiệm thực tế và giúp bạn thăng tiến nhanh hơn trong sự nghiệp IT.
+        - link "Khám Phá Tất Cả Mentor" [ref=e512] [cursor=pointer]:
+          - /url: /mentors
+          - text: Khám Phá Tất Cả Mentor
+          - img [ref=e513]
+      - generic [ref=e515]:
+        - link "Nguyễn Văn A 4.9 Nguyễn Văn A Senior Fullstack Developer @ Google React Node.js System Design" [ref=e516] [cursor=pointer]:
+          - /url: /mentors
+          - generic [ref=e517]:
+            - generic [ref=e518]:
+              - img "Nguyễn Văn A" [ref=e520]
+              - img [ref=e522]
+            - generic [ref=e525]:
+              - img [ref=e526]
+              - generic [ref=e528]: "4.9"
+          - generic [ref=e529]:
+            - heading "Nguyễn Văn A" [level=3] [ref=e530]
+            - paragraph [ref=e531]: Senior Fullstack Developer @ Google
+          - generic [ref=e532]:
+            - generic [ref=e533]: React
+            - generic [ref=e534]: Node.js
+            - generic [ref=e535]: System Design
+        - link "Trần Thị B 4.8 Trần Thị B AI Engineer @ VinAI Python Machine Learning PyTorch" [ref=e536] [cursor=pointer]:
+          - /url: /mentors
+          - generic [ref=e537]:
+            - generic [ref=e538]:
+              - img "Trần Thị B" [ref=e540]
+              - img [ref=e542]
+            - generic [ref=e545]:
+              - img [ref=e546]
+              - generic [ref=e548]: "4.8"
+          - generic [ref=e549]:
+            - heading "Trần Thị B" [level=3] [ref=e550]
+            - paragraph [ref=e551]: AI Engineer @ VinAI
+          - generic [ref=e552]:
+            - generic [ref=e553]: Python
+            - generic [ref=e554]: Machine Learning
+            - generic [ref=e555]: PyTorch
+        - link "Lê Văn C 5 Lê Văn C DevOps Architect @ Amazon AWS Kubernetes CI/CD" [ref=e556] [cursor=pointer]:
+          - /url: /mentors
+          - generic [ref=e557]:
+            - generic [ref=e558]:
+              - img "Lê Văn C" [ref=e560]
+              - img [ref=e562]
+            - generic [ref=e565]:
+              - img [ref=e566]
+              - generic [ref=e568]: "5"
+          - generic [ref=e569]:
+            - heading "Lê Văn C" [level=3] [ref=e570]
+            - paragraph [ref=e571]: DevOps Architect @ Amazon
+          - generic [ref=e572]:
+            - generic [ref=e573]: AWS
+            - generic [ref=e574]: Kubernetes
+            - generic [ref=e575]: CI/CD
+    - generic [ref=e577]:
+      - generic [ref=e578]:
+        - heading "Kiến Thức & Nguồn Tài Nguyên" [level=2] [ref=e579]
+        - paragraph [ref=e580]: Cập nhật các xu hướng và bài hướng dẫn mới nhất về công nghệ.
+      - generic [ref=e582]:
+        - img "Bai viet test api moi" [ref=e584]
+        - generic [ref=e585]:
+          - generic [ref=e586]: Blog
+          - heading "Bai viet test api moi" [level=3] [ref=e587]
+          - link "Đọc Thêm" [ref=e588] [cursor=pointer]:
+            - /url: /blog/bai-viet-test-api-moi
+            - button "Đọc Thêm" [ref=e589]
+      - link "Xem Tất Cả Bài Viết" [ref=e591] [cursor=pointer]:
+        - /url: /blog
+        - button "Xem Tất Cả Bài Viết" [ref=e592]
+  - contentinfo [ref=e84]:
+    - generic [ref=e86]:
+      - generic [ref=e87]:
+        - generic [ref=e88]:
+          - img [ref=e92]
+          - generic [ref=e95]: IT Compass
+        - paragraph [ref=e96]: La bàn định vị sự nghiệp IT của bạn. Chúng tôi giúp thế hệ chuyên gia công nghệ Việt Nam tìm thấy đam mê và con đường phát triển phù hợp nhất.
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - generic: Website
+            - link [ref=e99] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e100]
+          - generic [ref=e103]:
+            - generic: Email
+            - link [ref=e104] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e105]
+          - generic [ref=e108]:
+            - generic: Phone
+            - link [ref=e109] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e110]
+      - generic [ref=e113]:
+        - heading "Nền Tảng" [level=4] [ref=e114]
+        - list [ref=e115]:
+          - listitem [ref=e116]:
+            - link "Làm Bài Test" [ref=e117] [cursor=pointer]:
+              - /url: /test
+              - img [ref=e118]
+              - text: Làm Bài Test
+          - listitem [ref=e121]:
+            - link "Chuyên Ngành IT" [ref=e122] [cursor=pointer]:
+              - /url: /majors
+              - img [ref=e123]
+              - text: Chuyên Ngành IT
+          - listitem [ref=e126]:
+            - link "Blog" [ref=e127] [cursor=pointer]:
+              - /url: /blog
+              - img [ref=e128]
+              - text: Blog
+      - generic [ref=e131]:
+        - heading "Công Ty" [level=4] [ref=e132]
+        - list [ref=e133]:
+          - listitem [ref=e134]:
+            - link "Về Chúng Tôi" [ref=e135] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e136]
+              - text: Về Chúng Tôi
+          - listitem [ref=e139]:
+            - link "Điều Khoản Dịch Vụ" [ref=e140] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e141]
+              - text: Điều Khoản Dịch Vụ
+          - listitem [ref=e144]:
+            - link "Chính Sách Bảo Mật" [ref=e145] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e146]
+              - text: Chính Sách Bảo Mật
+          - listitem [ref=e149]:
+            - link "Liên Hệ" [ref=e150] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e151]
+              - text: Liên Hệ
+    - generic [ref=e157]:
+      - paragraph [ref=e158]: © 2026 IT Compass. Đã đăng ký bản quyền.
+      - paragraph [ref=e159]: Được xây dựng với ❤️ cho thế hệ IT Việt Nam

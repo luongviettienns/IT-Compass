@@ -16,6 +16,8 @@ import { BrowserRouter } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { getErrorMessage, shouldRetryRequest } from './lib/appError'
 import { AuthProvider } from './contexts/AuthContext'
+import { RealtimeBookingListener } from './components/shared/RealtimeBookingListener'
+import { RealtimeNotificationListener } from './components/shared/RealtimeNotificationListener'
 import App from './App'
 import './index.css'
 
@@ -55,6 +57,8 @@ createRoot(document.getElementById('root')!).render(
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
+          <RealtimeBookingListener />
+          <RealtimeNotificationListener />
           <Toaster richColors position="top-center" />
           <BrowserRouter>
             <App />

@@ -20,6 +20,9 @@ import { adminBlogRoutes, blogRoutes } from './routes/blog.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 import adminUserRoutes from './routes/admin-user.routes.js';
 import { mentorRoutes, publicMentorRoutes } from './routes/mentor.routes.js';
+import { mentorBookingRoutes, publicMentorBookingRoutes, studentBookingRoutes } from './routes/booking.routes.js';
+import { bookingConversationRoutes, conversationRoutes } from './routes/conversation.routes.js';
+import notificationRoutes from './routes/notification.routes.js';
 import adminMentorRoutes from './routes/admin-mentor.routes.js';
 import { authConfig } from './config/auth.js';
 import { env } from './config/env.js';
@@ -59,8 +62,14 @@ app.use(metricsMiddleware); // Thu thập metrics thời gian xử lý và số 
 app.use('/api/auth', authRoutes);
 // Nhóm API người dùng cuối giữ prefix theo domain để từng module tự chốt middleware và validator phù hợp.
 app.use('/api/users', userRoutes);
+app.use('/api/users', studentBookingRoutes);
+app.use('/api/conversations', conversationRoutes);
+app.use('/api/bookings', bookingConversationRoutes);
+app.use('/api/notifications', notificationRoutes);
 app.use('/api/assessments', assessmentRoutes);
+app.use('/api/mentors', publicMentorBookingRoutes);
 app.use('/api/mentors', publicMentorRoutes);
+app.use('/api/mentor', mentorBookingRoutes);
 app.use('/api/mentor', mentorRoutes);
 app.use('/api/blogs', blogRoutes);
 // Toàn bộ route quản trị cùng đi qua /api/admin để RBAC, audit và điều tra sự cố tập trung hơn.

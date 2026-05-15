@@ -1,0 +1,189 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e53]:
+        - img [ref=e55]
+        - generic [ref=e58]: Đăng nhập thành công.
+  - generic [ref=e3]:
+    - banner [ref=e59]:
+      - generic [ref=e60]:
+        - link "IT Compass" [ref=e61] [cursor=pointer]:
+          - /url: /
+          - img [ref=e63]
+          - generic [ref=e75]: IT Compass
+        - navigation [ref=e76]:
+          - link "Trang chủ" [ref=e77] [cursor=pointer]:
+            - /url: /
+          - link "Trắc nghiệm" [ref=e78] [cursor=pointer]:
+            - /url: /test
+          - link "Blog" [ref=e79] [cursor=pointer]:
+            - /url: /blog
+          - link "Mentor" [ref=e80] [cursor=pointer]:
+            - /url: /mentors
+            - text: Mentor
+          - link "Ngành học" [ref=e82] [cursor=pointer]:
+            - /url: /majors
+        - generic [ref=e83]:
+          - button "Thông báo (1 chưa đọc)" [ref=e85] [cursor=pointer]:
+            - img [ref=e86]
+            - generic [ref=e90]: "1"
+          - button "Student Test" [ref=e92] [cursor=pointer]:
+            - img [ref=e94]
+            - generic [ref=e97]: Student Test
+            - img [ref=e98]
+    - main [ref=e100]:
+      - generic [ref=e101]:
+        - generic [ref=e103]:
+          - link "← Tất cả mentor" [ref=e105] [cursor=pointer]:
+            - /url: /mentors
+          - generic [ref=e106]:
+            - img [ref=e110]
+            - generic [ref=e113]:
+              - generic [ref=e114]: MIDDLE
+              - generic [ref=e115]:
+                - img [ref=e116]
+                - text: Web Development, Frontend, Backend
+            - heading "Mentor Demo" [level=1] [ref=e119]
+            - paragraph [ref=e120]: Mentor IT
+            - generic [ref=e121]:
+              - button "Đặt lịch tư vấn" [ref=e122] [cursor=pointer]:
+                - img [ref=e123]
+                - text: Đặt lịch tư vấn
+              - link "Làm trắc nghiệm trước" [ref=e126] [cursor=pointer]:
+                - /url: /test
+                - text: Làm trắc nghiệm trước
+                - img [ref=e127]
+        - generic [ref=e129]:
+          - generic [ref=e130]:
+            - img [ref=e132]
+            - paragraph [ref=e135]: Kinh nghiệm
+            - paragraph [ref=e136]: 0 năm
+          - generic [ref=e137]:
+            - img [ref=e139]
+            - paragraph [ref=e141]: Chi phí tham khảo
+            - paragraph [ref=e142]: Liên hệ
+          - generic [ref=e143]:
+            - img [ref=e145]
+            - paragraph [ref=e147]: Độ tin cậy
+            - paragraph [ref=e148]: 0 đánh giá
+          - generic [ref=e149]:
+            - img [ref=e151]
+            - paragraph [ref=e155]: Ngôn ngữ tư vấn
+            - paragraph [ref=e156]: Tiếng Việt
+        - generic [ref=e157]:
+          - generic [ref=e158]:
+            - generic [ref=e159]:
+              - generic [ref=e161]:
+                - img [ref=e163]
+                - generic [ref=e165]:
+                  - paragraph [ref=e166]: Giới thiệu
+                  - heading "Mentor này có thể giúp gì cho bạn?" [level=2] [ref=e167]
+              - paragraph [ref=e169]: Tài khoản mentor dùng để kiểm thử luồng đặt lịch và chat realtime.
+            - generic [ref=e170]:
+              - generic [ref=e171]:
+                - img [ref=e173]
+                - heading "Chuyên môn nổi bật" [level=2] [ref=e176]
+              - generic [ref=e177]:
+                - generic [ref=e178]: Web Development
+                - generic [ref=e179]: Frontend
+                - generic [ref=e180]: Backend
+            - generic [ref=e181]:
+              - generic [ref=e182]:
+                - img [ref=e184]
+                - paragraph [ref=e188]: Công ty hiện tại
+                - paragraph [ref=e189]: Đang cập nhật
+              - generic [ref=e190]:
+                - img [ref=e192]
+                - paragraph [ref=e195]: Vị trí
+                - paragraph [ref=e196]: Mentor IT
+              - generic [ref=e197]:
+                - img [ref=e199]
+                - paragraph [ref=e202]: Trường học
+                - paragraph [ref=e203]: Đang cập nhật
+              - generic [ref=e204]:
+                - img [ref=e206]
+                - paragraph [ref=e211]: Hình thức tư vấn
+                - paragraph [ref=e212]: Online 1:1
+          - complementary [ref=e213]:
+            - generic [ref=e214]:
+              - generic [ref=e215]:
+                - paragraph [ref=e216]: Sẵn sàng bắt đầu?
+                - paragraph [ref=e217]: Liên hệ/giờ
+              - generic [ref=e218]:
+                - generic [ref=e219]:
+                  - button "Đặt lịch ngay" [ref=e220] [cursor=pointer]:
+                    - img [ref=e221]
+                    - text: Đặt lịch ngay
+                  - link "Làm trắc nghiệm trước" [ref=e224] [cursor=pointer]:
+                    - /url: /test
+                    - text: Làm trắc nghiệm trước
+                    - img [ref=e225]
+                - generic [ref=e227]:
+                  - generic [ref=e228]:
+                    - img [ref=e230]
+                    - text: Profile đã được xác minh bởi IT Compass
+                  - generic [ref=e233]:
+                    - img [ref=e235]
+                    - text: Phản hồi trong vòng 24 giờ
+                  - generic [ref=e238]:
+                    - img [ref=e240]
+                    - text: 0 đánh giá từ mentee
+            - generic [ref=e242]:
+              - paragraph [ref=e243]: Chưa chắc hướng đi?
+              - paragraph [ref=e244]: Làm trắc nghiệm định hướng nghề nghiệp IT miễn phí để nhận gợi ý mentor phù hợp nhất.
+              - link "Bắt đầu ngay" [ref=e245] [cursor=pointer]:
+                - /url: /test
+                - text: Bắt đầu ngay
+                - img [ref=e246]
+    - generic [ref=e249]:
+      - generic [ref=e250]:
+        - img [ref=e252]
+        - generic [ref=e255]:
+          - paragraph [ref=e256]: Mentor Demo
+          - paragraph [ref=e257]: Liên hệ/giờ
+      - button "Đặt lịch tư vấn" [ref=e258] [cursor=pointer]:
+        - img [ref=e259]
+        - text: Đặt lịch tư vấn
+    - contentinfo [ref=e262]:
+      - generic [ref=e263]:
+        - generic [ref=e264]:
+          - generic [ref=e265]:
+            - link "IT Compass" [ref=e266] [cursor=pointer]:
+              - /url: /
+              - img [ref=e268]
+              - generic [ref=e280]: IT Compass
+            - paragraph [ref=e281]: Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+          - generic [ref=e282]:
+            - heading "Khám phá" [level=3] [ref=e283]
+            - list [ref=e284]:
+              - listitem [ref=e285]:
+                - link "Trắc nghiệm" [ref=e286] [cursor=pointer]:
+                  - /url: /test
+              - listitem [ref=e287]:
+                - link "Blog" [ref=e288] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e289]:
+                - link "Mentor" [ref=e290] [cursor=pointer]:
+                  - /url: /mentors
+              - listitem [ref=e291]:
+                - link "Ngành học" [ref=e292] [cursor=pointer]:
+                  - /url: /majors
+              - listitem [ref=e293]:
+                - link "Về chúng tôi" [ref=e294] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e295]:
+            - heading "Liên hệ" [level=3] [ref=e296]
+            - list [ref=e297]:
+              - listitem [ref=e298]:
+                - img [ref=e299]
+                - text: contact@itcompass.vn
+              - listitem [ref=e302]:
+                - img [ref=e303]
+                - text: TP. Hồ Chí Minh, Việt Nam
+              - listitem [ref=e306]:
+                - link "GitHub" [ref=e307] [cursor=pointer]:
+                  - /url: https://github.com
+                  - img [ref=e308]
+                  - text: GitHub
+                  - img [ref=e311]
+        - generic [ref=e315]: © 2026 IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.

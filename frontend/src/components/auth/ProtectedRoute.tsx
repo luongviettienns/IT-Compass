@@ -20,7 +20,8 @@ export function ProtectedRoute({ requireRoles }: ProtectedRouteProps) {
     }
 
     if (!isAuthenticated) {
-        return <Navigate to="/auth/login" state={{ redirectTo: location.pathname }} replace />;
+        const redirectTo = `${location.pathname}${location.search}`;
+        return <Navigate to="/auth/login" state={{ redirectTo }} replace />;
     }
 
     if (requireRoles && user && !requireRoles.includes(user.role)) {

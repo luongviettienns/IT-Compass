@@ -7,13 +7,17 @@
  * - Xử lý tắt server một cách an toàn (graceful shutdown) khi nhận tín hiệu SIGINT/SIGTERM,
  *   đảm bảo đóng kết nối database và dừng các tác vụ nền trước khi thoát.
  */
+import { createServer } from 'node:http';
 import app from './app.js';
 import { prisma } from './db/prisma.js';
 import { env } from './config/env.js';
 import { logger } from './utils/logger.js';
 import { startScheduler, stopScheduler } from './tasks/scheduler.js';
-/** Khởi tạo HTTP server và bắt đầu lắng nghe kết nối trên port cấu hình. */
-const server = app.listen(env.port, () => {
+import { initializeSocketServer } from './socket/index.js';
+/** Khởi tạo HTTP server để Express và Socket.IO dùng chung một port. */
+const server = createServer(app);
+const io = initializeSocketServer(server);
+server.listen(env.port, () => {
     logger.info('Backend server is running', {
         port: env.port,
         environment: env.nodeEnv,
@@ -29,10 +33,12 @@ const server = app.listen(env.port, () => {
 const shutdown = async (signal) => {
     logger.warn('Received shutdown signal', { signal });
     stopScheduler();
-    server.close(async () => {
-        await prisma.$disconnect();
-        logger.info('Backend server stopped gracefully', { signal });
-        process.exit(0);
+    io.close(() => {
+        server.close(async () => {
+            await prisma.$disconnect();
+            logger.info('Backend server stopped gracefully', { signal });
+            process.exit(0);
+        });
     });
 };
 process.on('SIGINT', () => {

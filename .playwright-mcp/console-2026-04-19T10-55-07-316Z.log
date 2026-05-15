@@ -1,0 +1,2 @@
+[      90ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=eb631c10:14337
+[   44520ms] [VERBOSE] [DOM] Password forms should have (optionally hidden) username fields for accessibility: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/reset-password?token=a6b88e15fca89077f200054e3fc80e9e64d6776da17365f8e593af8709c24cfd3b4291a949d4fb044dc7546ff5bbf0bc:0

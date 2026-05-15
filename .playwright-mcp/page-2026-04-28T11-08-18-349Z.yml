@@ -1,0 +1,21 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e8]:
+    - banner [ref=e9]:
+      - button "Mở menu" [ref=e10] [cursor=pointer]:
+        - img [ref=e11]
+      - generic [ref=e12]: Mentor Portal
+    - main [ref=e13]:
+      - complementary [ref=e16]:
+        - generic [ref=e17]:
+          - paragraph [ref=e18]: Tin nhắn
+          - heading "Cuộc trò chuyện" [level=1] [ref=e19]
+          - paragraph [ref=e20]: Chọn một cuộc trò chuyện để mở toàn màn hình trên điện thoại.
+        - button "Student Chat Test 21:15 26-04 student.chat.1777212244454@it.com Em đã nhận được tin nhắn, cảm ơn mentor ạ." [ref=e22] [cursor=pointer]:
+          - img [ref=e24]
+          - generic [ref=e27]:
+            - generic [ref=e28]:
+              - generic [ref=e29]: Student Chat Test
+              - generic [ref=e30]: 21:15 26-04
+            - generic [ref=e31]: student.chat.1777212244454@it.com
+            - generic [ref=e32]: Em đã nhận được tin nhắn, cảm ơn mentor ạ.

@@ -1,0 +1,163 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: IT Compass
+        - navigation [ref=e12]:
+          - link "Trang chủ" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - text: Trang chủ
+          - link "Trắc nghiệm" [ref=e15] [cursor=pointer]:
+            - /url: /test
+            - text: Trắc nghiệm
+          - link "Lĩnh vực IT" [ref=e17] [cursor=pointer]:
+            - /url: /majors
+            - text: Lĩnh vực IT
+          - link "Cố vấn" [ref=e19] [cursor=pointer]:
+            - /url: /mentors
+            - text: Cố vấn
+          - link "Blog" [ref=e21] [cursor=pointer]:
+            - /url: /blog
+            - text: Blog
+          - link "Giới thiệu" [ref=e23] [cursor=pointer]:
+            - /url: /about
+            - text: Giới thiệu
+        - link "Đăng nhập" [ref=e28] [cursor=pointer]:
+          - /url: /auth
+          - img [ref=e29]
+          - text: Đăng nhập
+    - generic [ref=e33]:
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - heading "Đăng Nhập" [level=1] [ref=e36]
+          - paragraph [ref=e37]: Chào mừng bạn quay lại với IT Compass
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - img [ref=e40]
+            - textbox "Email của bạn" [ref=e43]
+          - generic [ref=e44]:
+            - img [ref=e45]
+            - textbox "Mật khẩu" [ref=e48]
+          - link "Quên mật khẩu?" [ref=e50] [cursor=pointer]:
+            - /url: /forgot-password
+          - button "Đăng Nhập" [ref=e51] [cursor=pointer]
+        - generic [ref=e52]:
+          - generic [ref=e57]: Hoặc đăng nhập bằng
+          - button "Đăng nhập bằng Google" [ref=e59] [cursor=pointer]:
+            - generic [ref=e61]:
+              - img [ref=e62]
+              - text: Đăng nhập bằng Google
+      - generic:
+        - generic:
+          - heading "Đăng Ký" [level=1]
+          - paragraph: Bắt đầu hành trình của bạn ngay hôm nay
+        - generic:
+          - generic:
+            - img
+            - textbox "Họ và tên"
+          - generic:
+            - img
+            - textbox "Email của bạn"
+          - generic:
+            - img
+            - textbox "Mật khẩu"
+          - generic:
+            - combobox:
+              - option "Học viên" [selected]
+              - option "Mentor"
+          - generic:
+            - generic:
+              - checkbox "Tôi đồng ý với Điều khoản"
+              - generic:
+                - text: Tôi đồng ý với
+                - link "Điều khoản":
+                  - /url: /about
+          - button "Tạo Tài Khoản"
+      - generic [ref=e68]:
+        - generic [ref=e69]:
+          - heading "Mừng Bạn Trở Lại!" [level=2] [ref=e70]:
+            - text: Mừng Bạn
+            - text: Trở Lại!
+          - paragraph [ref=e71]: Để giữ kết nối với chúng tôi, vui lòng đăng nhập bằng thông tin cá nhân của bạn.
+          - button "Đăng Nhập Ngay" [ref=e72] [cursor=pointer]:
+            - text: Đăng Nhập Ngay
+            - img [ref=e73]
+        - generic [ref=e75]:
+          - heading "Chào Bạn Mới!" [level=2] [ref=e76]:
+            - text: Chào Bạn
+            - text: Mới!
+          - paragraph [ref=e77]: Nhập thông tin cá nhân và bắt đầu hành trình khám phá thế giới IT cùng chúng tôi.
+          - button "Tạo Tài Khoản" [ref=e78] [cursor=pointer]:
+            - text: Tạo Tài Khoản
+            - img [ref=e79]
+    - contentinfo [ref=e81]:
+      - generic [ref=e83]:
+        - generic [ref=e84]:
+          - generic [ref=e85]:
+            - img [ref=e89]
+            - generic [ref=e92]: IT Compass
+          - paragraph [ref=e93]: La bàn định vị sự nghiệp IT của bạn. Chúng tôi giúp thế hệ chuyên gia công nghệ Việt Nam tìm thấy đam mê và con đường phát triển phù hợp nhất.
+          - generic [ref=e94]:
+            - generic [ref=e95]:
+              - generic: Website
+              - link [ref=e96] [cursor=pointer]:
+                - /url: /about
+                - img [ref=e97]
+            - generic [ref=e100]:
+              - generic: Email
+              - link [ref=e101] [cursor=pointer]:
+                - /url: mailto:hello@itcompass.vn
+                - img [ref=e102]
+            - generic [ref=e105]:
+              - generic: Hotline
+              - link [ref=e106] [cursor=pointer]:
+                - /url: tel:19001234567
+                - img [ref=e107]
+        - generic [ref=e110]:
+          - heading "Nền Tảng" [level=4] [ref=e111]
+          - list [ref=e112]:
+            - listitem [ref=e113]:
+              - link "Làm Bài Test" [ref=e114] [cursor=pointer]:
+                - /url: /test
+                - img [ref=e115]
+                - text: Làm Bài Test
+            - listitem [ref=e118]:
+              - link "Chuyên Ngành IT" [ref=e119] [cursor=pointer]:
+                - /url: /majors
+                - img [ref=e120]
+                - text: Chuyên Ngành IT
+            - listitem [ref=e123]:
+              - link "Blog" [ref=e124] [cursor=pointer]:
+                - /url: /blog
+                - img [ref=e125]
+                - text: Blog
+        - generic [ref=e128]:
+          - heading "Công Ty" [level=4] [ref=e129]
+          - list [ref=e130]:
+            - listitem [ref=e131]:
+              - link "Về Chúng Tôi" [ref=e132] [cursor=pointer]:
+                - /url: /about
+                - img [ref=e133]
+                - text: Về Chúng Tôi
+            - listitem [ref=e136]:
+              - link "Điều Khoản Dịch Vụ" [ref=e137] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e138]
+                - text: Điều Khoản Dịch Vụ
+            - listitem [ref=e141]:
+              - link "Chính Sách Bảo Mật" [ref=e142] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e143]
+                - text: Chính Sách Bảo Mật
+            - listitem [ref=e146]:
+              - link "Liên Hệ" [ref=e147] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e148]
+                - text: Liên Hệ
+      - generic [ref=e154]:
+        - paragraph [ref=e155]: © 2026 IT Compass. Đã đăng ký bản quyền.
+        - paragraph [ref=e156]: Được xây dựng với ❤️ cho thế hệ IT Việt Nam
+  - region "Notifications alt+T"

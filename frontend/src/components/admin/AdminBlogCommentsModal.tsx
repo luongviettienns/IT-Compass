@@ -2,9 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Search, X, EyeOff, Eye, Trash2, ShieldAlert } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { blogApi } from '../../lib/blogApi';
 import type { BlogComment } from '../../lib/blogApi';
 import { adminQueryKeys } from '../../lib/adminQueryKeys';
+import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../../components/ui/Loader';
 import { AdminActionDialog } from './AdminActionDialog';
 
@@ -78,7 +80,8 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
             blogApi.adminModerateComment(id, status),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: adminQueryKeys.commentsRoot });
-        }
+        },
+        onError: (error) => toast.error(getErrorMessage(error, 'Không thể cập nhật trạng thái bình luận.')),
     });
 
     const deleteMutation = useMutation({
@@ -87,7 +90,8 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
             queryClient.invalidateQueries({ queryKey: adminQueryKeys.commentsRoot });
             queryClient.invalidateQueries({ queryKey: adminQueryKeys.blogStats });
             setCommentToDelete(null);
-        }
+        },
+        onError: (error) => toast.error(getErrorMessage(error, 'Không thể xóa bình luận.')),
     });
 
     const handleToggleHide = (comment: BlogComment) => {

@@ -1,0 +1,47 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - main [ref=e216]:
+    - generic:
+      - generic:
+        - img
+        - text: Developer
+      - generic:
+        - img
+        - text: Data
+      - generic:
+        - img
+        - text: Security
+      - generic:
+        - img
+        - text: Design
+    - generic [ref=e217]:
+      - link [ref=e219] [cursor=pointer]:
+        - /url: /
+        - img [ref=e220]
+      - generic [ref=e233]:
+        - generic [ref=e234]:
+          - heading "Đăng nhập" [level=3] [ref=e235]
+          - paragraph [ref=e236]: Bắt đầu hành trình IT của bạn
+        - generic [ref=e237]:
+          - generic [ref=e238]:
+            - generic [ref=e239]:
+              - text: Email
+              - generic [ref=e240]:
+                - img [ref=e242]
+                - textbox "Email" [ref=e245]:
+                  - /placeholder: ban@truonghoc.edu.vn
+            - generic [ref=e246]:
+              - text: Mật khẩu
+              - generic [ref=e247]:
+                - img [ref=e249]
+                - textbox "Mật khẩu" [ref=e252]:
+                  - /placeholder: Tối thiểu 8 ký tự
+            - button "Đăng nhập" [ref=e253] [cursor=pointer]:
+              - img [ref=e254]
+              - text: Đăng nhập
+          - generic [ref=e257]:
+            - link "Quên mật khẩu?" [ref=e258] [cursor=pointer]:
+              - /url: /forgot-password
+            - generic [ref=e259]:
+              - text: Chưa có tài khoản?
+              - button "Đăng ký ngay" [ref=e260] [cursor=pointer]

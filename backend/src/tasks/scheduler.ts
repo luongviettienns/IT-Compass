@@ -13,7 +13,7 @@
  */
 
 import { logger } from '../utils/logger.js';
-import { purgeExpiredAuthData, publishScheduledPosts } from './scheduled.tasks.js';
+import { markNoShowBookings, purgeExpiredAuthData, publishScheduledPosts, sendBookingReminders } from './scheduled.tasks.js';
 
 /** Cấu hình cho một tác vụ nền được lập lịch. */
 interface ScheduledJob {
@@ -38,6 +38,16 @@ const jobs: ScheduledJob[] = [
     name: 'publish-scheduled-posts',
     intervalMs: 2 * 60 * 1000, // mỗi 2 phút
     task: publishScheduledPosts,
+  },
+  {
+    name: 'send-booking-reminders',
+    intervalMs: 60 * 1000, // mỗi 1 phút
+    task: sendBookingReminders,
+  },
+  {
+    name: 'mark-no-show-bookings',
+    intervalMs: 15 * 60 * 1000, // mỗi 15 phút
+    task: markNoShowBookings,
   },
 ];
 

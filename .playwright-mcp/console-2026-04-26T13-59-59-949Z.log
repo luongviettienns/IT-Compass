@@ -1,0 +1,5 @@
+[      28ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=237fe8f3:14337
+[     468ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://127.0.0.1:5173/auth/login:0
+[   54133ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=237fe8f3:14337
+[   54511ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://127.0.0.1:5173/auth/login?redirect=%2Fmentor%2Fmessages:0
+[  221986ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:5000/api/mentor/booking-settings:0

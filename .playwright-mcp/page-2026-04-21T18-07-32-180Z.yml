@@ -1,0 +1,68 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e20]: IT Compass
+        - navigation [ref=e21]:
+          - link "Trang chủ" [ref=e22] [cursor=pointer]:
+            - /url: /
+          - link "Trắc nghiệm" [ref=e23] [cursor=pointer]:
+            - /url: /test
+          - link "Blog" [ref=e24] [cursor=pointer]:
+            - /url: /blog
+          - link "Mentor" [ref=e25] [cursor=pointer]:
+            - /url: /mentors
+          - link "Ngành học" [ref=e26] [cursor=pointer]:
+            - /url: /majors
+        - generic [ref=e28]:
+          - link "Đăng nhập" [ref=e29] [cursor=pointer]:
+            - /url: /auth/login
+          - link "Đăng ký" [ref=e30] [cursor=pointer]:
+            - /url: /auth/register
+    - contentinfo [ref=e31]:
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - generic [ref=e34]:
+            - link "IT Compass" [ref=e35] [cursor=pointer]:
+              - /url: /
+              - img [ref=e37]
+              - generic [ref=e49]: IT Compass
+            - paragraph [ref=e50]: Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+          - generic [ref=e51]:
+            - heading "Khám phá" [level=3] [ref=e52]
+            - list [ref=e53]:
+              - listitem [ref=e54]:
+                - link "Trắc nghiệm" [ref=e55] [cursor=pointer]:
+                  - /url: /test
+              - listitem [ref=e56]:
+                - link "Blog" [ref=e57] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e58]:
+                - link "Mentor" [ref=e59] [cursor=pointer]:
+                  - /url: /mentors
+              - listitem [ref=e60]:
+                - link "Ngành học" [ref=e61] [cursor=pointer]:
+                  - /url: /majors
+              - listitem [ref=e62]:
+                - link "Về chúng tôi" [ref=e63] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e64]:
+            - heading "Liên hệ" [level=3] [ref=e65]
+            - list [ref=e66]:
+              - listitem [ref=e67]:
+                - img [ref=e68]
+                - text: contact@itcompass.vn
+              - listitem [ref=e71]:
+                - img [ref=e72]
+                - text: TP. Hồ Chí Minh, Việt Nam
+              - listitem [ref=e75]:
+                - link "GitHub" [ref=e76] [cursor=pointer]:
+                  - /url: https://github.com
+                  - img [ref=e77]
+                  - text: GitHub
+                  - img [ref=e80]
+        - generic [ref=e84]: © 2026 IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.

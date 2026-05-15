@@ -4,12 +4,15 @@
  * File này chứa logic nghiệp vụ thực tế của các tác vụ nền:
  * - purgeExpiredAuthData: Dọn dẹp session, token xác minh email, token reset password đã hết hạn.
  * - publishScheduledPosts: Tự động xuất bản bài viết blog đã đến giờ lên lịch.
+ * - sendBookingReminderNotifications: Gửi nhắc lịch tư vấn trước giờ hẹn.
  *
  * Mỗi hàm đều idempotent và safe to retry.
  */
 
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
+import { markOverdueBookingsAsNoShow } from '../services/booking.service.js';
+import { sendBookingReminderNotifications } from '../services/notification.service.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -77,6 +80,26 @@ export const purgeExpiredAuthData = async () => {
  *
  * @returns Số lượng bài viết đã xuất bản.
  */
+export const markNoShowBookings = async () => {
+  const result = await markOverdueBookingsAsNoShow();
+
+  if (result.marked > 0) {
+    logger.info('Marked overdue mentor bookings as no-show', { count: result.marked });
+  }
+
+  return result;
+};
+
+export const sendBookingReminders = async () => {
+  const result = await sendBookingReminderNotifications();
+
+  if (result.bookings > 0) {
+    logger.info('Sent booking reminder notifications', { count: result.bookings });
+  }
+
+  return result;
+};
+
 export const publishScheduledPosts = async () => {
   const now = new Date();
 

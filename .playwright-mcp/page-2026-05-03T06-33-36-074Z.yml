@@ -1,0 +1,198 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "IT Compass" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img [ref=e8]
+        - generic [ref=e20]: IT Compass
+    - main [ref=e102]:
+      - generic [ref=e103]:
+        - article [ref=e104]:
+          - generic [ref=e105]:
+            - link "Quay lại blog" [ref=e106] [cursor=pointer]:
+              - /url: /blog
+              - img [ref=e107]
+              - text: Quay lại blog
+            - generic [ref=e109]:
+              - generic [ref=e110]:
+                - generic [ref=e111]: Hướng nghiệp
+                - generic [ref=e112]: 02 tháng 5, 2026
+                - generic [ref=e114]: 8 phút đọc
+              - heading "Lập kế hoạch học tập 12 tuần để chuẩn bị phỏng vấn thực tập" [level=1] [ref=e115]
+              - paragraph [ref=e116]: Một lộ trình 12 tuần gọn, thực tế và dễ áp dụng cho sinh viên công nghệ muốn hoàn thiện hồ sơ, dự án và kỹ năng phỏng vấn.
+              - generic [ref=e117]:
+                - generic [ref=e118]:
+                  - img [ref=e120]
+                  - generic [ref=e123]:
+                    - paragraph [ref=e124]: Phạm Đức Long
+                    - paragraph [ref=e125]: Biên tập nội dung
+                - generic [ref=e126]:
+                  - generic [ref=e127]:
+                    - img [ref=e128]
+                    - text: 268 lượt xem
+                  - generic [ref=e131]:
+                    - img [ref=e132]
+                    - text: 2 bình luận
+          - generic [ref=e135]:
+            - img [ref=e137]
+            - article [ref=e140]:
+              - heading "Lập kế hoạch học tập 12 tuần để chuẩn bị phỏng vấn thực tập" [level=1] [ref=e141]
+              - paragraph [ref=e142]: Nếu bạn đang ở giai đoạn chuẩn bị thực tập, điều quan trọng nhất không phải là học thật nhiều, mà là học đúng thứ trong thời gian đủ ngắn. Một kế hoạch 12 tuần sẽ giúp bạn nhìn rõ mục tiêu, đo tiến độ và tránh tình trạng ôm quá nhiều chủ đề cùng lúc.
+              - heading "1. Chọn một mục tiêu chính" [level=2] [ref=e143]
+              - paragraph [ref=e144]: "Trước khi bắt đầu, hãy trả lời thật rõ ba câu hỏi:"
+              - list [ref=e145]:
+                - listitem [ref=e146]: "Bạn muốn thực tập ở mảng nào: frontend, backend, dữ liệu hay product?"
+                - listitem [ref=e147]: "Kết quả cuối cùng cần có là gì: CV, portfolio, bài test hay mock interview?"
+                - listitem [ref=e148]: Mỗi tuần bạn có thể dành bao nhiêu giờ học tập trung?
+              - blockquote [ref=e149]:
+                - paragraph [ref=e150]: Kế hoạch tốt không phải là kế hoạch dài nhất, mà là kế hoạch bạn có thể làm đều đặn đến cuối cùng.
+              - heading "2. Chia 12 tuần thành 3 chặng" [level=2] [ref=e151]
+              - 'heading "Tuần 1–4: Củng cố nền tảng" [level=3] [ref=e152]'
+              - list [ref=e153]:
+                - listitem [ref=e154]: Ôn lại kiến thức cốt lõi của chuyên ngành.
+                - listitem [ref=e155]: Chọn một project nhỏ để luyện tay.
+                - listitem [ref=e156]: Viết ghi chú ngắn sau mỗi buổi học.
+              - 'heading "Tuần 5–8: Nâng chất lượng đầu ra" [level=3] [ref=e157]'
+              - list [ref=e158]:
+                - listitem [ref=e159]: Hoàn thiện project chính với README rõ ràng.
+                - listitem [ref=e160]: Rà lại CV, mô tả kinh nghiệm và kỹ năng.
+                - listitem [ref=e161]: Bắt đầu luyện câu hỏi phỏng vấn theo nhóm chủ đề.
+              - 'heading "Tuần 9–12: Chuyển sang chế độ ứng tuyển" [level=3] [ref=e162]'
+              - list [ref=e163]:
+                - listitem [ref=e164]: Gửi hồ sơ thử cho các vị trí phù hợp.
+                - listitem [ref=e165]: Làm mock interview cùng bạn bè hoặc mentor.
+                - listitem [ref=e166]: Rà lại những câu hỏi mình hay trả lời chưa rõ.
+              - heading "3. Một checklist hàng tuần rất đơn giản" [level=2] [ref=e167]
+              - paragraph [ref=e168]:
+                - text: \
+                - code [ref=e169]: \
+                - text: \
+                - code [ref=e170]: ts const weeklyPlan = [ 'Ôn kiến thức nền', 'Làm 1 bài tập nhỏ', 'Viết ghi chú', 'Luyện phỏng vấn thử', 'Rà lại CV và portfolio', ]; \
+                - text: \
+                - code [ref=e171]: \
+              - paragraph [ref=e172]: Checklist này không cần cầu kỳ. Điều quan trọng là bạn giữ được nhịp đều trong nhiều tuần, thay vì học dồn rồi bỏ giữa chừng.
+              - heading "4. Đừng học một mình quá lâu" [level=2] [ref=e173]
+              - paragraph [ref=e174]: Khi có mentor hoặc bạn học đồng hành, bạn sẽ thấy rõ mình đang thiếu gì và cần sửa gì. Một buổi review ngắn có thể tiết kiệm cho bạn rất nhiều tuần đi sai hướng.
+              - paragraph [ref=e175]:
+                - text: Bạn có thể bắt đầu từ việc xem lại các mentor phù hợp trong
+                - link "danh sách mentor" [ref=e176] [cursor=pointer]:
+                  - /url: /mentors
+                - text: ", sau đó chọn một người có kinh nghiệm gần với mục tiêu của mình."
+              - heading "5. Kết luận" [level=2] [ref=e177]
+              - paragraph [ref=e178]: "Một lộ trình tốt cần ba thứ: mục tiêu rõ, nhịp học đều và phản hồi sớm. Nếu bạn làm được ba điều đó trong 12 tuần, cơ hội phỏng vấn thực tập sẽ sáng hơn rất nhiều."
+          - generic [ref=e180]:
+            - generic [ref=e181]:
+              - img [ref=e183]
+              - generic [ref=e186]:
+                - paragraph [ref=e187]: Bình luận
+                - heading "Trao đổi về bài viết này" [level=2] [ref=e188]
+            - generic [ref=e189]:
+              - generic [ref=e190]:
+                - text: Tên hiển thị
+                - textbox "Tên hiển thị" [ref=e191]:
+                  - /placeholder: Nhập tên của bạn
+              - generic [ref=e192]:
+                - text: Nội dung bình luận
+                - textbox "Nội dung bình luận" [ref=e193]:
+                  - /placeholder: Chia sẻ suy nghĩ, câu hỏi hoặc góc nhìn của bạn về bài viết này
+              - generic [ref=e194]:
+                - paragraph [ref=e195]: Bạn có thể bình luận ngay cả khi chưa đăng nhập.
+                - button "Gửi bình luận" [ref=e196] [cursor=pointer]:
+                  - text: Gửi bình luận
+                  - img [ref=e197]
+            - generic [ref=e199]:
+              - generic [ref=e201]:
+                - img [ref=e203]
+                - generic [ref=e206]:
+                  - generic [ref=e207]:
+                    - generic [ref=e208]:
+                      - paragraph [ref=e209]: Nguyễn Thảo Vy
+                      - paragraph [ref=e210]: 12:35 03/05/2026
+                    - generic [ref=e211]: Tài khoản
+                  - paragraph [ref=e212]: Bài viết rất thực tế, em sẽ chia lại kế hoạch học theo từng tuần để dễ theo dõi tiến độ hơn.
+              - generic [ref=e214]:
+                - img [ref=e216]
+                - generic [ref=e219]:
+                  - generic [ref=e220]:
+                    - generic [ref=e221]:
+                      - paragraph [ref=e222]: Mai Linh
+                      - paragraph [ref=e223]: 12:35 03/05/2026
+                    - generic [ref=e224]: Khách
+                  - paragraph [ref=e225]: Cách chia ba chặng 12 tuần rất dễ áp dụng cho người mới bắt đầu chuẩn bị hồ sơ thực tập.
+        - complementary [ref=e226]:
+          - generic [ref=e227]:
+            - paragraph [ref=e228]: Tóm tắt nhanh
+            - generic [ref=e229]:
+              - generic [ref=e230]:
+                - term [ref=e231]: Ngày đăng
+                - definition [ref=e232]: 02 tháng 5, 2026
+              - generic [ref=e233]:
+                - term [ref=e234]: Tác giả
+                - definition [ref=e235]: Phạm Đức Long
+              - generic [ref=e236]:
+                - term [ref=e237]: Thời gian đọc
+                - definition [ref=e238]: 8 phút đọc
+              - generic [ref=e239]:
+                - term [ref=e240]: Lượt xem
+                - definition [ref=e241]: "268"
+    - contentinfo [ref=e25]:
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - link "IT Compass" [ref=e29] [cursor=pointer]:
+              - /url: /
+              - img [ref=e31]
+              - generic [ref=e43]: IT Compass
+            - paragraph [ref=e44]: Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+          - generic [ref=e45]:
+            - heading "Khám phá" [level=3] [ref=e46]
+            - list [ref=e47]:
+              - listitem [ref=e48]:
+                - link "Trắc nghiệm" [ref=e49] [cursor=pointer]:
+                  - /url: /test
+              - listitem [ref=e50]:
+                - link "Blog" [ref=e51] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e52]:
+                - link "Mentor" [ref=e53] [cursor=pointer]:
+                  - /url: /mentors
+              - listitem [ref=e54]:
+                - link "Ngành học" [ref=e55] [cursor=pointer]:
+                  - /url: /majors
+              - listitem [ref=e56]:
+                - link "Về chúng tôi" [ref=e57] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e58]:
+            - heading "Liên hệ" [level=3] [ref=e59]
+            - list [ref=e60]:
+              - listitem [ref=e61]:
+                - img [ref=e62]
+                - text: contact@itcompass.vn
+              - listitem [ref=e65]:
+                - img [ref=e66]
+                - text: TP. Hồ Chí Minh, Việt Nam
+              - listitem [ref=e69]:
+                - link "GitHub" [ref=e70] [cursor=pointer]:
+                  - /url: https://github.com
+                  - img [ref=e71]
+                  - text: GitHub
+                  - img [ref=e74]
+        - generic [ref=e78]: © 2026 IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.
+    - navigation [ref=e79]:
+      - generic [ref=e80]:
+        - link "Trang chủ" [ref=e81] [cursor=pointer]:
+          - /url: /
+          - img [ref=e82]
+          - generic [ref=e85]: Trang chủ
+        - link "Trắc nghiệm" [ref=e86] [cursor=pointer]:
+          - /url: /test
+          - img [ref=e87]
+          - generic [ref=e91]: Trắc nghiệm
+        - link "Blog" [ref=e92] [cursor=pointer]:
+          - /url: /blog
+          - img [ref=e93]
+          - generic [ref=e95]: Blog
+        - button "Tôi" [ref=e96] [cursor=pointer]:
+          - img [ref=e97]
+          - generic [ref=e101]: Tôi

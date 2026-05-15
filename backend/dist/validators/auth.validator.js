@@ -5,13 +5,11 @@ const passwordSchema = z
     .max(128, 'Password must not exceed 128 characters');
 const fullNameSchema = z.string().trim().min(2).max(150);
 const emailSchema = z.string().trim().email().max(191);
-const roleSchema = z.enum(['STUDENT', 'MENTOR']).default('STUDENT');
 export const registerSchema = z.object({
     body: z.object({
         fullName: fullNameSchema,
         email: emailSchema,
         password: passwordSchema,
-        role: roleSchema,
     }),
 });
 export const loginSchema = z.object({

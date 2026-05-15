@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { adminMentorApi } from '../../lib/adminMentorApi';
 import type { AdminMentorInput } from '../../lib/adminMentorApi';
 import { adminQueryKeys } from '../../lib/adminQueryKeys';
+import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../ui/Loader';
 
 type AdminMentorFormModalProps = {
@@ -76,17 +78,53 @@ export const AdminMentorFormModal: React.FC<AdminMentorFormModalProps> = ({ isOp
         setErrorMessage(null);
     }, [mentorToEdit, isOpen]);
 
+    const showFormError = (message: string) => {
+        setErrorMessage(message);
+        toast.error(message);
+    };
+
+    const validateForm = () => {
+        if (!name.trim()) {
+            showFormError('Vui lòng nhập tên mentor.');
+            return false;
+        }
+
+        if (!slug.trim()) {
+            showFormError('Vui lòng nhập slug mentor.');
+            return false;
+        }
+
+        if (yearsOfExperience !== '' && Number(yearsOfExperience) < 0) {
+            showFormError('Số năm kinh nghiệm không được âm.');
+            return false;
+        }
+
+        if (hourlyRate !== '' && Number(hourlyRate) < 0) {
+            showFormError('Phí tư vấn không được âm.');
+            return false;
+        }
+
+        return true;
+    };
+
     const saveMutation = useMutation({
         mutationFn: async () => {
             const payload: AdminMentorInput = {
-                name, slug, title: title || null, bio: bio || null,
-                expertiseArea: expertiseArea || null, level: level as any,
+                name: name.trim(),
+                slug: slug.trim(),
+                title: title.trim() || null,
+                bio: bio.trim() || null,
+                expertiseArea: expertiseArea.trim() || null,
+                level: level as any,
                 yearsOfExperience: yearsOfExperience === '' ? null : Number(yearsOfExperience),
                 hourlyRate: hourlyRate === '' ? null : Number(hourlyRate),
-                currentSchool: currentSchool || null, currentCompany: currentCompany || null,
-                currentJobTitle: currentJobTitle || null,
-                consultationLang: consultationLang || null,
-                avatarUrl: avatarUrl || null, isVerified, status: status as any,
+                currentSchool: currentSchool.trim() || null,
+                currentCompany: currentCompany.trim() || null,
+                currentJobTitle: currentJobTitle.trim() || null,
+                consultationLang: consultationLang.trim() || null,
+                avatarUrl: avatarUrl.trim() || null,
+                isVerified,
+                status: status as any,
             };
             if (mentorToEdit) {
                 return adminMentorApi.updateMentor(mentorToEdit.id, payload);
@@ -102,7 +140,7 @@ export const AdminMentorFormModal: React.FC<AdminMentorFormModalProps> = ({ isOp
             setErrorMessage(null);
             onClose();
         },
-        onError: (err: Error) => setErrorMessage(err.message || 'Lưu mentor thất bại'),
+        onError: (error) => showFormError(getErrorMessage(error, 'Lưu mentor thất bại.')),
     });
 
     if (!isOpen) return null;
@@ -251,8 +289,11 @@ export const AdminMentorFormModal: React.FC<AdminMentorFormModalProps> = ({ isOp
                     <div className="flex items-center gap-3">
                         <button onClick={onClose} className="px-6 py-2.5 rounded-xl font-bold bg-secondary hover:bg-secondary/70 transition-colors">Hủy Bỏ</button>
                         <button
-                            disabled={saveMutation.isPending || !name || !slug}
-                            onClick={() => saveMutation.mutate()}
+                            disabled={saveMutation.isPending || !name.trim() || !slug.trim()}
+                            onClick={() => {
+                                if (!validateForm()) return;
+                                saveMutation.mutate();
+                            }}
                             className="px-6 py-2.5 rounded-xl font-bold bg-primary text-primary-foreground flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform disabled:opacity-50"
                         >
                             {saveMutation.isPending ? 'Đang lưu...' : <><Save className="w-4 h-4" /> Lưu Mentor</>}

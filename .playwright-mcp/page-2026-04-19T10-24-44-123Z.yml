@@ -1,0 +1,333 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: IT Compass
+        - navigation [ref=e12]:
+          - link "Trang chủ" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - text: Trang chủ
+          - link "Trắc nghiệm" [ref=e15] [cursor=pointer]:
+            - /url: /test
+            - text: Trắc nghiệm
+          - link "Lĩnh vực IT" [ref=e17] [cursor=pointer]:
+            - /url: /majors
+            - text: Lĩnh vực IT
+          - link "Cố vấn" [ref=e19] [cursor=pointer]:
+            - /url: /mentors
+            - text: Cố vấn
+          - link "Blog" [ref=e21] [cursor=pointer]:
+            - /url: /blog
+            - text: Blog
+          - link "Giới thiệu" [ref=e23] [cursor=pointer]:
+            - /url: /about
+            - text: Giới thiệu
+        - button "QT vien" [ref=e110] [cursor=pointer]:
+          - generic [ref=e111]: QT
+          - generic [ref=e113]:
+            - generic [ref=e114]: vien
+            - img [ref=e115]
+    - generic [ref=e118]:
+      - generic [ref=e120]:
+        - img [ref=e122]
+        - generic [ref=e124]:
+          - heading "Bảng Quản Trị" [level=1] [ref=e125]
+          - paragraph [ref=e126]: Quản trị hệ thống IT Compass
+      - generic [ref=e127]:
+        - complementary [ref=e128]:
+          - generic [ref=e129]:
+            - button "Tổng quan" [ref=e130] [cursor=pointer]:
+              - generic [ref=e131]:
+                - img [ref=e132]
+                - text: Tổng quan
+            - button "Bài viết" [ref=e137] [cursor=pointer]:
+              - generic [ref=e138]:
+                - img [ref=e139]
+                - text: Bài viết
+            - button "Bình luận" [ref=e142] [cursor=pointer]:
+              - generic [ref=e143]:
+                - img [ref=e144]
+                - text: Bình luận
+            - button "Người dùng" [ref=e146] [cursor=pointer]:
+              - generic [ref=e147]:
+                - img [ref=e148]
+                - text: Người dùng
+            - button "Nhật ký" [active] [ref=e153] [cursor=pointer]:
+              - generic [ref=e154]:
+                - img [ref=e155]
+                - text: Nhật ký
+        - main [ref=e158]:
+          - generic [ref=e1031]:
+            - generic [ref=e1032]:
+              - generic [ref=e1033]:
+                - generic [ref=e1034]:
+                  - img [ref=e1035]
+                  - heading "Nhật ký quản trị" [level=2] [ref=e1038]
+                  - generic [ref=e1039]: (15 bản ghi)
+                - generic [ref=e1040]:
+                  - button "Bộ lọc" [ref=e1041] [cursor=pointer]:
+                    - img [ref=e1042]
+                    - text: Bộ lọc
+                  - button [ref=e1044] [cursor=pointer]:
+                    - img [ref=e1045]
+              - generic [ref=e1050]:
+                - button "Tất cả" [ref=e1051] [cursor=pointer]
+                - button "Cập nhật TK" [ref=e1052] [cursor=pointer]
+                - button "Cập nhật hồ sơ" [ref=e1053] [cursor=pointer]
+                - button "Đổi trạng thái" [ref=e1054] [cursor=pointer]
+                - button "Đổi vai trò" [ref=e1055] [cursor=pointer]
+                - button "Thu hồi phiên" [ref=e1056] [cursor=pointer]
+                - button "Bulk trạng thái" [ref=e1057] [cursor=pointer]
+                - button "Bulk thu hồi" [ref=e1058] [cursor=pointer]
+            - generic [ref=e1059]:
+              - generic [ref=e1064] [cursor=pointer]:
+                - generic [ref=e1065]:
+                  - generic [ref=e1066]:
+                    - generic [ref=e1067]:
+                      - img [ref=e1068]
+                      - text: Đổi trạng thái
+                    - generic "16:24:51 18/4/2026" [ref=e1071]: 1 ngày trước
+                  - paragraph [ref=e1072]:
+                    - text: Quan tri vien đã thao tác trên Verify Student
+                    - generic [ref=e1073]: (verify.student.1776502877115@example.com)
+                  - paragraph [ref=e1074]: 💬 Final bulk status verification
+                - img [ref=e1076]
+              - generic [ref=e1082] [cursor=pointer]:
+                - generic [ref=e1083]:
+                  - generic [ref=e1084]:
+                    - generic [ref=e1085]:
+                      - img [ref=e1086]
+                      - text: Đổi trạng thái
+                    - generic "16:23:35 18/4/2026" [ref=e1089]: 1 ngày trước
+                  - paragraph [ref=e1090]:
+                    - text: Quan tri vien đã thao tác trên Verify Student
+                    - generic [ref=e1091]: (verify.student.1776502877115@example.com)
+                  - paragraph [ref=e1092]: 💬 Final bulk status verification
+                - img [ref=e1094]
+              - generic [ref=e1100] [cursor=pointer]:
+                - generic [ref=e1101]:
+                  - generic [ref=e1102]:
+                    - generic [ref=e1103]:
+                      - img [ref=e1104]
+                      - text: Đổi trạng thái
+                    - generic "16:15:09 18/4/2026" [ref=e1107]: 1 ngày trước
+                  - paragraph [ref=e1108]:
+                    - text: Quan tri vien đã thao tác trên Verify Student
+                    - generic [ref=e1109]: (verify.student.1776502877115@example.com)
+                  - paragraph [ref=e1110]: 💬 Recheck bulk status shape
+                - img [ref=e1112]
+              - generic [ref=e1118] [cursor=pointer]:
+                - generic [ref=e1119]:
+                  - generic [ref=e1120]:
+                    - generic [ref=e1121]:
+                      - img [ref=e1122]
+                      - text: Đổi trạng thái
+                    - generic "16:10:39 18/4/2026" [ref=e1125]: 1 ngày trước
+                  - paragraph [ref=e1126]:
+                    - text: Quan tri vien đã thao tác trên Verify Mentor Updated
+                    - generic [ref=e1127]: (verify.mentor.1776503002864@example.com)
+                  - paragraph [ref=e1128]: 💬 Restore after recheck
+                - img [ref=e1130]
+              - generic [ref=e1136] [cursor=pointer]:
+                - generic [ref=e1137]:
+                  - generic [ref=e1138]:
+                    - generic [ref=e1139]:
+                      - img [ref=e1140]
+                      - text: Đổi trạng thái
+                    - generic "16:10:39 18/4/2026" [ref=e1143]: 1 ngày trước
+                  - paragraph [ref=e1144]:
+                    - text: Quan tri vien đã thao tác trên Verify Mentor Updated
+                    - generic [ref=e1145]: (verify.mentor.1776503002864@example.com)
+                  - paragraph [ref=e1146]: 💬 Recheck status response
+                - img [ref=e1148]
+              - generic [ref=e1154] [cursor=pointer]:
+                - generic [ref=e1155]:
+                  - generic [ref=e1156]:
+                    - generic [ref=e1157]:
+                      - img [ref=e1158]
+                      - text: Đổi trạng thái
+                    - generic "16:09:44 18/4/2026" [ref=e1161]: 1 ngày trước
+                  - paragraph [ref=e1162]:
+                    - text: Quan tri vien đã thao tác trên Verify Mentor Updated
+                    - generic [ref=e1163]: (verify.mentor.1776503002864@example.com)
+                  - paragraph [ref=e1164]: 💬 Restore status after verification
+                - img [ref=e1166]
+              - generic [ref=e1172] [cursor=pointer]:
+                - generic [ref=e1173]:
+                  - generic [ref=e1174]:
+                    - generic [ref=e1175]:
+                      - img [ref=e1176]
+                      - text: Đổi trạng thái
+                    - generic "16:09:44 18/4/2026" [ref=e1179]: 1 ngày trước
+                  - paragraph [ref=e1180]:
+                    - text: Quan tri vien đã thao tác trên Verify Mentor Updated
+                    - generic [ref=e1181]: (verify.mentor.1776503002864@example.com)
+                  - paragraph [ref=e1182]: 💬 Verify status update
+                - img [ref=e1184]
+              - generic [ref=e1190] [cursor=pointer]:
+                - generic [ref=e1191]:
+                  - generic [ref=e1192]:
+                    - generic [ref=e1193]:
+                      - img [ref=e1194]
+                      - text: Thu hồi phiên
+                    - generic "16:09:44 18/4/2026" [ref=e1197]: 1 ngày trước
+                  - paragraph [ref=e1198]:
+                    - text: Quan tri vien đã thao tác trên Verify Mentor Updated
+                    - generic [ref=e1199]: (verify.mentor.1776503002864@example.com)
+                  - paragraph [ref=e1200]: 💬 Verify bulk revoke partial result
+                - img [ref=e1202]
+              - generic [ref=e1208] [cursor=pointer]:
+                - generic [ref=e1209]:
+                  - generic [ref=e1210]:
+                    - generic [ref=e1211]:
+                      - img [ref=e1212]
+                      - text: Thu hồi phiên
+                    - generic "16:09:44 18/4/2026" [ref=e1215]: 1 ngày trước
+                  - paragraph [ref=e1216]:
+                    - text: Quan tri vien đã thao tác trên Verify Student
+                    - generic [ref=e1217]: (verify.student.1776502877115@example.com)
+                  - paragraph [ref=e1218]: 💬 Verify bulk revoke partial result
+                - img [ref=e1220]
+              - generic [ref=e1226] [cursor=pointer]:
+                - generic [ref=e1227]:
+                  - generic [ref=e1228]:
+                    - generic [ref=e1229]:
+                      - img [ref=e1230]
+                      - text: Đổi trạng thái
+                    - generic "16:09:44 18/4/2026" [ref=e1233]: 1 ngày trước
+                  - paragraph [ref=e1234]:
+                    - text: Quan tri vien đã thao tác trên Verify Student
+                    - generic [ref=e1235]: (verify.student.1776502877115@example.com)
+                  - paragraph [ref=e1236]: 💬 Verify bulk status partial result
+                - img [ref=e1238]
+              - generic [ref=e1244] [cursor=pointer]:
+                - generic [ref=e1245]:
+                  - generic [ref=e1246]:
+                    - generic [ref=e1247]:
+                      - img [ref=e1248]
+                      - text: Thu hồi phiên
+                    - generic "16:09:44 18/4/2026" [ref=e1251]: 1 ngày trước
+                  - paragraph [ref=e1252]:
+                    - text: Quan tri vien đã thao tác trên Verify Mentor Updated
+                    - generic [ref=e1253]: (verify.mentor.1776503002864@example.com)
+                  - paragraph [ref=e1254]: 💬 Verify single revoke
+                - img [ref=e1256]
+              - generic [ref=e1262] [cursor=pointer]:
+                - generic [ref=e1263]:
+                  - generic [ref=e1264]:
+                    - generic [ref=e1265]:
+                      - img [ref=e1266]
+                      - text: Đổi vai trò
+                    - generic "16:09:44 18/4/2026" [ref=e1268]: 1 ngày trước
+                  - paragraph [ref=e1269]:
+                    - text: Quan tri vien đã thao tác trên Verify Mentor Updated
+                    - generic [ref=e1270]: (verify.mentor.1776503002864@example.com)
+                  - paragraph [ref=e1271]: 💬 Restore role after verification
+                - img [ref=e1273]
+              - generic [ref=e1279] [cursor=pointer]:
+                - generic [ref=e1280]:
+                  - generic [ref=e1281]:
+                    - generic [ref=e1282]:
+                      - img [ref=e1283]
+                      - text: Đổi vai trò
+                    - generic "16:09:44 18/4/2026" [ref=e1285]: 1 ngày trước
+                  - paragraph [ref=e1286]:
+                    - text: Quan tri vien đã thao tác trên Verify Mentor Updated
+                    - generic [ref=e1287]: (verify.mentor.1776503002864@example.com)
+                  - paragraph [ref=e1288]: 💬 Verify role update
+                - img [ref=e1290]
+              - generic [ref=e1296] [cursor=pointer]:
+                - generic [ref=e1297]:
+                  - generic [ref=e1298]:
+                    - generic [ref=e1299]:
+                      - img [ref=e1300]
+                      - text: Cập nhật hồ sơ
+                    - generic "16:09:44 18/4/2026" [ref=e1303]: 1 ngày trước
+                  - paragraph [ref=e1304]:
+                    - text: Quan tri vien đã thao tác trên Verify Mentor Updated
+                    - generic [ref=e1305]: (verify.mentor.1776503002864@example.com)
+                  - paragraph [ref=e1306]: 💬 Verify profile update
+                - img [ref=e1308]
+              - generic [ref=e1314] [cursor=pointer]:
+                - generic [ref=e1315]:
+                  - generic [ref=e1316]:
+                    - generic [ref=e1317]:
+                      - img [ref=e1318]
+                      - text: Cập nhật tài khoản
+                    - generic "16:09:43 18/4/2026" [ref=e1321]: 1 ngày trước
+                  - paragraph [ref=e1322]:
+                    - text: Quan tri vien đã thao tác trên Verify Mentor Updated
+                    - generic [ref=e1323]: (verify.mentor.1776503002864@example.com)
+                  - paragraph [ref=e1324]: 💬 Verify account update
+                - img [ref=e1326]
+    - contentinfo [ref=e33]:
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - img [ref=e41]
+            - generic [ref=e44]: IT Compass
+          - paragraph [ref=e45]: La bàn định vị sự nghiệp IT của bạn. Chúng tôi giúp thế hệ chuyên gia công nghệ Việt Nam tìm thấy đam mê và con đường phát triển phù hợp nhất.
+          - generic [ref=e46]:
+            - generic [ref=e47]:
+              - generic: Website
+              - link [ref=e48] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e49]
+            - generic [ref=e52]:
+              - generic: Email
+              - link [ref=e53] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e54]
+            - generic [ref=e57]:
+              - generic: Phone
+              - link [ref=e58] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e59]
+        - generic [ref=e62]:
+          - heading "Nền Tảng" [level=4] [ref=e63]
+          - list [ref=e64]:
+            - listitem [ref=e65]:
+              - link "Làm Bài Test" [ref=e66] [cursor=pointer]:
+                - /url: /test
+                - img [ref=e67]
+                - text: Làm Bài Test
+            - listitem [ref=e70]:
+              - link "Chuyên Ngành IT" [ref=e71] [cursor=pointer]:
+                - /url: /majors
+                - img [ref=e72]
+                - text: Chuyên Ngành IT
+            - listitem [ref=e75]:
+              - link "Blog" [ref=e76] [cursor=pointer]:
+                - /url: /blog
+                - img [ref=e77]
+                - text: Blog
+        - generic [ref=e80]:
+          - heading "Công Ty" [level=4] [ref=e81]
+          - list [ref=e82]:
+            - listitem [ref=e83]:
+              - link "Về Chúng Tôi" [ref=e84] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e85]
+                - text: Về Chúng Tôi
+            - listitem [ref=e88]:
+              - link "Điều Khoản Dịch Vụ" [ref=e89] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e90]
+                - text: Điều Khoản Dịch Vụ
+            - listitem [ref=e93]:
+              - link "Chính Sách Bảo Mật" [ref=e94] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e95]
+                - text: Chính Sách Bảo Mật
+            - listitem [ref=e98]:
+              - link "Liên Hệ" [ref=e99] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e100]
+                - text: Liên Hệ
+      - generic [ref=e106]:
+        - paragraph [ref=e107]: © 2026 IT Compass. Đã đăng ký bản quyền.
+        - paragraph [ref=e108]: Được xây dựng với ❤️ cho thế hệ IT Việt Nam
+  - region "Notifications alt+T"

@@ -1,0 +1,34 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e8]:
+    - banner [ref=e9]:
+      - button "Mở menu" [ref=e10] [cursor=pointer]:
+        - img [ref=e11]
+      - generic [ref=e12]: Mentor Portal
+    - main [ref=e13]:
+      - main [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - button "Quay lại danh sách tin nhắn" [ref=e36] [cursor=pointer]:
+              - img [ref=e37]
+            - img [ref=e40]
+            - generic [ref=e43]:
+              - heading "Student Chat Test" [level=2] [ref=e44]
+              - paragraph [ref=e45]: student.chat.1777212244454@it.com
+          - generic [ref=e46]:
+            - generic [ref=e48]:
+              - generic [ref=e49]: Chào em, mentor đã nhận lịch tư vấn và sẵn sàng trao đổi nhé.
+              - paragraph [ref=e50]: 21:07
+            - generic [ref=e52]:
+              - generic [ref=e53]: Mentor gửi thêm tin nhắn kiểm thử realtime từ giao diện.
+              - paragraph [ref=e54]: 21:13
+            - generic [ref=e55]:
+              - img [ref=e57]
+              - generic [ref=e60]:
+                - paragraph [ref=e61]: Student Chat Test
+                - generic [ref=e62]: Em đã nhận được tin nhắn, cảm ơn mentor ạ.
+                - paragraph [ref=e63]: 21:15
+          - generic [ref=e65]:
+            - textbox "Nhập tin nhắn..." [ref=e66]
+            - button "Gửi tin nhắn" [disabled]:
+              - img

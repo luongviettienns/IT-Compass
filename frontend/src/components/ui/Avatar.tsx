@@ -5,18 +5,19 @@ import { toApiAssetUrl } from '../../lib/authApi';
 type AvatarProps = {
     src?: string | null;
     alt?: string;
-    size?: 'sm' | 'md' | 'lg' | 'xl';
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     className?: string;
 };
 
 const sizeMap = {
+    xs: 'h-6 w-6 text-[10px]',
     sm: 'h-8 w-8 text-xs',
     md: 'h-10 w-10 text-sm',
     lg: 'h-14 w-14 text-base',
     xl: 'h-24 w-24 text-2xl',
 };
 
-const iconSizeMap = { sm: 14, md: 16, lg: 20, xl: 32 };
+const iconSizeMap = { xs: 12, sm: 14, md: 16, lg: 20, xl: 32 };
 
 export function Avatar({ src, alt = '', size = 'md', className }: AvatarProps) {
     const resolvedSrc = toApiAssetUrl(src);

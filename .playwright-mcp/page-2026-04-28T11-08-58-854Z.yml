@@ -1,0 +1,217 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e20]: IT Compass
+        - navigation [ref=e21]:
+          - link "Trang chủ" [ref=e22] [cursor=pointer]:
+            - /url: /
+          - link "Trắc nghiệm" [ref=e23] [cursor=pointer]:
+            - /url: /test
+          - link "Blog" [ref=e24] [cursor=pointer]:
+            - /url: /blog
+          - link "Ngành học" [ref=e25] [cursor=pointer]:
+            - /url: /majors
+        - button "Student Test" [ref=e88] [cursor=pointer]:
+          - img [ref=e90]
+          - generic [ref=e93]: Student Test
+          - img [ref=e94]
+    - main [ref=e96]:
+      - generic [ref=e97]:
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - img [ref=e105]
+            - generic [ref=e108]:
+              - generic [ref=e109]:
+                - generic [ref=e110]: HỌC VIÊN
+                - generic [ref=e111]: ACTIVE
+                - generic [ref=e112]: Email đã xác minh
+              - generic [ref=e113]:
+                - heading "Student Test" [level=1] [ref=e114]
+                - paragraph [ref=e115]: student@it.com
+          - generic [ref=e116]:
+            - generic [ref=e117] [cursor=pointer]:
+              - text: Tải ảnh bìa
+              - img [ref=e118]
+              - button "Tải ảnh bìa" [ref=e122]
+            - generic [ref=e123] [cursor=pointer]:
+              - text: Tải ảnh đại diện
+              - img [ref=e124]
+              - button "Tải ảnh đại diện" [ref=e127]
+        - generic [ref=e128]:
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - heading "Thông tin hồ sơ" [level=3] [ref=e132]
+              - paragraph [ref=e133]: Cập nhật thông tin nền tảng để kết quả định hướng và mentor gợi ý sát hơn với mục tiêu hiện tại của bạn.
+            - generic [ref=e134]:
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - img [ref=e137]
+                  - text: Nhận diện cá nhân
+                - generic [ref=e140]:
+                  - generic [ref=e141]:
+                    - text: Họ và tên
+                    - textbox "Họ và tên" [ref=e143]: Student Test
+                  - generic [ref=e144]:
+                    - text: Email
+                    - textbox "Email" [disabled] [ref=e146]: student@it.com
+                  - generic [ref=e147]:
+                    - text: Chức danh hiện tại
+                    - textbox "Chức danh hiện tại" [ref=e149]
+                  - generic [ref=e150]:
+                    - text: Số điện thoại
+                    - generic [ref=e151]:
+                      - img [ref=e153]
+                      - textbox "Số điện thoại" [ref=e155]
+                  - generic [ref=e156]:
+                    - text: Địa điểm
+                    - generic [ref=e157]:
+                      - img [ref=e159]
+                      - textbox "Địa điểm" [ref=e162]
+                  - generic [ref=e163]:
+                    - text: Tỉnh / thành
+                    - textbox "Tỉnh / thành" [ref=e165]
+                  - generic [ref=e166]:
+                    - text: Năm sinh
+                    - spinbutton "Năm sinh" [ref=e168]
+                  - generic [ref=e169]:
+                    - text: Giới tính
+                    - combobox [ref=e170]:
+                      - option "Chưa chọn" [selected]
+                      - option "Nam"
+                      - option "Nữ"
+                      - option "Khác"
+              - generic [ref=e171]:
+                - generic [ref=e172]:
+                  - img [ref=e173]
+                  - text: Học tập & công việc
+                - generic [ref=e176]:
+                  - generic [ref=e177]:
+                    - text: Trường học / công ty
+                    - textbox "Trường học / công ty" [ref=e179]
+                  - generic [ref=e180]:
+                    - text: Khoa / bộ phận
+                    - textbox "Khoa / bộ phận" [ref=e182]
+                  - generic [ref=e183]:
+                    - text: GitHub URL
+                    - generic [ref=e184]:
+                      - img [ref=e186]
+                      - textbox "GitHub URL" [ref=e189]
+                  - generic [ref=e190]:
+                    - text: LinkedIn URL
+                    - generic [ref=e191]:
+                      - img [ref=e193]
+                      - textbox "LinkedIn URL" [ref=e196]
+                - generic [ref=e197]:
+                  - text: Giới thiệu ngắn
+                  - textbox "Bạn đang học gì, quan tâm mảng nào, muốn phát triển ra sao..." [ref=e198]
+              - generic [ref=e199]:
+                - generic [ref=e200]:
+                  - button "Lưu thay đổi" [ref=e201] [cursor=pointer]:
+                    - text: Lưu thay đổi
+                    - img [ref=e202]
+                  - button "Gỡ toàn bộ ảnh" [disabled]
+                - paragraph [ref=e204]: "Cập nhật lần gần nhất: 21:50 26/04/2026"
+          - generic [ref=e205]:
+            - generic [ref=e207]:
+              - generic [ref=e208]:
+                - heading "Tổng quan kết quả định hướng" [level=3] [ref=e209]
+                - paragraph [ref=e210]: Tóm tắt nhanh kết quả gần nhất để nối tiếp sang mentor và lộ trình học phù hợp.
+              - generic [ref=e212]:
+                - img [ref=e214]
+                - heading "Chưa có kết quả bài định hướng" [level=3] [ref=e217]
+                - paragraph [ref=e218]: Làm bài trắc nghiệm đầu tiên để mở khóa gợi ý mentor và chuyên ngành phù hợp.
+                - link "Bắt đầu bài định hướng" [ref=e220] [cursor=pointer]:
+                  - /url: /test
+            - generic [ref=e222]:
+              - generic [ref=e223]:
+                - heading "Lịch sử bài định hướng" [level=3] [ref=e224]
+                - paragraph [ref=e225]: Các lượt làm gần đây để bạn so sánh xu hướng và kiểm tra mức ổn định của kết quả.
+              - generic [ref=e227]:
+                - img [ref=e229]
+                - heading "Chưa có lịch sử bài định hướng" [level=3] [ref=e231]
+                - paragraph [ref=e232]: Sau khi nộp bài, các lượt làm gần nhất sẽ xuất hiện ở đây.
+        - generic [ref=e234]:
+          - generic [ref=e235]:
+            - img [ref=e237]
+            - heading "Lịch tư vấn của bạn" [level=3] [ref=e241]
+            - paragraph [ref=e242]: Theo dõi các yêu cầu đặt lịch với mentor và hủy lịch khi chưa hoàn thành.
+          - article [ref=e245]:
+            - generic [ref=e246]:
+              - generic [ref=e247]:
+                - img [ref=e249]
+                - generic [ref=e252]:
+                  - heading "Mentor Demo" [level=3] [ref=e253]
+                  - paragraph [ref=e254]: Mentor IT
+              - generic [ref=e255]: Chờ mentor xác nhận
+            - generic [ref=e256]:
+              - generic [ref=e257]:
+                - paragraph [ref=e258]: Thời gian
+                - paragraph [ref=e259]: Thứ Tư, 29/04/2026, 18:30 - 19:30
+                - paragraph [ref=e260]: Còn 1 ngày nữa
+              - generic [ref=e261]:
+                - paragraph [ref=e262]: Chi tiết
+                - paragraph [ref=e263]: 60 phút
+                - paragraph [ref=e264]: Liên hệ / buổi
+            - generic [ref=e265]: Chat sẽ mở sau khi mentor xác nhận lịch.
+            - generic [ref=e266]:
+              - link "Xem mentor" [ref=e267] [cursor=pointer]:
+                - /url: /mentors/mentor-demo
+              - button "Hủy lịch" [ref=e268] [cursor=pointer]
+        - generic [ref=e270]:
+          - generic [ref=e271]:
+            - heading "Mentor gợi ý" [level=3] [ref=e272]
+            - paragraph [ref=e273]: Gợi ý mentor được suy ra từ kết quả bài định hướng gần nhất để bạn chuyển ngay sang bước hành động.
+          - generic [ref=e275]:
+            - img [ref=e277]
+            - heading "Chưa có mentor gợi ý" [level=3] [ref=e280]
+            - paragraph [ref=e281]: Hoàn thiện bài định hướng hoặc cập nhật hồ sơ để hệ thống đề xuất mentor phù hợp hơn.
+            - link "Xem toàn bộ mentor" [ref=e283] [cursor=pointer]:
+              - /url: /mentors
+    - contentinfo [ref=e34]:
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - link "IT Compass" [ref=e38] [cursor=pointer]:
+              - /url: /
+              - img [ref=e40]
+              - generic [ref=e52]: IT Compass
+            - paragraph [ref=e53]: Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+          - generic [ref=e54]:
+            - heading "Khám phá" [level=3] [ref=e55]
+            - list [ref=e56]:
+              - listitem [ref=e57]:
+                - link "Trắc nghiệm" [ref=e58] [cursor=pointer]:
+                  - /url: /test
+              - listitem [ref=e59]:
+                - link "Blog" [ref=e60] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e61]:
+                - link "Mentor" [ref=e62] [cursor=pointer]:
+                  - /url: /mentors
+              - listitem [ref=e63]:
+                - link "Ngành học" [ref=e64] [cursor=pointer]:
+                  - /url: /majors
+              - listitem [ref=e65]:
+                - link "Về chúng tôi" [ref=e66] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e67]:
+            - heading "Liên hệ" [level=3] [ref=e68]
+            - list [ref=e69]:
+              - listitem [ref=e70]:
+                - img [ref=e71]
+                - text: contact@itcompass.vn
+              - listitem [ref=e74]:
+                - img [ref=e75]
+                - text: TP. Hồ Chí Minh, Việt Nam
+              - listitem [ref=e78]:
+                - link "GitHub" [ref=e79] [cursor=pointer]:
+                  - /url: https://github.com
+                  - img [ref=e80]
+                  - text: GitHub
+                  - img [ref=e83]
+        - generic [ref=e87]: © 2026 IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.

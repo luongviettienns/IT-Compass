@@ -59,7 +59,12 @@ export const validate = (schema: RequestSchema) => (req: Request, _res: Response
   }
 
   if (result.data.query) {
-    Object.assign(req.query, result.data.query);
+    Object.defineProperty(req, 'query', {
+      value: result.data.query,
+      configurable: true,
+      enumerable: true,
+      writable: true,
+    });
   }
 
   if (result.data.params) {

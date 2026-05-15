@@ -37,7 +37,12 @@ export const validate = (schema) => (req, _res, next) => {
         req.body = result.data.body;
     }
     if (result.data.query) {
-        Object.assign(req.query, result.data.query);
+        Object.defineProperty(req, 'query', {
+            value: result.data.query,
+            configurable: true,
+            enumerable: true,
+            writable: true,
+        });
     }
     if (result.data.params) {
         req.params = result.data.params;

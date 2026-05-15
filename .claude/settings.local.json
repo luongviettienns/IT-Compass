@@ -6,7 +6,16 @@
       "Bash(npm ls:*)",
       "mcp__playwright__browser_navigate",
       "mcp__playwright__browser_console_messages",
-      "mcp__playwright__browser_network_requests"
+      "mcp__playwright__browser_network_requests",
+      "Bash(curl -s http://127.0.0.1:5000/api/health)",
+      "mcp__playwright__browser_navigate_back",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__chrome-devtools__select_page",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_snapshot"
     ]
+  },
+  "enabledPlugins": {
+    "backend-development@claude-code-workflows": true
   }
 }

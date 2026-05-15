@@ -1,0 +1,24 @@
+import { Router } from 'express';
+
+import * as conversationController from '../controllers/conversation.controller.js';
+import { requireActiveUser, requireAuth } from '../middlewares/auth.middleware.js';
+import { validate } from '../middlewares/validate.middleware.js';
+import {
+  createConversationMessageSchema,
+  getBookingConversationSchema,
+  getConversationMessagesSchema,
+  listConversationsSchema,
+} from '../validators/conversation.validator.js';
+
+const conversationRoutes = Router();
+const bookingConversationRoutes = Router();
+
+conversationRoutes.use(requireAuth, requireActiveUser);
+conversationRoutes.get('/', validate(listConversationsSchema), conversationController.listConversations);
+conversationRoutes.get('/:conversationId/messages', validate(getConversationMessagesSchema), conversationController.listMessages);
+conversationRoutes.post('/:conversationId/messages', validate(createConversationMessageSchema), conversationController.createMessage);
+
+bookingConversationRoutes.use(requireAuth, requireActiveUser);
+bookingConversationRoutes.get('/:bookingId/conversation', validate(getBookingConversationSchema), conversationController.getBookingConversation);
+
+export { bookingConversationRoutes, conversationRoutes };

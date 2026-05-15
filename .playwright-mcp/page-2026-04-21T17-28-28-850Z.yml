@@ -1,0 +1,92 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - main [ref=e151]:
+    - generic [ref=e152]:
+      - generic [ref=e153]:
+        - generic [ref=e154]:
+          - generic [ref=e155]:
+            - img [ref=e156]
+            - text: Phiên quiz tập trung
+          - heading "Phần Holland" [level=1] [ref=e159]
+          - paragraph [ref=e160]: Câu 1/29 · Tự động lưu trong phiên hiện tại
+        - generic [ref=e162]:
+          - generic [ref=e163]: Tiến độ
+          - generic [ref=e164]: 3%
+      - generic [ref=e167]: Bạn có thể làm quiz ngay lúc này. Khi tới bước nộp bài, hệ thống sẽ yêu cầu đăng nhập để lưu kết quả chính thức.
+      - generic [ref=e168]:
+        - generic [ref=e170]:
+          - generic [ref=e171]: R · Realistic
+          - generic [ref=e172]:
+            - img [ref=e173]
+            - text: Tự lượng giá mức độ phù hợp
+        - generic [ref=e177]:
+          - generic [ref=e178]:
+            - paragraph [ref=e179]: Holland prompt
+            - heading "Tôi thích tự tay tháo lắp, sửa chữa các thiết bị điện tử hoặc máy tính." [level=2] [ref=e180]
+            - paragraph [ref=e181]: Chọn mức độ phản ánh đúng sở thích hoặc thiên hướng thật của bạn. Đừng nghĩ theo “nên làm”, hãy chọn theo “thực sự muốn làm”.
+            - generic [ref=e182]:
+              - button "1 Rất không đúng Gần như không muốn làm" [ref=e183] [cursor=pointer]:
+                - generic [ref=e184]:
+                  - generic [ref=e185]: "1"
+                  - generic [ref=e186]:
+                    - paragraph [ref=e187]: Rất không đúng
+                    - paragraph [ref=e188]: Gần như không muốn làm
+              - button "2 Không đúng lắm Ít hứng thú" [ref=e189] [cursor=pointer]:
+                - generic [ref=e190]:
+                  - generic [ref=e191]: "2"
+                  - generic [ref=e192]:
+                    - paragraph [ref=e193]: Không đúng lắm
+                    - paragraph [ref=e194]: Ít hứng thú
+              - button "3 Trung lập Có thể cân nhắc" [ref=e195] [cursor=pointer]:
+                - generic [ref=e196]:
+                  - generic [ref=e197]: "3"
+                  - generic [ref=e198]:
+                    - paragraph [ref=e199]: Trung lập
+                    - paragraph [ref=e200]: Có thể cân nhắc
+              - button "4 Khá đúng Muốn thử nghiêm túc" [ref=e201] [cursor=pointer]:
+                - generic [ref=e202]:
+                  - generic [ref=e203]: "4"
+                  - generic [ref=e204]:
+                    - paragraph [ref=e205]: Khá đúng
+                    - paragraph [ref=e206]: Muốn thử nghiêm túc
+              - button "5 Rất đúng Rất phù hợp với tôi" [ref=e207] [cursor=pointer]:
+                - generic [ref=e208]:
+                  - generic [ref=e209]: "5"
+                  - generic [ref=e210]:
+                    - paragraph [ref=e211]: Rất đúng
+                    - paragraph [ref=e212]: Rất phù hợp với tôi
+          - complementary [ref=e213]:
+            - generic [ref=e214]:
+              - paragraph [ref=e215]: Session note
+              - paragraph [ref=e216]: Tiến độ hiện tại được giữ trong session của trình duyệt. Nếu reload tab, bạn có thể tiếp tục ở đúng bước đang làm.
+            - generic [ref=e217]:
+              - paragraph [ref=e218]: Bắt đầu lúc
+              - paragraph [ref=e219]: 00:28 22/04/2026
+            - generic [ref=e220]:
+              - paragraph [ref=e221]: Tiến độ trả lời
+              - generic [ref=e222]:
+                - generic [ref=e223]:
+                  - generic [ref=e224]: Holland
+                  - generic [ref=e225]: 0/24
+                - generic [ref=e226]:
+                  - generic [ref=e227]: Situational
+                  - generic [ref=e228]: 0/5
+            - generic [ref=e230]:
+              - img [ref=e231]
+              - generic [ref=e235]:
+                - paragraph [ref=e236]: Lưu kết quả cần đăng nhập
+                - paragraph [ref=e237]: Khi bấm nộp ở câu cuối, hệ thống sẽ đưa bạn sang đăng nhập và giữ nguyên toàn bộ câu trả lời hiện tại.
+        - generic [ref=e238]:
+          - generic [ref=e239]:
+            - button "Câu trước" [disabled]:
+              - img
+              - text: Câu trước
+            - link "Thoát quiz" [ref=e240] [cursor=pointer]:
+              - /url: /test
+          - generic [ref=e241]:
+            - generic [ref=e242]:
+              - img [ref=e243]
+              - text: Chọn một đáp án để tiếp tục
+            - button "Tiếp tục" [disabled]:
+              - text: Tiếp tục
+              - img

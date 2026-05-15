@@ -29,6 +29,7 @@ import { toApiAssetUrl, type AuthUser, type Gender } from '../lib/authApi';
 import { getErrorMessage } from '../lib/appError';
 import { assessmentApi } from '../lib/assessmentApi';
 import { assessmentQueryKeys } from '../lib/assessmentQueryKeys';
+
 import { mentorApi, formatMentorHourlyRate, getMentorHeadline } from '../lib/mentorApi';
 import { mentorQueryKeys } from '../lib/mentorQueryKeys';
 import { getRoleBadge } from '../lib/userDisplay';
@@ -70,6 +71,7 @@ const formatDateTime = (value: string | null | undefined) => {
         minute: '2-digit',
     });
 };
+
 
 const normalizeNullable = (value: string) => {
     const normalized = value.trim();
@@ -139,6 +141,7 @@ export default function ProfilePage() {
         queryFn: () => mentorApi.getRecommended(RECOMMENDED_LIMIT),
         enabled: user?.role === 'STUDENT',
     });
+
 
     const roleBadge = useMemo(() => getRoleBadge(user?.role), [user?.role]);
     const latestAttempt = latestAttemptQuery.data?.attempt ?? null;
@@ -233,13 +236,15 @@ export default function ProfilePage() {
         }
     };
 
+
+
     return (
         <>
             <Helmet>
                 <title>Hồ sơ cá nhân — IT Compass</title>
                 <meta
                     name="description"
-                    content="Quản lý hồ sơ cá nhân IT Compass, cập nhật thông tin học tập, xem lịch sử assessment và các mentor được gợi ý từ kết quả mới nhất."
+                    content="Quản lý hồ sơ cá nhân IT Compass, cập nhật thông tin học tập và xem các mentor được gợi ý từ kết quả mới nhất."
                 />
             </Helmet>
 
@@ -322,7 +327,7 @@ export default function ProfilePage() {
                                 <CardHeader className="space-y-3">
                                     <CardTitle className="text-3xl font-black tracking-tight">Thông tin hồ sơ</CardTitle>
                                     <CardDescription className="text-sm leading-6">
-                                        Cập nhật thông tin nền tảng để kết quả định hướng và mentor recommendation sát hơn với mục tiêu hiện tại của bạn.
+                                        Cập nhật thông tin nền tảng để kết quả định hướng và mentor gợi ý sát hơn với mục tiêu hiện tại của bạn.
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-8">
@@ -462,7 +467,7 @@ export default function ProfilePage() {
                             <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.04 }}>
                                 <Card className="rounded-[32px] border-border/70 shadow-xl shadow-primary/5">
                                     <CardHeader className="space-y-3">
-                                        <CardTitle className="text-2xl font-black tracking-tight">Assessment snapshot</CardTitle>
+                                        <CardTitle className="text-2xl font-black tracking-tight">Tổng quan kết quả định hướng</CardTitle>
                                         <CardDescription className="text-sm leading-6">
                                             Tóm tắt nhanh kết quả gần nhất để nối tiếp sang mentor và lộ trình học phù hợp.
                                         </CardDescription>
@@ -476,7 +481,7 @@ export default function ProfilePage() {
                                             </div>
                                         ) : latestAttemptQuery.error ? (
                                             <div className="rounded-[24px] border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
-                                                {getErrorMessage(latestAttemptQuery.error, 'Không thể tải kết quả assessment gần nhất.')}
+                                                {getErrorMessage(latestAttemptQuery.error, 'Không thể tải kết quả bài định hướng gần nhất.')}
                                             </div>
                                         ) : latestAttempt ? (
                                             <div className="space-y-4">
@@ -502,11 +507,11 @@ export default function ProfilePage() {
                                         ) : (
                                             <EmptyState
                                                 icon={<Sparkles size={24} />}
-                                                title="Chưa có kết quả assessment"
+                                                title="Chưa có kết quả bài định hướng"
                                                 description="Làm bài trắc nghiệm đầu tiên để mở khóa gợi ý mentor và chuyên ngành phù hợp."
                                                 action={
                                                     <Link to="/test" className={buttonVariants({ variant: 'outline' })}>
-                                                        Bắt đầu assessment
+                                                        Bắt đầu bài định hướng
                                                     </Link>
                                                 }
                                             />
@@ -518,7 +523,7 @@ export default function ProfilePage() {
                             <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.08 }}>
                                 <Card className="rounded-[32px] border-border/70 shadow-xl shadow-primary/5">
                                     <CardHeader className="space-y-3">
-                                        <CardTitle className="text-2xl font-black tracking-tight">Lịch sử assessment</CardTitle>
+                                        <CardTitle className="text-2xl font-black tracking-tight">Lịch sử bài định hướng</CardTitle>
                                         <CardDescription className="text-sm leading-6">
                                             Các lượt làm gần đây để bạn so sánh xu hướng và kiểm tra mức ổn định của kết quả.
                                         </CardDescription>
@@ -532,7 +537,7 @@ export default function ProfilePage() {
                                             </div>
                                         ) : historyQuery.error ? (
                                             <div className="rounded-[24px] border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
-                                                {getErrorMessage(historyQuery.error, 'Không thể tải lịch sử assessment.')}
+                                                {getErrorMessage(historyQuery.error, 'Không thể tải lịch sử bài định hướng.')}
                                             </div>
                                         ) : history.length ? (
                                             <div className="space-y-3">
@@ -558,7 +563,7 @@ export default function ProfilePage() {
                                         ) : (
                                             <EmptyState
                                                 icon={<BookOpen size={24} />}
-                                                title="Chưa có lịch sử assessment"
+                                                title="Chưa có lịch sử bài định hướng"
                                                 description="Sau khi nộp bài, các lượt làm gần nhất sẽ xuất hiện ở đây."
                                             />
                                         )}
@@ -568,78 +573,77 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
-                    {user.role === 'STUDENT' && (
-                        <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.12 }}>
-                            <Card className="rounded-[32px] border-border/70 shadow-xl shadow-primary/5">
-                                <CardHeader className="space-y-3">
-                                    <CardTitle className="text-3xl font-black tracking-tight">Mentor recommendation</CardTitle>
-                                    <CardDescription className="text-sm leading-6">
-                                        Gợi ý mentor được suy ra từ kết quả assessment gần nhất để bạn chuyển ngay sang bước hành động.
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-5">
-                                    {recommendedMentorsQuery.isLoading ? (
-                                        <div className="grid gap-4 lg:grid-cols-3">
-                                            {Array.from({ length: 3 }).map((_, index) => (
-                                                <Skeleton key={index} className="h-52 rounded-[24px]" />
+                    <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.1 }}>
+                        <Card className="rounded-[32px] border-border/70 shadow-xl shadow-primary/5">
+                            <CardHeader className="space-y-3">
+                                <CardTitle className="text-3xl font-black tracking-tight">Mentor gợi ý</CardTitle>
+                                <CardDescription className="text-sm leading-6">
+                                    Gợi ý mentor được suy ra từ kết quả bài định hướng gần nhất để bạn chuyển ngay sang bước hành động.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-5">
+                                {recommendedMentorsQuery.isLoading ? (
+                                    <div className="grid gap-4 lg:grid-cols-3">
+                                        {Array.from({ length: 3 }).map((_, index) => (
+                                            <Skeleton key={index} className="h-52 rounded-[24px]" />
+                                        ))}
+                                    </div>
+                                ) : recommendedMentorsQuery.error ? (
+                                    <div className="rounded-[24px] border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
+                                        {getErrorMessage(recommendedMentorsQuery.error, 'Không thể tải mentor gợi ý lúc này.')}
+                                    </div>
+                                ) : recommendations.length ? (
+                                    <>
+                                        <div className="flex flex-wrap gap-2">
+                                            {matchedExpertise.map((tag) => (
+                                                <Badge key={tag} variant="outline" className="border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
+                                                    {tag}
+                                                </Badge>
                                             ))}
                                         </div>
-                                    ) : recommendedMentorsQuery.error ? (
-                                        <div className="rounded-[24px] border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
-                                            {getErrorMessage(recommendedMentorsQuery.error, 'Không thể tải mentor gợi ý lúc này.')}
+                                        <div className="grid gap-4 lg:grid-cols-3">
+                                            {recommendations.map((mentor) => (
+                                                <article key={mentor.id} className="rounded-[24px] border border-border/60 bg-background p-5">
+                                                    <div className="flex items-start gap-4">
+                                                        <Avatar src={mentor.avatarUrl} alt={mentor.name} size="lg" />
+                                                        <div className="min-w-0">
+                                                            <h3 className="text-base font-semibold text-foreground">{mentor.name}</h3>
+                                                            <p className="mt-1 text-sm text-muted-foreground">{getMentorHeadline(mentor)}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="mt-4 space-y-2 text-sm text-muted-foreground">
+                                                        <p>{mentor.expertiseArea || 'Chưa cập nhật chuyên môn chính'}</p>
+                                                        <p>{formatMentorHourlyRate(mentor.hourlyRate)} / buổi</p>
+                                                        <p>{mentor.reviewCount} đánh giá</p>
+                                                    </div>
+                                                    <Link
+                                                        to={`/mentors/${mentor.slug}`}
+                                                        className={cn(buttonVariants({ variant: 'outline' }), 'mt-5 w-full justify-center')}
+                                                    >
+                                                        Xem hồ sơ mentor
+                                                    </Link>
+                                                </article>
+                                            ))}
                                         </div>
-                                    ) : recommendations.length ? (
-                                        <>
-                                            <div className="flex flex-wrap gap-2">
-                                                {matchedExpertise.map((tag) => (
-                                                    <Badge key={tag} variant="outline" className="border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
-                                                        {tag}
-                                                    </Badge>
-                                                ))}
-                                            </div>
-                                            <div className="grid gap-4 lg:grid-cols-3">
-                                                {recommendations.map((mentor) => (
-                                                    <article key={mentor.id} className="rounded-[24px] border border-border/60 bg-background p-5">
-                                                        <div className="flex items-start gap-4">
-                                                            <Avatar src={mentor.avatarUrl} alt={mentor.name} size="lg" />
-                                                            <div className="min-w-0">
-                                                                <h3 className="text-base font-semibold text-foreground">{mentor.name}</h3>
-                                                                <p className="mt-1 text-sm text-muted-foreground">{getMentorHeadline(mentor)}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="mt-4 space-y-2 text-sm text-muted-foreground">
-                                                            <p>{mentor.expertiseArea || 'Chưa cập nhật chuyên môn chính'}</p>
-                                                            <p>{formatMentorHourlyRate(mentor.hourlyRate)} / buổi</p>
-                                                            <p>{mentor.reviewCount} đánh giá</p>
-                                                        </div>
-                                                        <Link
-                                                            to={`/mentors/${mentor.slug}`}
-                                                            className={cn(buttonVariants({ variant: 'outline' }), 'mt-5 w-full justify-center')}
-                                                        >
-                                                            Xem hồ sơ mentor
-                                                        </Link>
-                                                    </article>
-                                                ))}
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <EmptyState
-                                            icon={<BadgeCheck size={24} />}
-                                            title="Chưa có mentor recommendation"
-                                            description="Hoàn thiện assessment hoặc cập nhật hồ sơ để hệ thống đề xuất mentor phù hợp hơn."
-                                            action={
-                                                <Link to="/mentors" className={buttonVariants({ variant: 'outline' })}>
-                                                    Xem toàn bộ mentor
-                                                </Link>
-                                            }
-                                        />
-                                    )}
-                                </CardContent>
-                            </Card>
-                        </motion.section>
-                    )}
+                                    </>
+                                ) : (
+                                    <EmptyState
+                                        icon={<BadgeCheck size={24} />}
+                                        title="Chưa có mentor gợi ý"
+                                        description="Hoàn thiện bài định hướng hoặc cập nhật hồ sơ để hệ thống đề xuất mentor phù hợp hơn."
+                                        action={
+                                            <Link to="/mentors" className={buttonVariants({ variant: 'outline' })}>
+                                                Xem toàn bộ mentor
+                                            </Link>
+                                        }
+                                    />
+                                )}
+                            </CardContent>
+                        </Card>
+                    </motion.section>
                 </div>
             </main>
+
         </>
     );
 }

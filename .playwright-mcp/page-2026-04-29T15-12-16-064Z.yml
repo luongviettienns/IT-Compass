@@ -1,0 +1,141 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e172]:
+        - img [ref=e174]
+        - generic [ref=e177]: Tên hiển thị phải từ 2 đến 150 ký tự.
+  - generic [ref=e7]:
+    - complementary [ref=e9]:
+      - generic [ref=e10]:
+        - generic [ref=e11]:
+          - img [ref=e13]
+          - generic [ref=e16]:
+            - generic [ref=e17]: IT Compass
+            - generic [ref=e18]: Mentor Portal
+        - button [ref=e19] [cursor=pointer]:
+          - img [ref=e20]
+      - navigation [ref=e22]:
+        - link "Tổng quan" [ref=e23] [cursor=pointer]:
+          - /url: /mentor
+          - img [ref=e24]
+          - generic [ref=e29]: Tổng quan
+        - link "Lịch tư vấn 1" [ref=e30] [cursor=pointer]:
+          - /url: /mentor/bookings
+          - img [ref=e31]
+          - generic [ref=e35]: Lịch tư vấn
+          - generic [ref=e36]: "1"
+        - link "Tin nhắn" [ref=e37] [cursor=pointer]:
+          - /url: /mentor/messages
+          - img [ref=e38]
+          - generic [ref=e40]: Tin nhắn
+        - link "Khung giờ" [ref=e41] [cursor=pointer]:
+          - /url: /mentor/availability
+          - img [ref=e42]
+          - generic [ref=e45]: Khung giờ
+        - link "Hồ sơ" [ref=e46] [cursor=pointer]:
+          - /url: /mentor/profile
+          - img [ref=e47]
+          - generic [ref=e51]: Hồ sơ
+        - link "Xem trước" [ref=e52] [cursor=pointer]:
+          - /url: /mentor/preview
+          - img [ref=e53]
+          - generic [ref=e56]: Xem trước
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - img [ref=e60]
+          - generic [ref=e63]:
+            - generic [ref=e64]: Mentor Demo
+            - generic [ref=e65]: mentor@it.com
+        - link "Về trang chủ" [ref=e66] [cursor=pointer]:
+          - /url: /
+          - img [ref=e67]
+          - generic [ref=e70]: Về trang chủ
+        - button "Đăng xuất" [ref=e71] [cursor=pointer]:
+          - img [ref=e72]
+          - generic [ref=e75]: Đăng xuất
+    - main [ref=e77]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - paragraph [ref=e80]: Mentor Portal
+          - heading "Chỉnh sửa hồ sơ" [level=1] [ref=e81]
+          - paragraph [ref=e82]: Cập nhật thông tin để hiển thị tốt nhất cho học viên.
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - img [ref=e88]
+            - heading "Thông tin cơ bản" [level=2] [ref=e91]
+          - generic [ref=e92]:
+            - generic [ref=e93]:
+              - img [ref=e95]
+              - generic [ref=e98]: Xem trước avatar
+            - generic [ref=e99]:
+              - generic [ref=e100]:
+                - text: Tên hiển thị
+                - textbox "Tên hiển thị" [ref=e102]: A
+              - generic [ref=e103]:
+                - text: Slug (URL)
+                - textbox "Slug (URL)" [ref=e105]: mentor-demo
+              - generic [ref=e106]:
+                - text: Headline / Title
+                - textbox "Headline / Title" [ref=e108]: Mentor IT
+              - generic [ref=e109]:
+                - text: Avatar URL
+                - textbox "Avatar URL" [ref=e111]:
+                  - /placeholder: https://...
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - img [ref=e117]
+            - heading "Chuyên môn & Kinh nghiệm" [level=2] [ref=e120]
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - text: Chuyên môn chính
+              - textbox "Chuyên môn chính" [ref=e124]: Web Development, Frontend, Backend
+            - generic [ref=e125]:
+              - text: Level
+              - combobox "Level" [ref=e126]:
+                - option "Chọn level"
+                - option "Student"
+                - option "Fresher"
+                - option "Junior"
+                - option "Middle" [selected]
+                - option "Senior"
+                - option "Lead"
+                - option "Architect"
+                - option "Manager"
+            - generic [ref=e127]:
+              - text: Số năm kinh nghiệm
+              - spinbutton "Số năm kinh nghiệm" [ref=e129]: "3"
+            - generic [ref=e130]:
+              - text: Chi phí / giờ (VNĐ)
+              - spinbutton "Chi phí / giờ (VNĐ)" [ref=e132]
+        - generic [ref=e135]:
+          - generic [ref=e136]:
+            - img [ref=e138]
+            - heading "Hiển thị công khai" [level=2] [ref=e143]
+          - generic [ref=e144]:
+            - generic [ref=e145]:
+              - text: Công ty hiện tại
+              - textbox "Công ty hiện tại" [ref=e147]
+            - generic [ref=e148]:
+              - text: Job title hiện tại
+              - textbox "Job title hiện tại" [ref=e150]
+            - generic [ref=e151]:
+              - text: Trường học
+              - textbox "Trường học" [ref=e153]
+            - generic [ref=e154]:
+              - text: Ngôn ngữ tư vấn
+              - textbox "Ngôn ngữ tư vấn" [ref=e156]:
+                - /placeholder: "Ví dụ: Tiếng Việt, English"
+                - text: Tiếng Việt
+          - generic [ref=e158]:
+            - text: Bio giới thiệu
+            - textbox "Bio giới thiệu 66/5000" [ref=e159]:
+              - /placeholder: Giới thiệu ngắn về kinh nghiệm, thế mạnh và kiểu vấn đề bạn có thể hỗ trợ mentee.
+              - text: Tài khoản mentor dùng để kiểm thử luồng đặt lịch và chat realtime.
+            - generic [ref=e161]: 66/5000
+      - generic [ref=e163]:
+        - paragraph [ref=e164]: Bạn có thay đổi chưa lưu.
+        - generic [ref=e165]:
+          - button "Hoàn tác" [ref=e166] [cursor=pointer]
+          - button "Lưu thay đổi" [active] [ref=e167] [cursor=pointer]:
+            - img [ref=e168]
+            - text: Lưu thay đổi

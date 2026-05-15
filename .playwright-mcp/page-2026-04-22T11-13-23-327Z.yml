@@ -1,0 +1,139 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e53]:
+        - img [ref=e55]
+        - generic [ref=e58]: Đăng nhập thành công.
+  - generic [ref=e59]:
+    - complementary [ref=e60]:
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - img [ref=e64]
+          - generic [ref=e67]:
+            - generic [ref=e68]: IT Compass
+            - generic [ref=e69]: Administrator
+        - button [ref=e70] [cursor=pointer]:
+          - img [ref=e71]
+      - navigation [ref=e73]:
+        - link "Tổng quan" [ref=e74] [cursor=pointer]:
+          - /url: /admin
+          - img [ref=e75]
+          - generic [ref=e80]: Tổng quan
+        - link "Người dùng" [ref=e81] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e82]
+          - generic [ref=e87]: Người dùng
+        - link "Mentor" [ref=e88] [cursor=pointer]:
+          - /url: /admin/mentors
+          - img [ref=e89]
+          - generic [ref=e93]: Mentor
+        - link "Nội dung (CMS)" [ref=e94] [cursor=pointer]:
+          - /url: /admin/blogs
+          - img [ref=e95]
+          - generic [ref=e98]: Nội dung (CMS)
+        - link "Bình luận blog" [ref=e99] [cursor=pointer]:
+          - /url: /admin/blog-comments
+          - img [ref=e100]
+          - generic [ref=e102]: Bình luận blog
+        - link "Assessment" [ref=e103] [cursor=pointer]:
+          - /url: /admin/assessments
+          - img [ref=e104]
+          - generic [ref=e107]: Assessment
+        - link "Nhật ký hệ thống" [ref=e108] [cursor=pointer]:
+          - /url: /admin/audit-logs
+          - img [ref=e109]
+          - generic [ref=e111]: Nhật ký hệ thống
+        - link "Cài đặt" [ref=e112] [cursor=pointer]:
+          - /url: /admin/settings
+          - img [ref=e113]
+          - generic [ref=e116]: Cài đặt
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - generic [ref=e119]: L
+          - generic [ref=e120]:
+            - generic [ref=e121]: Lương Việt Tiến
+            - generic [ref=e122]: admin@example.com
+        - button "Đăng xuất" [ref=e123] [cursor=pointer]:
+          - img [ref=e124]
+          - generic [ref=e127]: Đăng xuất
+    - generic [ref=e128]:
+      - banner [ref=e129]:
+        - generic [ref=e131]:
+          - img [ref=e132]
+          - textbox "Tìm kiếm nhanh..." [ref=e135]
+        - generic [ref=e136]:
+          - button [ref=e137] [cursor=pointer]:
+            - img [ref=e138]
+          - button [ref=e141] [cursor=pointer]:
+            - img [ref=e142]
+      - main [ref=e144]:
+        - generic [ref=e145]:
+          - generic [ref=e146]:
+            - heading "Tổng quan hệ thống" [level=1] [ref=e147]
+            - paragraph [ref=e148]: Theo dõi các chỉ số quan trọng của IT Compass.
+          - generic [ref=e149]:
+            - generic [ref=e150]:
+              - generic [ref=e151]:
+                - paragraph [ref=e152]: Tổng người dùng
+                - img [ref=e154]
+              - heading "12" [level=3] [ref=e159]
+            - generic [ref=e160]:
+              - generic [ref=e161]:
+                - paragraph [ref=e162]: Tổng Mentor
+                - img [ref=e164]
+              - heading "1" [level=3] [ref=e168]
+            - generic [ref=e169]:
+              - generic [ref=e170]:
+                - paragraph [ref=e171]: Tổng bài viết
+                - img [ref=e173]
+              - heading "3" [level=3] [ref=e176]
+            - generic [ref=e177]:
+              - generic [ref=e178]:
+                - paragraph [ref=e179]: Lượt Assessment
+                - img [ref=e181]
+              - heading "8" [level=3] [ref=e184]
+          - generic [ref=e185]:
+            - generic [ref=e186]:
+              - heading "Người dùng" [level=3] [ref=e187]
+              - generic [ref=e188]:
+                - generic [ref=e189]:
+                  - img [ref=e190]
+                  - text: Hoạt động
+                - generic [ref=e193]: "11"
+              - generic [ref=e194]:
+                - generic [ref=e195]:
+                  - img [ref=e196]
+                  - text: Bị khóa
+                - generic [ref=e201]: "1"
+              - generic [ref=e202]:
+                - generic [ref=e203]:
+                  - img [ref=e204]
+                  - text: Đã xác minh email
+                - generic [ref=e207]: "3"
+            - generic [ref=e208]:
+              - heading "Nội dung (Blog)" [level=3] [ref=e209]
+              - generic [ref=e210]:
+                - generic [ref=e211]: Đã xuất bản
+                - generic [ref=e212]: "3"
+              - generic [ref=e213]:
+                - generic [ref=e214]: Bản nháp
+                - generic [ref=e215]: "0"
+              - generic [ref=e216]:
+                - generic [ref=e217]: Lên lịch đăng
+                - generic [ref=e218]: "0"
+              - generic [ref=e219]:
+                - generic [ref=e220]:
+                  - img [ref=e221]
+                  - text: Bình luận
+                - generic [ref=e223]: "2"
+            - generic [ref=e224]:
+              - heading "Mentor" [level=3] [ref=e225]
+              - generic [ref=e226]:
+                - generic [ref=e227]: Hoạt động
+                - generic [ref=e228]: "1"
+              - generic [ref=e229]:
+                - generic [ref=e230]: Tạm dừng
+                - generic [ref=e231]: "0"
+              - generic [ref=e232]:
+                - generic [ref=e233]: Đã xác thực
+                - generic [ref=e234]: "0"

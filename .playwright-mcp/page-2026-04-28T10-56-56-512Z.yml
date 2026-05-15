@@ -1,0 +1,17 @@
+- generic [ref=e3]:
+  - generic [ref=e6]:
+    - heading "Không thể truy cập trang web này" [level=1] [ref=e7]
+    - paragraph [ref=e8]:
+      - strong [ref=e9]: 127.0.0.1
+      - text: đã từ chối kết nối.
+    - generic [ref=e10]:
+      - paragraph [ref=e11]: "Hãy thử:"
+      - list [ref=e12]:
+        - listitem [ref=e13]: Kiểm tra kết nối
+        - listitem [ref=e14]:
+          - link "Kiểm tra proxy và tường lửa" [ref=e15] [cursor=pointer]:
+            - /url: "#buttons"
+    - generic [ref=e16]: ERR_CONNECTION_REFUSED
+  - generic [ref=e17]:
+    - button "Tải lại" [ref=e19] [cursor=pointer]
+    - button "Chi tiết" [ref=e20] [cursor=pointer]

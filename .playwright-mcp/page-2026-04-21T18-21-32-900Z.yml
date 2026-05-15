@@ -1,0 +1,193 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e20]: IT Compass
+        - navigation [ref=e21]:
+          - link "Trang chủ" [ref=e22] [cursor=pointer]:
+            - /url: /
+          - link "Trắc nghiệm" [ref=e23] [cursor=pointer]:
+            - /url: /test
+          - link "Blog" [ref=e24] [cursor=pointer]:
+            - /url: /blog
+          - link "Mentor" [ref=e25] [cursor=pointer]:
+            - /url: /mentors
+          - link "Ngành học" [ref=e26] [cursor=pointer]:
+            - /url: /majors
+        - button "Claude Profile Test" [ref=e89] [cursor=pointer]:
+          - img [ref=e91]
+          - generic [ref=e94]: Claude Profile Test
+          - img [ref=e95]
+    - main [ref=e101]:
+      - generic [ref=e102]:
+        - generic [ref=e106]:
+          - generic [ref=e107]:
+            - img [ref=e109]
+            - generic [ref=e112]:
+              - generic [ref=e113]:
+                - generic [ref=e114]: HỌC VIÊN
+                - generic [ref=e115]: ACTIVE
+                - generic [ref=e116]: Email chưa xác minh
+              - generic [ref=e117]:
+                - heading "Claude Profile Test" [level=1] [ref=e118]
+                - paragraph [ref=e119]: claude.profile.1776795272338@example.com
+                - paragraph [ref=e120]: Quan tâm frontend product, trải nghiệm người dùng và xây dựng giao diện production-ready.
+          - generic [ref=e121]:
+            - generic [ref=e122] [cursor=pointer]:
+              - text: Tải ảnh bìa
+              - img [ref=e123]
+              - button "Tải ảnh bìa" [ref=e127]
+            - generic [ref=e128] [cursor=pointer]:
+              - text: Tải ảnh đại diện
+              - img [ref=e129]
+              - button "Tải ảnh đại diện" [ref=e132]
+        - generic [ref=e133]:
+          - generic [ref=e135]:
+            - generic [ref=e136]:
+              - heading "Thông tin hồ sơ" [level=3] [ref=e137]
+              - paragraph [ref=e138]: Cập nhật thông tin nền tảng để kết quả định hướng và mentor recommendation sát hơn với mục tiêu hiện tại của bạn.
+            - generic [ref=e139]:
+              - generic [ref=e140]:
+                - generic [ref=e141]:
+                  - img [ref=e142]
+                  - text: Nhận diện cá nhân
+                - generic [ref=e145]:
+                  - generic [ref=e146]:
+                    - text: Họ và tên
+                    - textbox "Họ và tên" [ref=e148]: Claude Profile Test
+                  - generic [ref=e149]:
+                    - text: Email
+                    - textbox "Email" [disabled] [ref=e151]: claude.profile.1776795272338@example.com
+                  - generic [ref=e152]:
+                    - text: Chức danh hiện tại
+                    - textbox "Chức danh hiện tại" [ref=e154]: Frontend Explorer
+                  - generic [ref=e155]:
+                    - text: Số điện thoại
+                    - generic [ref=e156]:
+                      - img [ref=e158]
+                      - textbox "Số điện thoại" [ref=e160]
+                  - generic [ref=e161]:
+                    - text: Địa điểm
+                    - generic [ref=e162]:
+                      - img [ref=e164]
+                      - textbox "Địa điểm" [ref=e167]: TP. Hồ Chí Minh
+                  - generic [ref=e168]:
+                    - text: Tỉnh / thành
+                    - textbox "Tỉnh / thành" [ref=e170]: Hồ Chí Minh
+                  - generic [ref=e171]:
+                    - text: Năm sinh
+                    - spinbutton "Năm sinh" [ref=e173]
+                  - generic [ref=e174]:
+                    - text: Giới tính
+                    - combobox [ref=e175]:
+                      - option "Chưa chọn" [selected]
+                      - option "Nam"
+                      - option "Nữ"
+                      - option "Khác"
+              - generic [ref=e176]:
+                - generic [ref=e177]:
+                  - img [ref=e178]
+                  - text: Học tập & công việc
+                - generic [ref=e181]:
+                  - generic [ref=e182]:
+                    - text: Trường học / công ty
+                    - textbox "Trường học / công ty" [ref=e184]: IT Compass Lab
+                  - generic [ref=e185]:
+                    - text: Khoa / bộ phận
+                    - textbox "Khoa / bộ phận" [ref=e187]
+                  - generic [ref=e188]:
+                    - text: GitHub URL
+                    - generic [ref=e189]:
+                      - img [ref=e191]
+                      - textbox "GitHub URL" [ref=e194]: https://github.com/claude-profile-test
+                  - generic [ref=e195]:
+                    - text: LinkedIn URL
+                    - generic [ref=e196]:
+                      - img [ref=e198]
+                      - textbox "LinkedIn URL" [ref=e201]
+                - generic [ref=e202]:
+                  - text: Giới thiệu ngắn
+                  - textbox "Bạn đang học gì, quan tâm mảng nào, muốn phát triển ra sao..." [ref=e203]: Quan tâm frontend product, trải nghiệm người dùng và xây dựng giao diện production-ready.
+              - generic [ref=e204]:
+                - generic [ref=e205]:
+                  - button "Lưu thay đổi" [ref=e206] [cursor=pointer]:
+                    - text: Lưu thay đổi
+                    - img [ref=e207]
+                  - button "Gỡ toàn bộ ảnh" [disabled]
+                - paragraph [ref=e209]: "Cập nhật lần gần nhất: 01:15 22/04/2026"
+          - generic [ref=e210]:
+            - generic [ref=e212]:
+              - generic [ref=e213]:
+                - heading "Assessment snapshot" [level=3] [ref=e214]
+                - paragraph [ref=e215]: Tóm tắt nhanh kết quả gần nhất để nối tiếp sang mentor và lộ trình học phù hợp.
+              - generic [ref=e217]:
+                - img [ref=e219]
+                - heading "Chưa có kết quả assessment" [level=3] [ref=e222]
+                - paragraph [ref=e223]: Làm bài trắc nghiệm đầu tiên để mở khóa gợi ý mentor và chuyên ngành phù hợp.
+                - link "Bắt đầu assessment" [ref=e225] [cursor=pointer]:
+                  - /url: /test
+            - generic [ref=e227]:
+              - generic [ref=e228]:
+                - heading "Lịch sử assessment" [level=3] [ref=e229]
+                - paragraph [ref=e230]: Các lượt làm gần đây để bạn so sánh xu hướng và kiểm tra mức ổn định của kết quả.
+              - generic [ref=e232]:
+                - img [ref=e234]
+                - heading "Chưa có lịch sử assessment" [level=3] [ref=e236]
+                - paragraph [ref=e237]: Sau khi nộp bài, các lượt làm gần nhất sẽ xuất hiện ở đây.
+        - generic [ref=e239]:
+          - generic [ref=e240]:
+            - heading "Mentor recommendation" [level=3] [ref=e241]
+            - paragraph [ref=e242]: Gợi ý mentor được suy ra từ kết quả assessment gần nhất để bạn chuyển ngay sang bước hành động.
+          - generic [ref=e244]:
+            - img [ref=e246]
+            - heading "Chưa có mentor recommendation" [level=3] [ref=e249]
+            - paragraph [ref=e250]: Hoàn thiện assessment hoặc cập nhật hồ sơ để hệ thống đề xuất mentor phù hợp hơn.
+            - link "Xem toàn bộ mentor" [ref=e252] [cursor=pointer]:
+              - /url: /mentors
+    - contentinfo [ref=e35]:
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - generic [ref=e38]:
+            - link "IT Compass" [ref=e39] [cursor=pointer]:
+              - /url: /
+              - img [ref=e41]
+              - generic [ref=e53]: IT Compass
+            - paragraph [ref=e54]: Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+          - generic [ref=e55]:
+            - heading "Khám phá" [level=3] [ref=e56]
+            - list [ref=e57]:
+              - listitem [ref=e58]:
+                - link "Trắc nghiệm" [ref=e59] [cursor=pointer]:
+                  - /url: /test
+              - listitem [ref=e60]:
+                - link "Blog" [ref=e61] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e62]:
+                - link "Mentor" [ref=e63] [cursor=pointer]:
+                  - /url: /mentors
+              - listitem [ref=e64]:
+                - link "Ngành học" [ref=e65] [cursor=pointer]:
+                  - /url: /majors
+              - listitem [ref=e66]:
+                - link "Về chúng tôi" [ref=e67] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e68]:
+            - heading "Liên hệ" [level=3] [ref=e69]
+            - list [ref=e70]:
+              - listitem [ref=e71]:
+                - img [ref=e72]
+                - text: contact@itcompass.vn
+              - listitem [ref=e75]:
+                - img [ref=e76]
+                - text: TP. Hồ Chí Minh, Việt Nam
+              - listitem [ref=e79]:
+                - link "GitHub" [ref=e80] [cursor=pointer]:
+                  - /url: https://github.com
+                  - img [ref=e81]
+                  - text: GitHub
+                  - img [ref=e84]
+        - generic [ref=e88]: © 2026 IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.

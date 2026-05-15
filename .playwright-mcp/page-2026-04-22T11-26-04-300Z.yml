@@ -1,0 +1,126 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e49]:
+        - img [ref=e51]
+        - generic [ref=e54]: Đăng nhập thành công.
+  - generic [ref=e55]:
+    - complementary [ref=e56]:
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - img [ref=e60]
+          - generic [ref=e63]:
+            - generic [ref=e64]: IT Compass
+            - generic [ref=e65]: Administrator
+        - button [ref=e66] [cursor=pointer]:
+          - img [ref=e67]
+      - navigation [ref=e69]:
+        - link "Tổng quan" [ref=e70] [cursor=pointer]:
+          - /url: /admin
+          - img [ref=e71]
+          - generic [ref=e76]: Tổng quan
+        - link "Người dùng" [ref=e77] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e78]
+          - generic [ref=e83]: Người dùng
+        - link "Mentor" [ref=e84] [cursor=pointer]:
+          - /url: /admin/mentors
+          - img [ref=e85]
+          - generic [ref=e89]: Mentor
+        - link "Nội dung (CMS)" [ref=e90] [cursor=pointer]:
+          - /url: /admin/blogs
+          - img [ref=e91]
+          - generic [ref=e94]: Nội dung (CMS)
+        - link "Bình luận blog" [ref=e95] [cursor=pointer]:
+          - /url: /admin/blog-comments
+          - img [ref=e96]
+          - generic [ref=e98]: Bình luận blog
+        - link "Assessment" [ref=e99] [cursor=pointer]:
+          - /url: /admin/assessments
+          - img [ref=e100]
+          - generic [ref=e103]: Assessment
+        - link "Nhật ký hệ thống" [ref=e104] [cursor=pointer]:
+          - /url: /admin/audit-logs
+          - img [ref=e105]
+          - generic [ref=e107]: Nhật ký hệ thống
+        - link "Cài đặt" [ref=e108] [cursor=pointer]:
+          - /url: /admin/settings
+          - img [ref=e109]
+          - generic [ref=e112]: Cài đặt
+      - generic [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e115]: L
+          - generic [ref=e116]:
+            - generic [ref=e117]: Lương Việt Tiến
+            - generic [ref=e118]: admin@example.com
+        - button "Đăng xuất" [ref=e119] [cursor=pointer]:
+          - img [ref=e120]
+          - generic [ref=e123]: Đăng xuất
+    - generic [ref=e124]:
+      - banner [ref=e125]:
+        - generic [ref=e127]:
+          - img [ref=e128]
+          - textbox "Tìm kiếm nhanh..." [ref=e131]
+        - generic [ref=e132]:
+          - button [ref=e133] [cursor=pointer]:
+            - img [ref=e134]
+          - button [ref=e137] [cursor=pointer]:
+            - img [ref=e138]
+      - main [ref=e140]:
+        - generic [ref=e141]:
+          - generic [ref=e142]:
+            - generic [ref=e143]:
+              - heading "Quản lý Mentor" [level=1] [ref=e144]
+              - paragraph [ref=e145]: Phê duyệt, quản lý hồ sơ và trạng thái Mentor.
+            - button "Tạo Mentor mới" [ref=e146] [cursor=pointer]:
+              - img [ref=e147]
+              - text: Tạo Mentor mới
+          - generic [ref=e150]:
+            - generic [ref=e151]:
+              - img [ref=e152]
+              - textbox "Tìm mentor theo tên..." [ref=e155]
+            - generic [ref=e156]:
+              - button "Tất cả" [ref=e157] [cursor=pointer]
+              - button "Hoạt động" [ref=e158] [cursor=pointer]
+              - button "Tạm ngưng" [ref=e159] [cursor=pointer]
+          - generic [ref=e160]:
+            - generic [ref=e161]:
+              - generic [ref=e162]: Tổng Mentor
+              - generic [ref=e163]: "1"
+            - generic [ref=e164]:
+              - generic [ref=e165]: Đã Xác thực
+              - generic [ref=e166]: "0"
+            - generic [ref=e167]:
+              - generic [ref=e168]: Hoạt động
+              - generic [ref=e169]: "1"
+            - generic [ref=e170]:
+              - generic [ref=e171]: Tạm ngưng
+              - generic [ref=e172]: "0"
+          - table [ref=e174]:
+            - rowgroup [ref=e175]:
+              - row "Mentor Lĩnh vực / Chức danh Cấp độ Xác thực Thao tác" [ref=e176]:
+                - columnheader "Mentor" [ref=e177]
+                - columnheader "Lĩnh vực / Chức danh" [ref=e178]
+                - columnheader "Cấp độ" [ref=e179]
+                - columnheader "Xác thực" [ref=e180]
+                - columnheader "Thao tác" [ref=e181]
+            - rowgroup [ref=e182]:
+              - row "Mentor Verify Local mentor1776686962464@example.com Frontend, React, Career Coaching Lead Mentor @ IT Compass Lab Chưa cập nhật Chờ duyệt Phê duyệt Ngưng" [ref=e183]:
+                - cell "Mentor Verify Local mentor1776686962464@example.com" [ref=e184]:
+                  - generic [ref=e185]:
+                    - generic [ref=e186]: Mentor Verify Local
+                    - generic [ref=e187]: mentor1776686962464@example.com
+                - cell "Frontend, React, Career Coaching Lead Mentor @ IT Compass Lab" [ref=e188]:
+                  - generic [ref=e189]:
+                    - generic [ref=e190]: Frontend, React, Career Coaching
+                    - generic [ref=e191]: Lead Mentor @ IT Compass Lab
+                - cell "Chưa cập nhật" [ref=e192]:
+                  - generic [ref=e193]: Chưa cập nhật
+                - cell "Chờ duyệt" [ref=e194]:
+                  - generic [ref=e195]: Chờ duyệt
+                - cell "Phê duyệt Ngưng" [ref=e197]:
+                  - generic [ref=e198]:
+                    - button "Sửa mentor" [ref=e199] [cursor=pointer]:
+                      - img [ref=e200]
+                    - button "Phê duyệt" [ref=e203] [cursor=pointer]
+                    - button "Ngưng" [ref=e204] [cursor=pointer]

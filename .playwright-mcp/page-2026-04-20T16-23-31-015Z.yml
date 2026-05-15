@@ -1,0 +1,130 @@
+- generic [ref=e2]:
+  - generic [ref=e550]:
+    - banner [ref=e551]:
+      - generic [ref=e552]:
+        - generic [ref=e553]:
+          - link "IT Compass" [ref=e554] [cursor=pointer]:
+            - /url: /
+            - img [ref=e555]
+            - img [ref=e557]
+            - generic [ref=e560]: IT Compass
+          - generic [ref=e561]: /
+          - generic [ref=e562]:
+            - img [ref=e563]
+            - generic [ref=e565]: Quản trị
+        - button "LV Tiến" [ref=e567] [cursor=pointer]:
+          - generic [ref=e568]: LV
+          - generic [ref=e569]: Tiến
+          - img [ref=e570]
+    - generic [ref=e572]:
+      - generic [ref=e574]:
+        - img [ref=e576]
+        - generic [ref=e578]:
+          - heading "Bảng Quản Trị" [level=1] [ref=e579]
+          - paragraph [ref=e580]: Quản trị hệ thống IT Compass
+      - generic [ref=e581]:
+        - complementary [ref=e582]:
+          - generic [ref=e583]:
+            - button "Tổng quan" [ref=e584] [cursor=pointer]:
+              - generic [ref=e585]:
+                - img [ref=e586]
+                - text: Tổng quan
+            - button "Bài viết" [ref=e591] [cursor=pointer]:
+              - generic [ref=e592]:
+                - img [ref=e593]
+                - text: Bài viết
+            - button "Bình luận" [ref=e596] [cursor=pointer]:
+              - generic [ref=e597]:
+                - img [ref=e598]
+                - text: Bình luận
+            - button "Người dùng" [ref=e600] [cursor=pointer]:
+              - generic [ref=e601]:
+                - img [ref=e602]
+                - text: Người dùng
+            - button "Mentor" [active] [ref=e607] [cursor=pointer]:
+              - generic [ref=e608]:
+                - img [ref=e609]
+                - text: Mentor
+            - button "Nhật ký" [ref=e613] [cursor=pointer]:
+              - generic [ref=e614]:
+                - img [ref=e615]
+                - text: Nhật ký
+        - main [ref=e618]:
+          - generic [ref=e825]:
+            - generic [ref=e826]:
+              - generic [ref=e827]:
+                - paragraph [ref=e828]: "1"
+                - paragraph [ref=e829]: Tổng mentor
+              - generic [ref=e830]:
+                - paragraph [ref=e831]: "1"
+                - paragraph [ref=e832]: Hoạt động
+              - generic [ref=e833]:
+                - paragraph [ref=e834]: "0"
+                - paragraph [ref=e835]: Tạm dừng
+              - generic [ref=e836]:
+                - paragraph [ref=e837]: "0"
+                - paragraph [ref=e838]: Đã xác thực
+            - generic [ref=e839]:
+              - generic [ref=e840]:
+                - button "Tất cả" [ref=e841] [cursor=pointer]
+                - button "Hoạt động" [ref=e842] [cursor=pointer]
+                - button "Tạm dừng" [ref=e843] [cursor=pointer]
+                - button "Mọi xác thực" [ref=e845] [cursor=pointer]
+                - button "Đã xác thực" [ref=e846] [cursor=pointer]
+                - button "Chưa xác thực" [ref=e847] [cursor=pointer]
+              - generic [ref=e848]:
+                - generic [ref=e849]:
+                  - img [ref=e850]
+                  - textbox "Tìm tên mentor, slug, công ty, email..." [ref=e853]
+                - generic [ref=e854]:
+                  - combobox [ref=e855]:
+                    - option "Mọi level" [selected]
+                    - option "Sinh viên"
+                    - option "Fresher"
+                    - option "Junior"
+                    - option "Middle"
+                    - option "Senior"
+                    - option "Lead"
+                    - option "Architect"
+                    - option "Manager"
+                  - combobox [ref=e856]:
+                    - option "Cập nhật gần nhất" [selected]
+                    - option "Tạo mới nhất"
+                    - option "Nhiều review nhất"
+                    - option "Kinh nghiệm cao nhất"
+                    - option "Tên A→Z"
+                    - option "Tên Z→A"
+                  - button "Làm mới" [ref=e857] [cursor=pointer]:
+                    - img [ref=e858]
+                  - button "Tạo mới" [ref=e863] [cursor=pointer]:
+                    - img [ref=e864]
+                    - text: Tạo mới
+            - generic [ref=e866] [cursor=pointer]:
+              - generic [ref=e867]:
+                - generic [ref=e869]: ML
+                - generic [ref=e870]:
+                  - generic [ref=e871]:
+                    - generic [ref=e872]:
+                      - img [ref=e873]
+                      - text: Hoạt động
+                    - generic [ref=e876]:
+                      - img [ref=e877]
+                      - text: Chưa xác thực
+                  - paragraph [ref=e879]: Mentor Verify Local
+                  - paragraph [ref=e880]: Mentor IT · mentor1776686962464@example.com
+                  - generic [ref=e881]:
+                    - generic [ref=e882]: Liên hệ/giờ
+                    - generic [ref=e883]: •
+                    - generic [ref=e884]: 0 năm kinh nghiệm
+                    - generic [ref=e885]: •
+                    - generic [ref=e886]: 0 reviews
+              - generic [ref=e887]:
+                - button "Chỉnh sửa" [ref=e888]:
+                  - img [ref=e889]
+                - button "Tạm dừng mentor" [ref=e892]:
+                  - img [ref=e893]
+                - button "Xác thực mentor" [ref=e895]:
+                  - img [ref=e896]
+                - button "Xem chi tiết" [ref=e899]:
+                  - img [ref=e900]
+  - region "Notifications alt+T"

@@ -1,0 +1,52 @@
+[      50ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:14337
+[  108772ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5000/api/mentor/dashboard:0
+[  108784ms] [ERROR] %o
+
+%s
+
+%s
+ Error: React.Children.only expected to receive a single React element child.
+    at Object.only (http://127.0.0.1:5173/node_modules/.vite/deps/react.js?v=abc8b8d5:468:42)
+    at Slot.SlotClone (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-slot.js?v=44695c59:81:76)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:4213:19)
+    at updateForwardRef (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:5396:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:6204:21)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:8309:6) The above error occurred in the <Slot.SlotClone> component. React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary. @ http://127.0.0.1:5173/@vite/client:509
+[  108789ms] [ERROR] [ErrorBoundary] Error: React.Children.only expected to receive a single React element child.
+    at Object.only (http://127.0.0.1:5173/node_modules/.vite/deps/react.js?v=abc8b8d5:468:42)
+    at Slot.SlotClone (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-slot.js?v=44695c59:81:76)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:4213:19)
+    at updateForwardRef (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:5396:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:6204:21)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=a8724cc1:8309:6) 
+    at Slot.SlotClone (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-slot.js?v=44695c59:73:9)
+    at Slot.Slot (http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-slot.js?v=44695c59:42:9)
+    at _c (http://127.0.0.1:5173/src/components/ui/button.tsx:30:41)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at div (<anonymous>)
+    at MentorDashboard (http://127.0.0.1:5173/src/pages/MentorDashboard.tsx:17:19)
+    at Suspense (<anonymous>)
+    at RenderedRoute (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=d55bb7d2:4004:26)
+    at Outlet (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=d55bb7d2:4570:25)
+    at ProtectedRoute (http://127.0.0.1:5173/src/components/auth/ProtectedRoute.tsx:7:34)
+    at RenderedRoute (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=d55bb7d2:4004:26)
+    at Routes (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=d55bb7d2:4623:19)
+    at div (<anonymous>)
+    at AppShell (http://127.0.0.1:5173/src/App.tsx:72:23)
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=d55bb7d2:4575:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=d55bb7d2:6927:26)
+    at App (<anonymous>)
+    at AuthProvider (http://127.0.0.1:5173/src/contexts/AuthContext.tsx:62:32)
+    at QueryClientProvider (http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=9f535384:2517:30)
+    at _HelmetProvider (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=5ecb5f92:491:3)
+    at ErrorBoundary (http://127.0.0.1:5173/src/components/ErrorBoundary.tsx:8:3) @ http://127.0.0.1:5173/@vite/client:509

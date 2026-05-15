@@ -103,7 +103,25 @@ const isProduction = nodeEnv === 'production';
 const isStaging = nodeEnv === 'staging';
 const isDevelopment = !isProduction && !isStaging;
 
+const assertProductionSafety = ({ frontendUrl }: { frontendUrl: string }) => {
+  if (!isProduction) return;
+
+  if (!frontendUrl.startsWith('https://')) {
+    throw new Error('FRONTEND_URL must use HTTPS when NODE_ENV=production');
+  }
+
+  if (process.env.COOKIE_SECURE === 'false') {
+    throw new Error('COOKIE_SECURE=false is not allowed when NODE_ENV=production');
+  }
+
+  if (process.env.JWT_ACCESS_SECRET?.trim() === 'change-me-in-production') {
+    throw new Error('JWT_ACCESS_SECRET must be changed from the example value in production');
+  }
+};
+
 const frontendUrl = process.env.FRONTEND_URL?.trim() || 'http://localhost:5173';
+assertProductionSafety({ frontendUrl });
+
 const allowedOrigins = [
   frontendUrl,
   ...(process.env.ALLOWED_ORIGINS || '')

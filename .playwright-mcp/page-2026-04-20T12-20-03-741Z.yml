@@ -1,0 +1,200 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: IT Compass
+        - navigation [ref=e12]:
+          - link "Trang chủ" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - text: Trang chủ
+          - link "Trắc nghiệm" [ref=e15] [cursor=pointer]:
+            - /url: /test
+            - text: Trắc nghiệm
+          - link "Lĩnh vực IT" [ref=e17] [cursor=pointer]:
+            - /url: /majors
+            - text: Lĩnh vực IT
+          - link "Cố vấn" [ref=e19] [cursor=pointer]:
+            - /url: /mentors
+            - text: Cố vấn
+          - link "Blog" [ref=e21] [cursor=pointer]:
+            - /url: /blog
+            - text: Blog
+          - link "Giới thiệu" [ref=e23] [cursor=pointer]:
+            - /url: /about
+            - text: Giới thiệu
+          - link "Bảng điều khiển" [ref=e129] [cursor=pointer]:
+            - /url: /mentor/dashboard
+            - text: Bảng điều khiển
+        - button "MV Local" [ref=e132] [cursor=pointer]:
+          - generic [ref=e133]: MV
+          - generic [ref=e135]:
+            - generic [ref=e136]: Local
+            - img [ref=e137]
+    - generic [ref=e139]:
+      - generic [ref=e140]:
+        - img "Cover" [ref=e142]
+        - img [ref=e145] [cursor=pointer]
+      - generic [ref=e148]:
+        - generic [ref=e150]:
+          - generic [ref=e152] [cursor=pointer]:
+            - img "Mentor Verify Local" [ref=e153]
+            - img [ref=e155]
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - heading "Mentor Verify Local" [level=1] [ref=e161]
+              - generic [ref=e162]:
+                - img [ref=e163]
+                - text: Cố vấn
+            - paragraph [ref=e166]: Cố vấn
+            - generic [ref=e167]:
+              - generic [ref=e168]:
+                - img [ref=e169]
+                - text: Chưa cập nhật
+              - generic [ref=e172]:
+                - img [ref=e173]
+                - text: Chưa cập nhật
+              - generic [ref=e176]:
+                - img [ref=e177]
+                - text: Email chưa xác thực
+          - generic [ref=e179]:
+            - button "Chỉnh sửa" [ref=e180] [cursor=pointer]:
+              - img [ref=e181]
+              - text: Chỉnh sửa
+            - button [ref=e184] [cursor=pointer]:
+              - img [ref=e185]
+        - generic [ref=e188]:
+          - generic [ref=e189]:
+            - generic [ref=e190]:
+              - heading "Giới thiệu" [level=3] [ref=e191]:
+                - img [ref=e192]
+                - text: Giới thiệu
+              - paragraph [ref=e195]: Chưa có giới thiệu
+            - generic [ref=e196]:
+              - heading "Thông tin liên hệ" [level=3] [ref=e197]:
+                - img [ref=e198]
+                - text: Thông tin liên hệ
+              - list [ref=e200]:
+                - listitem [ref=e201]:
+                  - img [ref=e203]
+                  - generic [ref=e206]: mentor1776686962464@example.com
+                - listitem [ref=e207]:
+                  - img [ref=e209]
+                  - generic [ref=e211]: Chưa cập nhật
+                - listitem [ref=e212]:
+                  - img [ref=e214]
+                  - generic [ref=e216]: Chưa cập nhật
+                - listitem [ref=e217]:
+                  - img [ref=e219]
+                  - generic [ref=e221]: Chưa cập nhật
+            - generic [ref=e222]:
+              - heading "Kỹ năng IT" [level=3] [ref=e223]:
+                - img [ref=e224]
+                - text: Kỹ năng IT
+              - generic [ref=e227]:
+                - generic [ref=e228]: ReactJS
+                - generic [ref=e229]: TypeScript
+                - generic [ref=e230]: Tailwind CSS
+                - generic [ref=e231]: Node.js
+                - generic [ref=e232]: Git
+          - generic [ref=e233]:
+            - generic [ref=e234]:
+              - button "Tổng quan tiến độ" [ref=e235] [cursor=pointer]
+              - button "Mentor gợi ý 0" [ref=e236] [cursor=pointer]:
+                - text: Mentor gợi ý
+                - generic [ref=e237]: "0"
+            - generic [ref=e239]:
+              - generic [ref=e240]:
+                - generic [ref=e241]:
+                  - generic [ref=e242]:
+                    - img [ref=e243]
+                    - text: Mới nhất
+                  - 'heading "Định hướng: Chưa có kết quả" [level=2] [ref=e246]'
+                  - paragraph [ref=e247]: Hãy làm bài test để khám phá bản thân.
+                  - heading "Gợi ý lộ trình nghề nghiệp:" [level=4] [ref=e249]
+                  - link "Làm lại bài Test" [ref=e251] [cursor=pointer]:
+                    - /url: /test
+                    - text: Làm lại bài Test
+                    - img [ref=e252]
+                - generic:
+                  - img
+              - generic [ref=e254]:
+                - heading "Học vấn" [level=2] [ref=e255]:
+                  - img [ref=e256]
+                  - text: Học vấn
+                - generic [ref=e260]:
+                  - heading "Kỹ sư Kỹ thuật Phần mềm" [level=4] [ref=e262]
+                  - paragraph [ref=e263]: Đại học Sư Phạm Kỹ Thuật Hưng Yên
+                  - generic [ref=e264]:
+                    - generic [ref=e265]: 2023 - Hiện tại
+                    - generic [ref=e266]: "GPA: 3.5/4.0"
+    - contentinfo [ref=e53]:
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - img [ref=e61]
+            - generic [ref=e64]: IT Compass
+          - paragraph [ref=e65]: La bàn định vị sự nghiệp IT của bạn. Chúng tôi giúp thế hệ chuyên gia công nghệ Việt Nam tìm thấy đam mê và con đường phát triển phù hợp nhất.
+          - generic [ref=e66]:
+            - generic [ref=e67]:
+              - generic: Website
+              - link [ref=e68] [cursor=pointer]:
+                - /url: /about
+                - img [ref=e69]
+            - generic [ref=e72]:
+              - generic: Email
+              - link [ref=e73] [cursor=pointer]:
+                - /url: mailto:hello@itcompass.vn
+                - img [ref=e74]
+            - generic [ref=e77]:
+              - generic: Hotline
+              - link [ref=e78] [cursor=pointer]:
+                - /url: tel:19001234567
+                - img [ref=e79]
+        - generic [ref=e82]:
+          - heading "Nền Tảng" [level=4] [ref=e83]
+          - list [ref=e84]:
+            - listitem [ref=e85]:
+              - link "Làm Bài Test" [ref=e86] [cursor=pointer]:
+                - /url: /test
+                - img [ref=e87]
+                - text: Làm Bài Test
+            - listitem [ref=e90]:
+              - link "Chuyên Ngành IT" [ref=e91] [cursor=pointer]:
+                - /url: /majors
+                - img [ref=e92]
+                - text: Chuyên Ngành IT
+            - listitem [ref=e95]:
+              - link "Blog" [ref=e96] [cursor=pointer]:
+                - /url: /blog
+                - img [ref=e97]
+                - text: Blog
+        - generic [ref=e100]:
+          - heading "Công Ty" [level=4] [ref=e101]
+          - list [ref=e102]:
+            - listitem [ref=e103]:
+              - link "Về Chúng Tôi" [ref=e104] [cursor=pointer]:
+                - /url: /about
+                - img [ref=e105]
+                - text: Về Chúng Tôi
+            - listitem [ref=e108]:
+              - link "Điều Khoản Dịch Vụ" [ref=e109] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e110]
+                - text: Điều Khoản Dịch Vụ
+            - listitem [ref=e113]:
+              - link "Chính Sách Bảo Mật" [ref=e114] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e115]
+                - text: Chính Sách Bảo Mật
+            - listitem [ref=e118]:
+              - link "Liên Hệ" [ref=e119] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e120]
+                - text: Liên Hệ
+      - generic [ref=e126]:
+        - paragraph [ref=e127]: © 2026 IT Compass. Đã đăng ký bản quyền.
+        - paragraph [ref=e128]: Được xây dựng với ❤️ cho thế hệ IT Việt Nam
+  - region "Notifications alt+T"

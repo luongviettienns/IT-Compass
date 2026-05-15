@@ -1,0 +1,119 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e55]:
+    - complementary [ref=e56]:
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - img [ref=e60]
+          - generic [ref=e63]:
+            - generic [ref=e64]: IT Compass
+            - generic [ref=e65]: Administrator
+        - button [ref=e66] [cursor=pointer]:
+          - img [ref=e67]
+      - navigation [ref=e69]:
+        - link "Tổng quan" [ref=e70] [cursor=pointer]:
+          - /url: /admin
+          - img [ref=e71]
+          - generic [ref=e76]: Tổng quan
+        - link "Người dùng" [ref=e77] [cursor=pointer]:
+          - /url: /admin/users
+          - img [ref=e78]
+          - generic [ref=e83]: Người dùng
+        - link "Mentor" [ref=e84] [cursor=pointer]:
+          - /url: /admin/mentors
+          - img [ref=e85]
+          - generic [ref=e89]: Mentor
+        - link "Nội dung (CMS)" [ref=e90] [cursor=pointer]:
+          - /url: /admin/blogs
+          - img [ref=e91]
+          - generic [ref=e94]: Nội dung (CMS)
+        - link "Bình luận blog" [ref=e95] [cursor=pointer]:
+          - /url: /admin/blog-comments
+          - img [ref=e96]
+          - generic [ref=e98]: Bình luận blog
+        - link "Assessment" [ref=e99] [cursor=pointer]:
+          - /url: /admin/assessments
+          - img [ref=e100]
+          - generic [ref=e103]: Assessment
+        - link "Nhật ký hệ thống" [ref=e104] [cursor=pointer]:
+          - /url: /admin/audit-logs
+          - img [ref=e105]
+          - generic [ref=e107]: Nhật ký hệ thống
+        - link "Cài đặt" [ref=e108] [cursor=pointer]:
+          - /url: /admin/settings
+          - img [ref=e109]
+          - generic [ref=e112]: Cài đặt
+      - generic [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e115]: L
+          - generic [ref=e116]:
+            - generic [ref=e117]: Lương Việt Tiến
+            - generic [ref=e118]: admin@example.com
+        - button "Đăng xuất" [ref=e119] [cursor=pointer]:
+          - img [ref=e120]
+          - generic [ref=e123]: Đăng xuất
+    - generic [ref=e124]:
+      - banner [ref=e125]:
+        - generic [ref=e127]:
+          - img [ref=e128]
+          - textbox "Tìm kiếm nhanh..." [ref=e131]
+        - generic [ref=e132]:
+          - button [ref=e133] [cursor=pointer]:
+            - img [ref=e134]
+          - button [ref=e137] [cursor=pointer]:
+            - img [ref=e138]
+      - main [ref=e140]:
+        - generic [ref=e678]:
+          - generic [ref=e679]:
+            - generic [ref=e680]:
+              - img [ref=e682]
+              - generic [ref=e684]:
+                - heading "Quản lý bình luận blog" [level=1] [ref=e685]
+                - paragraph [ref=e686]: Theo dõi, ẩn hoặc xóa bình luận trên toàn bộ hệ thống blog. Trang đang hiển thị bình luận của một bài viết cụ thể.
+            - generic [ref=e687]:
+              - button "Bỏ lọc bài viết" [ref=e688] [cursor=pointer]
+              - button "Quay lại bài viết" [ref=e689] [cursor=pointer]:
+                - img [ref=e690]
+                - text: Quay lại bài viết
+          - generic [ref=e692]:
+            - generic [ref=e694]:
+              - img [ref=e696]
+              - generic [ref=e698]:
+                - heading "Bình luận của bài viết đã chọn" [level=2] [ref=e699]
+                - paragraph [ref=e700]: Danh sách dưới đây chỉ hiển thị bình luận thuộc bài viết bạn vừa chọn từ trang bài viết.
+                - generic [ref=e701]: Đang lọc theo bài viết
+            - generic [ref=e702]:
+              - generic [ref=e703]:
+                - button "Tất cả" [ref=e704] [cursor=pointer]
+                - button "Hiển thị" [ref=e705] [cursor=pointer]
+                - button "Đã ẩn" [ref=e706] [cursor=pointer]
+                - button "Bị xóa" [ref=e707] [cursor=pointer]
+              - generic [ref=e708]:
+                - generic [ref=e709]:
+                  - img [ref=e710]
+                  - textbox "Tìm theo nội dung bình luận..." [ref=e713]
+                - generic [ref=e714]: "Tổng: 1"
+            - table [ref=e716]:
+              - rowgroup [ref=e717]:
+                - row "Người dùng Bình luận Bài viết Thao tác" [ref=e718]:
+                  - columnheader "Người dùng" [ref=e719]
+                  - columnheader "Bình luận" [ref=e720]
+                  - columnheader "Bài viết" [ref=e721]
+                  - columnheader "Thao tác" [ref=e722]
+              - rowgroup [ref=e723]:
+                - row "Khach 21/4/2026 Test comment Giới thiệu về ngành Kỹ Thuật Phần Mềm" [ref=e724]:
+                  - cell "Khach 21/4/2026" [ref=e725]:
+                    - generic [ref=e726]:
+                      - generic [ref=e727]: Khach
+                      - generic [ref=e728]: 21/4/2026
+                  - cell "Test comment" [ref=e729]:
+                    - paragraph [ref=e730]: Test comment
+                  - cell "Giới thiệu về ngành Kỹ Thuật Phần Mềm" [ref=e731]:
+                    - link "Giới thiệu về ngành Kỹ Thuật Phần Mềm" [ref=e732] [cursor=pointer]:
+                      - /url: /blog/gioi-thieu-ve-nganh-ky-thuat-phan-mem
+                  - cell [ref=e733]:
+                    - generic [ref=e734]:
+                      - button "Ẩn bình luận" [ref=e735] [cursor=pointer]:
+                        - img [ref=e736]
+                      - button "Xóa vĩnh viễn" [ref=e741] [cursor=pointer]:
+                        - img [ref=e742]

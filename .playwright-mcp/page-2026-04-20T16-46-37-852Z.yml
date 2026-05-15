@@ -1,0 +1,262 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: IT Compass
+        - navigation [ref=e12]:
+          - link "Trang chủ" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - text: Trang chủ
+          - link "Trắc nghiệm" [ref=e15] [cursor=pointer]:
+            - /url: /test
+            - text: Trắc nghiệm
+          - link "Lĩnh vực IT" [ref=e17] [cursor=pointer]:
+            - /url: /majors
+            - text: Lĩnh vực IT
+          - link "Cố vấn" [ref=e19] [cursor=pointer]:
+            - /url: /mentors
+            - text: Cố vấn
+          - link "Blog" [ref=e21] [cursor=pointer]:
+            - /url: /blog
+            - text: Blog
+          - link "Giới thiệu" [ref=e23] [cursor=pointer]:
+            - /url: /about
+            - text: Giới thiệu
+          - link "Bảng điều khiển" [ref=e129] [cursor=pointer]:
+            - /url: /mentor/dashboard
+            - text: Bảng điều khiển
+        - button "MV Local" [ref=e132] [cursor=pointer]:
+          - generic [ref=e133]: MV
+          - generic [ref=e135]:
+            - generic [ref=e136]: Local
+            - img [ref=e137]
+    - generic [ref=e140]:
+      - generic [ref=e141]:
+        - generic [ref=e142]:
+          - heading "Chào mừng trở lại, Mentor Verify Local!" [level=1] [ref=e143]
+          - paragraph [ref=e144]: Theo dõi nhanh trạng thái hồ sơ mentor và cập nhật trực tiếp thông tin hiển thị với mentee.
+        - generic [ref=e145]:
+          - link "Hồ sơ cá nhân" [ref=e146] [cursor=pointer]:
+            - /url: /profile
+            - img
+            - text: Hồ sơ cá nhân
+          - link "Xem trang mentor" [ref=e147] [cursor=pointer]:
+            - /url: /mentors/mentor-10
+            - img
+            - text: Xem trang mentor
+      - generic [ref=e148]:
+        - generic [ref=e149]:
+          - img [ref=e152]
+          - paragraph [ref=e157]: Hoàn thiện hồ sơ
+          - heading "18%" [level=3] [ref=e158]
+          - paragraph [ref=e159]: Mức độ sẵn sàng để hiển thị với mentee
+        - generic [ref=e160]:
+          - img [ref=e163]
+          - paragraph [ref=e166]: Trạng thái xác thực
+          - heading "Chưa xác thực" [level=3] [ref=e167]
+          - paragraph [ref=e168]: Hồ sơ đang chờ kiểm duyệt
+        - generic [ref=e169]:
+          - img [ref=e172]
+          - paragraph [ref=e175]: Trạng thái hoạt động
+          - heading "Đang hoạt động" [level=3] [ref=e176]
+          - paragraph [ref=e177]: Tình trạng hiển thị hiện tại trên hệ thống
+        - generic [ref=e178]:
+          - img [ref=e181]
+          - paragraph [ref=e183]: Số lượt đánh giá
+          - heading "0" [level=3] [ref=e184]
+          - paragraph [ref=e185]: Tổng đánh giá đang được lưu trên hệ thống
+      - generic [ref=e186]:
+        - generic [ref=e188]:
+          - generic [ref=e189]:
+            - generic [ref=e190]:
+              - img "Mentor Verify Local" [ref=e192]
+              - generic [ref=e193]:
+                - heading "Mentor Verify Local" [level=2] [ref=e194]
+                - paragraph [ref=e195]: Mentor IT
+                - paragraph [ref=e196]: "Cập nhật gần nhất: 23:18:53 20/4/2026"
+            - generic [ref=e197]:
+              - generic [ref=e198]:
+                - img [ref=e199]
+                - text: Hoàn thiện 18%
+              - button "Hủy" [ref=e284] [cursor=pointer]:
+                - img
+                - text: Hủy
+          - generic [ref=e205]:
+            - generic [ref=e206]:
+              - img [ref=e207]
+              - text: Đang hoạt động
+            - generic [ref=e210]:
+              - img [ref=e211]
+              - text: Chưa xác thực
+          - generic [ref=e285]:
+            - generic [ref=e286]:
+              - generic [ref=e287]:
+                - text: Tên mentor
+                - textbox "Tên mentor" [ref=e288]:
+                  - /placeholder: Nguyễn Văn A
+                  - text: Mentor Verify Local
+              - generic [ref=e289]:
+                - text: Slug
+                - textbox "Slug" [ref=e290]:
+                  - /placeholder: nguyen-van-a
+                  - text: mentor-10
+              - generic [ref=e291]:
+                - text: Avatar URL
+                - textbox "Avatar URL" [ref=e292]:
+                  - /placeholder: https://... hoặc /uploads/...
+              - generic [ref=e293]:
+                - text: Headline
+                - textbox "Headline" [ref=e294]:
+                  - /placeholder: Senior Frontend Engineer
+              - generic [ref=e295]:
+                - text: Cấp độ
+                - combobox "Cấp độ" [ref=e296]:
+                  - option "Chọn cấp độ" [selected]
+                  - option "Sinh viên"
+                  - option "Fresher"
+                  - option "Junior"
+                  - option "Middle"
+                  - option "Senior"
+                  - option "Lead"
+                  - option "Architect"
+                  - option "Manager"
+              - generic [ref=e297]:
+                - text: Giới thiệu
+                - textbox "Giới thiệu" [ref=e298]:
+                  - /placeholder: Mô tả ngắn gọn kinh nghiệm và định hướng tư vấn của bạn
+              - generic [ref=e299]:
+                - text: Chuyên môn tư vấn
+                - textbox "Chuyên môn tư vấn" [ref=e300]:
+                  - /placeholder: Frontend, React, Career Coaching
+              - generic [ref=e301]:
+                - text: Số năm kinh nghiệm
+                - spinbutton "Số năm kinh nghiệm" [ref=e302]
+              - generic [ref=e303]:
+                - text: Mức phí mỗi giờ
+                - spinbutton "Mức phí mỗi giờ" [ref=e304]
+              - generic [ref=e305]:
+                - text: Trường học hiện tại
+                - textbox "Trường học hiện tại" [ref=e306]:
+                  - /placeholder: Đại học ...
+              - generic [ref=e307]:
+                - text: Công ty hiện tại
+                - textbox "Công ty hiện tại" [ref=e308]:
+                  - /placeholder: FPT Software
+              - generic [ref=e309]:
+                - text: Vị trí hiện tại
+                - textbox "Vị trí hiện tại" [ref=e310]:
+                  - /placeholder: Tech Lead
+              - generic [ref=e311]:
+                - text: Ngôn ngữ tư vấn
+                - textbox "Ngôn ngữ tư vấn" [ref=e312]:
+                  - /placeholder: Tiếng Việt, English
+            - generic [ref=e313]:
+              - button "Hủy thay đổi" [ref=e314] [cursor=pointer]:
+                - img
+                - text: Hủy thay đổi
+              - button "Lưu hồ sơ mentor" [ref=e315] [cursor=pointer]:
+                - img
+                - text: Lưu hồ sơ mentor
+        - generic [ref=e242]:
+          - generic [ref=e243]:
+            - heading "Bước tiếp theo được gợi ý" [level=2] [ref=e244]
+            - generic [ref=e245]:
+              - generic [ref=e246]:
+                - img [ref=e247]
+                - paragraph [ref=e250]: Hoàn thiện thêm chuyên môn, bio và mức phí để tăng độ tin cậy cho hồ sơ.
+              - generic [ref=e251]:
+                - img [ref=e252]
+                - paragraph [ref=e255]: Kiểm tra trạng thái xác thực thường xuyên để biết khi nào hồ sơ đủ điều kiện hiển thị.
+              - generic [ref=e256]:
+                - img [ref=e257]
+                - paragraph [ref=e260]: Bạn có thể chỉnh sửa trực tiếp hồ sơ mentor ngay trong dashboard này mà không cần quay lại trang profile chung.
+            - button "Chỉnh sửa hồ sơ mentor" [active] [ref=e261] [cursor=pointer]
+          - generic [ref=e262]:
+            - heading "Tính năng đang phát triển" [level=2] [ref=e263]
+            - generic [ref=e264]:
+              - generic [ref=e265]:
+                - img [ref=e266]
+                - generic [ref=e268]:
+                  - paragraph [ref=e269]: Lịch hẹn mentor
+                  - paragraph [ref=e270]: Quản lý lịch trống và buổi hẹn sẽ được bổ sung ở phase tiếp theo.
+              - generic [ref=e271]:
+                - img [ref=e272]
+                - generic [ref=e274]:
+                  - paragraph [ref=e275]: Tin nhắn với mentee
+                  - paragraph [ref=e276]: Phần hội thoại trực tiếp chưa được nối vào dashboard này.
+              - generic [ref=e277]:
+                - img [ref=e278]
+                - generic [ref=e281]:
+                  - paragraph [ref=e282]: Theo dõi học viên
+                  - paragraph [ref=e283]: Thống kê học viên sẽ hiển thị khi backend cung cấp dữ liệu thật.
+    - contentinfo [ref=e53]:
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - img [ref=e61]
+            - generic [ref=e64]: IT Compass
+          - paragraph [ref=e65]: La bàn định vị sự nghiệp IT của bạn. Chúng tôi giúp thế hệ chuyên gia công nghệ Việt Nam tìm thấy đam mê và con đường phát triển phù hợp nhất.
+          - generic [ref=e66]:
+            - generic [ref=e67]:
+              - generic: Website
+              - link [ref=e68] [cursor=pointer]:
+                - /url: /about
+                - img [ref=e69]
+            - generic [ref=e72]:
+              - generic: Email
+              - link [ref=e73] [cursor=pointer]:
+                - /url: mailto:hello@itcompass.vn
+                - img [ref=e74]
+            - generic [ref=e77]:
+              - generic: Hotline
+              - link [ref=e78] [cursor=pointer]:
+                - /url: tel:19001234567
+                - img [ref=e79]
+        - generic [ref=e82]:
+          - heading "Nền Tảng" [level=4] [ref=e83]
+          - list [ref=e84]:
+            - listitem [ref=e85]:
+              - link "Làm Bài Test" [ref=e86] [cursor=pointer]:
+                - /url: /test
+                - img [ref=e87]
+                - text: Làm Bài Test
+            - listitem [ref=e90]:
+              - link "Chuyên Ngành IT" [ref=e91] [cursor=pointer]:
+                - /url: /majors
+                - img [ref=e92]
+                - text: Chuyên Ngành IT
+            - listitem [ref=e95]:
+              - link "Blog" [ref=e96] [cursor=pointer]:
+                - /url: /blog
+                - img [ref=e97]
+                - text: Blog
+        - generic [ref=e100]:
+          - heading "Công Ty" [level=4] [ref=e101]
+          - list [ref=e102]:
+            - listitem [ref=e103]:
+              - link "Về Chúng Tôi" [ref=e104] [cursor=pointer]:
+                - /url: /about
+                - img [ref=e105]
+                - text: Về Chúng Tôi
+            - listitem [ref=e108]:
+              - link "Điều Khoản Dịch Vụ" [ref=e109] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e110]
+                - text: Điều Khoản Dịch Vụ
+            - listitem [ref=e113]:
+              - link "Chính Sách Bảo Mật" [ref=e114] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e115]
+                - text: Chính Sách Bảo Mật
+            - listitem [ref=e118]:
+              - link "Liên Hệ" [ref=e119] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e120]
+                - text: Liên Hệ
+      - generic [ref=e126]:
+        - paragraph [ref=e127]: © 2026 IT Compass. Đã đăng ký bản quyền.
+        - paragraph [ref=e128]: Được xây dựng với ❤️ cho thế hệ IT Việt Nam
+  - region "Notifications alt+T"

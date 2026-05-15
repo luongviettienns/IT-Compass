@@ -1,0 +1,109 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e20]: IT Compass
+        - navigation [ref=e21]:
+          - link "Trang chủ" [ref=e22] [cursor=pointer]:
+            - /url: /
+          - link "Trắc nghiệm" [ref=e23] [cursor=pointer]:
+            - /url: /test
+            - text: Trắc nghiệm
+          - link "Blog" [ref=e25] [cursor=pointer]:
+            - /url: /blog
+          - link "Mentor" [ref=e26] [cursor=pointer]:
+            - /url: /mentors
+          - link "Ngành học" [ref=e27] [cursor=pointer]:
+            - /url: /majors
+        - generic [ref=e29]:
+          - link "Đăng nhập" [ref=e30] [cursor=pointer]:
+            - /url: /auth/login
+          - link "Đăng ký" [ref=e31] [cursor=pointer]:
+            - /url: /auth/register
+    - main [ref=e90]:
+      - generic [ref=e91]:
+        - generic [ref=e94]:
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - img [ref=e97]
+              - text: Assessment lab
+            - heading "Chọn hướng IT bằng dữ liệu cá nhân, thay vì đoán cảm tính." [level=1] [ref=e100]
+            - paragraph [ref=e101]: Bài trắc nghiệm này kết hợp câu hỏi Holland và tình huống mô phỏng để xác định nhóm nghề phù hợp, gợi ý chuyên ngành liên quan và tạo nền cho mentor recommendation sát với hồ sơ của bạn.
+            - generic [ref=e102]:
+              - generic [ref=e103]:
+                - img [ref=e104]
+                - text: 3 phút tập trung
+              - generic [ref=e107]:
+                - img [ref=e108]
+                - text: 29 câu hỏi có chấm điểm
+              - generic [ref=e112]:
+                - img [ref=e113]
+                - text: 7 nhóm kết quả nghề nghiệp
+            - link "Bắt đầu làm bài" [ref=e117] [cursor=pointer]:
+              - /url: /test/quiz
+              - text: Bắt đầu làm bài
+              - img [ref=e118]
+            - paragraph [ref=e120]: Bạn có thể làm trắc nghiệm ngay cả khi chưa đăng nhập, nhưng cần đăng nhập ở bước nộp để lưu kết quả chính thức.
+          - complementary [ref=e121]:
+            - paragraph [ref=e122]: Phiên gần nhất
+            - generic [ref=e123]: Đăng nhập để lưu lịch sử làm bài, xem lại kết quả gần nhất và đồng bộ gợi ý mentor vào hồ sơ cá nhân.
+        - generic [ref=e124]:
+          - article [ref=e125]:
+            - img [ref=e127]
+            - heading "Nhóm động lực Holland" [level=2] [ref=e135]
+            - paragraph [ref=e136]: Bạn sẽ tự đánh giá mức độ hứng thú với từng loại công việc để lộ ra thiên hướng nổi trội.
+          - article [ref=e137]:
+            - img [ref=e139]
+            - heading "Tình huống sát thực tế" [level=2] [ref=e142]
+            - paragraph [ref=e143]: Phần situational kiểm tra cách bạn ưu tiên hành động trong bối cảnh học tập và công việc IT.
+          - article [ref=e144]:
+            - img [ref=e146]
+            - heading "Kết nối bước tiếp theo" [level=2] [ref=e149]
+            - paragraph [ref=e150]: Kết quả cuối sẽ dẫn sang chuyên ngành, mentor và các hướng phát triển tương ứng.
+    - contentinfo [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - link "IT Compass" [ref=e40] [cursor=pointer]:
+              - /url: /
+              - img [ref=e42]
+              - generic [ref=e54]: IT Compass
+            - paragraph [ref=e55]: Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+          - generic [ref=e56]:
+            - heading "Khám phá" [level=3] [ref=e57]
+            - list [ref=e58]:
+              - listitem [ref=e59]:
+                - link "Trắc nghiệm" [ref=e60] [cursor=pointer]:
+                  - /url: /test
+              - listitem [ref=e61]:
+                - link "Blog" [ref=e62] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e63]:
+                - link "Mentor" [ref=e64] [cursor=pointer]:
+                  - /url: /mentors
+              - listitem [ref=e65]:
+                - link "Ngành học" [ref=e66] [cursor=pointer]:
+                  - /url: /majors
+              - listitem [ref=e67]:
+                - link "Về chúng tôi" [ref=e68] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e69]:
+            - heading "Liên hệ" [level=3] [ref=e70]
+            - list [ref=e71]:
+              - listitem [ref=e72]:
+                - img [ref=e73]
+                - text: contact@itcompass.vn
+              - listitem [ref=e76]:
+                - img [ref=e77]
+                - text: TP. Hồ Chí Minh, Việt Nam
+              - listitem [ref=e80]:
+                - link "GitHub" [ref=e81] [cursor=pointer]:
+                  - /url: https://github.com
+                  - img [ref=e82]
+                  - text: GitHub
+                  - img [ref=e85]
+        - generic [ref=e89]: © 2026 IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.

@@ -1,0 +1,156 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e53]:
+        - img [ref=e55]
+        - generic [ref=e58]: Đăng nhập thành công.
+  - generic [ref=e59]:
+    - complementary [ref=e61]:
+      - generic [ref=e62]:
+        - generic [ref=e63]:
+          - img [ref=e65]
+          - generic [ref=e68]:
+            - generic [ref=e69]: IT Compass
+            - generic [ref=e70]: Mentor Portal
+        - button [ref=e71] [cursor=pointer]:
+          - img [ref=e72]
+      - navigation [ref=e74]:
+        - link "Tổng quan" [ref=e75] [cursor=pointer]:
+          - /url: /mentor
+          - img [ref=e76]
+          - generic [ref=e81]: Tổng quan
+        - link "Lịch tư vấn 1" [ref=e82] [cursor=pointer]:
+          - /url: /mentor/bookings
+          - img [ref=e83]
+          - generic [ref=e87]: Lịch tư vấn
+          - generic [ref=e88]: "1"
+        - link "Tin nhắn" [ref=e89] [cursor=pointer]:
+          - /url: /mentor/messages
+          - img [ref=e90]
+          - generic [ref=e92]: Tin nhắn
+        - link "Khung giờ" [ref=e93] [cursor=pointer]:
+          - /url: /mentor/availability
+          - img [ref=e94]
+          - generic [ref=e97]: Khung giờ
+        - link "Hồ sơ" [ref=e98] [cursor=pointer]:
+          - /url: /mentor/profile
+          - img [ref=e99]
+          - generic [ref=e103]: Hồ sơ
+        - link "Xem trước" [ref=e104] [cursor=pointer]:
+          - /url: /mentor/preview
+          - img [ref=e105]
+          - generic [ref=e108]: Xem trước
+      - generic [ref=e109]:
+        - generic [ref=e110]:
+          - img [ref=e112]
+          - generic [ref=e115]:
+            - generic [ref=e116]: Mentor Demo
+            - generic [ref=e117]: mentor@it.com
+        - link "Về trang chủ" [ref=e118] [cursor=pointer]:
+          - /url: /
+          - img [ref=e119]
+          - generic [ref=e122]: Về trang chủ
+        - button "Đăng xuất" [ref=e123] [cursor=pointer]:
+          - img [ref=e124]
+          - generic [ref=e127]: Đăng xuất
+    - main [ref=e129]:
+      - generic [ref=e130]:
+        - generic [ref=e132]:
+          - generic [ref=e133]:
+            - img [ref=e135]
+            - generic [ref=e138]:
+              - heading "Xin chào, Mentor Demo!" [level=1] [ref=e140]
+              - paragraph [ref=e141]: Mentor IT
+              - generic [ref=e142]:
+                - generic [ref=e143]: MIDDLE
+                - generic [ref=e144]: Đang nhận tư vấn
+          - button "Cập nhật hồ sơ" [ref=e145] [cursor=pointer]:
+            - img [ref=e146]
+            - text: Cập nhật hồ sơ
+        - generic [ref=e150]:
+          - generic [ref=e152]:
+            - generic [ref=e153]:
+              - paragraph [ref=e154]: Hoàn thiện hồ sơ
+              - generic [ref=e156]:
+                - img [ref=e157]
+                - generic [ref=e161]: 73%
+            - img [ref=e163]
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - paragraph [ref=e169]: Lượt đánh giá
+              - paragraph [ref=e170]: "0"
+            - img [ref=e172]
+          - generic [ref=e178]:
+            - generic [ref=e179]:
+              - paragraph [ref=e180]: Xác minh
+              - paragraph [ref=e181]: Chưa xác minh
+            - img [ref=e183]
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - paragraph [ref=e189]: Trạng thái
+              - paragraph [ref=e190]: Đang nhận tư vấn
+            - img [ref=e192]
+        - generic [ref=e195]:
+          - generic [ref=e196]:
+            - generic [ref=e197]:
+              - img [ref=e199]
+              - heading "Thông tin nổi bật" [level=2] [ref=e202]
+            - generic [ref=e203]:
+              - generic [ref=e205]:
+                - img [ref=e206]
+                - generic [ref=e209]:
+                  - paragraph [ref=e210]: Kinh nghiệm
+                  - paragraph [ref=e211]: 3 năm
+              - generic [ref=e213]:
+                - img [ref=e214]
+                - generic [ref=e217]:
+                  - paragraph [ref=e218]: Chi phí / giờ
+                  - paragraph [ref=e219]: Liên hệ
+              - generic [ref=e221]:
+                - img [ref=e222]
+                - generic [ref=e227]:
+                  - paragraph [ref=e228]: Ngôn ngữ tư vấn
+                  - paragraph [ref=e229]: Tiếng Việt
+              - generic [ref=e231]:
+                - img [ref=e232]
+                - generic [ref=e235]:
+                  - paragraph [ref=e236]: Tổ chức
+                  - paragraph [ref=e237]: Chưa cập nhật
+          - generic [ref=e238]:
+            - generic [ref=e239]:
+              - heading "Checklist hồ sơ" [level=2] [ref=e240]
+              - generic [ref=e241]: 7/10
+            - generic [ref=e244]:
+              - generic [ref=e245]:
+                - img [ref=e246]
+                - generic [ref=e249]: Tên hiển thị
+              - generic [ref=e250]:
+                - img [ref=e251]
+                - generic [ref=e253]: Avatar
+              - generic [ref=e254]:
+                - img [ref=e255]
+                - generic [ref=e258]: Headline / Title
+              - generic [ref=e259]:
+                - img [ref=e260]
+                - generic [ref=e263]: Bio giới thiệu
+              - generic [ref=e264]:
+                - img [ref=e265]
+                - generic [ref=e268]: Chuyên môn
+              - generic [ref=e269]:
+                - img [ref=e270]
+                - generic [ref=e273]: Level
+              - generic [ref=e274]:
+                - img [ref=e275]
+                - generic [ref=e278]: Số năm kinh nghiệm
+              - generic [ref=e279]:
+                - img [ref=e280]
+                - generic [ref=e282]: Chi phí / giờ
+              - generic [ref=e283]:
+                - img [ref=e284]
+                - generic [ref=e286]: Công ty / Trường
+              - generic [ref=e287]:
+                - img [ref=e288]
+                - generic [ref=e291]: Ngôn ngữ tư vấn
+            - button "Hoàn thiện hồ sơ" [ref=e292] [cursor=pointer]:
+              - img [ref=e293]
+              - text: Hoàn thiện hồ sơ

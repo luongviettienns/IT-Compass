@@ -29,7 +29,6 @@ interface RegisterInput extends RequestMetadata {
   fullName: string;
   email: string;
   password: string;
-  role: 'STUDENT' | 'MENTOR';
 }
 
 interface LoginInput extends RequestMetadata {
@@ -103,7 +102,7 @@ const assertActiveUser = (user: Pick<User, 'status'>) => {
   }
 };
 
-export const register = async ({ fullName, email, password, role, userAgent, ipAddress }: RegisterInput) => {
+export const register = async ({ fullName, email, password, userAgent, ipAddress }: RegisterInput) => {
   // Chuẩn hóa input trước khi chạm DB để tránh lệch dữ liệu vì casing, khoảng trắng hoặc ký tự thừa.
   const sanitizedFullName = sanitizeSingleLineText(fullName);
   const normalizedEmail = sanitizeEmailAddress(email);
@@ -121,7 +120,7 @@ export const register = async ({ fullName, email, password, role, userAgent, ipA
       fullName: sanitizedFullName,
       email: normalizedEmail,
       passwordHash,
-      role,
+      role: 'STUDENT',
       profile: {
         create: {},
       },

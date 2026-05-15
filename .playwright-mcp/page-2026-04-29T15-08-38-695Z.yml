@@ -1,0 +1,351 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e8]:
+    - banner [ref=e9]:
+      - generic [ref=e10]:
+        - link "IT Compass" [ref=e11] [cursor=pointer]:
+          - /url: /
+          - img [ref=e13]
+          - generic [ref=e25]: IT Compass
+        - navigation [ref=e26]:
+          - link "Trang chủ" [ref=e27] [cursor=pointer]:
+            - /url: /
+            - text: Trang chủ
+          - link "Trắc nghiệm" [ref=e29] [cursor=pointer]:
+            - /url: /test
+          - link "Blog" [ref=e30] [cursor=pointer]:
+            - /url: /blog
+          - link "Mentor" [ref=e31] [cursor=pointer]:
+            - /url: /mentors
+          - link "Ngành học" [ref=e32] [cursor=pointer]:
+            - /url: /majors
+        - generic [ref=e34]:
+          - button "Student Test" [active] [ref=e35] [cursor=pointer]:
+            - img [ref=e37]
+            - generic [ref=e40]: Student Test
+            - img [ref=e41]
+          - generic [ref=e495]:
+            - generic [ref=e496]:
+              - paragraph [ref=e497]: Student Test
+              - paragraph [ref=e498]: student@it.com
+            - link "Hồ sơ cá nhân" [ref=e499] [cursor=pointer]:
+              - /url: /profile
+              - img [ref=e500]
+              - text: Hồ sơ cá nhân
+            - button "Đăng xuất" [ref=e504] [cursor=pointer]:
+              - img [ref=e505]
+              - text: Đăng xuất
+    - generic [ref=e48]:
+      - generic [ref=e49]:
+        - generic [ref=e51]:
+          - img [ref=e52]
+          - text: "Nền tảng #1 định hướng nghề IT"
+        - heading "Tìm ra con đường CNTT phù hợp với bạn" [level=1] [ref=e55]:
+          - text: Tìm ra con đường
+          - generic [ref=e56]: CNTT
+          - text: phù hợp với bạn
+        - paragraph [ref=e58]: Bài trắc nghiệm Holland khoa học giúp bạn khám phá thế mạnh, gợi ý ngành học và nghề nghiệp — kết nối với mentor thực chiến trong ngành.
+        - generic [ref=e59]:
+          - link "Bắt đầu trắc nghiệm" [ref=e60] [cursor=pointer]:
+            - /url: /test
+            - text: Bắt đầu trắc nghiệm
+            - img [ref=e61]
+          - link "Tìm hiểu cách hoạt động" [ref=e63] [cursor=pointer]:
+            - /url: "#how-it-works"
+            - text: Tìm hiểu cách hoạt động
+            - img [ref=e64]
+        - generic [ref=e66]:
+          - generic [ref=e72]: 500+ học sinh đã thử
+          - generic [ref=e73]:
+            - img [ref=e74]
+            - generic [ref=e76]: 4.8/5
+      - generic [ref=e78]:
+        - img [ref=e82]
+        - generic [ref=e95]:
+          - img [ref=e96]
+          - text: Software Engineer
+        - generic [ref=e101]:
+          - img [ref=e102]
+          - text: Data Science
+        - generic [ref=e107]:
+          - img [ref=e108]
+          - text: Cybersecurity
+        - generic [ref=e111]:
+          - img [ref=e112]
+          - text: UI/UX Design
+    - generic [ref=e119]:
+      - generic [ref=e120]:
+        - paragraph [ref=e121]: Nền tảng toàn diện
+        - heading "Tại sao chọn IT Compass?" [level=2] [ref=e122]
+      - generic [ref=e123]:
+        - generic [ref=e124]:
+          - img [ref=e126]
+          - heading "Trắc nghiệm Holland" [level=3] [ref=e130]
+          - paragraph [ref=e131]: Dựa trên mô hình RIASEC — tiêu chuẩn vàng trong tư vấn nghề nghiệp quốc tế.
+          - generic [ref=e132]: 30câu hỏi
+        - generic [ref=e133]:
+          - img [ref=e135]
+          - heading "Phân tích chi tiết" [level=3] [ref=e137]
+          - paragraph [ref=e138]: Biểu đồ 6 nhóm tính cách, gợi ý ngành học cụ thể và vị trí công việc phù hợp.
+          - generic [ref=e139]: 6nhóm phân tích
+        - generic [ref=e140]:
+          - img [ref=e142]
+          - heading "Mentor thực chiến" [level=3] [ref=e147]
+          - paragraph [ref=e148]: Kết nối 1:1 với anh chị đi trước — từ sinh viên đến senior trong ngành IT.
+          - generic [ref=e149]: 20+mentor
+        - generic [ref=e150]:
+          - img [ref=e152]
+          - heading "Tài nguyên chất lượng" [level=3] [ref=e154]
+          - paragraph [ref=e155]: Blog chuyên sâu về lộ trình, kinh nghiệm thực tập, và xu hướng ngành IT.
+          - generic [ref=e156]: 50+bài viết
+    - generic [ref=e158]:
+      - generic [ref=e159]:
+        - paragraph [ref=e160]: Khám phá lĩnh vực
+        - heading "6 hướng đi trong ngành CNTT" [level=2] [ref=e161]
+        - paragraph [ref=e162]: Mỗi hướng đi phù hợp với một khuynh hướng tính cách khác nhau
+      - generic [ref=e163]:
+        - link "Kỹ thuật phần mềm Xây dựng sản phẩm số từ ý tưởng đến thực tế Biến các yêu cầu mơ hồ thành sản phẩm chạy được — từ frontend, backend đến mobile. Tư duy hệ thống, khả năng phân tích và sự kiên trì là chìa khóa. Frontend Developer Backend Developer Full-stack Engineer Mobile Developer Tìm hiểu thêm" [ref=e165] [cursor=pointer]:
+          - /url: /majors/ky-thuat-phan-mem
+          - generic [ref=e166]:
+            - img [ref=e168]
+            - generic [ref=e172]:
+              - heading "Kỹ thuật phần mềm" [level=3] [ref=e173]
+              - paragraph [ref=e174]: Xây dựng sản phẩm số từ ý tưởng đến thực tế
+          - paragraph [ref=e175]: Biến các yêu cầu mơ hồ thành sản phẩm chạy được — từ frontend, backend đến mobile. Tư duy hệ thống, khả năng phân tích và sự kiên trì là chìa khóa.
+          - generic [ref=e176]:
+            - generic [ref=e177]: Frontend Developer
+            - generic [ref=e178]: Backend Developer
+            - generic [ref=e179]: Full-stack Engineer
+            - generic [ref=e180]: Mobile Developer
+          - generic [ref=e181]:
+            - text: Tìm hiểu thêm
+            - img [ref=e182]
+        - link "Dữ liệu và AI Khai phá giá trị từ dữ liệu Tìm quy luật ẩn trong dữ liệu, xây dựng mô hình dự đoán và hệ thống AI thông minh. Phù hợp với tư duy phân tích sâu và sự kiên nhẫn. Data Analyst Data Engineer ML Engineer AI Engineer Tìm hiểu thêm" [ref=e185] [cursor=pointer]:
+          - /url: /majors/du-lieu-va-ai
+          - generic [ref=e186]:
+            - img [ref=e188]
+            - generic [ref=e192]:
+              - heading "Dữ liệu và AI" [level=3] [ref=e193]
+              - paragraph [ref=e194]: Khai phá giá trị từ dữ liệu
+          - paragraph [ref=e195]: Tìm quy luật ẩn trong dữ liệu, xây dựng mô hình dự đoán và hệ thống AI thông minh. Phù hợp với tư duy phân tích sâu và sự kiên nhẫn.
+          - generic [ref=e196]:
+            - generic [ref=e197]: Data Analyst
+            - generic [ref=e198]: Data Engineer
+            - generic [ref=e199]: ML Engineer
+            - generic [ref=e200]: AI Engineer
+          - generic [ref=e201]:
+            - text: Tìm hiểu thêm
+            - img [ref=e202]
+        - link "An toàn thông tin Bảo vệ thế giới số Kết hợp tò mò kỹ thuật và phản xạ thực chiến — bảo vệ hệ thống, phát hiện lỗ hổng và xử lý sự cố bảo mật. Security Engineer Pentester Security Analyst AppSec Engineer Tìm hiểu thêm" [ref=e205] [cursor=pointer]:
+          - /url: /majors/an-toan-thong-tin
+          - generic [ref=e206]:
+            - img [ref=e208]
+            - generic [ref=e211]:
+              - heading "An toàn thông tin" [level=3] [ref=e212]
+              - paragraph [ref=e213]: Bảo vệ thế giới số
+          - paragraph [ref=e214]: Kết hợp tò mò kỹ thuật và phản xạ thực chiến — bảo vệ hệ thống, phát hiện lỗ hổng và xử lý sự cố bảo mật.
+          - generic [ref=e215]:
+            - generic [ref=e216]: Security Engineer
+            - generic [ref=e217]: Pentester
+            - generic [ref=e218]: Security Analyst
+            - generic [ref=e219]: AppSec Engineer
+          - generic [ref=e220]:
+            - text: Tìm hiểu thêm
+            - img [ref=e221]
+        - link "Thiết kế UI/UX Kiến tạo trải nghiệm số Nhìn công nghệ qua lăng kính con người — kết hợp thẩm mỹ, sự đồng cảm và khả năng tổ chức trải nghiệm người dùng. UI Designer UX Designer Product Designer Frontend UI Engineer Tìm hiểu thêm" [ref=e224] [cursor=pointer]:
+          - /url: /majors/thiet-ke-ui-ux
+          - generic [ref=e225]:
+            - img [ref=e227]
+            - generic [ref=e233]:
+              - heading "Thiết kế UI/UX" [level=3] [ref=e234]
+              - paragraph [ref=e235]: Kiến tạo trải nghiệm số
+          - paragraph [ref=e236]: Nhìn công nghệ qua lăng kính con người — kết hợp thẩm mỹ, sự đồng cảm và khả năng tổ chức trải nghiệm người dùng.
+          - generic [ref=e237]:
+            - generic [ref=e238]: UI Designer
+            - generic [ref=e239]: UX Designer
+            - generic [ref=e240]: Product Designer
+            - generic [ref=e241]: Frontend UI Engineer
+          - generic [ref=e242]:
+            - text: Tìm hiểu thêm
+            - img [ref=e243]
+        - link "Quản lý dự án & Nghiệp vụ Cầu nối giữa kinh doanh và kỹ thuật Điều phối, phân tích và dẫn dắt sản phẩm — kết nối nhu cầu kinh doanh với giải pháp công nghệ. Business Analyst Project Manager Product Owner Scrum Master Tìm hiểu thêm" [ref=e246] [cursor=pointer]:
+          - /url: /majors/quan-ly-du-an
+          - generic [ref=e247]:
+            - img [ref=e249]
+            - generic [ref=e252]:
+              - heading "Quản lý dự án & Nghiệp vụ" [level=3] [ref=e253]
+              - paragraph [ref=e254]: Cầu nối giữa kinh doanh và kỹ thuật
+          - paragraph [ref=e255]: Điều phối, phân tích và dẫn dắt sản phẩm — kết nối nhu cầu kinh doanh với giải pháp công nghệ.
+          - generic [ref=e256]:
+            - generic [ref=e257]: Business Analyst
+            - generic [ref=e258]: Project Manager
+            - generic [ref=e259]: Product Owner
+            - generic [ref=e260]: Scrum Master
+          - generic [ref=e261]:
+            - text: Tìm hiểu thêm
+            - img [ref=e262]
+        - link "DevOps và Hệ thống Vận hành hạ tầng công nghệ Tự động hóa, ổn định hệ thống và scale ứng dụng — phù hợp với người thích cloud, CI/CD và giải quyết bài toán hạ tầng. DevOps Engineer Cloud Engineer Platform Engineer System Engineer Tìm hiểu thêm" [ref=e265] [cursor=pointer]:
+          - /url: /majors/devops-he-thong
+          - generic [ref=e266]:
+            - img [ref=e268]
+            - generic [ref=e271]:
+              - heading "DevOps và Hệ thống" [level=3] [ref=e272]
+              - paragraph [ref=e273]: Vận hành hạ tầng công nghệ
+          - paragraph [ref=e274]: Tự động hóa, ổn định hệ thống và scale ứng dụng — phù hợp với người thích cloud, CI/CD và giải quyết bài toán hạ tầng.
+          - generic [ref=e275]:
+            - generic [ref=e276]: DevOps Engineer
+            - generic [ref=e277]: Cloud Engineer
+            - generic [ref=e278]: Platform Engineer
+            - generic [ref=e279]: System Engineer
+          - generic [ref=e280]:
+            - text: Tìm hiểu thêm
+            - img [ref=e281]
+    - generic [ref=e284]:
+      - generic [ref=e285]:
+        - paragraph [ref=e286]: Quy trình đơn giản
+        - heading "Bắt đầu chỉ với 3 bước" [level=2] [ref=e287]
+      - generic [ref=e288]:
+        - generic [ref=e289]:
+          - generic [ref=e290]: "01"
+          - generic [ref=e291]:
+            - img [ref=e293]
+            - heading "Làm bài trắc nghiệm" [level=3] [ref=e296]
+            - paragraph [ref=e297]: 15 phút, 30 câu hỏi — trả lời theo trực giác. Không có đáp án đúng sai, chỉ có sự khác biệt.
+        - generic [ref=e298]:
+          - generic [ref=e299]: "02"
+          - generic [ref=e300]:
+            - img [ref=e302]
+            - heading "Nhận kết quả chi tiết" [level=3] [ref=e305]
+            - paragraph [ref=e306]: Biểu đồ Holland 6 nhóm tính cách, ngành học gợi ý, nghề nghiệp phù hợp và lộ trình cụ thể.
+        - generic [ref=e307]:
+          - generic [ref=e308]: "03"
+          - generic [ref=e309]:
+            - img [ref=e311]
+            - heading "Lên kế hoạch hành động" [level=3] [ref=e316]
+            - paragraph [ref=e317]: Kết nối mentor, đọc blog chuyên sâu, xây dựng roadmap cá nhân cho hành trình IT của bạn.
+      - link "Bắt đầu ngay" [ref=e319] [cursor=pointer]:
+        - /url: /test
+        - text: Bắt đầu ngay
+        - img [ref=e320]
+    - generic [ref=e323]:
+      - generic [ref=e324]:
+        - generic [ref=e325]:
+          - paragraph [ref=e326]: Kiến thức
+          - heading "Blog nổi bật" [level=2] [ref=e327]
+        - link "Xem tất cả" [ref=e329] [cursor=pointer]:
+          - /url: /blog
+          - text: Xem tất cả
+          - img [ref=e330]
+      - generic [ref=e332]:
+        - link "Bài viết test Lương Việt Tiến · 0 lượt xem" [ref=e334] [cursor=pointer]:
+          - /url: /blog/bai-viet-test
+          - img [ref=e336]
+          - generic [ref=e338]:
+            - heading "Bài viết test" [level=3] [ref=e339]
+            - generic [ref=e340]:
+              - generic [ref=e341]: Lương Việt Tiến
+              - generic [ref=e342]: · 0 lượt xem
+        - link "Giới thiệu về ngành Kỹ Thuật Phần Mềm Software Giới thiệu về ngành Kỹ Thuật Phần Mềm Ngành Kỹ thuật Phần mềm là một trong những lĩnh vực cốt lõi của Công nghệ Thông tin, tập trung vào việc thiết kế, phát triển, kiểm thử và bảo trì phần mềm. Bài viết cung cấp cái nhìn tổng quan về ngành, cơ hội nghề nghiệp, kỹ năng cần thiết và định hướng học tập cho sinh viên. Lương Việt Tiến · 5 phút đọc · 0 lượt xem" [ref=e344] [cursor=pointer]:
+          - /url: /blog/gioi-thieu-ve-nganh-ky-thuat-phan-mem
+          - img "Giới thiệu về ngành Kỹ Thuật Phần Mềm" [ref=e345]
+          - generic [ref=e346]:
+            - generic [ref=e347]: Software
+            - heading "Giới thiệu về ngành Kỹ Thuật Phần Mềm" [level=3] [ref=e348]
+            - paragraph [ref=e349]: Ngành Kỹ thuật Phần mềm là một trong những lĩnh vực cốt lõi của Công nghệ Thông tin, tập trung vào việc thiết kế, phát triển, kiểm thử và bảo trì phần mềm. Bài viết cung cấp cái nhìn tổng quan về ngành, cơ hội nghề nghiệp, kỹ năng cần thiết và định hướng học tập cho sinh viên.
+            - generic [ref=e350]:
+              - generic [ref=e351]: Lương Việt Tiến
+              - generic [ref=e352]: · 5 phút đọc
+              - generic [ref=e353]: · 0 lượt xem
+        - link "Bai viet test api moi Tom tat test api moi Lương Việt Tiến · 0 lượt xem" [ref=e355] [cursor=pointer]:
+          - /url: /blog/bai-viet-test-api-moi
+          - img [ref=e357]
+          - generic [ref=e359]:
+            - heading "Bai viet test api moi" [level=3] [ref=e360]
+            - paragraph [ref=e361]: Tom tat test api moi
+            - generic [ref=e362]:
+              - generic [ref=e363]: Lương Việt Tiến
+              - generic [ref=e364]: · 0 lượt xem
+    - generic [ref=e366]:
+      - generic [ref=e367]:
+        - generic [ref=e368]:
+          - paragraph [ref=e369]: Cộng đồng
+          - heading "Mentor tiêu biểu" [level=2] [ref=e370]
+        - link "Xem tất cả" [ref=e372] [cursor=pointer]:
+          - /url: /mentors
+          - text: Xem tất cả
+          - img [ref=e373]
+      - generic [ref=e375]:
+        - link "Mentor Demo Mentor IT Web Development Frontend 3 năm KN" [ref=e377] [cursor=pointer]:
+          - /url: /mentors/mentor-demo
+          - img [ref=e379]
+          - generic [ref=e382]:
+            - heading "Mentor Demo" [level=3] [ref=e383]
+            - paragraph [ref=e384]: Mentor IT
+          - generic [ref=e385]:
+            - generic [ref=e386]: Web Development
+            - generic [ref=e387]: Frontend
+          - generic [ref=e389]: 3 năm KN
+        - link "Mentor Verify Local Senior Frontend Mentor Frontend React 7 năm KN · 450.000đ" [ref=e391] [cursor=pointer]:
+          - /url: /mentors/mentor-10
+          - img [ref=e393]
+          - generic [ref=e396]:
+            - heading "Mentor Verify Local" [level=3] [ref=e397]
+            - paragraph [ref=e398]: Senior Frontend Mentor
+          - generic [ref=e399]:
+            - generic [ref=e400]: Frontend
+            - generic [ref=e401]: React
+          - generic [ref=e402]:
+            - generic [ref=e403]: 7 năm KN
+            - generic [ref=e404]: · 450.000đ
+    - generic [ref=e407]:
+      - img [ref=e409]
+      - img [ref=e422]
+      - heading "Sẵn sàng tìm ra hướng đi?" [level=2] [ref=e434]
+      - paragraph [ref=e435]: Chỉ cần 15 phút để khám phá con đường CNTT phù hợp nhất. Hàng trăm bạn trẻ đã tìm được hướng đi — bạn thì sao?
+      - link "Bắt đầu trắc nghiệm miễn phí" [ref=e437] [cursor=pointer]:
+        - /url: /test
+        - text: Bắt đầu trắc nghiệm miễn phí
+        - img [ref=e438]
+    - contentinfo [ref=e440]:
+      - generic [ref=e441]:
+        - generic [ref=e442]:
+          - generic [ref=e443]:
+            - link "IT Compass" [ref=e444] [cursor=pointer]:
+              - /url: /
+              - img [ref=e446]
+              - generic [ref=e458]: IT Compass
+            - paragraph [ref=e459]: Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+          - generic [ref=e460]:
+            - heading "Khám phá" [level=3] [ref=e461]
+            - list [ref=e462]:
+              - listitem [ref=e463]:
+                - link "Trắc nghiệm" [ref=e464] [cursor=pointer]:
+                  - /url: /test
+              - listitem [ref=e465]:
+                - link "Blog" [ref=e466] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e467]:
+                - link "Mentor" [ref=e468] [cursor=pointer]:
+                  - /url: /mentors
+              - listitem [ref=e469]:
+                - link "Ngành học" [ref=e470] [cursor=pointer]:
+                  - /url: /majors
+              - listitem [ref=e471]:
+                - link "Về chúng tôi" [ref=e472] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e473]:
+            - heading "Liên hệ" [level=3] [ref=e474]
+            - list [ref=e475]:
+              - listitem [ref=e476]:
+                - img [ref=e477]
+                - text: contact@itcompass.vn
+              - listitem [ref=e480]:
+                - img [ref=e481]
+                - text: TP. Hồ Chí Minh, Việt Nam
+              - listitem [ref=e484]:
+                - link "GitHub" [ref=e485] [cursor=pointer]:
+                  - /url: https://github.com
+                  - img [ref=e486]
+                  - text: GitHub
+                  - img [ref=e489]
+        - generic [ref=e493]: © 2026 IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.

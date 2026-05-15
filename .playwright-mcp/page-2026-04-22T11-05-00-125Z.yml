@@ -1,0 +1,229 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - region "Notifications alt+T"
+    - generic [ref=e55]:
+      - complementary [ref=e56]:
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - img [ref=e60]
+            - generic [ref=e63]:
+              - generic [ref=e64]: IT Compass
+              - generic [ref=e65]: Administrator
+          - button [ref=e66] [cursor=pointer]:
+            - img [ref=e67]
+        - navigation [ref=e69]:
+          - link "Tổng quan" [ref=e70] [cursor=pointer]:
+            - /url: /admin
+            - img [ref=e71]
+            - generic [ref=e76]: Tổng quan
+          - link "Người dùng" [ref=e77] [cursor=pointer]:
+            - /url: /admin/users
+            - img [ref=e78]
+            - generic [ref=e83]: Người dùng
+          - link "Mentor" [ref=e84] [cursor=pointer]:
+            - /url: /admin/mentors
+            - img [ref=e85]
+            - generic [ref=e89]: Mentor
+          - link "Nội dung (CMS)" [ref=e90] [cursor=pointer]:
+            - /url: /admin/blogs
+            - img [ref=e91]
+            - generic [ref=e94]: Nội dung (CMS)
+          - link "Bình luận blog" [ref=e95] [cursor=pointer]:
+            - /url: /admin/blog-comments
+            - img [ref=e96]
+            - generic [ref=e98]: Bình luận blog
+          - link "Assessment" [ref=e99] [cursor=pointer]:
+            - /url: /admin/assessments
+            - img [ref=e100]
+            - generic [ref=e103]: Assessment
+          - link "Nhật ký hệ thống" [ref=e104] [cursor=pointer]:
+            - /url: /admin/audit-logs
+            - img [ref=e105]
+            - generic [ref=e107]: Nhật ký hệ thống
+          - link "Cài đặt" [ref=e108] [cursor=pointer]:
+            - /url: /admin/settings
+            - img [ref=e109]
+            - generic [ref=e112]: Cài đặt
+        - generic [ref=e113]:
+          - generic [ref=e114]:
+            - generic [ref=e115]: L
+            - generic [ref=e116]:
+              - generic [ref=e117]: Lương Việt Tiến
+              - generic [ref=e118]: admin@example.com
+          - button "Đăng xuất" [ref=e119] [cursor=pointer]:
+            - img [ref=e120]
+            - generic [ref=e123]: Đăng xuất
+      - generic [ref=e124]:
+        - banner [ref=e125]:
+          - generic [ref=e127]:
+            - img [ref=e128]
+            - textbox "Tìm kiếm nhanh..." [ref=e131]
+          - generic [ref=e132]:
+            - button [ref=e133] [cursor=pointer]:
+              - img [ref=e134]
+            - button [ref=e137] [cursor=pointer]:
+              - img [ref=e138]
+        - main [ref=e140]:
+          - generic [ref=e445]:
+            - generic [ref=e446]:
+              - generic [ref=e447]:
+                - heading "Quản lý Bài viết" [level=1] [ref=e448]
+                - paragraph [ref=e449]: Trung tâm kiểm duyệt và xuất bản blog.
+              - generic [ref=e450]:
+                - button "Bình luận" [ref=e451] [cursor=pointer]:
+                  - img [ref=e452]
+                  - text: Bình luận
+                - button "Viết bài mới" [ref=e454] [cursor=pointer]:
+                  - img [ref=e455]
+                  - text: Viết bài mới
+            - generic [ref=e460]:
+              - generic [ref=e461]:
+                - img [ref=e462]
+                - textbox "Tìm kiếm bài viết..." [ref=e465]
+              - generic [ref=e466]:
+                - button "Tất cả" [ref=e467] [cursor=pointer]
+                - button "Đã xuất bản" [ref=e468] [cursor=pointer]
+                - button "Bản nháp" [ref=e469] [cursor=pointer]
+                - button "Đã xóa" [ref=e470] [cursor=pointer]
+            - table [ref=e472]:
+              - rowgroup [ref=e473]:
+                - row "Bài viết Nội dung Lượt xem Trạng thái Thao tác" [ref=e474]:
+                  - columnheader [ref=e475]:
+                    - checkbox [ref=e476]
+                  - columnheader "Bài viết" [ref=e477]
+                  - columnheader "Nội dung" [ref=e478]
+                  - columnheader "Lượt xem" [ref=e479]
+                  - columnheader "Trạng thái" [ref=e480]
+                  - columnheader "Thao tác" [ref=e481]
+              - rowgroup [ref=e482]:
+                - row "Bài viết test /bai-viet-test 👍 0 0 Đã xuất bản Xóa" [ref=e483]:
+                  - cell [ref=e484]:
+                    - checkbox [ref=e485]
+                  - cell "Bài viết test /bai-viet-test 👍 0" [ref=e486]:
+                    - generic [ref=e487]:
+                      - generic "Bài viết test" [ref=e488]
+                      - generic [ref=e489]: /bai-viet-test
+                      - generic [ref=e491]: 👍 0
+                  - cell [ref=e492]:
+                    - paragraph
+                  - cell "0" [ref=e493]
+                  - cell "Đã xuất bản" [ref=e494]
+                  - cell "Xóa" [ref=e495]:
+                    - button "Sửa bài viết" [ref=e496] [cursor=pointer]:
+                      - img [ref=e497]
+                    - button "Cấu hình Meta/Tags" [ref=e500] [cursor=pointer]:
+                      - img [ref=e501]
+                    - button "Xem trước từ backend" [ref=e504] [cursor=pointer]:
+                      - img [ref=e505]
+                    - button "Xem bình luận của bài viết" [ref=e508] [cursor=pointer]:
+                      - img [ref=e509]
+                    - button "Xóa" [ref=e512] [cursor=pointer]
+                - row "Giới thiệu về ngành Kỹ Thuật Phần Mềm /gioi-thieu-ve-nganh-ky-thuat-phan-mem 👍 0 Ngành Kỹ thuật Phần mềm là một trong những lĩnh vực cốt lõi của Công nghệ Thông tin, tập trung vào việc thiết kế, phát triển, kiểm thử và bảo trì phần mềm. Bài viết cung cấp cái nhìn tổng quan về ngành, cơ hội nghề nghiệp, kỹ năng cần thiết và định hướng học tập cho sinh viên. 0 Đã xuất bản Xóa" [ref=e513]:
+                  - cell [ref=e514]:
+                    - checkbox [ref=e515]
+                  - cell "Giới thiệu về ngành Kỹ Thuật Phần Mềm /gioi-thieu-ve-nganh-ky-thuat-phan-mem 👍 0" [ref=e516]:
+                    - generic [ref=e517]:
+                      - generic "Giới thiệu về ngành Kỹ Thuật Phần Mềm" [ref=e518]
+                      - generic [ref=e519]: /gioi-thieu-ve-nganh-ky-thuat-phan-mem
+                      - generic [ref=e521]: 👍 0
+                  - cell "Ngành Kỹ thuật Phần mềm là một trong những lĩnh vực cốt lõi của Công nghệ Thông tin, tập trung vào việc thiết kế, phát triển, kiểm thử và bảo trì phần mềm. Bài viết cung cấp cái nhìn tổng quan về ngành, cơ hội nghề nghiệp, kỹ năng cần thiết và định hướng học tập cho sinh viên." [ref=e522]:
+                    - paragraph [ref=e523]: Ngành Kỹ thuật Phần mềm là một trong những lĩnh vực cốt lõi của Công nghệ Thông tin, tập trung vào việc thiết kế, phát triển, kiểm thử và bảo trì phần mềm. Bài viết cung cấp cái nhìn tổng quan về ngành, cơ hội nghề nghiệp, kỹ năng cần thiết và định hướng học tập cho sinh viên.
+                  - cell "0" [ref=e524]
+                  - cell "Đã xuất bản" [ref=e525]
+                  - cell "Xóa" [ref=e526]:
+                    - button "Sửa bài viết" [ref=e527] [cursor=pointer]:
+                      - img [ref=e528]
+                    - button "Cấu hình Meta/Tags" [ref=e531] [cursor=pointer]:
+                      - img [ref=e532]
+                    - button "Xem trước từ backend" [ref=e535] [cursor=pointer]:
+                      - img [ref=e536]
+                    - button "Xem bình luận của bài viết" [ref=e539] [cursor=pointer]:
+                      - img [ref=e540]
+                    - button "Xóa" [ref=e543] [cursor=pointer]
+                - row "Bai viet test api moi /bai-viet-test-api-moi 👍 0 Tom tat test api moi 0 Đã xuất bản Xóa" [ref=e544]:
+                  - cell [ref=e545]:
+                    - checkbox [ref=e546]
+                  - cell "Bai viet test api moi /bai-viet-test-api-moi 👍 0" [ref=e547]:
+                    - generic [ref=e548]:
+                      - generic "Bai viet test api moi" [ref=e549]
+                      - generic [ref=e550]: /bai-viet-test-api-moi
+                      - generic [ref=e552]: 👍 0
+                  - cell "Tom tat test api moi" [ref=e553]:
+                    - paragraph [ref=e554]: Tom tat test api moi
+                  - cell "0" [ref=e555]
+                  - cell "Đã xuất bản" [ref=e556]
+                  - cell "Xóa" [ref=e557]:
+                    - button "Sửa bài viết" [ref=e558] [cursor=pointer]:
+                      - img [ref=e559]
+                    - button "Cấu hình Meta/Tags" [ref=e562] [cursor=pointer]:
+                      - img [ref=e563]
+                    - button "Xem trước từ backend" [ref=e566] [cursor=pointer]:
+                      - img [ref=e567]
+                    - button "Xem bình luận của bài viết" [ref=e570] [cursor=pointer]:
+                      - img [ref=e571]
+                    - button "Xóa" [ref=e574] [cursor=pointer]
+  - generic [ref=e577]:
+    - generic [ref=e578]:
+      - generic [ref=e579]:
+        - heading "Tạo bài viết mới" [level=2] [ref=e580]
+        - paragraph [ref=e581]: Tạo bài viết mới theo quy trình biên tập gọn hơn.
+      - button [ref=e582] [cursor=pointer]:
+        - img [ref=e583]
+    - generic [ref=e587]:
+      - button "Bước 1 Nội dung Tiêu đề, slug và phần chính của bài viết." [ref=e666] [cursor=pointer]:
+        - generic [ref=e590]: Bước 1
+        - generic [ref=e591]: Nội dung
+        - generic [ref=e592]: Tiêu đề, slug và phần chính của bài viết.
+      - button "Bước 2 Xuất bản Trạng thái, ảnh đại diện và phân loại hiển thị." [ref=e593] [cursor=pointer]:
+        - generic [ref=e595]: Bước 2
+        - generic [ref=e596]: Xuất bản
+        - generic [ref=e597]: Trạng thái, ảnh đại diện và phân loại hiển thị.
+      - button "Bước 3 SEO Tối ưu tiêu đề và mô tả cho tìm kiếm." [ref=e598] [cursor=pointer]:
+        - generic [ref=e600]: Bước 3
+        - generic [ref=e601]: SEO
+        - generic [ref=e602]: Tối ưu tiêu đề và mô tả cho tìm kiếm.
+    - generic [ref=e604]:
+      - generic [ref=e605]:
+        - generic [ref=e606]:
+          - generic [ref=e607]: Tiêu đề chính
+          - textbox "Nhập tiêu đề..." [ref=e667]: Bài viết test overlay wizard
+        - generic [ref=e609]:
+          - generic [ref=e668]:
+            - text: Đường dẫn (Slug)
+            - button "Đường dẫn (Slug)" [ref=e669] [cursor=pointer]:
+              - img [ref=e670]
+              - text: Kiểm tra khả dụng
+          - 'textbox "vd: bai-viet-so-1" [ref=e673]': bai-viet-test-overlay-wizard
+        - generic [ref=e616]:
+          - generic [ref=e617]: Mô tả ngắn (Excerpt)
+          - textbox [ref=e674]
+        - generic [ref=e675]:
+          - generic [ref=e676]: Nội dung HTML / Markdown
+          - textbox [ref=e677]: <p>Nội dung kiểm tra modal nhiều bước.</p>
+      - generic [ref=e623]:
+        - text: Checklist nội dung
+        - generic [ref=e624]:
+          - generic [ref=e625]:
+            - generic [ref=e626]: Tiêu đề
+            - generic [ref=e627]: Đã nhập tiêu đề chính.
+          - generic [ref=e628]:
+            - generic [ref=e629]: Slug
+            - generic [ref=e630]: bai-viet-test-overlay-wizard
+          - generic [ref=e631]:
+            - generic [ref=e632]: Nội dung
+            - generic [ref=e633]: Đã có nội dung chính để xuất bản.
+    - generic [ref=e635]:
+      - generic [ref=e636]:
+        - generic [ref=e637]: Đang chỉnh
+        - generic [ref=e638]: Nội dung
+      - generic [ref=e639]:
+        - button "Bước trước" [disabled] [ref=e640]:
+          - img [ref=e641]
+          - text: Bước trước
+        - button "Bước tiếp" [ref=e643] [cursor=pointer]:
+          - text: Bước tiếp
+          - img [ref=e644]
+        - button "Hủy bỏ" [ref=e646] [cursor=pointer]
+        - button "Lưu bài viết" [ref=e647] [cursor=pointer]:
+          - img [ref=e648]
+          - text: Lưu bài viết

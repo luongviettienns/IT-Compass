@@ -1,0 +1,231 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e242]:
+    - banner [ref=e243]:
+      - generic [ref=e244]:
+        - link "IT Compass" [ref=e245] [cursor=pointer]:
+          - /url: /
+          - img [ref=e247]
+          - generic [ref=e259]: IT Compass
+        - navigation [ref=e260]:
+          - link "Trang chủ" [ref=e261] [cursor=pointer]:
+            - /url: /
+          - link "Trắc nghiệm" [ref=e262] [cursor=pointer]:
+            - /url: /test
+            - text: Trắc nghiệm
+          - link "Blog" [ref=e264] [cursor=pointer]:
+            - /url: /blog
+          - link "Mentor" [ref=e265] [cursor=pointer]:
+            - /url: /mentors
+          - link "Ngành học" [ref=e266] [cursor=pointer]:
+            - /url: /majors
+        - button "Claude Quiz Test" [ref=e269] [cursor=pointer]:
+          - img [ref=e271]
+          - generic [ref=e274]: Claude Quiz Test
+          - img [ref=e275]
+    - main [ref=e277]:
+      - generic [ref=e278]:
+        - generic [ref=e281]:
+          - generic [ref=e282]:
+            - generic [ref=e283]: SE · Career fit snapshot
+            - heading "Kỹ thuật phần mềm" [level=1] [ref=e284]
+            - paragraph [ref=e285]: Bạn phù hợp với nhóm Kỹ thuật phần mềm
+            - paragraph [ref=e286]: Bạn sở hữu tư duy hệ thống, khả năng phân tích và sự kiên trì cần thiết để biến các yêu cầu mơ hồ thành sản phẩm chạy được.
+            - generic [ref=e287]:
+              - generic [ref=e288]: I
+              - generic [ref=e289]: C
+              - generic [ref=e290]: E
+          - complementary [ref=e291]:
+            - paragraph [ref=e292]: Phiên assessment
+            - generic [ref=e293]:
+              - generic [ref=e294]:
+                - term [ref=e295]: Hoàn tất lúc
+                - definition [ref=e296]: 00:57 22/04/2026
+              - generic [ref=e297]:
+                - term [ref=e298]: Phiên bản quiz
+                - definition [ref=e299]: "2026.04"
+              - generic [ref=e300]:
+                - term [ref=e301]: Dominant code
+                - definition [ref=e302]: CI
+              - generic [ref=e303]:
+                - term [ref=e304]: Spread top 1 → top 3
+                - definition [ref=e305]: 6 điểm
+            - generic [ref=e306]:
+              - link "Xem mentor phù hợp" [ref=e307] [cursor=pointer]:
+                - /url: /mentors
+              - link "Làm lại bài trắc nghiệm" [ref=e308] [cursor=pointer]:
+                - /url: /test/quiz
+        - generic [ref=e309]:
+          - generic [ref=e310]:
+            - generic [ref=e311]:
+              - generic [ref=e312]:
+                - img [ref=e314]
+                - generic [ref=e317]:
+                  - paragraph [ref=e318]: Gợi ý phù hợp nhất
+                  - heading "Top hướng đi nên ưu tiên" [level=2] [ref=e319]
+              - generic [ref=e320]:
+                - generic [ref=e321]:
+                  - generic [ref=e322]:
+                    - generic [ref=e323]:
+                      - generic [ref=e324]: "#1 · high"
+                      - heading "Kỹ thuật phần mềm" [level=3] [ref=e325]
+                      - paragraph [ref=e326]: Bạn phù hợp với nhóm Kỹ thuật phần mềm
+                    - generic [ref=e327]:
+                      - paragraph [ref=e328]: Khớp
+                      - paragraph [ref=e329]: 100%
+                  - generic [ref=e330]:
+                    - generic [ref=e331]: C
+                    - generic [ref=e332]: I
+                - generic [ref=e333]:
+                  - generic [ref=e334]:
+                    - generic [ref=e335]:
+                      - generic [ref=e336]: "#2 · high"
+                      - heading "Dữ liệu và AI" [level=3] [ref=e337]
+                      - paragraph [ref=e338]: Bạn phù hợp với nhóm Dữ liệu và AI
+                    - generic [ref=e339]:
+                      - paragraph [ref=e340]: Khớp
+                      - paragraph [ref=e341]: 94%
+                  - generic [ref=e342]:
+                    - generic [ref=e343]: I
+                    - generic [ref=e344]: C
+                - generic [ref=e345]:
+                  - generic [ref=e346]:
+                    - generic [ref=e347]:
+                      - generic [ref=e348]: "#3 · high"
+                      - heading "Quản lý dự án và nghiệp vụ" [level=3] [ref=e349]
+                      - paragraph [ref=e350]: Bạn phù hợp với nhóm Quản lý dự án và nghiệp vụ
+                    - generic [ref=e351]:
+                      - paragraph [ref=e352]: Khớp
+                      - paragraph [ref=e353]: 93%
+                  - generic [ref=e354]:
+                    - generic [ref=e355]: E
+                    - generic [ref=e356]: C
+            - generic [ref=e357]:
+              - generic [ref=e358]:
+                - img [ref=e360]
+                - generic [ref=e362]:
+                  - paragraph [ref=e363]: Holland breakdown
+                  - heading "Bức tranh thiên hướng của bạn" [level=2] [ref=e364]
+              - generic [ref=e365]:
+                - generic [ref=e366]:
+                  - generic [ref=e367]:
+                    - generic [ref=e368]: R
+                    - generic [ref=e369]: "#5"
+                  - generic [ref=e371]:
+                    - paragraph [ref=e372]: 31%
+                    - paragraph [ref=e373]: "Điểm thô: 4"
+                - generic [ref=e376]:
+                  - generic [ref=e377]:
+                    - generic [ref=e378]: I
+                    - generic [ref=e379]: "#1"
+                  - generic [ref=e381]:
+                    - paragraph [ref=e382]: 100%
+                    - paragraph [ref=e383]: "Điểm thô: 13"
+                - generic [ref=e386]:
+                  - generic [ref=e387]:
+                    - generic [ref=e388]: A
+                    - generic [ref=e389]: "#6"
+                  - generic [ref=e391]:
+                    - paragraph [ref=e392]: 31%
+                    - paragraph [ref=e393]: "Điểm thô: 4"
+                - generic [ref=e396]:
+                  - generic [ref=e397]:
+                    - generic [ref=e398]: S
+                    - generic [ref=e399]: "#4"
+                  - generic [ref=e401]:
+                    - paragraph [ref=e402]: 46%
+                    - paragraph [ref=e403]: "Điểm thô: 6"
+                - generic [ref=e406]:
+                  - generic [ref=e407]:
+                    - generic [ref=e408]: E
+                    - generic [ref=e409]: "#3"
+                  - generic [ref=e411]:
+                    - paragraph [ref=e412]: 54%
+                    - paragraph [ref=e413]: "Điểm thô: 7"
+                - generic [ref=e416]:
+                  - generic [ref=e417]:
+                    - generic [ref=e418]: C
+                    - generic [ref=e419]: "#2"
+                  - generic [ref=e421]:
+                    - paragraph [ref=e422]: 62%
+                    - paragraph [ref=e423]: "Điểm thô: 8"
+          - complementary [ref=e426]:
+            - generic [ref=e427]:
+              - paragraph [ref=e428]: Nên làm tiếp
+              - generic [ref=e429]:
+                - generic [ref=e430]:
+                  - img [ref=e431]
+                  - generic [ref=e434]:
+                    - paragraph [ref=e435]: Chuyên ngành gợi ý
+                    - generic [ref=e436]:
+                      - generic [ref=e437]: ky-thuat-phan-mem
+                      - generic [ref=e438]: cong-nghe-phan-mem
+                - generic [ref=e439]:
+                  - img [ref=e440]
+                  - generic [ref=e443]:
+                    - paragraph [ref=e444]: Career matches
+                    - generic [ref=e445]:
+                      - generic [ref=e446]: Frontend Developer
+                      - generic [ref=e447]: Backend Developer
+                      - generic [ref=e448]: Full-stack Engineer
+                      - generic [ref=e449]: Mobile Developer
+                - generic [ref=e450]:
+                  - img [ref=e451]
+                  - generic [ref=e454]:
+                    - paragraph [ref=e455]: Mentor expertise nên xem
+                    - generic [ref=e456]:
+                      - generic [ref=e457]: Frontend
+                      - generic [ref=e458]: Backend
+                      - generic [ref=e459]: Fullstack
+            - generic [ref=e460]:
+              - paragraph [ref=e461]: Điều hướng nhanh
+              - generic [ref=e462]:
+                - link "Xem mentor ngay" [ref=e463] [cursor=pointer]:
+                  - /url: /mentors
+                - link "Khám phá chuyên ngành" [ref=e464] [cursor=pointer]:
+                  - /url: /majors
+                - link "Về hồ sơ cá nhân" [ref=e465] [cursor=pointer]:
+                  - /url: /profile
+    - contentinfo [ref=e466]:
+      - generic [ref=e467]:
+        - generic [ref=e468]:
+          - generic [ref=e469]:
+            - link "IT Compass" [ref=e470] [cursor=pointer]:
+              - /url: /
+              - img [ref=e472]
+              - generic [ref=e484]: IT Compass
+            - paragraph [ref=e485]: Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+          - generic [ref=e486]:
+            - heading "Khám phá" [level=3] [ref=e487]
+            - list [ref=e488]:
+              - listitem [ref=e489]:
+                - link "Trắc nghiệm" [ref=e490] [cursor=pointer]:
+                  - /url: /test
+              - listitem [ref=e491]:
+                - link "Blog" [ref=e492] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e493]:
+                - link "Mentor" [ref=e494] [cursor=pointer]:
+                  - /url: /mentors
+              - listitem [ref=e495]:
+                - link "Ngành học" [ref=e496] [cursor=pointer]:
+                  - /url: /majors
+              - listitem [ref=e497]:
+                - link "Về chúng tôi" [ref=e498] [cursor=pointer]:
+                  - /url: /about
+          - generic [ref=e499]:
+            - heading "Liên hệ" [level=3] [ref=e500]
+            - list [ref=e501]:
+              - listitem [ref=e502]:
+                - img [ref=e503]
+                - text: contact@itcompass.vn
+              - listitem [ref=e506]:
+                - img [ref=e507]
+                - text: TP. Hồ Chí Minh, Việt Nam
+              - listitem [ref=e510]:
+                - link "GitHub" [ref=e511] [cursor=pointer]:
+                  - /url: https://github.com
+                  - img [ref=e512]
+                  - text: GitHub
+                  - img [ref=e515]
+        - generic [ref=e519]: © 2026 IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.

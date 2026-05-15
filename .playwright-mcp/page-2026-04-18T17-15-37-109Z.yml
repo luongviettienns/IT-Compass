@@ -1,0 +1,279 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "IT Compass" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img [ref=e8]
+        - generic [ref=e11]: IT Compass
+      - navigation [ref=e12]:
+        - link "Trang chủ" [ref=e13] [cursor=pointer]:
+          - /url: /
+          - text: Trang chủ
+        - link "Trắc nghiệm" [ref=e15] [cursor=pointer]:
+          - /url: /test
+          - text: Trắc nghiệm
+        - link "Lĩnh vực IT" [ref=e17] [cursor=pointer]:
+          - /url: /majors
+          - text: Lĩnh vực IT
+        - link "Cố vấn" [ref=e19] [cursor=pointer]:
+          - /url: /mentors
+          - text: Cố vấn
+        - link "Blog" [ref=e21] [cursor=pointer]:
+          - /url: /blog
+          - text: Blog
+        - link "Giới thiệu" [ref=e23] [cursor=pointer]:
+          - /url: /about
+          - text: Giới thiệu
+      - button "QV User" [ref=e125] [cursor=pointer]:
+        - generic [ref=e126]: QV
+        - generic [ref=e128]:
+          - generic [ref=e129]: User
+          - img [ref=e130]
+  - generic [ref=e182]:
+    - generic [ref=e183]:
+      - generic [ref=e184]: KẾT QUẢ PHÂN TÍCH CỦA BẠN
+      - heading "Quản lý dự án và nghiệp vụ" [level=2] [ref=e185]
+      - paragraph [ref=e186]: Bạn phù hợp với nhóm Quản lý dự án và nghiệp vụ
+    - generic [ref=e188]:
+      - generic [ref=e189]: Kết quả đã được lưu vào hồ sơ của bạn.
+      - generic [ref=e190]:
+        - generic [ref=e191]:
+          - generic [ref=e192]:
+            - heading "Hồ sơ năng lực nổi bật" [level=3] [ref=e193]:
+              - img [ref=e194]
+              - text: Hồ sơ năng lực nổi bật
+            - paragraph [ref=e202]: Bạn là cầu nối giữa nhu cầu kinh doanh và thực thi kỹ thuật, hợp với vai trò điều phối, phân tích và dẫn dắt sản phẩm.
+          - generic [ref=e203]:
+            - generic [ref=e204]: Nhóm I
+            - generic [ref=e205]: Nhóm E
+            - generic [ref=e206]: Nhóm S
+          - generic [ref=e207]:
+            - generic [ref=e208]:
+              - generic [ref=e209]: Định hướng nổi trội
+              - generic [ref=e210]: 100%
+              - paragraph [ref=e211]: Quản lý dự án và nghiệp vụ
+            - generic [ref=e212]:
+              - generic [ref=e213]: Mã Holland chi phối
+              - generic [ref=e214]: EI
+              - paragraph [ref=e215]: "Khoảng cách top 1 → top 3: 3 điểm"
+        - generic [ref=e216]:
+          - generic [ref=e217]:
+            - generic [ref=e218]:
+              - paragraph [ref=e219]: Top định hướng phù hợp
+              - paragraph [ref=e220]: Xếp hạng theo mức độ tương thích hiện tại
+            - img [ref=e221]
+          - generic [ref=e227]:
+            - generic [ref=e228]:
+              - generic [ref=e229]:
+                - generic [ref=e230]:
+                  - generic [ref=e231]: "#1"
+                  - generic [ref=e232]:
+                    - paragraph [ref=e233]: Quản lý dự án và nghiệp vụ
+                    - paragraph [ref=e234]: Rất phù hợp
+                - generic [ref=e236]: 100%
+              - generic [ref=e239]:
+                - generic [ref=e240]: Trait E
+                - generic [ref=e241]: Trait C
+              - paragraph [ref=e242]: Business Analyst • Project Manager
+            - generic [ref=e243]:
+              - generic [ref=e244]:
+                - generic [ref=e245]:
+                  - generic [ref=e246]: "#2"
+                  - generic [ref=e247]:
+                    - paragraph [ref=e248]: Kỹ thuật phần mềm
+                    - paragraph [ref=e249]: Rất phù hợp
+                - generic [ref=e251]: 100%
+              - generic [ref=e254]:
+                - generic [ref=e255]: Trait C
+                - generic [ref=e256]: Trait I
+              - paragraph [ref=e257]: Frontend Developer • Backend Developer
+            - generic [ref=e258]:
+              - generic [ref=e259]:
+                - generic [ref=e260]:
+                  - generic [ref=e261]: "#3"
+                  - generic [ref=e262]:
+                    - paragraph [ref=e263]: Dữ liệu và AI
+                    - paragraph [ref=e264]: Rất phù hợp
+                - generic [ref=e266]: 93%
+              - generic [ref=e269]:
+                - generic [ref=e270]: Trait I
+                - generic [ref=e271]: Trait C
+              - paragraph [ref=e272]: Data Analyst • Data Engineer
+            - generic [ref=e273]:
+              - generic [ref=e274]:
+                - generic [ref=e275]:
+                  - generic [ref=e276]: "#4"
+                  - generic [ref=e277]:
+                    - paragraph [ref=e278]: Thiết kế UI/UX
+                    - paragraph [ref=e279]: Rất phù hợp
+                - generic [ref=e281]: 93%
+              - generic [ref=e284]:
+                - generic [ref=e285]: Trait A
+                - generic [ref=e286]: Trait S
+              - paragraph [ref=e287]: UI Designer • UX Designer
+    - generic [ref=e288]:
+      - generic [ref=e289]:
+        - generic [ref=e290]:
+          - img [ref=e291]
+          - heading "Biểu đồ điểm chi tiết" [level=3] [ref=e294]
+        - generic [ref=e295]:
+          - generic [ref=e297]:
+            - generic [ref=e298]:
+              - generic [ref=e299]: R
+              - generic [ref=e300]:
+                - paragraph [ref=e301]: Thực tiễn
+                - paragraph [ref=e302]: "Hạng #5"
+            - generic [ref=e303]:
+              - generic [ref=e304]: 74%
+              - generic [ref=e305]: 20 điểm
+          - generic [ref=e309]:
+            - generic [ref=e310]:
+              - generic [ref=e311]: I
+              - generic [ref=e312]:
+                - paragraph [ref=e313]: Nghiên cứu
+                - paragraph [ref=e314]: "Hạng #1"
+            - generic [ref=e315]:
+              - generic [ref=e316]: 100%
+              - generic [ref=e317]: 27 điểm
+          - generic [ref=e321]:
+            - generic [ref=e322]:
+              - generic [ref=e323]: A
+              - generic [ref=e324]:
+                - paragraph [ref=e325]: Sáng tạo
+                - paragraph [ref=e326]: "Hạng #6"
+            - generic [ref=e327]:
+              - generic [ref=e328]: 74%
+              - generic [ref=e329]: 20 điểm
+          - generic [ref=e333]:
+            - generic [ref=e334]:
+              - generic [ref=e335]: S
+              - generic [ref=e336]:
+                - paragraph [ref=e337]: Xã hội
+                - paragraph [ref=e338]: "Hạng #3"
+            - generic [ref=e339]:
+              - generic [ref=e340]: 89%
+              - generic [ref=e341]: 24 điểm
+          - generic [ref=e345]:
+            - generic [ref=e346]:
+              - generic [ref=e347]: E
+              - generic [ref=e348]:
+                - paragraph [ref=e349]: Lãnh đạo
+                - paragraph [ref=e350]: "Hạng #2"
+            - generic [ref=e351]:
+              - generic [ref=e352]: 93%
+              - generic [ref=e353]: 25 điểm
+          - generic [ref=e357]:
+            - generic [ref=e358]:
+              - generic [ref=e359]: C
+              - generic [ref=e360]:
+                - paragraph [ref=e361]: Tổ chức
+                - paragraph [ref=e362]: "Hạng #4"
+            - generic [ref=e363]:
+              - generic [ref=e364]: 85%
+              - generic [ref=e365]: 23 điểm
+      - generic [ref=e368]:
+        - generic [ref=e369]:
+          - generic [ref=e370]:
+            - img [ref=e371]
+            - heading "Gợi ý định hướng cụ thể" [level=3] [ref=e374]
+          - list [ref=e375]:
+            - listitem [ref=e376]:
+              - img [ref=e377]
+              - generic [ref=e380]: Chuyên viên phân tích nghiệp vụ
+            - listitem [ref=e381]:
+              - img [ref=e382]
+              - generic [ref=e385]: Quản lý dự án CNTT
+            - listitem [ref=e386]:
+              - img [ref=e387]
+              - generic [ref=e390]: Product Owner
+            - listitem [ref=e391]:
+              - img [ref=e392]
+              - generic [ref=e395]: "Nền tảng nên đầu tư: Jira, Agile/Scrum, business analysis"
+        - generic [ref=e396]:
+          - heading "Vai trò và chuyên ngành nên ưu tiên" [level=3] [ref=e397]
+          - generic [ref=e398]:
+            - generic [ref=e399]:
+              - paragraph [ref=e400]: Vai trò gợi ý
+              - generic [ref=e401]:
+                - generic [ref=e402]: Business Analyst
+                - generic [ref=e403]: Project Manager
+                - generic [ref=e404]: Product Owner
+                - generic [ref=e405]: Scrum Master
+            - generic [ref=e406]:
+              - paragraph [ref=e407]: Chuyên ngành nên xem thêm
+              - generic [ref=e408]:
+                - generic [ref=e409]: he-thong-thong-tin
+                - generic [ref=e410]: phan-tich-nghiep-vu
+    - generic [ref=e411]:
+      - button "Khám phá chuyên ngành" [ref=e412] [cursor=pointer]:
+        - text: Khám phá chuyên ngành
+        - img
+      - button "Xem trong hồ sơ" [ref=e413] [cursor=pointer]
+      - button "Làm lại bài test" [ref=e414] [cursor=pointer]
+  - contentinfo [ref=e48]:
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - img [ref=e56]
+          - generic [ref=e59]: IT Compass
+        - paragraph [ref=e60]: La bàn định vị sự nghiệp IT của bạn. Chúng tôi giúp thế hệ chuyên gia công nghệ Việt Nam tìm thấy đam mê và con đường phát triển phù hợp nhất.
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic: Website
+            - link [ref=e63] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e64]
+          - generic [ref=e67]:
+            - generic: Email
+            - link [ref=e68] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e69]
+          - generic [ref=e72]:
+            - generic: Phone
+            - link [ref=e73] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e74]
+      - generic [ref=e77]:
+        - heading "Nền Tảng" [level=4] [ref=e78]
+        - list [ref=e79]:
+          - listitem [ref=e80]:
+            - link "Làm Bài Test" [ref=e81] [cursor=pointer]:
+              - /url: /test
+              - img [ref=e82]
+              - text: Làm Bài Test
+          - listitem [ref=e85]:
+            - link "Chuyên Ngành IT" [ref=e86] [cursor=pointer]:
+              - /url: /majors
+              - img [ref=e87]
+              - text: Chuyên Ngành IT
+          - listitem [ref=e90]:
+            - link "Blog" [ref=e91] [cursor=pointer]:
+              - /url: /blog
+              - img [ref=e92]
+              - text: Blog
+      - generic [ref=e95]:
+        - heading "Công Ty" [level=4] [ref=e96]
+        - list [ref=e97]:
+          - listitem [ref=e98]:
+            - link "Về Chúng Tôi" [ref=e99] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e100]
+              - text: Về Chúng Tôi
+          - listitem [ref=e103]:
+            - link "Điều Khoản Dịch Vụ" [ref=e104] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e105]
+              - text: Điều Khoản Dịch Vụ
+          - listitem [ref=e108]:
+            - link "Chính Sách Bảo Mật" [ref=e109] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e110]
+              - text: Chính Sách Bảo Mật
+          - listitem [ref=e113]:
+            - link "Liên Hệ" [ref=e114] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e115]
+              - text: Liên Hệ
+    - generic [ref=e121]:
+      - paragraph [ref=e122]: © 2026 IT Compass. Đã đăng ký bản quyền.
+      - paragraph [ref=e123]: Được xây dựng với ❤️ cho thế hệ IT Việt Nam

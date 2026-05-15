@@ -1,0 +1,262 @@
+[    1172ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:14337
+[ 1182983ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:14337
+[ 1525258ms] [ERROR] %o
+
+%s
+
+%s
+ Error: useAuth must be used within AuthProvider
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776632772606:128:9)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633104824:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) The above error occurred in the <Header> component. React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary. @ http://127.0.0.1:5173/@vite/client:509
+[ 1525259ms] [ERROR] [ErrorBoundary] Error: useAuth must be used within AuthProvider
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776632772606:128:9)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633104824:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) 
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633104824:37:34)
+    at div (<anonymous>)
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:4575:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:6927:26)
+    at App (<anonymous>)
+    at AuthProvider (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633114935:12:32)
+    at QueryClientProvider (http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e8b98fe2:2517:30)
+    at _HelmetProvider (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=e8b98fe2:491:3)
+    at ErrorBoundary (http://127.0.0.1:5173/src/components/ErrorBoundary.tsx:8:3) @ http://127.0.0.1:5173/@vite/client:509
+[ 1525344ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:14337
+[ 1531599ms] [ERROR] %o
+
+%s
+
+%s
+ Error: useAuth must be used within AuthProvider
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633114935:128:9)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633114935:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) The above error occurred in the <Header> component. React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary. @ http://127.0.0.1:5173/@vite/client:509
+[ 1531600ms] [ERROR] [ErrorBoundary] Error: useAuth must be used within AuthProvider
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633114935:128:9)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633114935:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) 
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633114935:37:34)
+    at div (<anonymous>)
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:4575:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:6927:26)
+    at App (<anonymous>)
+    at AuthProvider (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633121284:12:32)
+    at QueryClientProvider (http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e8b98fe2:2517:30)
+    at _HelmetProvider (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=e8b98fe2:491:3)
+    at ErrorBoundary (http://127.0.0.1:5173/src/components/ErrorBoundary.tsx:8:3) @ http://127.0.0.1:5173/@vite/client:509
+[ 1531639ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:14337
+[ 1656475ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:14337
+[ 1656517ms] [ERROR] %o
+
+%s
+
+%s
+ ReferenceError: useContext is not defined
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633246092:126:18)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633246092:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) The above error occurred in the <Header> component. React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary. @ http://127.0.0.1:5173/@vite/client:509
+[ 1656518ms] [ERROR] [ErrorBoundary] ReferenceError: useContext is not defined
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633246092:126:18)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633246092:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) 
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633246092:37:34)
+    at div (<anonymous>)
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:4575:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:6927:26)
+    at App (<anonymous>)
+    at AuthProvider (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633246092:12:32)
+    at QueryClientProvider (http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e8b98fe2:2517:30)
+    at _HelmetProvider (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=e8b98fe2:491:3)
+    at ErrorBoundary (http://127.0.0.1:5173/src/components/ErrorBoundary.tsx:8:3) @ http://127.0.0.1:5173/@vite/client:509
+[ 1679113ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:14337
+[ 1679155ms] [ERROR] %o
+
+%s
+
+%s
+ ReferenceError: useContext is not defined
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633268735:126:18)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633268735:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) The above error occurred in the <Header> component. React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary. @ http://127.0.0.1:5173/@vite/client:509
+[ 1679156ms] [ERROR] [ErrorBoundary] ReferenceError: useContext is not defined
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633268735:126:18)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633268735:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) 
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633268735:37:34)
+    at div (<anonymous>)
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:4575:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:6927:26)
+    at App (<anonymous>)
+    at AuthProvider (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633268735:12:32)
+    at QueryClientProvider (http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e8b98fe2:2517:30)
+    at _HelmetProvider (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=e8b98fe2:491:3)
+    at ErrorBoundary (http://127.0.0.1:5173/src/components/ErrorBoundary.tsx:8:3) @ http://127.0.0.1:5173/@vite/client:509
+[ 1690569ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:14337
+[ 1690612ms] [ERROR] %o
+
+%s
+
+%s
+ ReferenceError: useContext is not defined
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633280200:130:18)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633280200:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) The above error occurred in the <Header> component. React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary. @ http://127.0.0.1:5173/@vite/client:509
+[ 1690612ms] [ERROR] [ErrorBoundary] ReferenceError: useContext is not defined
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633280200:130:18)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633280200:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) 
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633280200:37:34)
+    at div (<anonymous>)
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:4575:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:6927:26)
+    at App (<anonymous>)
+    at AuthProvider (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633280200:12:32)
+    at QueryClientProvider (http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e8b98fe2:2517:30)
+    at _HelmetProvider (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=e8b98fe2:491:3)
+    at ErrorBoundary (http://127.0.0.1:5173/src/components/ErrorBoundary.tsx:8:3) @ http://127.0.0.1:5173/@vite/client:509
+[ 1704300ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:14337
+[ 1704340ms] [ERROR] %o
+
+%s
+
+%s
+ ReferenceError: useContext is not defined
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633293930:134:18)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633293930:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) The above error occurred in the <Header> component. React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary. @ http://127.0.0.1:5173/@vite/client:509
+[ 1704340ms] [ERROR] [ErrorBoundary] ReferenceError: useContext is not defined
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633293930:134:18)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633293930:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) 
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633293930:37:34)
+    at div (<anonymous>)
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:4575:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:6927:26)
+    at App (<anonymous>)
+    at AuthProvider (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633293930:12:32)
+    at QueryClientProvider (http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e8b98fe2:2517:30)
+    at _HelmetProvider (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=e8b98fe2:491:3)
+    at ErrorBoundary (http://127.0.0.1:5173/src/components/ErrorBoundary.tsx:8:3) @ http://127.0.0.1:5173/@vite/client:509
+[ 1713503ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:14337
+[ 1713541ms] [ERROR] %o
+
+%s
+
+%s
+ ReferenceError: useContext is not defined
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633303144:134:18)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633303144:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) The above error occurred in the <Header> component. React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary. @ http://127.0.0.1:5173/@vite/client:509
+[ 1713542ms] [ERROR] [ErrorBoundary] ReferenceError: useContext is not defined
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633303144:134:18)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633303144:39:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=e8b98fe2:8309:6) 
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776633303144:37:34)
+    at div (<anonymous>)
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:4575:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=e8b98fe2:6927:26)
+    at App (<anonymous>)
+    at AuthProvider (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776633303144:12:32)
+    at QueryClientProvider (http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e8b98fe2:2517:30)
+    at _HelmetProvider (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=e8b98fe2:491:3)
+    at ErrorBoundary (http://127.0.0.1:5173/src/components/ErrorBoundary.tsx:8:3) @ http://127.0.0.1:5173/@vite/client:509
+[ 1725027ms] The requested module '/src/contexts/AuthContext.tsx?t=1776633314625' does not provide an export named 'useAuth'

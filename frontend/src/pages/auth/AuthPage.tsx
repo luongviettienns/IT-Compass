@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'motion/react';
-import { KeyRound, LogIn, Mail, UserRound, BriefcaseBusiness, UserRoundPlus, Code2, Database, Shield, Palette } from 'lucide-react';
+import { KeyRound, LogIn, Mail, UserRound, UserRoundPlus, Code2, Database, Shield, Palette } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '../../components/ui/Button';
@@ -12,10 +12,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import { getErrorMessage } from '../../lib/appError';
 import type { AuthPageState } from '../../lib/authNavigation';
 import { isQuizRedirect, resolvePostAuthRoute, sanitizeRedirectTo } from '../../lib/authNavigation';
-import { cn } from '../../lib/utils';
 import { CompassLogo } from '../../components/shared/CompassLogo';
 
-type RegisterRole = 'STUDENT' | 'MENTOR';
 type AuthMode = 'login' | 'register';
 
 export default function AuthPage() {
@@ -43,7 +41,6 @@ export default function AuthPage() {
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [role, setRole] = useState<RegisterRole>('STUDENT');
 
     const [formError, setFormError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -122,7 +119,7 @@ export default function AuthPage() {
 
         setIsSubmitting(true);
         try {
-            const authenticatedUser = await register(fullName.trim(), registerEmail.trim(), registerPassword, role);
+            const authenticatedUser = await register(fullName.trim(), registerEmail.trim(), registerPassword);
             const destination = resolvePostAuthRoute(authenticatedUser.role, redirectTo);
 
             toast.success(
@@ -274,29 +271,6 @@ export default function AuthPage() {
                                                 void handleRegisterSubmit();
                                             }}
                                         >
-                                            <div className="grid grid-cols-2 gap-2 mb-2 p-1 bg-secondary rounded-2xl">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setRole('STUDENT')}
-                                                    className={cn(
-                                                        'rounded-xl py-2.5 text-sm font-bold flex items-center justify-center gap-1.5 transition-all',
-                                                        role === 'STUDENT' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
-                                                    )}
-                                                >
-                                                    <UserRound size={16} /> Học sinh
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setRole('MENTOR')}
-                                                    className={cn(
-                                                        'rounded-xl py-2.5 text-sm font-bold flex items-center justify-center gap-1.5 transition-all',
-                                                        role === 'MENTOR' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
-                                                    )}
-                                                >
-                                                    <BriefcaseBusiness size={16} /> Mentor
-                                                </button>
-                                            </div>
-
                                             <Input
                                                 label="Họ và tên"
                                                 placeholder="Nguyễn Văn A"

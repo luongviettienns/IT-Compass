@@ -47,6 +47,11 @@
     border-color: hsl(var(--border));
   }
 
+  html,
+  body {
+    position: relative;
+  }
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));

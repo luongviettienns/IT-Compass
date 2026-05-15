@@ -42,6 +42,11 @@ const formatDateTime = (value: string) =>
         minute: '2-digit',
     });
 
+const MIN_COMMENT_LENGTH = 2;
+const MAX_COMMENT_LENGTH = 2000;
+const MIN_GUEST_NAME_LENGTH = 2;
+const MAX_GUEST_NAME_LENGTH = 120;
+
 function PostSkeleton() {
     return (
         <div className="space-y-8">
@@ -100,6 +105,7 @@ export default function BlogDetailPage() {
             await queryClient.invalidateQueries({ queryKey: blogQueryKeys.comments(slug) });
             toast.success('Bình luận của bạn đã được gửi.');
         },
+        onError: (error) => toast.error(getErrorMessage(error, 'Không thể gửi bình luận lúc này.')),
     });
 
     const handleSubmitComment = (event: { preventDefault: () => void }) => {
@@ -113,8 +119,28 @@ export default function BlogDetailPage() {
             return;
         }
 
+        if (normalizedContent.length < MIN_COMMENT_LENGTH) {
+            toast.error('Nội dung bình luận cần ít nhất 2 ký tự.');
+            return;
+        }
+
+        if (normalizedContent.length > MAX_COMMENT_LENGTH) {
+            toast.error('Nội dung bình luận không được vượt quá 2000 ký tự.');
+            return;
+        }
+
         if (!isAuthenticated && !normalizedGuestName) {
             toast.error('Vui lòng nhập tên hiển thị trước khi gửi bình luận.');
+            return;
+        }
+
+        if (!isAuthenticated && normalizedGuestName.length < MIN_GUEST_NAME_LENGTH) {
+            toast.error('Tên hiển thị cần ít nhất 2 ký tự.');
+            return;
+        }
+
+        if (!isAuthenticated && normalizedGuestName.length > MAX_GUEST_NAME_LENGTH) {
+            toast.error('Tên hiển thị không được vượt quá 120 ký tự.');
             return;
         }
 

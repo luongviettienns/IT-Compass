@@ -51,7 +51,7 @@ export const isQuizRedirect = (redirectTo: string | null | undefined) => redirec
 
 // Mentor đi thẳng dashboard sau auth, còn student/admin quay về shell mặc định rồi điều hướng tiếp theo context trang.
 export const getDefaultAuthRoute = (role: 'STUDENT' | 'MENTOR' | 'ADMIN') => (
-  role === 'MENTOR' ? '/mentor/dashboard' : '/'
+  role === 'MENTOR' ? '/mentor' : '/'
 );
 
 export const resolvePostAuthRoute = (

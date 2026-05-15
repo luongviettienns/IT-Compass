@@ -1,0 +1,17 @@
+---
+description: Use Vietnamese with diacritics for all user-facing UI copy
+globs: frontend/src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# UI copy in tiếng Việt có dấu
+
+- Mọi chuỗi hiển thị trực tiếp cho người dùng trong UI/UX phải dùng tiếng Việt có dấu.
+- Không dùng tiếng Việt không dấu cho tiêu đề, nút bấm, placeholder, trạng thái, toast, lỗi hiển thị, empty state, helper text.
+- Khi backend message được đưa thẳng lên UI, hãy ưu tiên chuẩn hóa message đó sang tiếng Việt có dấu trước khi hiển thị.
+- Giữ thuật ngữ kỹ thuật quen thuộc nếu cần, nhưng phần diễn đạt chính vẫn phải tự nhiên, rõ nghĩa, có dấu.
+
+Ví dụ:
+- `Đăng nhập thất bại` thay vì `Dang nhap that bai`
+- `Học viên` thay vì `Hoc vien`
+- `Không tải được bản xem trước` thay vì `Khong tai duoc preview`

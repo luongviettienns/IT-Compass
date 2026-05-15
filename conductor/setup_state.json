@@ -1,0 +1,56 @@
+{
+  "status": "complete",
+  "project_type": "brownfield",
+  "current_section": "code_styleguides",
+  "current_question": 1,
+  "completed_sections": [
+    "product",
+    "product_guidelines",
+    "tech_stack",
+    "workflow",
+    "code_styleguides"
+  ],
+  "answers": {
+    "project_name": "ITCompass",
+    "project_description": "ITCompass là nền tảng định hướng nghề nghiệp IT giúp người dùng làm trắc nghiệm, nhận gợi ý ngành/nghề và kết nối mentor, blog, cùng công cụ quản lý lộ trình học tập.",
+    "problem_statement": "Dự án giải quyết cả việc học sinh/sinh viên không biết chọn ngành IT nào phù hợp với bản thân và việc thiếu một công cụ đáng tin để định hướng lộ trình học và nghề nghiệp IT.",
+    "target_users": "Học sinh, sinh viên đang tìm hướng đi ngành IT",
+    "key_goals": [
+      "Giúp người dùng xác định hướng IT phù hợp bằng trắc nghiệm khoa học",
+      "Cung cấp gợi ý ngành học, nghề nghiệp và lộ trình phát triển rõ ràng",
+      "Kết nối người dùng với mentor, blog và tài nguyên để họ có thể hành động ngay"
+    ],
+    "voice_tone": "Professional, friendly, encouraging, direct",
+    "design_principles": [
+      "Clarity over complexity",
+      "Science-backed guidance",
+      "Mobile-first responsive experience",
+      "Trustworthy and polished UI",
+      "Accessible readable content"
+    ],
+    "primary_languages": ["TypeScript"],
+    "frontend_framework": "React",
+    "backend_framework": "Express",
+    "database": "MySQL",
+    "infrastructure": "Not decided yet; local dev is Vite frontend on 5173 and Express backend on 5000, with optional Redis for production rate limiting",
+    "style_guides_languages": ["TypeScript/JavaScript"],
+    "existing_conventions": "Yes, use existing configs",
+    "tdd_strictness": "Strict",
+    "commit_strategy": "Conventional Commits",
+    "code_review_requirements": "Required for non-trivial changes",
+    "verification_checkpoint": "After each phase completion"
+  },
+  "files_created": [
+    "conductor/index.md",
+    "conductor/product.md",
+    "conductor/product-guidelines.md",
+    "conductor/tech-stack.md",
+    "conductor/workflow.md",
+    "conductor/tracks.md",
+    "conductor/code_styleguides/general.md",
+    "conductor/code_styleguides/typescript.md",
+    "conductor/code_styleguides/javascript.md"
+  ],
+  "started_at": "2026-05-04T09:30:07.5729568+07:00",
+  "last_updated": "2026-05-04T10:09:23.3518789+07:00"
+}

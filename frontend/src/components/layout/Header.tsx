@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, LogOut, User, LayoutDashboard } from 'lucide-react';
+import { ChevronDown, LogOut, User, LayoutDashboard, CalendarClock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../../lib/utils';
 import { Avatar } from '../ui/Avatar';
 import { buttonVariants } from '../ui/Button';
 import { CompassLogo } from '../shared/CompassLogo';
+import { NotificationBell } from '../shared/NotificationBell';
 import { useAuth } from '../../contexts/AuthContext';
 
 const NAV_ITEMS = [
@@ -83,7 +84,8 @@ export function Header() {
                 </nav>
 
                 {/* Right side - Hidden on Mobile */}
-                <div className="hidden md:flex items-center gap-2">
+                <div className="hidden md:flex items-center gap-3">
+                    {isAuthenticated && <NotificationBell />}
                     {isAuthenticated && user ? (
                         <div className="relative">
                             <button
@@ -119,6 +121,15 @@ export function Header() {
                                             >
                                                 <User size={16} /> Hồ sơ cá nhân
                                             </Link>
+                                            {user.role === 'STUDENT' && (
+                                                <Link
+                                                    to="/bookings"
+                                                    className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
+                                                    onClick={() => setUserMenuOpen(false)}
+                                                >
+                                                    <CalendarClock size={16} /> Lịch tư vấn
+                                                </Link>
+                                            )}
                                             {user.role === 'ADMIN' && (
                                                 <Link
                                                     to="/admin"
@@ -130,11 +141,11 @@ export function Header() {
                                             )}
                                             {user.role === 'MENTOR' && (
                                                 <Link
-                                                    to="/mentor/dashboard"
+                                                    to="/mentor"
                                                     className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
                                                     onClick={() => setUserMenuOpen(false)}
                                                 >
-                                                    <LayoutDashboard size={16} /> Mentor Dashboard
+                                                    <LayoutDashboard size={16} /> Mentor
                                                 </Link>
                                             )}
                                             <div className="border-t" />

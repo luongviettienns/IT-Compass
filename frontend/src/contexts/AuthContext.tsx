@@ -36,7 +36,7 @@ type AuthState = {
 
 type AuthContextValue = AuthState & {
     login: (email: string, password: string) => Promise<AuthUser>;
-    register: (fullName: string, email: string, password: string, role?: 'STUDENT' | 'MENTOR') => Promise<AuthUser>;
+    register: (fullName: string, email: string, password: string) => Promise<AuthUser>;
     logout: () => Promise<void>;
     refreshUser: () => Promise<void>;
     hasRole: (...roles: Role[]) => boolean;
@@ -110,10 +110,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, [setUser]);
 
     const register = useCallback(
-        async (fullName: string, email: string, password: string, role: 'STUDENT' | 'MENTOR' = 'STUDENT') => {
+        async (fullName: string, email: string, password: string) => {
             setState((s) => ({ ...s, isLoading: true }));
             try {
-                const result = await authApi.register({ fullName, email, password, role });
+                const result = await authApi.register({ fullName, email, password });
                 authTokenStore.set(result.accessToken);
                 setUser(result.user);
                 return result.user;

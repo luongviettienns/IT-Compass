@@ -1,0 +1,374 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: IT Compass
+        - navigation [ref=e12]:
+          - link "Trang chủ" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - text: Trang chủ
+          - link "Trắc nghiệm" [ref=e15] [cursor=pointer]:
+            - /url: /test
+            - text: Trắc nghiệm
+          - link "Lĩnh vực IT" [ref=e17] [cursor=pointer]:
+            - /url: /majors
+            - text: Lĩnh vực IT
+          - link "Cố vấn" [ref=e19] [cursor=pointer]:
+            - /url: /mentors
+            - text: Cố vấn
+          - link "Blog" [ref=e21] [cursor=pointer]:
+            - /url: /blog
+            - text: Blog
+          - link "Giới thiệu" [ref=e23] [cursor=pointer]:
+            - /url: /about
+            - text: Giới thiệu
+        - button "QT vien" [ref=e110] [cursor=pointer]:
+          - generic [ref=e111]: QT
+          - generic [ref=e113]:
+            - generic [ref=e114]: vien
+            - img [ref=e115]
+    - generic [ref=e118]:
+      - generic [ref=e120]:
+        - img [ref=e122]
+        - generic [ref=e124]:
+          - heading "Bảng Quản Trị" [level=1] [ref=e125]
+          - paragraph [ref=e126]: Quản trị hệ thống IT Compass
+      - generic [ref=e127]:
+        - complementary [ref=e128]:
+          - generic [ref=e129]:
+            - button "Tổng quan" [ref=e130] [cursor=pointer]:
+              - generic [ref=e131]:
+                - img [ref=e132]
+                - text: Tổng quan
+            - button "Bài viết" [ref=e137] [cursor=pointer]:
+              - generic [ref=e138]:
+                - img [ref=e139]
+                - text: Bài viết
+            - button "Bình luận" [ref=e142] [cursor=pointer]:
+              - generic [ref=e143]:
+                - img [ref=e144]
+                - text: Bình luận
+            - button "Người dùng" [ref=e146] [cursor=pointer]:
+              - generic [ref=e147]:
+                - img [ref=e148]
+                - text: Người dùng
+            - button "Nhật ký" [ref=e153] [cursor=pointer]:
+              - generic [ref=e154]:
+                - img [ref=e155]
+                - text: Nhật ký
+        - main [ref=e158]:
+          - generic [ref=e683]:
+            - generic [ref=e684]:
+              - generic [ref=e685]:
+                - paragraph [ref=e686]: "5"
+                - paragraph [ref=e687]: Tổng
+              - generic [ref=e688]:
+                - paragraph [ref=e689]: "5"
+                - paragraph [ref=e690]: Hoạt động
+              - generic [ref=e691]:
+                - paragraph [ref=e692]: "0"
+                - paragraph [ref=e693]: Tạm khóa
+              - generic [ref=e694]:
+                - paragraph [ref=e695]: "0"
+                - paragraph [ref=e696]: Đã khóa
+              - generic [ref=e697]:
+                - paragraph [ref=e698]: "2"
+                - paragraph [ref=e699]: Xác thực
+              - generic [ref=e700]:
+                - paragraph [ref=e701]: "5"
+                - paragraph [ref=e702]: Có hồ sơ
+            - generic [ref=e703]:
+              - generic [ref=e704]:
+                - button "Tất cả" [ref=e705] [cursor=pointer]
+                - button "Hoạt động" [ref=e706] [cursor=pointer]
+                - button "Tạm khóa" [ref=e707] [cursor=pointer]
+                - button "Đã khóa" [ref=e708] [cursor=pointer]
+                - button "Tất cả" [ref=e710] [cursor=pointer]
+                - button "Học viên" [ref=e711] [cursor=pointer]
+                - button "Mentor" [ref=e712] [cursor=pointer]
+                - button "Admin" [ref=e713] [cursor=pointer]
+              - generic [ref=e714]:
+                - generic [ref=e715]:
+                  - img [ref=e716]
+                  - textbox "Tìm theo tên, email, SĐT..." [ref=e719]
+                - combobox [ref=e720]:
+                  - option "Mới nhất" [selected]
+                  - option "Cũ nhất"
+                  - option "Tên A→Z"
+                  - option "Tên Z→A"
+                  - option "Email A→Z"
+                - button "Làm mới" [ref=e721] [cursor=pointer]:
+                  - img [ref=e722]
+            - generic [ref=e727]:
+              - generic [ref=e728]:
+                - button [ref=e729] [cursor=pointer]
+                - generic [ref=e731]: Chọn tất cả (4)
+              - generic [ref=e733] [cursor=pointer]:
+                - button [ref=e734]
+                - generic [ref=e737]: QT
+                - generic [ref=e738]:
+                  - generic [ref=e739]:
+                    - generic [ref=e740]:
+                      - img [ref=e741]
+                      - text: Học viên
+                    - generic [ref=e744]:
+                      - img [ref=e745]
+                      - text: Hoạt động
+                    - img [ref=e749]
+                    - img [ref=e755]
+                  - paragraph [ref=e759]: Quiz Save Test
+                  - paragraph [ref=e760]:
+                    - text: quiz-save-test-20260419-0036@example.com · 19/4/2026
+                    - generic [ref=e761]: · 6 sessions
+                - button "Tạm khóa" [ref=e763]:
+                  - img [ref=e764]
+              - generic [ref=e768] [cursor=pointer]:
+                - button [ref=e769]
+                - generic [ref=e772]: QU
+                - generic [ref=e773]:
+                  - generic [ref=e774]:
+                    - generic [ref=e775]:
+                      - img [ref=e776]
+                      - text: Học viên
+                    - generic [ref=e779]:
+                      - img [ref=e780]
+                      - text: Hoạt động
+                    - img [ref=e784]
+                    - img [ref=e790]
+                  - paragraph [ref=e794]: Quiz Verify User
+                  - paragraph [ref=e795]:
+                    - text: quiz.verify+1776530812929@example.com · 18/4/2026
+                    - generic [ref=e796]: · 12 sessions
+                - button "Tạm khóa" [ref=e798]:
+                  - img [ref=e799]
+              - generic [ref=e803] [cursor=pointer]:
+                - button [ref=e804]
+                - generic [ref=e807]: VU
+                - generic [ref=e808]:
+                  - generic [ref=e809]:
+                    - generic [ref=e810]:
+                      - img [ref=e811]
+                      - text: Mentor
+                    - generic [ref=e815]:
+                      - img [ref=e816]
+                      - text: Hoạt động
+                    - img [ref=e820]
+                    - img [ref=e824]
+                  - paragraph [ref=e828]: Verify Mentor Updated
+                  - paragraph [ref=e829]: verify.mentor.1776503002864@example.com · 18/4/2026
+                - button "Tạm khóa" [ref=e831]:
+                  - img [ref=e832]
+              - generic [ref=e836] [cursor=pointer]:
+                - button [ref=e837]
+                - generic [ref=e840]: VS
+                - generic [ref=e841]:
+                  - generic [ref=e842]:
+                    - generic [ref=e843]:
+                      - img [ref=e844]
+                      - text: Học viên
+                    - generic [ref=e847]:
+                      - img [ref=e848]
+                      - text: Hoạt động
+                    - img [ref=e852]
+                    - img [ref=e858]
+                  - paragraph [ref=e862]: Verify Student
+                  - paragraph [ref=e863]: verify.student.1776502877115@example.com · 18/4/2026
+                - button "Tạm khóa" [ref=e865]:
+                  - img [ref=e866]
+              - generic [ref=e870] [cursor=pointer]:
+                - generic [ref=e873]: QV
+                - generic [ref=e874]:
+                  - generic [ref=e875]:
+                    - generic [ref=e876]:
+                      - img [ref=e877]
+                      - text: Admin
+                    - generic [ref=e879]:
+                      - img [ref=e880]
+                      - text: Hoạt động
+                    - img [ref=e884]
+                    - img [ref=e888]
+                  - paragraph [ref=e892]: Quan tri vien
+                  - paragraph [ref=e893]:
+                    - text: admin@example.com · 16/4/2026
+                    - generic [ref=e894]: · 28 sessions
+            - generic [ref=e896]:
+              - generic [ref=e897]:
+                - generic [ref=e917]:
+                  - generic [ref=e919]: QV
+                  - generic [ref=e920]:
+                    - heading "Quan tri vien" [level=2] [ref=e921]
+                    - paragraph [ref=e922]: admin@example.com
+                - button [ref=e898] [cursor=pointer]:
+                  - img [ref=e899]
+              - generic [ref=e902]:
+                - button "Thông tin" [ref=e903] [cursor=pointer]:
+                  - img [ref=e904]
+                  - text: Thông tin
+                - button "Hành động" [ref=e907] [cursor=pointer]:
+                  - img [ref=e908]
+                  - text: Hành động
+                - button "Nhật ký" [ref=e910] [cursor=pointer]:
+                  - img [ref=e911]
+                  - text: Nhật ký
+              - generic [ref=e915]:
+                - generic [ref=e923]:
+                  - generic [ref=e924]:
+                    - img [ref=e925]
+                    - text: Admin
+                  - generic [ref=e927]:
+                    - img [ref=e928]
+                    - text: Hoạt động
+                  - generic [ref=e931]:
+                    - img [ref=e932]
+                    - text: Email xác thực
+                - generic [ref=e936]:
+                  - heading "Tài khoản" [level=3] [ref=e937]:
+                    - img [ref=e938]
+                    - text: Tài khoản
+                  - generic [ref=e941]:
+                    - generic [ref=e942]:
+                      - paragraph [ref=e943]:
+                        - img [ref=e944]
+                        - text: Họ tên
+                      - paragraph [ref=e947]: Quan tri vien
+                    - generic [ref=e948]:
+                      - paragraph [ref=e949]:
+                        - img [ref=e950]
+                        - text: Email
+                      - paragraph [ref=e953]: admin@example.com
+                    - generic [ref=e954]:
+                      - paragraph [ref=e955]:
+                        - img [ref=e956]
+                        - text: Ngày tạo
+                      - paragraph [ref=e958]: 16/4/2026
+                    - generic [ref=e959]:
+                      - paragraph [ref=e960]:
+                        - img [ref=e961]
+                        - text: Cập nhật
+                      - paragraph [ref=e964]: 18/4/2026
+                    - generic [ref=e965]:
+                      - paragraph [ref=e966]:
+                        - img [ref=e967]
+                        - text: Sessions
+                      - paragraph [ref=e970]: "28"
+                    - generic [ref=e971]:
+                      - paragraph [ref=e972]:
+                        - img [ref=e973]
+                        - text: Đăng nhập gần nhất
+                      - paragraph [ref=e976]: 19/4/2026
+                - generic [ref=e977]:
+                  - heading "Hồ sơ" [level=3] [ref=e978]:
+                    - img [ref=e979]
+                    - text: Hồ sơ
+                  - generic [ref=e982]:
+                    - generic [ref=e983]:
+                      - paragraph [ref=e984]:
+                        - img [ref=e985]
+                        - text: Điện thoại
+                      - paragraph [ref=e987]: —
+                    - generic [ref=e988]:
+                      - paragraph [ref=e989]:
+                        - img [ref=e990]
+                        - text: Địa điểm
+                      - paragraph [ref=e993]: —
+                    - generic [ref=e994]:
+                      - paragraph [ref=e995]:
+                        - img [ref=e996]
+                        - text: Tỉnh/TP
+                      - paragraph [ref=e999]: —
+                    - generic [ref=e1000]:
+                      - paragraph [ref=e1001]:
+                        - img [ref=e1002]
+                        - text: Năm sinh
+                      - paragraph [ref=e1004]: —
+                    - generic [ref=e1005]:
+                      - paragraph [ref=e1006]:
+                        - img [ref=e1007]
+                        - text: Giới tính
+                      - paragraph [ref=e1010]: —
+                    - generic [ref=e1011]:
+                      - paragraph [ref=e1012]:
+                        - img [ref=e1013]
+                        - text: Chức danh
+                      - paragraph [ref=e1016]: —
+                    - generic [ref=e1017]:
+                      - paragraph [ref=e1018]:
+                        - img [ref=e1019]
+                        - text: Trường/Công ty
+                      - paragraph [ref=e1023]: —
+                    - generic [ref=e1024]:
+                      - paragraph [ref=e1025]:
+                        - img [ref=e1026]
+                        - text: Khoa/Phòng ban
+                      - paragraph [ref=e1030]: —
+    - contentinfo [ref=e33]:
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - img [ref=e41]
+            - generic [ref=e44]: IT Compass
+          - paragraph [ref=e45]: La bàn định vị sự nghiệp IT của bạn. Chúng tôi giúp thế hệ chuyên gia công nghệ Việt Nam tìm thấy đam mê và con đường phát triển phù hợp nhất.
+          - generic [ref=e46]:
+            - generic [ref=e47]:
+              - generic: Website
+              - link [ref=e48] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e49]
+            - generic [ref=e52]:
+              - generic: Email
+              - link [ref=e53] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e54]
+            - generic [ref=e57]:
+              - generic: Phone
+              - link [ref=e58] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e59]
+        - generic [ref=e62]:
+          - heading "Nền Tảng" [level=4] [ref=e63]
+          - list [ref=e64]:
+            - listitem [ref=e65]:
+              - link "Làm Bài Test" [ref=e66] [cursor=pointer]:
+                - /url: /test
+                - img [ref=e67]
+                - text: Làm Bài Test
+            - listitem [ref=e70]:
+              - link "Chuyên Ngành IT" [ref=e71] [cursor=pointer]:
+                - /url: /majors
+                - img [ref=e72]
+                - text: Chuyên Ngành IT
+            - listitem [ref=e75]:
+              - link "Blog" [ref=e76] [cursor=pointer]:
+                - /url: /blog
+                - img [ref=e77]
+                - text: Blog
+        - generic [ref=e80]:
+          - heading "Công Ty" [level=4] [ref=e81]
+          - list [ref=e82]:
+            - listitem [ref=e83]:
+              - link "Về Chúng Tôi" [ref=e84] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e85]
+                - text: Về Chúng Tôi
+            - listitem [ref=e88]:
+              - link "Điều Khoản Dịch Vụ" [ref=e89] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e90]
+                - text: Điều Khoản Dịch Vụ
+            - listitem [ref=e93]:
+              - link "Chính Sách Bảo Mật" [ref=e94] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e95]
+                - text: Chính Sách Bảo Mật
+            - listitem [ref=e98]:
+              - link "Liên Hệ" [ref=e99] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e100]
+                - text: Liên Hệ
+      - generic [ref=e106]:
+        - paragraph [ref=e107]: © 2026 IT Compass. Đã đăng ký bản quyền.
+        - paragraph [ref=e108]: Được xây dựng với ❤️ cho thế hệ IT Việt Nam
+  - region "Notifications alt+T"

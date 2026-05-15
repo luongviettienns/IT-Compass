@@ -111,7 +111,15 @@ import {
   toSessionExpiredError,
 } from './appError';
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const getDefaultApiBaseUrl = () => {
+  if (typeof window !== 'undefined' && window.location.hostname) {
+    return `http://${window.location.hostname}:5000/api`;
+  }
+
+  return 'http://localhost:5000/api';
+};
+
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || getDefaultApiBaseUrl();
 export const API_ORIGIN = API_BASE_URL.replace(/\/api$/, '');
 
 export const toApiAssetUrl = (path: string | null | undefined) => {
@@ -285,7 +293,7 @@ export const apiUploadRequest = async <T>(
 });
 
 export const authApi = {
-  register: (input: { fullName: string; email: string; password: string; role: 'STUDENT' | 'MENTOR' }) =>
+  register: (input: { fullName: string; email: string; password: string }) =>
     apiRequest<{ user: AuthUser; accessToken: string }>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(input),

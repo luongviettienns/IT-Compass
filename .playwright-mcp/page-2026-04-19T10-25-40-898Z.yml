@@ -1,0 +1,198 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "IT Compass" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e11]: IT Compass
+        - navigation [ref=e12]:
+          - link "Trang chủ" [ref=e13] [cursor=pointer]:
+            - /url: /
+            - text: Trang chủ
+          - link "Trắc nghiệm" [ref=e15] [cursor=pointer]:
+            - /url: /test
+            - text: Trắc nghiệm
+          - link "Lĩnh vực IT" [ref=e17] [cursor=pointer]:
+            - /url: /majors
+            - text: Lĩnh vực IT
+          - link "Cố vấn" [ref=e19] [cursor=pointer]:
+            - /url: /mentors
+            - text: Cố vấn
+          - link "Blog" [ref=e21] [cursor=pointer]:
+            - /url: /blog
+            - text: Blog
+          - link "Giới thiệu" [ref=e23] [cursor=pointer]:
+            - /url: /about
+            - text: Giới thiệu
+        - button "QT vien" [ref=e110] [cursor=pointer]:
+          - generic [ref=e111]: QT
+          - generic [ref=e113]:
+            - generic [ref=e114]: vien
+            - img [ref=e115]
+    - generic [ref=e118]:
+      - generic [ref=e120]:
+        - img [ref=e122]
+        - generic [ref=e124]:
+          - heading "Bảng Quản Trị" [level=1] [ref=e125]
+          - paragraph [ref=e126]: Quản trị hệ thống IT Compass
+      - generic [ref=e127]:
+        - complementary [ref=e128]:
+          - generic [ref=e129]:
+            - button "Tổng quan" [ref=e130] [cursor=pointer]:
+              - generic [ref=e131]:
+                - img [ref=e132]
+                - text: Tổng quan
+            - button "Bài viết" [ref=e137] [cursor=pointer]:
+              - generic [ref=e138]:
+                - img [ref=e139]
+                - text: Bài viết
+            - button "Bình luận" [ref=e142] [cursor=pointer]:
+              - generic [ref=e143]:
+                - img [ref=e144]
+                - text: Bình luận
+            - button "Người dùng" [ref=e146] [cursor=pointer]:
+              - generic [ref=e147]:
+                - img [ref=e148]
+                - text: Người dùng
+            - button "Nhật ký" [ref=e153] [cursor=pointer]:
+              - generic [ref=e154]:
+                - img [ref=e155]
+                - text: Nhật ký
+        - main [ref=e158]:
+          - generic [ref=e1352]:
+            - generic [ref=e1353]:
+              - generic [ref=e1354]:
+                - button "Tất cả(2)" [ref=e1355] [cursor=pointer]:
+                  - text: Tất cả
+                  - generic [ref=e1356]: (2)
+                - button "Xuất bản" [ref=e1357] [cursor=pointer]
+                - button "Nháp" [ref=e1358] [cursor=pointer]
+                - button "Lên lịch" [ref=e1359] [cursor=pointer]
+                - button "Đã xóa" [ref=e1360] [cursor=pointer]
+              - generic [ref=e1361]:
+                - generic [ref=e1362]:
+                  - img [ref=e1363]
+                  - textbox "Tìm tiêu đề bài viết..." [ref=e1366]
+                - combobox [ref=e1367]:
+                  - option "Tạo mới nhất" [selected]
+                  - option "Tạo cũ nhất"
+                  - option "Cập nhật gần nhất"
+                  - option "Xuất bản gần nhất"
+                  - option "Tiêu đề A→Z"
+                  - option "Tiêu đề Z→A"
+                - button "Làm mới" [ref=e1368] [cursor=pointer]:
+                  - img [ref=e1369]
+                - button "Tạo mới" [ref=e1374] [cursor=pointer]:
+                  - img [ref=e1375]
+                  - text: Tạo mới
+            - generic [ref=e1376]:
+              - generic [ref=e1377]:
+                - button [ref=e1378] [cursor=pointer]
+                - generic [ref=e1380]: Chọn tất cả (2)
+              - generic [ref=e1443]:
+                - button [ref=e1444] [cursor=pointer]
+                - img [ref=e1448]
+                - generic [ref=e1451]:
+                  - generic [ref=e1453]:
+                    - img [ref=e1454]
+                    - text: Xuất bản
+                  - paragraph [ref=e1457]: Bài viết test RHF Zod hợp lệ đã cập nhật
+                  - paragraph [ref=e1458]: Quan tri vien · 19/4/2026
+                - generic [ref=e1459]:
+                  - button "Sửa" [ref=e1460] [cursor=pointer]:
+                    - img [ref=e1461]
+                  - button "Chuyển về nháp" [ref=e1464] [cursor=pointer]:
+                    - img [ref=e1465]
+                  - button "Xóa mềm" [ref=e1470] [cursor=pointer]:
+                    - img [ref=e1471]
+              - generic [ref=e1474]:
+                - button [ref=e1475] [cursor=pointer]
+                - img [ref=e1479]
+                - generic [ref=e1482]:
+                  - generic [ref=e1484]:
+                    - img [ref=e1485]
+                    - text: Xuất bản
+                  - paragraph [ref=e1488]: Bai viet test api moi
+                  - paragraph [ref=e1489]: Quan tri vien · 16/4/2026
+                - generic [ref=e1490]:
+                  - button "Sửa" [ref=e1491] [cursor=pointer]:
+                    - img [ref=e1492]
+                  - button "Chuyển về nháp" [ref=e1495] [cursor=pointer]:
+                    - img [ref=e1496]
+                  - button "Xóa mềm" [ref=e1501] [cursor=pointer]:
+                    - img [ref=e1502]
+    - contentinfo [ref=e33]:
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - img [ref=e41]
+            - generic [ref=e44]: IT Compass
+          - paragraph [ref=e45]: La bàn định vị sự nghiệp IT của bạn. Chúng tôi giúp thế hệ chuyên gia công nghệ Việt Nam tìm thấy đam mê và con đường phát triển phù hợp nhất.
+          - generic [ref=e46]:
+            - generic [ref=e47]:
+              - generic: Website
+              - link [ref=e48] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e49]
+            - generic [ref=e52]:
+              - generic: Email
+              - link [ref=e53] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e54]
+            - generic [ref=e57]:
+              - generic: Phone
+              - link [ref=e58] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e59]
+        - generic [ref=e62]:
+          - heading "Nền Tảng" [level=4] [ref=e63]
+          - list [ref=e64]:
+            - listitem [ref=e65]:
+              - link "Làm Bài Test" [ref=e66] [cursor=pointer]:
+                - /url: /test
+                - img [ref=e67]
+                - text: Làm Bài Test
+            - listitem [ref=e70]:
+              - link "Chuyên Ngành IT" [ref=e71] [cursor=pointer]:
+                - /url: /majors
+                - img [ref=e72]
+                - text: Chuyên Ngành IT
+            - listitem [ref=e75]:
+              - link "Blog" [ref=e76] [cursor=pointer]:
+                - /url: /blog
+                - img [ref=e77]
+                - text: Blog
+        - generic [ref=e80]:
+          - heading "Công Ty" [level=4] [ref=e81]
+          - list [ref=e82]:
+            - listitem [ref=e83]:
+              - link "Về Chúng Tôi" [ref=e84] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e85]
+                - text: Về Chúng Tôi
+            - listitem [ref=e88]:
+              - link "Điều Khoản Dịch Vụ" [ref=e89] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e90]
+                - text: Điều Khoản Dịch Vụ
+            - listitem [ref=e93]:
+              - link "Chính Sách Bảo Mật" [ref=e94] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e95]
+                - text: Chính Sách Bảo Mật
+            - listitem [ref=e98]:
+              - link "Liên Hệ" [ref=e99] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e100]
+                - text: Liên Hệ
+      - generic [ref=e106]:
+        - paragraph [ref=e107]: © 2026 IT Compass. Đã đăng ký bản quyền.
+        - paragraph [ref=e108]: Được xây dựng với ❤️ cho thế hệ IT Việt Nam
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e1505]:
+        - button "Close toast" [ref=e1506] [cursor=pointer]:
+          - img [ref=e1507]
+        - img [ref=e1511]
+        - generic [ref=e1514]: Đã xuất bản!

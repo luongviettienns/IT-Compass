@@ -1,0 +1,244 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - region "Notifications alt+T"
+    - generic [ref=e55]:
+      - complementary [ref=e56]:
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - img [ref=e60]
+            - generic [ref=e63]:
+              - generic [ref=e64]: IT Compass
+              - generic [ref=e65]: Administrator
+          - button [ref=e66] [cursor=pointer]:
+            - img [ref=e67]
+        - navigation [ref=e69]:
+          - link "Tổng quan" [ref=e70] [cursor=pointer]:
+            - /url: /admin
+            - img [ref=e71]
+            - generic [ref=e76]: Tổng quan
+          - link "Người dùng" [ref=e77] [cursor=pointer]:
+            - /url: /admin/users
+            - img [ref=e78]
+            - generic [ref=e83]: Người dùng
+          - link "Mentor" [ref=e84] [cursor=pointer]:
+            - /url: /admin/mentors
+            - img [ref=e85]
+            - generic [ref=e89]: Mentor
+          - link "Nội dung (CMS)" [ref=e90] [cursor=pointer]:
+            - /url: /admin/blogs
+            - img [ref=e91]
+            - generic [ref=e94]: Nội dung (CMS)
+          - link "Assessment" [active] [ref=e95] [cursor=pointer]:
+            - /url: /admin/assessments
+            - img [ref=e96]
+            - generic [ref=e99]: Assessment
+          - link "Nhật ký hệ thống" [ref=e100] [cursor=pointer]:
+            - /url: /admin/audit-logs
+            - img [ref=e101]
+            - generic [ref=e103]: Nhật ký hệ thống
+          - link "Cài đặt" [ref=e104] [cursor=pointer]:
+            - /url: /admin/settings
+            - img [ref=e105]
+            - generic [ref=e108]: Cài đặt
+        - generic [ref=e109]:
+          - generic [ref=e110]:
+            - generic [ref=e111]: L
+            - generic [ref=e112]:
+              - generic [ref=e113]: Lương Việt Tiến
+              - generic [ref=e114]: admin@example.com
+          - button "Đăng xuất" [ref=e115] [cursor=pointer]:
+            - img [ref=e116]
+            - generic [ref=e119]: Đăng xuất
+      - generic [ref=e120]:
+        - banner [ref=e121]:
+          - generic [ref=e123]:
+            - img [ref=e124]
+            - textbox "Tìm kiếm nhanh..." [ref=e127]
+          - generic [ref=e128]:
+            - button [ref=e129] [cursor=pointer]:
+              - img [ref=e130]
+            - button [ref=e133] [cursor=pointer]:
+              - img [ref=e134]
+        - main [ref=e136]:
+          - generic [ref=e489]:
+            - generic [ref=e491]:
+              - heading "Quản lý Người dùng" [level=1] [ref=e492]
+              - paragraph [ref=e493]: "Danh sách tài khoản và phân quyền trên hệ thống. Tổng cộng: 12 người dùng."
+            - generic [ref=e494]:
+              - generic [ref=e495]:
+                - img [ref=e496]
+                - textbox "Tìm kiếm theo tên hoặc email..." [ref=e499]
+              - generic [ref=e500]:
+                - button "Tất cả" [ref=e501] [cursor=pointer]
+                - button "Active" [ref=e502] [cursor=pointer]
+                - button "Suspended" [ref=e503] [cursor=pointer]
+                - button "Blocked" [ref=e504] [cursor=pointer]
+            - generic [ref=e505]:
+              - table [ref=e506]:
+                - rowgroup [ref=e507]:
+                  - row "Tên & Email Vai trò Trạng thái Ngày tạo Thao tác" [ref=e508]:
+                    - columnheader [ref=e509]:
+                      - checkbox [ref=e510]
+                    - columnheader "Tên & Email" [ref=e511]
+                    - columnheader "Vai trò" [ref=e512]
+                    - columnheader "Trạng thái" [ref=e513]
+                    - columnheader "Ngày tạo" [ref=e514]
+                    - columnheader "Thao tác" [ref=e515]
+                - rowgroup [ref=e516]:
+                  - row "Claude Profile Test Đã cấu hình claude.profile.1776795272338@example.com STUDENT ACTIVE 22/4/2026 Khóa" [ref=e517]:
+                    - cell [ref=e518]:
+                      - checkbox [ref=e519]
+                    - cell "Claude Profile Test Đã cấu hình claude.profile.1776795272338@example.com" [ref=e520]:
+                      - generic [ref=e521]:
+                        - generic [ref=e522]: Claude Profile Test Đã cấu hình
+                        - generic [ref=e523]: claude.profile.1776795272338@example.com
+                    - cell "STUDENT" [ref=e524]
+                    - cell "ACTIVE" [ref=e525]:
+                      - generic [ref=e526]: ACTIVE
+                    - cell "22/4/2026" [ref=e528]
+                    - cell "Khóa" [ref=e529]:
+                      - button "Chỉnh sửa chi tiết" [ref=e530] [cursor=pointer]:
+                        - img [ref=e531]
+                      - button "Khóa" [ref=e534] [cursor=pointer]
+                  - row "Claude Quiz Test Đã cấu hình claude.test.1776794172654@example.com STUDENT ACTIVE 22/4/2026 Khóa" [ref=e535]:
+                    - cell [ref=e536]:
+                      - checkbox [ref=e537]
+                    - cell "Claude Quiz Test Đã cấu hình claude.test.1776794172654@example.com" [ref=e538]:
+                      - generic [ref=e539]:
+                        - generic [ref=e540]: Claude Quiz Test Đã cấu hình
+                        - generic [ref=e541]: claude.test.1776794172654@example.com
+                    - cell "STUDENT" [ref=e542]
+                    - cell "ACTIVE" [ref=e543]:
+                      - generic [ref=e544]: ACTIVE
+                    - cell "22/4/2026" [ref=e546]
+                    - cell "Khóa" [ref=e547]:
+                      - button "Chỉnh sửa chi tiết" [ref=e548] [cursor=pointer]:
+                        - img [ref=e549]
+                      - button "Khóa" [ref=e552] [cursor=pointer]
+                  - row "Mentor Verify Local Đã cấu hình mentor1776686962464@example.com MENTOR BLOCKED 20/4/2026 Mở khóa" [ref=e553]:
+                    - cell [ref=e554]:
+                      - checkbox [ref=e555]
+                    - cell "Mentor Verify Local Đã cấu hình mentor1776686962464@example.com" [ref=e556]:
+                      - generic [ref=e557]:
+                        - generic [ref=e558]: Mentor Verify Local Đã cấu hình
+                        - generic [ref=e559]: mentor1776686962464@example.com
+                    - cell "MENTOR" [ref=e560]
+                    - cell "BLOCKED" [ref=e561]:
+                      - generic [ref=e562]: BLOCKED
+                    - cell "20/4/2026" [ref=e564]
+                    - cell "Mở khóa" [ref=e565]:
+                      - button "Chỉnh sửa chi tiết" [ref=e566] [cursor=pointer]:
+                        - img [ref=e567]
+                      - button "Mở khóa" [ref=e570] [cursor=pointer]
+                  - row "Test Session Expired Đã cấu hình tk+1776675509613@example.com STUDENT ACTIVE 20/4/2026 Khóa" [ref=e571]:
+                    - cell [ref=e572]:
+                      - checkbox [ref=e573]
+                    - cell "Test Session Expired Đã cấu hình tk+1776675509613@example.com" [ref=e574]:
+                      - generic [ref=e575]:
+                        - generic [ref=e576]: Test Session Expired Đã cấu hình
+                        - generic [ref=e577]: tk+1776675509613@example.com
+                    - cell "STUDENT" [ref=e578]
+                    - cell "ACTIVE" [ref=e579]:
+                      - generic [ref=e580]: ACTIVE
+                    - cell "20/4/2026" [ref=e582]
+                    - cell "Khóa" [ref=e583]:
+                      - button "Chỉnh sửa chi tiết" [ref=e584] [cursor=pointer]:
+                        - img [ref=e585]
+                      - button "Khóa" [ref=e588] [cursor=pointer]
+                  - row "Test Readability Đã cấu hình readability.test.20260419@example.com STUDENT ACTIVE 20/4/2026 Khóa" [ref=e589]:
+                    - cell [ref=e590]:
+                      - checkbox [ref=e591]
+                    - cell "Test Readability Đã cấu hình readability.test.20260419@example.com" [ref=e592]:
+                      - generic [ref=e593]:
+                        - generic [ref=e594]: Test Readability Đã cấu hình
+                        - generic [ref=e595]: readability.test.20260419@example.com
+                    - cell "STUDENT" [ref=e596]
+                    - cell "ACTIVE" [ref=e597]:
+                      - generic [ref=e598]: ACTIVE
+                    - cell "20/4/2026" [ref=e600]
+                    - cell "Khóa" [ref=e601]:
+                      - button "Chỉnh sửa chi tiết" [ref=e602] [cursor=pointer]:
+                        - img [ref=e603]
+                      - button "Khóa" [ref=e606] [cursor=pointer]
+                  - row "Claude Synced User Đã cấu hình claude.profile.test.20260419@example.com STUDENT ACTIVE 19/4/2026 Khóa" [ref=e607]:
+                    - cell [ref=e608]:
+                      - checkbox [ref=e609]
+                    - cell "Claude Synced User Đã cấu hình claude.profile.test.20260419@example.com" [ref=e610]:
+                      - generic [ref=e611]:
+                        - generic [ref=e612]: Claude Synced User Đã cấu hình
+                        - generic [ref=e613]: claude.profile.test.20260419@example.com
+                    - cell "STUDENT" [ref=e614]
+                    - cell "ACTIVE" [ref=e615]:
+                      - generic [ref=e616]: ACTIVE
+                    - cell "19/4/2026" [ref=e618]
+                    - cell "Khóa" [ref=e619]:
+                      - button "Chỉnh sửa chi tiết" [ref=e620] [cursor=pointer]:
+                        - img [ref=e621]
+                      - button "Khóa" [ref=e624] [cursor=pointer]
+                  - row "Auth RHF Test Đã cấu hình auth-rhf-20260419@example.com STUDENT ACTIVE 19/4/2026 Khóa" [ref=e625]:
+                    - cell [ref=e626]:
+                      - checkbox [ref=e627]
+                    - cell "Auth RHF Test Đã cấu hình auth-rhf-20260419@example.com" [ref=e628]:
+                      - generic [ref=e629]:
+                        - generic [ref=e630]: Auth RHF Test Đã cấu hình
+                        - generic [ref=e631]: auth-rhf-20260419@example.com
+                    - cell "STUDENT" [ref=e632]
+                    - cell "ACTIVE" [ref=e633]:
+                      - generic [ref=e634]: ACTIVE
+                    - cell "19/4/2026" [ref=e636]
+                    - cell "Khóa" [ref=e637]:
+                      - button "Chỉnh sửa chi tiết" [ref=e638] [cursor=pointer]:
+                        - img [ref=e639]
+                      - button "Khóa" [ref=e642] [cursor=pointer]
+                  - row "Quiz Save Test Đã cấu hình quiz-save-test-20260419-0036@example.com STUDENT ACTIVE 19/4/2026 Khóa" [ref=e643]:
+                    - cell [ref=e644]:
+                      - checkbox [ref=e645]
+                    - cell "Quiz Save Test Đã cấu hình quiz-save-test-20260419-0036@example.com" [ref=e646]:
+                      - generic [ref=e647]:
+                        - generic [ref=e648]: Quiz Save Test Đã cấu hình
+                        - generic [ref=e649]: quiz-save-test-20260419-0036@example.com
+                    - cell "STUDENT" [ref=e650]
+                    - cell "ACTIVE" [ref=e651]:
+                      - generic [ref=e652]: ACTIVE
+                    - cell "19/4/2026" [ref=e654]
+                    - cell "Khóa" [ref=e655]:
+                      - button "Chỉnh sửa chi tiết" [ref=e656] [cursor=pointer]:
+                        - img [ref=e657]
+                      - button "Khóa" [ref=e660] [cursor=pointer]
+                  - row "Quiz Verify User Đã cấu hình quiz.verify+1776530812929@example.com STUDENT ACTIVE 18/4/2026 Khóa" [ref=e661]:
+                    - cell [ref=e662]:
+                      - checkbox [ref=e663]
+                    - cell "Quiz Verify User Đã cấu hình quiz.verify+1776530812929@example.com" [ref=e664]:
+                      - generic [ref=e665]:
+                        - generic [ref=e666]: Quiz Verify User Đã cấu hình
+                        - generic [ref=e667]: quiz.verify+1776530812929@example.com
+                    - cell "STUDENT" [ref=e668]
+                    - cell "ACTIVE" [ref=e669]:
+                      - generic [ref=e670]: ACTIVE
+                    - cell "18/4/2026" [ref=e672]
+                    - cell "Khóa" [ref=e673]:
+                      - button "Chỉnh sửa chi tiết" [ref=e674] [cursor=pointer]:
+                        - img [ref=e675]
+                      - button "Khóa" [ref=e678] [cursor=pointer]
+                  - row "Verify Mentor Updated Đã cấu hình verify.mentor.1776503002864@example.com MENTOR ACTIVE 18/4/2026 Khóa" [ref=e679]:
+                    - cell [ref=e680]:
+                      - checkbox [ref=e681]
+                    - cell "Verify Mentor Updated Đã cấu hình verify.mentor.1776503002864@example.com" [ref=e682]:
+                      - generic [ref=e683]:
+                        - generic [ref=e684]: Verify Mentor Updated Đã cấu hình
+                        - generic [ref=e685]: verify.mentor.1776503002864@example.com
+                    - cell "MENTOR" [ref=e686]
+                    - cell "ACTIVE" [ref=e687]:
+                      - generic [ref=e688]: ACTIVE
+                    - cell "18/4/2026" [ref=e690]
+                    - cell "Khóa" [ref=e691]:
+                      - button "Chỉnh sửa chi tiết" [ref=e692] [cursor=pointer]:
+                        - img [ref=e693]
+                      - button "Khóa" [ref=e696] [cursor=pointer]
+              - generic [ref=e697]:
+                - button "Trang trước" [disabled] [ref=e698]
+                - generic [ref=e699]:
+                  - generic [ref=e700]: "1"
+                  - generic [ref=e701]: / 2
+                - button "Trang sau" [ref=e702] [cursor=pointer]
+  - generic [ref=e488]: "0"

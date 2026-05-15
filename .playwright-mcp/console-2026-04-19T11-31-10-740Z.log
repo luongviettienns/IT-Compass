@@ -1,0 +1,89 @@
+[      57ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[   32000ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[   33029ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[   34006ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[   34960ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[   35417ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "username"): (More info: https://goo.gl/9p2vKq) %o @ http://127.0.0.1:5173/reset-password:0
+[   35919ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[   36880ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[   37996ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[   39269ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[   40256ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[  331371ms] [ERROR] %o
+
+%s
+
+%s
+ Error: useAuth must be used within AuthProvider
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776596023315:113:9)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776596023315:43:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8309:6) The above error occurred in the <Header> component. React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary. @ http://127.0.0.1:5173/@vite/client:509
+[  331372ms] [ERROR] [ErrorBoundary] Error: useAuth must be used within AuthProvider
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776596023315:113:9)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776596023315:43:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8309:6) 
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776596023315:41:34)
+    at div (<anonymous>)
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=0658d43e:4575:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=0658d43e:6927:26)
+    at App (<anonymous>)
+    at AuthProvider (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776598601962:10:32)
+    at QueryClientProvider (http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=176fbd37:2517:30)
+    at _HelmetProvider (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=95b72f48:491:3)
+    at ErrorBoundary (http://127.0.0.1:5173/src/components/ErrorBoundary.tsx:7:3) @ http://127.0.0.1:5173/@vite/client:509
+[  331439ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[  332446ms] [ERROR] %o
+
+%s
+
+%s
+ Error: useAuth must be used within AuthProvider
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776598601962:113:9)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776598601962:43:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8309:6) The above error occurred in the <Header> component. React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary. @ http://127.0.0.1:5173/@vite/client:509
+[  332446ms] [ERROR] [ErrorBoundary] Error: useAuth must be used within AuthProvider
+    at useAuth (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776598601962:113:9)
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776598601962:43:44)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:12868:12)
+    at renderWithHooks (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:4213:19)
+    at updateFunctionComponent (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:5569:16)
+    at beginWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:6140:20)
+    at runWithFiberInDEV (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:851:66)
+    at performUnitOfWork (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8429:92)
+    at workLoopSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8325:37)
+    at renderRootSync (http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:8309:6) 
+    at Header (http://127.0.0.1:5173/src/components/sections/Header.tsx?t=1776598601962:41:34)
+    at div (<anonymous>)
+    at Router (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=0658d43e:4575:29)
+    at BrowserRouter (http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=0658d43e:6927:26)
+    at App (<anonymous>)
+    at AuthProvider (http://127.0.0.1:5173/src/contexts/AuthContext.tsx?t=1776598603083:10:32)
+    at QueryClientProvider (http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=176fbd37:2517:30)
+    at _HelmetProvider (http://127.0.0.1:5173/node_modules/.vite/deps/react-helmet-async.js?v=95b72f48:491:3)
+    at ErrorBoundary (http://127.0.0.1:5173/src/components/ErrorBoundary.tsx:7:3) @ http://127.0.0.1:5173/@vite/client:509
+[  332499ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[  349680ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[  350852ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[  392267ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337
+[  393374ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=70339b0b:14337

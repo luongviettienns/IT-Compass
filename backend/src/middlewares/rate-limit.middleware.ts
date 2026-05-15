@@ -273,6 +273,19 @@ export const verifyEmailConfirmLimiter = createRateLimiter({
   },
 });
 
+export const bookingCreateLimiter = createRateLimiter({
+  name: 'booking-create',
+  windowMs: 10 * 60 * 1000,
+  maxRequests: 8,
+  code: 'BOOKING_CREATE_RATE_LIMITED',
+  message: 'Too many booking requests in a short time. Please try again later.',
+  keyGenerator: (req) => {
+    const actor = req.user?.id ? `user:${String(req.user.id)}` : getClientIp(req);
+    const mentorSlug = normalizeIdentity(req.params?.slug, 'unknown-mentor');
+    return `${actor}:${hashValue(mentorSlug)}`;
+  },
+});
+
 export const commentCreateLimiter = createRateLimiter({
   name: 'blog-comment-create',
   windowMs: 5 * 60 * 1000,

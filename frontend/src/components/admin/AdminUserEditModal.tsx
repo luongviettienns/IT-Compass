@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Save, Key } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { adminUserApi } from '../../lib/adminUserApi';
 import type { UserRole } from '../../lib/adminUserApi';
 import { adminQueryKeys } from '../../lib/adminQueryKeys';
+import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../ui/Loader';
 import { AdminActionDialog } from './AdminActionDialog';
 
@@ -13,6 +15,8 @@ type AdminUserEditModalProps = {
     onClose: () => void;
     userId: string | null;
 };
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, onClose, userId }) => {
     const queryClient = useQueryClient();
@@ -61,17 +65,27 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
     };
 
     const accountMutation = useMutation({
-        mutationFn: () => adminUserApi.updateAccount(user!.id, { fullName, email, emailVerified, reason }),
+        mutationFn: () => adminUserApi.updateAccount(user!.id, {
+            fullName: fullName.trim(),
+            email: email.trim(),
+            emailVerified,
+            reason: reason.trim(),
+        }),
         onSuccess: () => invalidateUserData(),
     });
 
     const profileMutation = useMutation({
-        mutationFn: () => adminUserApi.updateProfile(user!.id, { phoneNumber, location, jobTitle, reason }),
+        mutationFn: () => adminUserApi.updateProfile(user!.id, {
+            phoneNumber: phoneNumber.trim(),
+            location: location.trim(),
+            jobTitle: jobTitle.trim(),
+            reason: reason.trim(),
+        }),
         onSuccess: () => invalidateUserData(),
     });
 
     const roleMutation = useMutation({
-        mutationFn: () => adminUserApi.updateRole(user!.id, { role: role as 'STUDENT' | 'MENTOR', reason }),
+        mutationFn: () => adminUserApi.updateRole(user!.id, { role: role as 'STUDENT' | 'MENTOR', reason: reason.trim() }),
         onSuccess: () => invalidateUserData(),
     });
 
@@ -80,13 +94,49 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
         onSuccess: () => {
             invalidateUserData();
             setRevokeDialogOpen(false);
-        }
+        },
+        onError: (error) => toast.error(getErrorMessage(error, 'Không thể thu hồi phiên đăng nhập.')),
     });
 
     if (!isOpen) return null;
 
+    const showFormError = (message: string) => {
+        setErrorMessage(message);
+        toast.error(message);
+    };
+
+    const validateSaveInput = () => {
+        if (!fullName.trim()) {
+            showFormError('Vui lòng nhập họ tên người dùng.');
+            return false;
+        }
+
+        if (!email.trim()) {
+            showFormError('Vui lòng nhập email người dùng.');
+            return false;
+        }
+
+        if (!EMAIL_PATTERN.test(email.trim())) {
+            showFormError('Email người dùng không hợp lệ.');
+            return false;
+        }
+
+        const normalizedReason = reason.trim();
+        if (normalizedReason.length < 3) {
+            showFormError('Lý do thay đổi cần ít nhất 3 ký tự.');
+            return false;
+        }
+
+        if (normalizedReason.length > 500) {
+            showFormError('Lý do thay đổi không được vượt quá 500 ký tự.');
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSave = async () => {
-        if (!user) {
+        if (!user || !validateSaveInput()) {
             return;
         }
 
@@ -101,7 +151,7 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
             setErrorMessage(null);
             onClose();
         } catch (err) {
-            setErrorMessage(err instanceof Error ? err.message : 'Cập nhật người dùng thất bại');
+            showFormError(getErrorMessage(err, 'Cập nhật người dùng thất bại.'));
         }
     };
 
@@ -234,11 +284,24 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
                 inputPlaceholder="Bảo mật hệ thống"
                 inputDefaultValue="Bảo mật hệ thống"
                 requireInput
+                minLength={3}
+                maxLength={500}
                 confirmText="Thu hồi phiên"
                 tone="destructive"
                 isPending={revokeMutation.isPending}
                 onClose={() => setRevokeDialogOpen(false)}
-                onConfirm={(revokeReason) => revokeMutation.mutate(revokeReason)}
+                onConfirm={(revokeReason) => {
+                    const normalizedReason = revokeReason.trim();
+                    if (normalizedReason.length < 3) {
+                        toast.error('Lý do hủy phiên cần ít nhất 3 ký tự.');
+                        return;
+                    }
+                    if (normalizedReason.length > 500) {
+                        toast.error('Lý do hủy phiên không được vượt quá 500 ký tự.');
+                        return;
+                    }
+                    revokeMutation.mutate(normalizedReason);
+                }}
             />
         </div>,
         document.body,

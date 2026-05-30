@@ -152,14 +152,17 @@
   .prose figure,
   .blog-content figure {
     margin: 2em 0;
+    overflow: hidden;
   }
   .prose img,
   .blog-content img {
+    display: block;
     width: 100%;
+    height: auto;
     border-radius: 1.5rem;
     border: 1px solid hsl(var(--border));
     margin: 0;
-    object-fit: cover;
+    object-fit: contain;
     box-shadow: 0 24px 60px -32px hsl(var(--foreground) / 0.22);
   }
   .prose figcaption,
@@ -215,12 +218,38 @@
   }
   .prose table,
   .blog-content table {
+    display: block;
     width: 100%;
     margin: 1.8em 0;
     border-collapse: collapse;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     border-radius: 1rem;
     border: 1px solid hsl(var(--border));
+  }
+  .prose table > tbody,
+  .blog-content table > tbody {
+    display: table;
+    width: 100%;
+  }
+  .prose table > thead,
+  .blog-content table > thead,
+  .prose table > tfoot,
+  .blog-content table > tfoot {
+    display: table;
+    width: 100%;
+  }
+  .prose table > tbody,
+  .blog-content table > tbody {
+    width: max-content;
+    min-width: 100%;
+  }
+  .prose table > thead,
+  .blog-content table > thead,
+  .prose table > tfoot,
+  .blog-content table > tfoot {
+    width: max-content;
+    min-width: 100%;
   }
   .prose th, .prose td,
   .blog-content th, .blog-content td {
@@ -263,3 +292,52 @@
     overflow: hidden;
   }
 }
+
+/* ── Compositable ring animations (outside @layer to avoid purge) ── */
+@keyframes ring-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes ring-spin-rev {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+@keyframes needle-settle {
+  from { transform: rotate(-30deg); }
+  to   { transform: rotate(0deg); }
+}
+
+/* Compass wrapper entry rotate — CSS-only, no Framer rotate → no 'spin' CLS */
+@keyframes compass-enter-rotate {
+  from { transform: rotate(-20deg); }
+  to   { transform: rotate(0deg); }
+}
+
+.compass-enter-rotate {
+  animation: compass-enter-rotate 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.4s both;
+}
+
+
+.ring-spin-slow {
+  will-change: transform;
+  animation: ring-spin 40s linear infinite;
+}
+
+.ring-spin-slow-reverse {
+  will-change: transform;
+  animation: ring-spin-rev 60s linear infinite;
+}
+
+/* Loader spinner — custom keyframe (not 'spin') to avoid CLS trace false-positive */
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+
+.loader-spin {
+  will-change: transform;
+  animation: loader-spin 0.75s linear infinite;
+}
+
+

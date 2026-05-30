@@ -11,7 +11,7 @@ import { buttonVariants } from '../components/ui/Button';
 
 import { MAJORS_DB } from '../lib/constants/majors';
 
-const EASE: any = [0.22, 1, 0.36, 1];
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export default function MajorDetailPage() {
     const { slug } = useParams();

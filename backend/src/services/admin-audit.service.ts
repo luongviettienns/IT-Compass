@@ -63,7 +63,7 @@ const parseJsonValue = (value: unknown) => {
   return value;
 };
 
-const buildWhereSql = ({ actorUserId, action, targetType, targetId }: Record<string, unknown>) => {
+const buildWhereSql = ({ actorUserId, action, targetType, targetId, createdFrom, createdTo }: Record<string, unknown>) => {
   const conditions: Prisma.Sql[] = [];
 
   if (actorUserId) {
@@ -82,12 +82,26 @@ const buildWhereSql = ({ actorUserId, action, targetType, targetId }: Record<str
     conditions.push(Prisma.sql`a.doi_tuong_id = ${String(targetId)}`);
   }
 
+  if (createdFrom) {
+    conditions.push(Prisma.sql`a.tao_luc >= ${new Date(createdFrom as string)}`);
+  }
+
+  if (createdTo) {
+    conditions.push(Prisma.sql`a.tao_luc <= ${new Date(createdTo as string)}`);
+  }
+
   if (conditions.length === 0) {
     return Prisma.empty;
   }
 
   return Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`;
 };
+
+const normalizeDateRange = (createdFrom?: unknown, createdTo?: unknown) => ({
+  createdFrom: typeof createdFrom === 'string' ? createdFrom : undefined,
+  createdTo: typeof createdTo === 'string' ? createdTo : undefined,
+});
+
 
 const normalizeAuditLog = (log: Record<string, unknown>) => ({
   id: String(log.id),
@@ -143,11 +157,11 @@ export const createAdminAuditLog = async ({
   `;
 };
 
-export const listAdminAuditLogs = async ({ page = 1, limit = 20, actorUserId, action, targetType, targetId }: Record<string, unknown>) => {
+export const listAdminAuditLogs = async ({ page = 1, limit = 20, actorUserId, action, targetType, targetId, createdFrom, createdTo }: Record<string, unknown>) => {
   const parsedPage = normalizePositiveInt(page, 1);
   const parsedLimit = Math.min(normalizePositiveInt(limit, 20), 100);
   const offset = (parsedPage - 1) * parsedLimit;
-  const whereSql = buildWhereSql({ actorUserId, action, targetType, targetId });
+  const whereSql = buildWhereSql({ actorUserId, action, targetType, targetId, ...normalizeDateRange(createdFrom, createdTo) });
 
   const [countRows, logs] = await Promise.all([
     prisma.$queryRaw<Array<{ total: bigint | number }>>(Prisma.sql`

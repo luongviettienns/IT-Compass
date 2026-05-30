@@ -22,16 +22,18 @@ const AdminBlogsPage = lazy(() => import('./AdminBlogsPage'));
 const AdminBlogCommentsPage = lazy(() => import('./AdminBlogCommentsPage'));
 const AdminAssessmentsPage = lazy(() => import('./AdminAssessmentsPage'));
 const AdminAuditLogsPage = lazy(() => import('./AdminAuditLogsPage'));
+const AdminBookingsPage = lazy(() => import('./AdminBookingsPage'));
 const AdminSettingsPage = lazy(() => import('./AdminSettingsPage'));
 
 const BREADCRUMB_MAP: Record<string, string> = {
     '/admin': 'Tổng quan',
     '/admin/users': 'Người dùng',
     '/admin/mentors': 'Mentor',
-    '/admin/blogs': 'Nội dung',
-    '/admin/blog-comments': 'Bình luận',
+    '/admin/blogs': 'Nội dung (CMS)',
+    '/admin/blog-comments': 'Bình luận blog',
     '/admin/assessments': 'Assessment',
-    '/admin/audit-logs': 'Nhật ký',
+    '/admin/audit-logs': 'Nhật ký hệ thống',
+    '/admin/bookings': 'Lịch tư vấn',
     '/admin/settings': 'Cài đặt',
 };
 
@@ -124,6 +126,7 @@ export default function AdminPage() {
                 <Route path="blog-comments" element={<AdminBlogCommentsPage />} />
                 <Route path="assessments" element={<AdminAssessmentsPage />} />
                 <Route path="audit-logs" element={<AdminAuditLogsPage />} />
+                <Route path="bookings" element={<AdminBookingsPage />} />
                 <Route path="settings" element={<AdminSettingsPage />} />
             </Route>
         </Routes>

@@ -43,18 +43,30 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
-        if (user) {
-            setFullName(user.fullName || '');
-            setEmail(user.email || '');
-            setRole(user.role || 'STUDENT');
-            setEmailVerified(user.emailVerified || false);
-            setPhoneNumber(user.profile?.phoneNumber || '');
-            setLocation(user.profile?.location || '');
-            setJobTitle(user.profile?.jobTitle || '');
-            setReason('Admin update');
-        }
-        setErrorMessage(null);
-    }, [user]);
+        if (!isOpen) return;
+        queueMicrotask(() => {
+            if (user) {
+                setFullName(user.fullName || '');
+                setEmail(user.email || '');
+                setRole(user.role || 'STUDENT');
+                setEmailVerified(user.emailVerified || false);
+                setPhoneNumber(user.profile?.phoneNumber || '');
+                setLocation(user.profile?.location || '');
+                setJobTitle(user.profile?.jobTitle || '');
+                setReason('Admin update');
+            } else {
+                setFullName('');
+                setEmail('');
+                setRole('STUDENT');
+                setEmailVerified(false);
+                setPhoneNumber('');
+                setLocation('');
+                setJobTitle('');
+                setReason('Admin update');
+            }
+            setErrorMessage(null);
+        });
+    }, [isOpen, user]);
 
     const invalidateUserData = () => {
         queryClient.invalidateQueries({ queryKey: adminQueryKeys.usersRoot });
@@ -144,9 +156,11 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
             await accountMutation.mutateAsync();
             await profileMutation.mutateAsync();
             if (role !== user.role) {
-                if (role !== 'ADMIN') {
-                    await roleMutation.mutateAsync();
+                if (role === 'ADMIN') {
+                    showFormError('Không thể đổi vai trò sang ADMIN từ màn này.');
+                    return;
                 }
+                await roleMutation.mutateAsync();
             }
             setErrorMessage(null);
             onClose();
@@ -216,6 +230,7 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
                                         <option value="MENTOR">MENTOR</option>
                                         <option value="ADMIN">ADMIN</option>
                                     </select>
+                                    {user.role === 'ADMIN' ? <p className="px-1 text-xs text-muted-foreground">ADMIN không đổi từ màn này.</p> : null}
                                 </div>
                                 <div className="flex items-center gap-3 pt-6 px-1">
                                     <input type="checkbox" id="emailVerified" checked={emailVerified} onChange={e => setEmailVerified(e.target.checked)} className="w-5 h-5 rounded accent-primary" />

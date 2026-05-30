@@ -63,3 +63,11 @@ export const getAdminAssessmentStats = asyncHandler(async (_req, res) => {
     const stats = await assessmentService.getAdminAssessmentStats();
     return res.status(200).json({ stats });
 });
+export const getAdminAssessmentExport = asyncHandler(async (req, res) => {
+    const query = req.query;
+    const result = await assessmentService.getAdminAssessmentAttempts({
+        page: query.page ?? 1,
+        limit: query.limit ?? 100,
+    });
+    return res.status(200).json(result);
+});

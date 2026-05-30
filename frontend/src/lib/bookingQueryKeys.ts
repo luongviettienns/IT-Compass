@@ -14,4 +14,7 @@ export const bookingQueryKeys = {
     mentorBookingSettings: ['bookings', 'mentor', 'settings'] as const,
     mentorBookings: (params: BookingListParams = {}) => ['bookings', 'mentor', 'list', toParamsKey(params)] as const,
     mentorBookingDetail: (bookingId: string) => ['bookings', 'mentor', 'detail', bookingId] as const,
+    adminRoot: ['bookings', 'admin'] as const,
+    adminBookings: (params: BookingListParams = {}) => ['bookings', 'admin', 'list', toParamsKey(params)] as const,
+    adminBookingDetail: (bookingId: string) => ['bookings', 'admin', 'detail', bookingId] as const,
 };

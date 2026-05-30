@@ -1,28 +1,25 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import {
-    ArrowRight,
-    BadgeCheck,
-    BarChart3,
-    Brain,
-    Compass,
-    GraduationCap,
-    Sparkles,
-    UserRound,
-} from 'lucide-react';
+import { ArrowRight, BadgeCheck, BarChart3, Brain, Compass, GraduationCap, Sparkles, UserRound } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { Avatar } from '../../components/ui/Avatar';
 import { Badge } from '../../components/ui/Badge';
-import { buttonVariants } from '../../components/ui/Button';
+import { Button, buttonVariants } from '../../components/ui/Button';
+import { BookingDialog } from '../../components/mentor/BookingDialog';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { Skeleton } from '../../components/ui/Skeleton';
+import { useAuth } from '../../contexts/AuthContext';
 import { getErrorMessage } from '../../lib/appError';
-import type { AssessmentAttempt, HollandBreakdownItem } from '../../lib/assessmentApi';
-import { assessmentApi } from '../../lib/assessmentApi';
+import { assessmentApi, type AssessmentAttempt, type HollandBreakdownItem } from '../../lib/assessmentApi';
 import { assessmentQueryKeys } from '../../lib/assessmentQueryKeys';
-import { cn } from '../../lib/utils';
-import { MAJORS_LIST } from '../../lib/constants/majors';
 import { HOLLAND_TRAIT_MAP } from '../../lib/constants/holland';
+import { MAJORS_LIST } from '../../lib/constants/majors';
+import { cn } from '../../lib/utils';
+import { formatMentorHourlyRate, getMentorHeadline, mentorApi, type PublicMentor } from '../../lib/mentorApi';
+import { mentorQueryKeys } from '../../lib/mentorQueryKeys';
+import { Clock3 } from 'lucide-react';
 
 
 
@@ -45,6 +42,61 @@ function ResultSkeleton() {
     );
 }
 
+// Card mentor để người dùng mở detail hoặc đặt lịch ngay từ kết quả.
+function MentorCard({ mentor, onBook }: { mentor: PublicMentor; onBook: (mentor: PublicMentor) => void }) {
+    return (
+        <div className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-border/60 bg-background p-5 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/10">
+            <Link to={`/mentors/${mentor.slug}`} className="flex-1">
+                <div className="flex items-start gap-4">
+                    <Avatar src={mentor.avatarUrl} alt={mentor.name} size="md" className="ring-4 ring-primary/10" />
+                    <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                            <h3 className="truncate text-lg font-bold text-foreground group-hover:text-primary">{mentor.name}</h3>
+                            {mentor.isVerified && <BadgeCheck size={16} className="shrink-0 text-primary" />}
+                        </div>
+                        <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">{getMentorHeadline(mentor)}</p>
+                    </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                    {(mentor.expertise.length > 0 ? mentor.expertise : mentor.expertiseArea ? [mentor.expertiseArea] : []).slice(0, 3).map((item) => (
+                        <Badge key={item} variant="outline" className="border-border/70 bg-surface/60 px-3 py-1 text-xs text-muted-foreground">
+                            {item}
+                        </Badge>
+                    ))}
+                </div>
+
+                <div className="mt-5 grid grid-cols-2 gap-3 rounded-[22px] border border-border/60 bg-surface/45 p-4 text-sm">
+                    <div>
+                        <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Kinh nghiệm</p>
+                        <p className="mt-1 font-medium text-foreground">{mentor.yearsOfExperience != null ? `${mentor.yearsOfExperience} năm` : 'Đang cập nhật'}</p>
+                    </div>
+                    <div>
+                        <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Chi phí</p>
+                        <p className="mt-1 font-medium text-foreground">{formatMentorHourlyRate(mentor.hourlyRate)}</p>
+                    </div>
+                </div>
+            </Link>
+
+            <div className="mt-5 flex items-center justify-between gap-3 border-t border-border/60 pt-4 text-sm">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                    <Clock3 size={14} />
+                    <span>{mentor.reviewCount.toLocaleString('vi-VN')} đánh giá</span>
+                </div>
+                <div className="flex gap-2">
+                    <Link to={`/mentors/${mentor.slug}`} className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'rounded-xl')}>
+                        Chi tiết
+                    </Link>
+                    <Button size="sm" className="rounded-xl" onClick={() => onBook(mentor)}>
+                        Đặt lịch
+                    </Button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// Hiển thị từng nhóm Holland theo % để đọc nhanh mức độ nổi trội.
 function BreakdownCard({ item }: { item: HollandBreakdownItem }) {
     return (
         <div className="rounded-[24px] border border-border/60 bg-background p-5 flex flex-col justify-center">
@@ -68,12 +120,17 @@ function BreakdownCard({ item }: { item: HollandBreakdownItem }) {
 
 export default function ResultPage() {
     const location = useLocation();
+    const { isAuthenticated, isInitialized } = useAuth();
     const stateAttempt = (location.state as { attempt?: AssessmentAttempt } | null)?.attempt ?? null;
+    const [bookingMentorSlug, setBookingMentorSlug] = useState('');
+    const mentorSectionRef = useRef<HTMLElement | null>(null);
+    const shouldFetch = isInitialized && isAuthenticated;
 
     const latestAttemptQuery = useQuery({
         queryKey: assessmentQueryKeys.latestAttempt,
         queryFn: () => assessmentApi.getLatestAttempt(),
         initialData: stateAttempt ? { attempt: stateAttempt } : undefined,
+        enabled: shouldFetch,
     });
 
     const attempt = latestAttemptQuery.data?.attempt ?? stateAttempt ?? null;
@@ -81,6 +138,25 @@ export default function ResultPage() {
     const breakdown = attempt?.summary.hollandBreakdown ?? [];
     const recommendations = ranking.slice(0, 3);
     const matchedMajors = MAJORS_LIST.filter((m) => attempt?.summary.suggestedMajors.includes(m.title));
+    const mentorRecommendationsQuery = useQuery({
+        queryKey: mentorQueryKeys.recommended(3),
+        queryFn: () => mentorApi.getRecommended(3),
+        enabled: shouldFetch && Boolean(attempt),
+    });
+    const recommendedMentors = mentorRecommendationsQuery.data?.mentors ?? [];
+    const bookingMentor = recommendedMentors.find((mentor) => mentor.slug === bookingMentorSlug) ?? null;
+    const matchedExpertise = mentorRecommendationsQuery.data?.matchedExpertise ?? attempt?.summary.suggestedMentorExpertise ?? [];
+
+    // Khi có mentor gợi ý thì tự scroll xuống section mentor để user thấy bước tiếp theo.
+    useEffect(() => {
+        if (recommendedMentors.length > 0 && mentorSectionRef.current) {
+            mentorSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, [recommendedMentors.length]);
+
+    if (isInitialized && !isAuthenticated) {
+        return <Navigate to="/auth/login" state={{ redirectTo: `${location.pathname}${location.search}` }} replace />;
+    }
 
     return (
         <>
@@ -91,6 +167,8 @@ export default function ResultPage() {
                     content={attempt?.summary.headline || 'Xem kết quả assessment mới nhất, nhóm nghề phù hợp và các gợi ý học tập tiếp theo từ IT Compass.'}
                 />
             </Helmet>
+
+            <BookingDialog slug={bookingMentor?.slug ?? ''} open={Boolean(bookingMentor)} onOpenChange={(open) => !open && setBookingMentorSlug('')} />
 
             <main className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
                 {latestAttemptQuery.isLoading && !attempt ? (
@@ -288,9 +366,61 @@ export default function ResultPage() {
                                 </div>
                             </motion.section>
                             <motion.section
+                                ref={mentorSectionRef}
                                 initial={{ opacity: 0, y: 22 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.2 }}
+                                className="rounded-[32px] border border-primary/15 bg-primary/5 p-6 sm:p-8"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <UserRound size={20} className="text-primary" />
+                                    <h3 className="text-xl font-bold text-foreground">Mentor phù hợp từ kết quả của bạn</h3>
+                                </div>
+                                <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                                    Dựa trên expertise đề xuất, đây là những mentor có khả năng phù hợp nhất để bạn bắt đầu trao đổi.
+                                </p>
+                                <div className="mt-5 flex flex-wrap gap-2">
+                                    {matchedExpertise.length > 0 ? (
+                                        matchedExpertise.map((item) => (
+                                            <Badge key={item} variant="outline" className="border-primary/20 bg-background px-4 py-1.5 text-sm text-foreground/80">
+                                                {item}
+                                            </Badge>
+                                        ))
+                                    ) : (
+                                        <span className="text-muted-foreground text-sm">Chưa có expertise đề xuất.</span>
+                                    )}
+                                </div>
+
+                                <div className="mt-6 grid gap-4 lg:grid-cols-3">
+                                    {mentorRecommendationsQuery.isLoading ? (
+                                        Array.from({ length: 3 }).map((_, index) => (
+                                            <div key={index} className="h-56 rounded-[26px] border border-border/60 bg-background p-5">
+                                                <Skeleton className="h-full rounded-[20px]" />
+                                            </div>
+                                        ))
+                                    ) : recommendedMentors.length > 0 ? (
+                                        recommendedMentors.map((mentor) => <MentorCard key={mentor.id} mentor={mentor} onBook={(selected) => setBookingMentorSlug(selected.slug)} />)
+                                    ) : (
+                                        <div className="rounded-[26px] border border-border/60 bg-background p-5 text-sm text-muted-foreground lg:col-span-3">
+                                            Chưa tìm thấy mentor khớp trực tiếp. Bạn có thể xem toàn bộ danh sách mentor bên dưới.
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                                    <Link to="/mentors" className={cn(buttonVariants({ size: 'lg' }), 'w-full justify-center')}>
+                                        Xem tất cả mentor <ArrowRight size={16} />
+                                    </Link>
+                                    <Link to="/bookings" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'w-full justify-center')}>
+                                        Đi tới lịch hẹn
+                                    </Link>
+                                </div>
+                            </motion.section>
+
+                            <motion.section
+                                initial={{ opacity: 0, y: 22 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.24 }}
                                 className="grid gap-6 sm:grid-cols-2"
                             >
                                 <div className="rounded-[32px] border border-border/60 bg-surface/45 p-6 sm:p-8 flex flex-col h-full">
@@ -318,23 +448,23 @@ export default function ResultPage() {
 
                                 <div className="rounded-[32px] border border-border/60 bg-surface/45 p-6 sm:p-8 flex flex-col h-full">
                                     <div className="flex items-center gap-3 mb-6">
-                                        <UserRound size={20} className="text-primary" />
-                                        <h3 className="text-xl font-bold text-foreground">Kết nối Mentor</h3>
+                                        <Compass size={20} className="text-primary" />
+                                        <h3 className="text-xl font-bold text-foreground">Khám phá lộ trình</h3>
                                     </div>
                                     <div className="flex flex-wrap gap-2 mb-6">
-                                        {attempt.summary.suggestedMentorExpertise.length > 0 ? (
-                                            attempt.summary.suggestedMentorExpertise.map((item) => (
-                                                <Badge key={item} variant="outline" className="border-border/70 bg-background px-4 py-1.5 text-sm text-foreground/80">
-                                                    {item}
+                                        {matchedMajors.length > 0 ? (
+                                            matchedMajors.slice(0, 3).map((major) => (
+                                                <Badge key={major.slug} variant="outline" className="border-border/70 bg-background px-4 py-1.5 text-sm text-foreground/80">
+                                                    {major.title}
                                                 </Badge>
                                             ))
                                         ) : (
-                                            <span className="text-muted-foreground text-sm">Chưa có expertise đề xuất.</span>
+                                            <span className="text-muted-foreground text-sm">Chưa có ngành học gợi ý.</span>
                                         )}
                                     </div>
                                     <div className="mt-auto pt-6 border-t border-border/50">
-                                        <Link to="/mentors" className={cn(buttonVariants({ size: 'lg' }), 'w-full justify-center')}>
-                                            Khám phá Mentor phù hợp
+                                        <Link to="/majors" className={cn(buttonVariants({ size: 'lg' }), 'w-full justify-center')}>
+                                            Xem ngành học phù hợp
                                         </Link>
                                     </div>
                                 </div>

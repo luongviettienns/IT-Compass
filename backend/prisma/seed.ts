@@ -334,8 +334,7 @@ const seedAccounts: SeedAccount[] = [
   },
 ];
 
-const blogContent = sanitizeRichText(`
-# ${BLOG_TITLE}
+const blogContent = sanitizeRichText(`# ${BLOG_TITLE}
 
 Nếu bạn đang ở giai đoạn chuẩn bị thực tập, điều quan trọng nhất không phải là học thật nhiều, mà là học đúng thứ trong thời gian đủ ngắn. Một kế hoạch 12 tuần sẽ giúp bạn nhìn rõ mục tiêu, đo tiến độ và tránh tình trạng ôm quá nhiều chủ đề cùng lúc.
 

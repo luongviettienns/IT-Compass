@@ -24,6 +24,7 @@ import { toApiAssetUrl } from '../lib/authApi';
 import { getErrorMessage } from '../lib/appError';
 import { useAuth } from '../contexts/AuthContext';
 
+// Format ngày xuất bản để hiển thị nhất quán ở header bài viết.
 const formatDate = (value: string | null) => {
     if (!value) return 'Chưa xuất bản';
     return new Date(value).toLocaleDateString('vi-VN', {
@@ -33,6 +34,7 @@ const formatDate = (value: string | null) => {
     });
 };
 
+// Format thời gian comment để đọc lịch sử trao đổi rõ hơn.
 const formatDateTime = (value: string) =>
     new Date(value).toLocaleString('vi-VN', {
         day: '2-digit',
@@ -90,11 +92,13 @@ export default function BlogDetailPage() {
     const post = postQuery.data?.post ?? null;
     const comments = commentsQuery.data?.comments ?? [];
 
+    // Ưu tiên meta description rồi fallback sang excerpt để SEO không bị trống.
     const seoDescription = useMemo(
         () => post?.metaDescription || post?.excerpt || 'Bài viết chia sẻ kiến thức, kinh nghiệm và góc nhìn thực chiến từ IT Compass.',
         [post?.excerpt, post?.metaDescription],
     );
 
+    // Gửi comment rồi refresh lại list comment của bài viết hiện tại.
     const createCommentMutation = useMutation({
         mutationFn: (input: { content: string; guestName?: string }) => blogApi.createComment(slug, input),
         onSuccess: async () => {
@@ -108,6 +112,7 @@ export default function BlogDetailPage() {
         onError: (error) => toast.error(getErrorMessage(error, 'Không thể gửi bình luận lúc này.')),
     });
 
+    // Validate nội dung comment trước khi bắn request lên server.
     const handleSubmitComment = (event: { preventDefault: () => void }) => {
         event.preventDefault();
 

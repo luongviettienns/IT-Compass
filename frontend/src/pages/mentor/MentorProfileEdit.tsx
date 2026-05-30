@@ -139,8 +139,10 @@ export default function MentorProfileEdit() {
     useEffect(() => {
         if (!mentor) return;
         const parsed = formFromMentor(mentor as unknown as Record<string, unknown>);
-        setForm(parsed);
-        setInitialForm(parsed);
+        queueMicrotask(() => {
+            setForm(parsed);
+            setInitialForm(parsed);
+        });
     }, [mentor]);
 
     const isDirty = useMemo(

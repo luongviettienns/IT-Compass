@@ -16,6 +16,7 @@
     ]
   },
   "enabledPlugins": {
-    "backend-development@claude-code-workflows": true
+    "backend-development@claude-code-workflows": true,
+    "superpowers@claude-plugins-official": false
   }
 }

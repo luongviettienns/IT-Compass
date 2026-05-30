@@ -2,10 +2,10 @@ import { prisma } from '../db/prisma.js';
 import { HttpError } from '../utils/httpError.js';
 import { logger } from '../utils/logger.js';
 import { publicMentorSelect, serializePublicMentor } from '../utils/serializeMentor.js';
+import { sanitizeNullableRichText, sanitizeNullableSingleLineText } from '../utils/sanitize.js';
 import { ensureConversationForConfirmedBooking } from './conversation.service.js';
 import { emitBookingUpdated } from '../socket/booking.events.js';
 import { notifyBookingCancelledByMentor, notifyBookingCancelledByStudent, notifyBookingCompleted, notifyBookingConfirmed, notifyBookingNoShow, notifyBookingRequested, } from './notification.service.js';
-import { sanitizeNullableRichText, sanitizeNullableSingleLineText } from '../utils/sanitize.js';
 const DURATION_STEP_MINUTE = 30;
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 20;
@@ -69,6 +69,15 @@ const bookingSelect = {
                     avatarUrl: true,
                 },
             },
+        },
+    },
+    review: {
+        select: {
+            id: true,
+            rating: true,
+            comment: true,
+            createdAt: true,
+            updatedAt: true,
         },
     },
 };
@@ -175,6 +184,15 @@ const serializeBooking = (booking) => ({
         email: booking.student.email,
         avatarUrl: booking.student.profile?.avatarUrl ?? null,
     },
+    review: booking.review
+        ? {
+            id: String(booking.review.id),
+            rating: booking.review.rating,
+            comment: booking.review.comment,
+            createdAt: booking.review.createdAt,
+            updatedAt: booking.review.updatedAt,
+        }
+        : null,
 });
 const notifyBookingUpdated = (booking) => {
     emitBookingUpdated({
@@ -386,6 +404,35 @@ const buildBookingWhere = ({ status, from, to, }) => ({
         }
         : {}),
 });
+const listBookings = async ({ where, page, limit }) => {
+    const [total, bookings] = await Promise.all([
+        prisma.mentorBooking.count({ where }),
+        prisma.mentorBooking.findMany({
+            where,
+            select: bookingSelect,
+            orderBy: [{ startAt: 'desc' }, { id: 'desc' }],
+            skip: (page - 1) * limit,
+            take: limit,
+        }),
+    ]);
+    return {
+        bookings: bookings.map(serializeBooking),
+        pagination: {
+            page,
+            limit,
+            total,
+            totalPages: Math.max(1, Math.ceil(total / limit)),
+        },
+    };
+};
+const collectAllBookings = async (where) => {
+    const bookings = await prisma.mentorBooking.findMany({
+        where,
+        select: bookingSelect,
+        orderBy: [{ startAt: 'desc' }, { id: 'desc' }],
+    });
+    return bookings.map(serializeBooking);
+};
 const validateSetting = (setting) => {
     const durationFields = [setting.minDurationMinute, setting.maxDurationMinute, setting.defaultDurationMinute];
     if (durationFields.some((value) => value % DURATION_STEP_MINUTE !== 0)) {
@@ -434,6 +481,7 @@ const getBookingDetailOrThrow = async (where, tx = prisma) => {
     }
     return booking;
 };
+const canAdminCancelBooking = (status) => ['REQUESTED', 'CONFIRMED'].includes(status);
 export const getPublicBookingConfig = async ({ slug }) => {
     const mentor = await getPublicMentorForBooking(slug);
     const setting = await getBookingSettingOrDefault(mentor.id);
@@ -575,25 +623,14 @@ export const listStudentBookings = async ({ userId, query, }) => {
         ...buildBookingWhere(query),
         studentUserId: userId,
     };
-    const [total, bookings] = await Promise.all([
-        prisma.mentorBooking.count({ where }),
-        prisma.mentorBooking.findMany({
-            where,
-            select: bookingSelect,
-            orderBy: [{ startAt: 'desc' }, { id: 'desc' }],
-            skip: (page - 1) * limit,
-            take: limit,
-        }),
-    ]);
-    return {
-        bookings: bookings.map(serializeBooking),
-        pagination: {
-            page,
-            limit,
-            total,
-            totalPages: Math.max(1, Math.ceil(total / limit)),
-        },
+    return listBookings({ where, page, limit });
+};
+export const exportStudentBookings = async ({ userId, query, }) => {
+    const where = {
+        ...buildBookingWhere(query),
+        studentUserId: userId,
     };
+    return collectAllBookings(where);
 };
 export const getStudentBookingDetail = async ({ userId, bookingId }) => {
     const booking = await getBookingDetailOrThrow({
@@ -732,25 +769,123 @@ export const listMentorBookings = async ({ userId, query, }) => {
         ...buildBookingWhere(query),
         mentorId: mentor.id,
     };
-    const [total, bookings] = await Promise.all([
-        prisma.mentorBooking.count({ where }),
-        prisma.mentorBooking.findMany({
-            where,
-            select: bookingSelect,
-            orderBy: [{ startAt: 'desc' }, { id: 'desc' }],
-            skip: (page - 1) * limit,
-            take: limit,
-        }),
-    ]);
-    return {
-        bookings: bookings.map(serializeBooking),
-        pagination: {
-            page,
-            limit,
-            total,
-            totalPages: Math.max(1, Math.ceil(total / limit)),
-        },
+    return listBookings({ where, page, limit });
+};
+export const exportMentorBookings = async ({ userId, query, }) => {
+    const mentor = await getSelfMentor(userId);
+    const where = {
+        ...buildBookingWhere(query),
+        mentorId: mentor.id,
     };
+    return collectAllBookings(where);
+};
+export const adminListBookings = async ({ query }) => {
+    const { page, limit } = normalizePagination(query);
+    return listBookings({ where: buildBookingWhere(query), page, limit });
+};
+export const adminExportBookings = async ({ query }) => collectAllBookings(buildBookingWhere(query));
+export const adminGetBookingDetail = async ({ bookingId }) => serializeBooking(await getBookingDetailOrThrow({ id: bookingId }));
+export const adminConfirmBooking = async ({ bookingId }) => {
+    const currentBooking = await getBookingDetailOrThrow({ id: bookingId });
+    if (currentBooking.status !== 'REQUESTED') {
+        throw new HttpError(400, 'Only requested bookings can be confirmed', undefined, 'BOOKING_CANNOT_CONFIRM');
+    }
+    const booking = await prisma.$transaction(async (tx) => {
+        const confirmedBooking = await tx.mentorBooking.update({
+            where: { id: bookingId },
+            data: {
+                status: 'CONFIRMED',
+                confirmedAt: new Date(),
+            },
+            select: bookingSelect,
+        });
+        await ensureConversationForConfirmedBooking(tx, confirmedBooking);
+        return confirmedBooking;
+    });
+    logBookingTransition({
+        booking,
+        actorUserId: null,
+        actorType: 'SYSTEM',
+        action: 'CONFIRM',
+        fromStatus: 'REQUESTED',
+        toStatus: booking.status,
+    });
+    notifyBookingUpdated(booking);
+    return serializeBooking(booking);
+};
+export const adminCompleteBooking = async ({ bookingId }) => {
+    const currentBooking = await getBookingDetailOrThrow({ id: bookingId });
+    if (currentBooking.status !== 'CONFIRMED') {
+        throw new HttpError(400, 'Only confirmed bookings can be completed', undefined, 'BOOKING_CANNOT_COMPLETE');
+    }
+    const booking = await prisma.mentorBooking.update({
+        where: { id: bookingId },
+        data: {
+            status: 'COMPLETED',
+            completedAt: new Date(),
+        },
+        select: bookingSelect,
+    });
+    logBookingTransition({
+        booking,
+        actorUserId: null,
+        actorType: 'SYSTEM',
+        action: 'COMPLETE',
+        fromStatus: 'CONFIRMED',
+        toStatus: booking.status,
+    });
+    notifyBookingUpdated(booking);
+    return serializeBooking(booking);
+};
+export const adminMarkNoShowBooking = async ({ bookingId }) => {
+    const currentBooking = await getBookingDetailOrThrow({ id: bookingId });
+    if (currentBooking.status !== 'CONFIRMED') {
+        throw new HttpError(400, 'Only confirmed bookings can be marked no-show', undefined, 'BOOKING_CANNOT_NO_SHOW');
+    }
+    const booking = await prisma.mentorBooking.update({
+        where: { id: bookingId },
+        data: {
+            status: 'NO_SHOW',
+        },
+        select: bookingSelect,
+    });
+    logBookingTransition({
+        booking,
+        actorUserId: null,
+        actorType: 'SYSTEM',
+        action: 'NO_SHOW',
+        fromStatus: 'CONFIRMED',
+        toStatus: booking.status,
+    });
+    notifyBookingUpdated(booking);
+    return serializeBooking(booking);
+};
+export const adminCancelBooking = async ({ bookingId, reason }) => {
+    const currentBooking = await getBookingDetailOrThrow({ id: bookingId });
+    if (!canAdminCancelBooking(currentBooking.status)) {
+        throw new HttpError(400, 'Booking cannot be cancelled in current status', undefined, 'BOOKING_CANNOT_CANCEL');
+    }
+    const booking = await prisma.mentorBooking.update({
+        where: { id: bookingId },
+        data: {
+            status: 'CANCELLED_BY_MENTOR',
+            cancelReason: sanitizeNullableSingleLineText(reason) ?? null,
+            cancelledBy: 'SYSTEM',
+            cancelledAt: new Date(),
+        },
+        select: bookingSelect,
+    });
+    logBookingTransition({
+        booking,
+        actorUserId: null,
+        actorType: 'SYSTEM',
+        action: 'CANCEL',
+        fromStatus: currentBooking.status,
+        toStatus: booking.status,
+        reason: booking.cancelReason,
+    });
+    notifyBookingUpdated(booking);
+    return serializeBooking(booking);
 };
 export const getMentorBookingDetail = async ({ userId, bookingId }) => {
     const mentor = await getSelfMentor(userId);
@@ -878,6 +1013,58 @@ export const markOverdueBookingsAsNoShow = async () => {
     }
     return { marked: updatedBookings.length };
 };
+export const createBookingReview = async ({ userId, bookingId, input, }) => {
+    const booking = await getBookingDetailOrThrow({
+        id: bookingId,
+        studentUserId: userId,
+    });
+    if (booking.status !== 'COMPLETED') {
+        throw new HttpError(400, 'Only completed bookings can be reviewed', undefined, 'BOOKING_REVIEW_INVALID_STATUS');
+    }
+    const review = await prisma.$transaction(async (tx) => {
+        const existingReview = await tx.bookingReview.findUnique({
+            where: { bookingId },
+            select: { id: true },
+        });
+        if (existingReview) {
+            throw new HttpError(409, 'Booking review already exists', undefined, 'BOOKING_REVIEW_ALREADY_EXISTS');
+        }
+        const createdReview = await tx.bookingReview.create({
+            data: {
+                bookingId: booking.id,
+                mentorId: booking.mentorId,
+                studentUserId: booking.studentUserId,
+                rating: input.rating,
+                comment: sanitizeNullableRichText(input.comment ?? null) ?? null,
+            },
+            select: {
+                id: true,
+                bookingId: true,
+                mentorId: true,
+                studentUserId: true,
+                rating: true,
+                comment: true,
+                createdAt: true,
+                updatedAt: true,
+            },
+        });
+        await tx.mentor.update({
+            where: { id: booking.mentorId },
+            data: { reviewCount: { increment: 1 } },
+        });
+        return createdReview;
+    });
+    return {
+        id: String(review.id),
+        bookingId: String(review.bookingId),
+        mentorId: String(review.mentorId),
+        studentUserId: String(review.studentUserId),
+        rating: review.rating,
+        comment: review.comment,
+        createdAt: review.createdAt,
+        updatedAt: review.updatedAt,
+    };
+};
 export const completeMentorBooking = async ({ userId, bookingId }) => {
     const mentor = await getSelfMentor(userId);
     const currentBooking = await getBookingDetailOrThrow({
@@ -886,6 +1073,9 @@ export const completeMentorBooking = async ({ userId, bookingId }) => {
     });
     if (currentBooking.status !== 'CONFIRMED') {
         throw new HttpError(400, 'Only confirmed bookings can be completed', undefined, 'BOOKING_CANNOT_COMPLETE');
+    }
+    if (currentBooking.endAt > new Date()) {
+        throw new HttpError(400, 'Booking can only be completed after the session ends', undefined, 'BOOKING_CANNOT_COMPLETE_EARLY');
     }
     const booking = await prisma.mentorBooking.update({
         where: { id: bookingId },

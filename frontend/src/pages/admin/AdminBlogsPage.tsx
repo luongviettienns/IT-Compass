@@ -6,12 +6,33 @@ import type { BlogPost } from '../../lib/blogApi';
 import { adminQueryKeys } from '../../lib/adminQueryKeys';
 import { Loader } from '../../components/ui/Loader';
 import { useMemo, useState } from 'react';
-import { Settings, PenTool, CheckSquare, Trash2, RefreshCcw, FileText, Send, MessageSquareText, Search, Eye } from 'lucide-react';
+import { Settings, PenTool, CheckSquare, Trash2, RefreshCcw, Send, MessageSquareText, Search, Eye, Download, ChevronDown, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { AdminBlogFormModal } from '../../components/admin/AdminBlogFormModal';
+import { BlogContentRenderer } from '../../components/blog/BlogContentRenderer';
 import { AdminActionDialog } from '../../components/admin/AdminActionDialog';
+import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
+import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
 import { getErrorMessage } from '../../lib/appError';
+
+const blogExportColumns: ExportColumn[] = [
+    { header: 'Post ID', key: 'id', width: 14 },
+    { header: 'Title', key: 'title', width: 32 },
+    { header: 'Slug', key: 'slug', width: 24 },
+    { header: 'Excerpt', key: 'excerpt', width: 36 },
+    { header: 'Status', key: 'status', width: 14 },
+    { header: 'Views', key: 'views', width: 12 },
+    { header: 'Likes', key: 'likes', width: 12 },
+    { header: 'Created at', key: 'createdAt', width: 22 },
+    { header: 'Updated at', key: 'updatedAt', width: 22 },
+];
+
+// Gom filter thành 1 chuỗi để subtitle export dễ đọc hơn.
+const formatBlogFilters = (activeTab: 'all' | 'published' | 'draft' | 'deleted', search: string) => {
+    const parts = [activeTab !== 'all' ? `status=${activeTab}` : null, search ? `search=${search}` : null].filter(Boolean);
+    return parts.length ? parts.join(' · ') : 'No filters';
+};
 
 const BLOG_STATUS_LABEL: Record<BlogPost['status'], string> = {
     DRAFT: 'Nháp',
@@ -29,6 +50,10 @@ export default function AdminBlogsPage() {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [formMode, setFormMode] = useState<'edit' | 'preview'>('edit');
     const [previewPostId, setPreviewPostId] = useState<string | null>(null);
+    const [previewTab, setPreviewTab] = useState<'preview' | 'edit'>('preview');
+    const [exportOpen, setExportOpen] = useState(false);
+    const [exportError, setExportError] = useState<string | null>(null);
+    const [isExporting, setIsExporting] = useState(false);
     const [actionDialog, setActionDialog] = useState<{
         open: boolean;
         type: 'delete' | 'restore' | 'publish' | 'bulkDelete' | 'bulkRestore' | 'bulkPublish';
@@ -46,6 +71,7 @@ export default function AdminBlogsPage() {
         queryFn: () => blogApi.adminList({ page, limit: 10, status: activeTab, search: search || undefined }),
     });
 
+    // Refresh cache list + stats + detail sau các thao tác CRUD.
     const invalidateBlogData = (postId?: string) => {
         queryClient.invalidateQueries({ queryKey: adminQueryKeys.postsRoot });
         queryClient.invalidateQueries({ queryKey: adminQueryKeys.blogStats });
@@ -143,32 +169,88 @@ export default function AdminBlogsPage() {
         );
     };
 
+    // Mở modal ở chế độ sửa, đồng thời reset các trạng thái preview cũ.
     const openEditForm = (post: BlogPost) => {
         setPreviewPostId(null);
         setEditingPostId(post.id);
         setFormMode('edit');
+        setPreviewTab('edit');
         setIsFormOpen(true);
     };
 
+    // Mở modal xem trước bài viết theo id.
     const openPreviewForm = (postId: string) => {
         setEditingPostId(null);
         setPreviewPostId(postId);
         setFormMode('preview');
+        setPreviewTab('preview');
         setIsFormOpen(true);
     };
 
+    // Đóng modal và reset toàn bộ state liên quan.
     const closeForm = () => {
         setIsFormOpen(false);
         setEditingPostId(null);
         setPreviewPostId(null);
         setFormMode('edit');
+        setPreviewTab('preview');
     };
 
+    // Mở modal tạo mới với state sạch.
     const openCreateForm = () => {
         setPreviewPostId(null);
         setEditingPostId(null);
         setFormMode('edit');
+        setPreviewTab('edit');
         setIsFormOpen(true);
+    };
+
+    // Xuất danh sách blog theo scope hiện tại hoặc toàn bộ dữ liệu đã lọc.
+    const handleExport = async ({ format, scope, selectedColumnKeys, filePrefix }: { format: 'xlsx' | 'csv'; scope: ExportScope; selectedColumnKeys: string[]; filePrefix: string }) => {
+        try {
+            setIsExporting(true);
+            setExportError(null);
+            const columns = blogExportColumns.filter((column) => selectedColumnKeys.includes(column.key));
+            const firstPage = await blogApi.adminList({ page: 1, limit: 100, status: activeTab, search: search || undefined });
+            const posts = scope === 'all'
+                ? await collectPagedItems({
+                    initialPage: firstPage,
+                    fetchPage: (currentPage, limit) => blogApi.adminList({ page: currentPage, limit, status: activeTab, search: search || undefined }),
+                    selectItems: (response) => response.posts,
+                    selectPagination: (response) => response.pagination,
+                })
+                : firstPage.posts;
+
+            await exportWorkbook({
+                fileName: buildExportFileName(filePrefix, format),
+                title: 'IT Compass — Export Blogs',
+                subtitle: formatBlogFilters(activeTab, search),
+                format,
+                sheets: [{
+                    name: 'Blogs',
+                    columns,
+                    rows: posts.map((post) => ({
+                        id: post.id,
+                        title: post.title,
+                        slug: post.slug,
+                        excerpt: post.excerpt ?? post.content.slice(0, 120),
+                        status: post.status,
+                        views: post.views,
+                        likes: post.likes,
+                        createdAt: new Date(post.createdAt).toLocaleString('vi-VN'),
+                        updatedAt: new Date(post.updatedAt || post.createdAt).toLocaleString('vi-VN'),
+                    })),
+                }],
+            });
+            setExportOpen(false);
+            toast.success('Đã xuất file blog.');
+        } catch {
+            const message = 'Không thể xuất dữ liệu blog.';
+            setExportError(message);
+            toast.error(message);
+        } finally {
+            setIsExporting(false);
+        }
     };
 
     const openBulkActionDialog = (type: 'bulkDelete' | 'bulkRestore' | 'bulkPublish') => {
@@ -213,6 +295,9 @@ export default function AdminBlogsPage() {
                         </p>
                     </div>
                     <div className="flex items-center gap-3">
+                        <button onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/15">
+                            <Download className="h-4 w-4" /> Export
+                        </button>
                         <button onClick={() => navigate('/admin/blog-comments')} className="bg-secondary text-foreground font-bold px-4 py-2.5 rounded-xl hover:scale-105 active:scale-95 transition-transform flex items-center gap-2">
                             <MessageSquareText className="w-4 h-4" /> Bình luận
                         </button>
@@ -221,6 +306,26 @@ export default function AdminBlogsPage() {
                         </button>
                     </div>
                 </div>
+
+                <AdminExportModal
+                    isOpen={exportOpen}
+                    onClose={() => setExportOpen(false)}
+                    onExport={handleExport}
+                    config={{
+                        moduleLabel: 'Blogs',
+                        filePrefix: 'blogs-export',
+                        totalRows: data?.pagination?.total || 0,
+                        filteredRows: data?.pagination?.total || 0,
+                        supportsSelected: true,
+                        selectedRows: selectedPostIds.length,
+                        availableColumns: blogExportColumns,
+                        defaultScope: selectedPostIds.length ? 'selected' : 'current',
+                        defaultFormat: 'xlsx',
+                        errorMessage: exportError,
+                        isGenerating: isExporting,
+                        warningMessage: activeTab !== 'all' ? `Đang lọc theo ${activeTab}` : undefined,
+                    }}
+                />
 
                 {/* Search + Filter Tabs */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -313,10 +418,7 @@ export default function AdminBlogsPage() {
                                         <button onClick={() => openEditForm(post)} className="text-primary hover:bg-primary/10 p-1.5 rounded-lg transition-colors" title="Sửa bài viết">
                                             <Settings className="w-4 h-4" />
                                         </button>
-                                        <button onClick={() => openEditForm(post)} className="text-secondary-foreground hover:bg-secondary p-1.5 rounded-lg transition-colors" title="Cấu hình Meta/Tags">
-                                            <FileText className="w-4 h-4" />
-                                        </button>
-                                        <button onClick={() => previewMutation.mutate(post.id)} className="text-indigo-500 hover:bg-indigo-500/10 p-1.5 rounded-lg transition-colors" title="Xem trước từ backend">
+                                        <button onClick={() => openPreviewForm(post.id)} className="text-indigo-500 hover:bg-indigo-500/10 p-1.5 rounded-lg transition-colors" title="Xem trước">
                                             <Eye className="w-4 h-4" />
                                         </button>
                                         <button
@@ -342,7 +444,7 @@ export default function AdminBlogsPage() {
                                                 <button
                                                     onClick={() => handleDelete(post.id)}
                                                     disabled={isMutating}
-                                                    className="text-destructive font-bold hover:bg-destructive/10 px-2 py-1 rounded transition-colors disabled:opacity-50">Xóa</button>
+                                                    className="text-destructive font-bold hover:bg-destructive/10 px-2 py-1 rounded transition-colors disabled:opacity-50">Xóa mềm</button>
                                             </>
                                         )}
                                     </td>
@@ -385,6 +487,25 @@ export default function AdminBlogsPage() {
                 </div>
 
                 <AdminBlogFormModal isOpen={isFormOpen} onClose={closeForm} postId={editingPostId ?? previewPostId} initialMode={formMode} />
+                {isFormOpen && previewTab === 'preview' && previewPostId ? (
+                    <div className="fixed inset-0 z-[120] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={closeForm}>
+                        <div className="w-full max-w-4xl rounded-[28px] border bg-card shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                            <div className="flex items-center justify-between border-b p-4">
+                                <div>
+                                    <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Preview</div>
+                                    <div className="font-bold">Xem trước bài viết</div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <button onClick={() => setPreviewTab('edit')} className="inline-flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-sm font-bold hover:bg-secondary/70"><ChevronDown className="h-4 w-4" /> Chỉnh sửa</button>
+                                    <button onClick={closeForm} className="rounded-full bg-secondary p-2"><X className="h-4 w-4" /></button>
+                                </div>
+                            </div>
+                            <div className="p-6">
+                                <div className="rounded-2xl border bg-background p-6"><BlogContentRenderer content={data?.posts?.find((p) => p.id === previewPostId)?.content || ''} /></div>
+                            </div>
+                        </div>
+                    </div>
+                ) : null}
                 <AdminActionDialog
                     isOpen={actionDialog.open}
                     title={actionDialog.type === 'delete' ? 'Lưu trữ bài viết' : actionDialog.type === 'restore' ? 'Khôi phục bài viết' : actionDialog.type === 'publish' ? 'Xuất bản bài viết' : actionDialog.type === 'bulkDelete' ? 'Lưu trữ hàng loạt' : actionDialog.type === 'bulkRestore' ? 'Khôi phục hàng loạt' : 'Xuất bản hàng loạt'}

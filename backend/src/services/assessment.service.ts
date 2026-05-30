@@ -33,6 +33,27 @@ const normalizeAttempt = (attempt: AssessmentAttempt | null): NormalizedAssessme
   };
 };
 
+const normalizeAdminAttempt = (
+  attempt: AssessmentAttempt & { user: { fullName: string; email: string } },
+) => ({
+  id: String(attempt.id),
+  userId: String(attempt.userId),
+  userName: attempt.user.fullName,
+  userEmail: attempt.user.email,
+  quizType: attempt.quizType,
+  quizVersion: attempt.quizVersion,
+  status: attempt.status,
+  resultCode: attempt.resultCode,
+  topTraits: attempt.topTraits,
+  rawScores: attempt.rawScoresJson,
+  answers: attempt.answersJson,
+  summary: attempt.summaryJson,
+  startedAt: attempt.startedAt,
+  submittedAt: attempt.submittedAt,
+  createdAt: attempt.createdAt,
+  updatedAt: attempt.updatedAt,
+});
+
 export const getCurrentTemplate = async () => ({
   quizType: assessmentCatalog.quizType,
   version: assessmentCatalog.version,
@@ -178,8 +199,65 @@ export const getAttemptById = async ({ userId, attemptId }: { userId: bigint; at
   return normalizeAttempt(attempt);
 };
 
+const buildAdminAttemptWhere = ({ status, resultCode, search, createdFrom, createdTo }: { status?: string; resultCode?: string; search?: string; createdFrom?: string; createdTo?: string }): Prisma.AssessmentAttemptWhereInput => ({
+  ...(status ? { status: status as Prisma.AssessmentAttemptWhereInput['status'] } : {}),
+  ...(resultCode ? { resultCode } : {}),
+  ...(createdFrom || createdTo
+    ? {
+        submittedAt: {
+          ...(createdFrom ? { gte: new Date(createdFrom) } : {}),
+          ...(createdTo ? { lte: new Date(createdTo) } : {}),
+        },
+      }
+    : {}),
+  ...(search
+    ? {
+        user: {
+          OR: [
+            { fullName: { contains: search } },
+            { email: { contains: search } },
+          ],
+        },
+      }
+    : {}),
+});
+
+export const getAdminAssessmentAttempts = async ({ page, limit, status, resultCode, search, createdFrom, createdTo }: { page: number; limit: number; status?: string; resultCode?: string; search?: string; createdFrom?: string; createdTo?: string }) => {
+  const normalizedPage = Number(page);
+  const normalizedLimit = Number(limit);
+  const where = buildAdminAttemptWhere({ status, resultCode, search, createdFrom, createdTo });
+
+  const [total, attempts] = await prisma.$transaction([
+    prisma.assessmentAttempt.count({ where }),
+    prisma.assessmentAttempt.findMany({
+      where,
+      orderBy: { submittedAt: 'desc' },
+      skip: (normalizedPage - 1) * normalizedLimit,
+      take: normalizedLimit,
+      include: {
+        user: {
+          select: {
+            fullName: true,
+            email: true,
+          },
+        },
+      },
+    }),
+  ]);
+
+  return {
+    attempts: attempts.map((attempt) => normalizeAdminAttempt(attempt)),
+    pagination: {
+      page: normalizedPage,
+      limit: normalizedLimit,
+      total,
+      totalPages: Math.max(1, Math.ceil(total / normalizedLimit)),
+    },
+  };
+};
+
 export const getAdminAssessmentStats = async () => {
-  const [totalAttempts, latestRows, distinctCompletedRows, totalUsers] = await Promise.all([
+  const [totalAttempts, latestRows, distinctCompletedRows, totalUsers, trendRows] = await Promise.all([
     prisma.assessmentAttempt.count(),
     prisma.$queryRaw<Array<{ resultCode: string; total: bigint | number }>>`
       SELECT latest.ma_ket_qua AS resultCode, COUNT(*) AS total
@@ -198,6 +276,13 @@ export const getAdminAssessmentStats = async () => {
       FROM ket_qua_danh_gia
     `,
     prisma.user.count(),
+    prisma.$queryRaw<Array<{ period: string; total: bigint | number }>>`
+      SELECT DATE_FORMAT(nop_luc, '%Y-%m') AS period, COUNT(*) AS total
+      FROM ket_qua_danh_gia
+      GROUP BY DATE_FORMAT(nop_luc, '%Y-%m')
+      ORDER BY period DESC
+      LIMIT 6
+    `,
   ]);
 
   const completedUsers = Number(distinctCompletedRows[0]?.total || 0);
@@ -215,8 +300,13 @@ export const getAdminAssessmentStats = async () => {
     completedUsers,
     completionRate: totalUsers > 0 ? Math.round((completedUsers / totalUsers) * 100) : 0,
     resultDistribution,
+    trend: trendRows
+      .map((row) => ({ period: row.period, total: Number(row.total || 0) }))
+      .reverse(),
   };
 };
+
+export const getAdminAssessmentTrend = async () => getAdminAssessmentStats();
 
 export const getAssessmentSummaryForUser = async ({ userId }: { userId: bigint }) => {
   const latest = await getLatestAttempt({ userId });

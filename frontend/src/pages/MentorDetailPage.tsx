@@ -34,6 +34,7 @@ import { useAuth } from '../contexts/AuthContext';
 /* ────────────────────────────────────────────────────────
  * Animated number counter for stat highlights
  * ──────────────────────────────────────────────────────── */
+// Chạy số đếm động cho các chỉ số nổi bật để phần hero nhìn “sống” hơn.
 function AnimatedValue({ value, suffix = '' }: { value: number; suffix?: string }) {
     const [display, setDisplay] = useState(0);
     const ref = useRef<HTMLSpanElement>(null);
@@ -99,6 +100,7 @@ function DetailSkeleton() {
 /* ────────────────────────────────────────────────────────
  * Animation presets
  * ──────────────────────────────────────────────────────── */
+// Bộ preset animation dùng lại cho các khối nội dung trong trang.
 const fadeUp = (delay = 0) => ({
     initial: { opacity: 0, y: 28 } as const,
     animate: { opacity: 1, y: 0 } as const,
@@ -130,7 +132,7 @@ export default function MentorDetailPage() {
     const mentor = data?.mentor ?? null;
     const canBookMentor = isAuthenticated && user?.role === 'STUDENT';
 
-    /* Show sticky CTA after hero scrolls out of view */
+    // Hiện CTA dán dưới màn hình khi hero đã cuộn ra khỏi viewport.
     useEffect(() => {
         const hero = heroRef.current;
         if (!hero) return;

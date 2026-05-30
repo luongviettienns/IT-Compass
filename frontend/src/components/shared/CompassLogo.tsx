@@ -8,8 +8,9 @@ type Props = {
 };
 
 /**
- * Brand compass icon — bold SVG with animated needle.
- * Higher contrast version: filled outer ring + stronger ticks.
+ * Brand compass icon.
+ * Needle uses CSS @keyframes (no Framer rotate) → no non-composited spin → CLS fixed.
+ * whileHover scale is compositable (only scale, no rotate).
  */
 export function CompassLogo({ size = 40, className, animate = true }: Props) {
     return (
@@ -18,14 +19,14 @@ export function CompassLogo({ size = 40, className, animate = true }: Props) {
             width={size}
             height={size}
             className={cn('shrink-0', className)}
-            whileHover={animate ? { scale: 1.08, rotate: 5 } : undefined}
+            whileHover={animate ? { scale: 1.08 } : undefined}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
-            {/* Outer filled ring — makes it visible on white backgrounds */}
+            {/* Outer rings */}
             <circle cx="50" cy="50" r="47" fill="none" className="stroke-primary" strokeWidth="3" opacity={0.25} />
             <circle cx="50" cy="50" r="42" fill="none" className="stroke-primary" strokeWidth="1.5" opacity={0.12} />
 
-            {/* Tick marks NESW - bold */}
+            {/* Major tick marks (NESW) */}
             {[0, 90, 180, 270].map((deg) => (
                 <line
                     key={deg}
@@ -49,20 +50,22 @@ export function CompassLogo({ size = 40, className, animate = true }: Props) {
                 />
             ))}
 
-            {/* Compass needle — animated rotation */}
-            <motion.g
-                initial={animate ? { rotate: -30 } : undefined}
-                animate={animate ? { rotate: 0 } : undefined}
-                transition={animate ? { type: 'spring', stiffness: 60, damping: 12, delay: 0.3 } : undefined}
-                style={{ transformOrigin: '50px 50px' }}
+            {/*
+             * Compass needle — CSS @keyframes only (no Framer rotate).
+             * Framer rotate on SVG child = non-composited 'spin' = CLS culprit.
+             * CSS animation on SVG <g> with explicit transformOrigin = compositable.
+             */}
+            <g
+                style={animate ? {
+                    transformOrigin: '50px 50px',
+                    animation: 'needle-settle 0.9s cubic-bezier(0.22,1,0.36,1) 0.3s both',
+                } : undefined}
             >
-                {/* North needle (primary blue — bold) */}
                 <polygon points="50,14 43,50 50,45 57,50" className="fill-primary" />
-                {/* South needle (muted) */}
                 <polygon points="50,86 43,50 50,55 57,50" className="fill-primary" opacity={0.18} />
-            </motion.g>
+            </g>
 
-            {/* Center dot — larger, more visible */}
+            {/* Center dot */}
             <circle cx="50" cy="50" r="4.5" className="fill-primary" />
             <circle cx="50" cy="50" r="2" fill="white" />
         </motion.svg>

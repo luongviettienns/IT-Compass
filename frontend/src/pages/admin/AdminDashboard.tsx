@@ -20,7 +20,9 @@ import {
     ArrowRight,
     Sparkles,
     TrendingUp,
+    Calendar,
 } from 'lucide-react';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { adminUserApi } from '../../lib/adminUserApi';
 import { adminMentorApi } from '../../lib/adminMentorApi';
 import { blogApi } from '../../lib/blogApi';
@@ -53,6 +55,7 @@ export default function AdminDashboard() {
         queryKey: adminQueryKeys.assessmentStats,
         queryFn: assessmentApi.getAdminStats,
     });
+    const trendData = assessmentStats?.stats?.trend || [];
 
     if (loadingUsers || loadingMentors || loadingBlogs || loadingAssessments) {
         return <div className="flex h-[400px] items-center justify-center"><Loader /></div>;
@@ -74,6 +77,7 @@ export default function AdminDashboard() {
 
     const quickActions = [
         { label: 'Quản lý người dùng', href: '/admin/users', icon: Users, desc: 'Phân quyền, khóa tài khoản' },
+        { label: 'Lịch tư vấn', href: '/admin/bookings', icon: Calendar, desc: 'Xử lý booking' },
         { label: 'Duyệt nội dung', href: '/admin/blogs', icon: FileText, desc: 'Bài viết, bình luận' },
         { label: 'Xem nhật ký', href: '/admin/audit-logs', icon: ShieldCheck, desc: 'Theo dõi hành động' },
         { label: 'Thống kê Assessment', href: '/admin/assessments', icon: TrendingUp, desc: 'Phân tích kết quả' },
@@ -240,14 +244,39 @@ export default function AdminDashboard() {
                     </motion.div>
                 </div>
 
+                <motion.section
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.38, ease: EASE }}
+                    className="rounded-[24px] border border-border/60 bg-background p-6 shadow-sm"
+                >
+                    <div className="mb-4 flex items-center justify-between gap-3">
+                        <div>
+                            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground">Assessment trend</h2>
+                            <p className="text-xs text-muted-foreground">6 tháng gần nhất</p>
+                        </div>
+                    </div>
+                    <div className="h-[220px] w-full">
+                        <ResponsiveContainer width="100%" height={220}>
+                            <LineChart data={trendData}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--muted))" />
+                                <XAxis dataKey="period" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
+                                <Tooltip />
+                                <Line type="monotone" dataKey="total" stroke="hsl(var(--primary))" strokeWidth={3} dot={false} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </motion.section>
+
                 {/* ── Quick Actions ─────────────────────────────────── */}
                 <motion.section
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.4, ease: EASE }}
+                    transition={{ duration: 0.4, delay: 0.42, ease: EASE }}
                 >
                     <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Truy cập nhanh</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3">
                         {quickActions.map((action) => (
                             <Link
                                 key={action.href}

@@ -62,6 +62,13 @@ export const cancelStudentBookingSchema = z.object({
         reason: z.string().trim().max(500).nullable().optional(),
     }).optional().default({}),
 });
+export const createBookingReviewSchema = z.object({
+    params: idParamSchema,
+    body: z.object({
+        rating: z.coerce.number().int().min(1).max(5),
+        comment: z.string().trim().max(1000).nullable().optional(),
+    }),
+});
 export const getMentorAvailabilitySchema = z.object({
     query: z.object({}).optional().default({}),
 });
@@ -88,6 +95,24 @@ export const updateMentorBookingSettingsSchema = z.object({
 });
 export const listMentorBookingsSchema = z.object({
     query: listBookingsQuerySchema,
+});
+export const adminListBookingsSchema = z.object({
+    query: listBookingsQuerySchema,
+});
+export const adminExportBookingsSchema = z.object({
+    query: listBookingsQuerySchema,
+});
+export const adminBookingDetailSchema = z.object({
+    params: idParamSchema,
+});
+export const adminBookingActionSchema = z.object({
+    params: idParamSchema,
+});
+export const adminCancelBookingSchema = z.object({
+    params: idParamSchema,
+    body: z.object({
+        reason: z.string().trim().max(500).nullable().optional(),
+    }).optional().default({}),
 });
 export const mentorBookingActionSchema = z.object({
     params: idParamSchema,

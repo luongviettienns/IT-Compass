@@ -159,7 +159,7 @@ export default function BlogPage() {
         queryFn: () => blogApi.listPublished(),
     });
 
-    const posts = data?.posts ?? [];
+    const posts = useMemo(() => data?.posts ?? [], [data?.posts]);
 
     const tags = useMemo(
         () => posts.map((post) => post.tag).filter((tag): tag is string => Boolean(tag)).filter((tag, index, arr) => arr.indexOf(tag) === index),

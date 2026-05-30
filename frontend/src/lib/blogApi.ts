@@ -187,6 +187,8 @@ export const blogApi = {
     action?: AdminBlogAuditAction;
     targetType?: 'BLOG_POST' | 'BLOG_COMMENT';
     targetId?: string;
+    createdFrom?: string;
+    createdTo?: string;
   }) => {
     const params = new URLSearchParams();
     if (query?.page) params.set('page', String(query.page));
@@ -195,6 +197,8 @@ export const blogApi = {
     if (query?.action) params.set('action', query.action);
     if (query?.targetType) params.set('targetType', query.targetType);
     if (query?.targetId) params.set('targetId', query.targetId);
+    if (query?.createdFrom) params.set('createdFrom', query.createdFrom);
+    if (query?.createdTo) params.set('createdTo', query.createdTo);
     return request<{ logs: AdminBlogAuditLog[]; pagination: PostPagination }>(
       `/admin/blogs/audit-logs${params.toString() ? `?${params}` : ''}`,
     );

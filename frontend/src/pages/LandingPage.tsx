@@ -1,11 +1,11 @@
-﻿/**
+/**
  * @file LandingPage.tsx - IT Compass Landing Page (Cinematic Rebuild).
  *
  * Design: Split hero + parallax + scroll-triggered cinematic sections.
  * Motion level: Apple product-page inspired.
  */
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -30,6 +30,8 @@ import {
     ClipboardList,
     PieChart,
     Rocket,
+    Clock,
+    CheckCircle2
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { buttonVariants } from '../components/ui/Button';
@@ -40,14 +42,15 @@ import { ErrorBoundary } from '../components/shared/ErrorBoundary';
 import { CompassLogo } from '../components/shared/CompassLogo';
 import { blogApi } from '../lib/blogApi';
 import { blogQueryKeys } from '../lib/blogQueryKeys';
-import { mentorApi, getMentorHeadline, formatMentorHourlyRate } from '../lib/mentorApi';
+import { mentorApi, getMentorHeadline } from '../lib/mentorApi';
 import { mentorQueryKeys } from '../lib/mentorQueryKeys';
 import { CAREER_PATHS } from '../data/careerPaths';
 import { toApiAssetUrl } from '../lib/authApi';
 import { cn } from '../lib/utils';
 
-/* â”€â”€â”€ Shared motion helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Shared motion helpers ──────────────────────────────────────────── */
 
+// Trả về ref + trạng thái nhìn thấy để bật animation cho từng section đúng lúc.
 function useSectionInView() {
     const ref = useRef<HTMLDivElement>(null);
     const isInView = useInView(ref, { once: true, margin: '-80px' });
@@ -61,23 +64,25 @@ const sectionVariants = {
     visible: {
         opacity: 1,
         y: 0,
-        transition: { duration: 0.7, ease: EASE },
+        transition: { duration: 0.6, ease: EASE },
     },
 };
 
+// Stagger nhẹ để text hiện dần, tránh dồn animation cùng lúc.
 const stagger = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.12 } },
+    // Giảm stagger delay → H1 xuất hiện sớm hơn → LCP cải thiện
+    visible: { transition: { staggerChildren: 0.06 } },
 };
 
 const fadeChild = {
-    hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } },
 };
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-/* Section 1 â€” HERO (Split layout + parallax compass)                   */
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════ */
+/* Section 1 — HERO (Split layout + parallax compass)                   */
+/* ═══════════════════════════════════════════════════════════════════════ */
 
 function HeroSection() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -89,10 +94,21 @@ function HeroSection() {
     const textY = useTransform(scrollYProgress, [0, 1], [0, 60]);
     const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
+    // Chỉ mount vòng trang trí sau first paint để tránh ảnh hưởng CLS.
+    const [ringsVisible, setRingsVisible] = useState(false);
+    useEffect(() => {
+        const id1 = requestAnimationFrame(() => {
+            const id2 = requestAnimationFrame(() => setRingsVisible(true));
+            return () => cancelAnimationFrame(id2);
+        });
+        return () => cancelAnimationFrame(id1);
+    }, []);
+
     return (
         <section
             ref={containerRef}
             className="relative overflow-hidden min-h-[90vh] flex items-center"
+            style={{ contain: 'layout' }}
         >
             {/* Background grid */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(37,99,235,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(37,99,235,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
@@ -114,17 +130,18 @@ function HeroSection() {
                 className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 py-16"
             >
                 <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
-                    {/* Left â€” Text */}
+                    {/* Left — Text */}
                     <motion.div
                         style={{ y: textY }}
                         initial="hidden"
                         animate="visible"
                         variants={stagger}
                         className="space-y-6 text-center lg:text-left"
+                        layout={false}
                     >
                         <motion.div variants={fadeChild}>
                             <Badge variant="secondary" className="gap-1.5 px-4 py-2 text-sm font-semibold bg-primary/10 text-primary border border-primary/20 shadow-sm">
-                                <Sparkles size={15} className="text-primary" /> Ná»n táº£ng #1 Ä‘á»‹nh hÆ°á»›ng nghá» IT
+                                <Sparkles size={15} className="text-primary" /> Nền tảng #1 định hướng nghề IT
                             </Badge>
                         </motion.div>
 
@@ -132,7 +149,7 @@ function HeroSection() {
                             variants={fadeChild}
                             className="text-4xl font-black tracking-tight text-foreground sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]"
                         >
-                            TĂ¬m ra con Ä‘Æ°á»ng{' '}
+                            Tìm ra con đường{' '}
                             <span className="relative">
                                 <span className="text-primary">CNTT</span>
                                 <motion.span
@@ -143,14 +160,14 @@ function HeroSection() {
                                     style={{ originX: 0 }}
                                 />
                             </span>{' '}
-                            phĂ¹ há»£p vá»›i báº¡n
+                            phù hợp với bạn
                         </motion.h1>
 
                         <motion.p
                             variants={fadeChild}
                             className="max-w-xl text-lg text-muted-foreground leading-relaxed mx-auto lg:mx-0"
                         >
-                            BĂ i tráº¯c nghiá»‡m Holland khoa há»c giĂºp báº¡n khĂ¡m phĂ¡ tháº¿ máº¡nh, gá»£i Ă½ ngĂ nh há»c vĂ  nghá» nghiá»‡p â€” káº¿t ná»‘i vá»›i mentor thá»±c chiáº¿n trong ngĂ nh.
+                            Bài trắc nghiệm Holland khoa học giúp bạn khám phá thế mạnh, gợi ý ngành học và nghề nghiệp — kết nối với mentor thực chiến trong ngành.
                         </motion.p>
 
                         <motion.div
@@ -164,13 +181,13 @@ function HeroSection() {
                                     'gap-2 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-shadow',
                                 )}
                             >
-                                Báº¯t Ä‘áº§u tráº¯c nghiá»‡m <ArrowRight size={18} />
+                                Bắt đầu trắc nghiệm <ArrowRight size={18} />
                             </Link>
                             <a
                                 href="#how-it-works"
                                 className={cn(buttonVariants({ variant: 'ghost', size: 'lg' }), 'gap-1')}
                             >
-                                TĂ¬m hiá»ƒu cĂ¡ch hoáº¡t Ä‘á»™ng <ChevronRight size={16} />
+                                Tìm hiểu cách hoạt động <ChevronRight size={16} />
                             </a>
                         </motion.div>
 
@@ -184,7 +201,7 @@ function HeroSection() {
                                         <div key={c} className={cn('h-5 w-5 rounded-full border-2 border-background', c)} />
                                     ))}
                                 </div>
-                                <span>500+ há»c sinh Ä‘Ă£ thá»­</span>
+                                <span>500+ học sinh đã thử</span>
                             </div>
                             <div className="flex items-center gap-1">
                                 <Star size={14} className="fill-amber-400 text-amber-400" />
@@ -193,31 +210,55 @@ function HeroSection() {
                         </motion.div>
                     </motion.div>
 
-                    {/* Right â€” Compass illustration */}
+                    {/* Right — Compass illustration */}
                     <motion.div
-                        style={{ y: compassY }}
+                        style={{ y: compassY, willChange: 'transform', contain: 'layout style paint' }}
                         className="relative flex items-center justify-center"
                     >
+                        {/* Rotating rings — lazy-mounted AFTER first paint to avoid CLS */}
+                        {ringsVisible && (
+                            <>
+                                <svg
+                                    className="ring-spin-slow pointer-events-none absolute"
+                                    style={{ width: 'calc(100% + 3rem)', height: 'calc(100% + 3rem)', inset: '-1.5rem' }}
+                                    viewBox="0 0 100 100"
+                                    aria-hidden="true"
+                                >
+                                    <circle
+                                        cx="50" cy="50" r="48"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="0.35"
+                                        strokeDasharray="2 4"
+                                        className="text-primary/25"
+                                    />
+                                </svg>
+                                <svg
+                                    className="ring-spin-slow-reverse pointer-events-none absolute"
+                                    style={{ width: 'calc(100% + 6rem)', height: 'calc(100% + 6rem)', inset: '-3rem' }}
+                                    viewBox="0 0 100 100"
+                                    aria-hidden="true"
+                                >
+                                    <circle
+                                        cx="50" cy="50" r="48"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="0.15"
+                                        strokeDasharray="1 6"
+                                        className="text-primary/10"
+                                    />
+                                </svg>
+                            </>
+                        )}
+
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.8, rotate: -20 }}
-                            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                            transition={{ delay: 0.4, duration: 0.8, ease: EASE }}
-                            className="relative"
+                            initial={{ opacity: 0, scale: 0.85 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.4, duration: 0.7, ease: EASE }}
+                            className="relative compass-enter-rotate"
                         >
                             {/* Glow ring */}
                             <div className="absolute inset-0 -m-8 rounded-full bg-primary/[0.05] blur-2xl" />
-
-                            {/* Rotating ring decoration */}
-                            <motion.div
-                                className="absolute -inset-6 rounded-full border border-dashed border-primary/10"
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
-                            />
-                            <motion.div
-                                className="absolute -inset-12 rounded-full border border-dotted border-primary/5"
-                                animate={{ rotate: -360 }}
-                                transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-                            />
 
                             {/* Main compass */}
                             <CompassLogo size={280} className="text-foreground relative z-10" />
@@ -251,38 +292,38 @@ function HeroSection() {
     );
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-/* Section 2 â€” FEATURES (Icon grid with counter animation)              */
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════ */
+/* Section 2 — FEATURES (Icon grid with counter animation)              */
+/* ═══════════════════════════════════════════════════════════════════════ */
 
 const FEATURES = [
     {
         icon: ClipboardCheck,
-        title: 'Tráº¯c nghiá»‡m Holland',
-        desc: 'Dá»±a trĂªn mĂ´ hĂ¬nh RIASEC â€” tiĂªu chuáº©n vĂ ng trong tÆ° váº¥n nghá» nghiá»‡p quá»‘c táº¿.',
+        title: 'Trắc nghiệm Holland',
+        desc: 'Dựa trên mô hình RIASEC — tiêu chuẩn vàng trong tư vấn nghề nghiệp quốc tế.',
         stat: '30',
-        statLabel: 'cĂ¢u há»i',
+        statLabel: 'câu hỏi',
     },
     {
         icon: BarChart3,
-        title: 'PhĂ¢n tĂ­ch chi tiáº¿t',
-        desc: 'Biá»ƒu Ä‘á»“ 6 nhĂ³m tĂ­nh cĂ¡ch, gá»£i Ă½ ngĂ nh há»c cá»¥ thá»ƒ vĂ  vá»‹ trĂ­ cĂ´ng viá»‡c phĂ¹ há»£p.',
+        title: 'Phân tích chi tiết',
+        desc: 'Biểu đồ 6 nhóm tính cách, gợi ý ngành học cụ thể và vị trí công việc phù hợp.',
         stat: '6',
-        statLabel: 'nhĂ³m phĂ¢n tĂ­ch',
+        statLabel: 'nhóm phân tích',
     },
     {
         icon: Users,
-        title: 'Mentor thá»±c chiáº¿n',
-        desc: 'Káº¿t ná»‘i 1:1 vá»›i anh chá»‹ Ä‘i trÆ°á»›c â€” tá»« sinh viĂªn Ä‘áº¿n senior trong ngĂ nh IT.',
+        title: 'Mentor thực chiến',
+        desc: 'Kết nối 1:1 với anh chị đi trước — từ sinh viên đến senior trong ngành IT.',
         stat: '20+',
         statLabel: 'mentor',
     },
     {
         icon: BookOpen,
-        title: 'TĂ i nguyĂªn cháº¥t lÆ°á»£ng',
-        desc: 'Blog chuyĂªn sĂ¢u vá» lá»™ trĂ¬nh, kinh nghiá»‡m thá»±c táº­p, vĂ  xu hÆ°á»›ng ngĂ nh IT.',
+        title: 'Tài nguyên chất lượng',
+        desc: 'Blog chuyên sâu về lộ trình, kinh nghiệm thực tập, và xu hướng ngành IT.',
         stat: '50+',
-        statLabel: 'bĂ i viáº¿t',
+        statLabel: 'bài viết',
     },
 ];
 
@@ -299,10 +340,10 @@ function FeaturesSection() {
                     className="text-center mb-16"
                 >
                     <motion.p variants={fadeChild} className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">
-                        Ná»n táº£ng toĂ n diá»‡n
+                        Nền tảng toàn diện
                     </motion.p>
                     <motion.h2 variants={fadeChild} className="text-3xl font-bold text-foreground sm:text-4xl">
-                        Táº¡i sao chá»n IT Compass?
+                        Tại sao chọn IT Compass?
                     </motion.h2>
                 </motion.div>
 
@@ -335,9 +376,9 @@ function FeaturesSection() {
     );
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-/* Section 3 â€” CAREER PATHS (Alternating cards with scroll reveal)      */
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════ */
+/* Section 3 — CAREER PATHS (Alternating cards with scroll reveal)      */
+/* ═══════════════════════════════════════════════════════════════════════ */
 
 function CareerPathsSection() {
     const { ref, isInView } = useSectionInView();
@@ -352,13 +393,13 @@ function CareerPathsSection() {
                     className="text-center mb-16"
                 >
                     <motion.p variants={fadeChild} className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">
-                        KhĂ¡m phĂ¡ lÄ©nh vá»±c
+                        Khám phá lĩnh vực
                     </motion.p>
                     <motion.h2 variants={fadeChild} className="text-3xl font-bold text-foreground sm:text-4xl">
-                        6 hÆ°á»›ng Ä‘i trong ngĂ nh CNTT
+                        6 hướng đi trong ngành CNTT
                     </motion.h2>
                     <motion.p variants={fadeChild} className="mt-3 text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Má»—i hÆ°á»›ng Ä‘i phĂ¹ há»£p vá»›i má»™t khuynh hÆ°á»›ng tĂ­nh cĂ¡ch khĂ¡c nhau
+                        Mỗi hướng đi phù hợp với một khuynh hướng tính cách khác nhau
                     </motion.p>
                 </motion.div>
 
@@ -407,7 +448,7 @@ function CareerPathsSection() {
                                     ))}
                                 </div>
                                 <div className="mt-4 flex items-center text-sm font-semibold text-primary/80 group-hover:text-primary transition-colors">
-                                    TĂ¬m hiá»ƒu thĂªm <ArrowRight size={14} className="ml-1 transition-transform sm:group-hover:translate-x-1" />
+                                    Tìm hiểu thêm <ArrowRight size={14} className="ml-1 transition-transform sm:group-hover:translate-x-1" />
                                 </div>
                             </Link>
                         </motion.div>
@@ -418,32 +459,32 @@ function CareerPathsSection() {
     );
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-/* Section 4 â€” HOW IT WORKS (Cinematic 3-step process)                  */
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════ */
+/* Section 4 — HOW IT WORKS (Cinematic 3-step process)                  */
+/* ═══════════════════════════════════════════════════════════════════════ */
 
 const STEPS = [
     {
         number: '01',
         Icon: ClipboardList,
-        title: 'LĂ m bĂ i tráº¯c nghiá»‡m',
-        desc: '15 phĂºt, 30 cĂ¢u há»i â€” tráº£ lá»i theo trá»±c giĂ¡c. KhĂ´ng cĂ³ Ä‘Ă¡p Ă¡n Ä‘Ăºng sai, chá»‰ cĂ³ sá»± khĂ¡c biá»‡t.',
+        title: 'Làm bài trắc nghiệm',
+        desc: '15 phút, 30 câu hỏi — trả lời theo trực giác. Không có đáp án đúng sai, chỉ có sự khác biệt.',
         color: 'from-blue-500/10 to-blue-600/5',
         iconColor: 'text-blue-600',
     },
     {
         number: '02',
         Icon: PieChart,
-        title: 'Nháº­n káº¿t quáº£ chi tiáº¿t',
-        desc: 'Biá»ƒu Ä‘á»“ Holland 6 nhĂ³m tĂ­nh cĂ¡ch, ngĂ nh há»c gá»£i Ă½, nghá» nghiá»‡p phĂ¹ há»£p vĂ  lá»™ trĂ¬nh cá»¥ thá»ƒ.',
+        title: 'Nhận kết quả chi tiết',
+        desc: 'Biểu đồ Holland 6 nhóm tính cách, ngành học gợi ý, nghề nghiệp phù hợp và lộ trình cụ thể.',
         color: 'from-emerald-500/10 to-emerald-600/5',
         iconColor: 'text-emerald-600',
     },
     {
         number: '03',
         Icon: Rocket,
-        title: 'LĂªn káº¿ hoáº¡ch hĂ nh Ä‘á»™ng',
-        desc: 'Káº¿t ná»‘i mentor, Ä‘á»c blog chuyĂªn sĂ¢u, xĂ¢y dá»±ng roadmap cĂ¡ nhĂ¢n cho hĂ nh trĂ¬nh IT cá»§a báº¡n.',
+        title: 'Lên kế hoạch hành động',
+        desc: 'Kết nối mentor, đọc blog chuyên sâu, xây dựng roadmap cá nhân cho hành trình IT của bạn.',
         color: 'from-amber-500/10 to-amber-600/5',
         iconColor: 'text-amber-600',
     },
@@ -462,10 +503,10 @@ function StepsSection() {
                     className="text-center mb-16"
                 >
                     <motion.p variants={fadeChild} className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">
-                        Quy trĂ¬nh Ä‘Æ¡n giáº£n
+                        Quy trình đơn giản
                     </motion.p>
                     <motion.h2 variants={fadeChild} className="text-3xl font-bold text-foreground sm:text-4xl">
-                        Báº¯t Ä‘áº§u chá»‰ vá»›i 3 bÆ°á»›c
+                        Bắt đầu chỉ với 3 bước
                     </motion.h2>
                 </motion.div>
 
@@ -516,7 +557,7 @@ function StepsSection() {
                             'gap-2 shadow-lg shadow-primary/20',
                         )}
                     >
-                        Báº¯t Ä‘áº§u ngay <ArrowRight size={18} />
+                        Bắt đầu ngay <ArrowRight size={18} />
                     </Link>
                 </motion.div>
             </div>
@@ -524,9 +565,9 @@ function StepsSection() {
     );
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-/* Section 5 â€” FEATURED BLOG                                            */
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════ */
+/* Section 5 — FEATURED BLOG                                            */
+/* ═══════════════════════════════════════════════════════════════════════ */
 
 function FeaturedBlogSection() {
     const { ref, isInView } = useSectionInView();
@@ -551,15 +592,15 @@ function FeaturedBlogSection() {
                 >
                     <div>
                         <motion.p variants={fadeChild} className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">
-                            Kiáº¿n thá»©c
+                            Kiến thức
                         </motion.p>
                         <motion.h2 variants={fadeChild} className="text-3xl font-bold text-foreground sm:text-4xl">
-                            Blog ná»•i báº­t
+                            Blog nổi bật
                         </motion.h2>
                     </div>
                     <motion.div variants={fadeChild} className="hidden sm:block">
                         <Link to="/blog" className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'gap-1')}>
-                            Xem táº¥t cáº£ <ArrowRight size={14} />
+                            Xem tất cả <ArrowRight size={14} />
                         </Link>
                     </motion.div>
                 </motion.div>
@@ -614,8 +655,8 @@ function FeaturedBlogSection() {
                                         )}
                                         <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
                                             {post.author && <span>{post.author.fullName}</span>}
-                                            {post.readTimeText && <span>Â· {post.readTimeText}</span>}
-                                            <span>Â· {post.views} lÆ°á»£t xem</span>
+                                            {post.readTimeText && <span>· {post.readTimeText}</span>}
+                                            <span>· {post.views} lượt xem</span>
                                         </div>
                                     </div>
                                 </Link>
@@ -626,7 +667,7 @@ function FeaturedBlogSection() {
 
                 <div className="sm:hidden mt-6 text-center">
                     <Link to="/blog" className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'gap-1')}>
-                        Xem táº¥t cáº£ <ArrowRight size={14} />
+                        Xem tất cả <ArrowRight size={14} />
                     </Link>
                 </div>
             </div>
@@ -634,9 +675,9 @@ function FeaturedBlogSection() {
     );
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-/* Section 6 â€” FEATURED MENTORS                                         */
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════ */
+/* Section 6 — FEATURED MENTORS                                         */
+/* ═══════════════════════════════════════════════════════════════════════ */
 
 function FeaturedMentorsSection() {
     const { ref, isInView } = useSectionInView();
@@ -662,15 +703,15 @@ function FeaturedMentorsSection() {
                 >
                     <div>
                         <motion.p variants={fadeChild} className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">
-                            Cá»™ng Ä‘á»“ng
+                            Cộng đồng
                         </motion.p>
                         <motion.h2 variants={fadeChild} className="text-3xl font-bold text-foreground sm:text-4xl">
-                            Mentor tiĂªu biá»ƒu
+                            Mentor tiêu biểu
                         </motion.h2>
                     </div>
                     <motion.div variants={fadeChild} className="hidden sm:block">
                         <Link to="/mentors" className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'gap-1')}>
-                            Xem táº¥t cáº£ <ArrowRight size={14} />
+                            Xem tất cả <ArrowRight size={14} />
                         </Link>
                     </motion.div>
                 </motion.div>
@@ -678,10 +719,20 @@ function FeaturedMentorsSection() {
                 {isLoading ? (
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                         {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className="rounded-2xl border bg-background p-6 text-center">
-                                <Skeleton className="mx-auto h-20 w-20 rounded-full" />
-                                <Skeleton className="mx-auto mt-4 h-5 w-32" />
-                                <Skeleton className="mx-auto mt-2 h-4 w-40" />
+                            <div key={i} className="rounded-2xl border bg-background overflow-hidden flex flex-col">
+                                <div className="h-24 w-full bg-muted/30" />
+                                <div className="px-5 relative flex justify-center sm:justify-start">
+                                    <Skeleton className="-mt-10 h-20 w-20 rounded-full border-4 border-background" />
+                                </div>
+                                <div className="p-5 pt-3 space-y-3">
+                                    <Skeleton className="h-5 w-3/4 mx-auto sm:mx-0" />
+                                    <Skeleton className="h-4 w-full" />
+                                    <Skeleton className="h-4 w-5/6 mx-auto sm:mx-0" />
+                                    <div className="flex gap-2 justify-center sm:justify-start pt-2">
+                                        <Skeleton className="h-6 w-16 rounded-full" />
+                                        <Skeleton className="h-6 w-20 rounded-full" />
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -693,29 +744,66 @@ function FeaturedMentorsSection() {
                         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
                     >
                         {mentors.map((mentor) => (
-                            <motion.div key={mentor.id} variants={fadeChild}>
+                            <motion.div key={mentor.id} variants={fadeChild} className="h-full">
                                 <Link
                                     to={`/mentors/${mentor.slug}`}
-                                    className="group block rounded-2xl border bg-background p-6 text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                                    className="group relative flex h-full flex-col rounded-2xl border border-border/60 bg-background overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary/40"
                                 >
-                                    <Avatar src={mentor.avatarUrl} alt={mentor.name} size="lg" className="mx-auto" />
-                                    <div className="mt-4">
-                                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors flex items-center justify-center gap-1">
-                                            {mentor.name}
-                                            {mentor.isVerified && <span className="text-primary text-xs">âœ“</span>}
-                                        </h3>
-                                        <p className="mt-0.5 text-sm text-muted-foreground line-clamp-1">
-                                            {getMentorHeadline(mentor)}
-                                        </p>
+                                    {/* Cover Gradient */}
+                                    <div className="h-24 w-full bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-[linear-gradient(rgba(37,99,235,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(37,99,235,0.05)_1px,transparent_1px)] bg-[size:16px_16px]" />
                                     </div>
-                                    <div className="mt-3 flex flex-wrap justify-center gap-1">
-                                        {mentor.expertise?.slice(0, 2).map((e) => (
-                                            <Badge key={e} variant="secondary" className="text-xs">{e}</Badge>
-                                        ))}
+
+                                    {/* Avatar */}
+                                    <div className="px-5 relative flex justify-center sm:justify-start">
+                                        <div className="-mt-10 rounded-full border-[3px] border-background bg-background shadow-sm overflow-hidden h-[76px] w-[76px] flex items-center justify-center">
+                                            <Avatar src={mentor.avatarUrl} alt={mentor.name} className="h-full w-full" />
+                                        </div>
+                                        {mentor.isVerified && (
+                                            <div className="absolute top-2 right-4 flex items-center gap-1 rounded-full bg-blue-500/10 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-blue-600 dark:text-blue-400">
+                                                <CheckCircle2 size={12} />
+                                                <span>VERIFIED</span>
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="mt-3 text-xs text-muted-foreground">
-                                        {mentor.yearsOfExperience != null && <span>{mentor.yearsOfExperience} nÄƒm KN</span>}
-                                        {mentor.hourlyRate != null && <span> Â· {formatMentorHourlyRate(mentor.hourlyRate)}</span>}
+
+                                    {/* Content */}
+                                    <div className="flex flex-col flex-1 p-5 pt-3">
+                                        <div className="text-center sm:text-left mb-3">
+                                            <h3 className="font-bold text-lg text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                                                {mentor.name}
+                                            </h3>
+                                            <p className="mt-1 text-sm text-muted-foreground line-clamp-2 min-h-[40px]">
+                                                {getMentorHeadline(mentor)}
+                                            </p>
+                                        </div>
+
+                                        <div className="flex flex-wrap justify-center sm:justify-start gap-1.5 mb-auto">
+                                            {mentor.expertise?.slice(0, 3).map((e) => (
+                                                <Badge key={e} variant="secondary" className="text-[10px] font-medium px-2 py-0.5 bg-secondary/40">
+                                                    {e}
+                                                </Badge>
+                                            ))}
+                                        </div>
+
+                                        {/* Bottom Meta */}
+                                        <div className="mt-5 pt-4 border-t border-border/50 flex items-center justify-between">
+                                            <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+                                                <div className="flex items-center gap-1 font-medium text-foreground">
+                                                    <Star size={13} className="fill-amber-400 text-amber-400" />
+                                                    <span>5.0</span>
+                                                    <span className="text-muted-foreground font-normal">({mentor.reviewCount})</span>
+                                                </div>
+                                                <div className="flex items-center gap-1.5">
+                                                    <Clock size={13} />
+                                                    <span>{mentor.yearsOfExperience ? `${mentor.yearsOfExperience} năm KN` : 'Chưa cập nhật'}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-110">
+                                                <ArrowRight size={16} className="-rotate-45 transition-transform duration-300 group-hover:rotate-0" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </Link>
                             </motion.div>
@@ -723,9 +811,9 @@ function FeaturedMentorsSection() {
                     </motion.div>
                 ) : null}
 
-                <div className="sm:hidden mt-6 text-center">
+                <div className="sm:hidden mt-8 text-center">
                     <Link to="/mentors" className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'gap-1')}>
-                        Xem táº¥t cáº£ <ArrowRight size={14} />
+                        Xem tất cả <ArrowRight size={14} />
                     </Link>
                 </div>
             </div>
@@ -733,9 +821,9 @@ function FeaturedMentorsSection() {
     );
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-/* Section 7 â€” FINAL CTA                                                */
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════ */
+/* Section 7 — FINAL CTA                                                */
+/* ═══════════════════════════════════════════════════════════════════════ */
 
 function FinalCTASection() {
     const { ref, isInView } = useSectionInView();
@@ -761,13 +849,13 @@ function FinalCTASection() {
                         variants={fadeChild}
                         className="relative z-10 text-3xl font-bold text-foreground sm:text-4xl"
                     >
-                        Sáºµn sĂ ng tĂ¬m ra hÆ°á»›ng Ä‘i?
+                        Sẵn sàng tìm ra hướng đi?
                     </motion.h2>
                     <motion.p
                         variants={fadeChild}
                         className="relative z-10 mt-4 text-lg text-muted-foreground max-w-xl mx-auto"
                     >
-                        Chá»‰ cáº§n 15 phĂºt Ä‘á»ƒ khĂ¡m phĂ¡ con Ä‘Æ°á»ng CNTT phĂ¹ há»£p nháº¥t. HĂ ng trÄƒm báº¡n tráº» Ä‘Ă£ tĂ¬m Ä‘Æ°á»£c hÆ°á»›ng Ä‘i â€” báº¡n thĂ¬ sao?
+                        Chỉ cần 15 phút để khám phá con đường CNTT phù hợp nhất. Hàng trăm bạn trẻ đã tìm được hướng đi — bạn thì sao?
                     </motion.p>
                     <motion.div variants={fadeChild} className="relative z-10 mt-8">
                         <Link
@@ -777,7 +865,7 @@ function FinalCTASection() {
                                 'gap-2 shadow-lg shadow-primary/20 hover:shadow-xl',
                             )}
                         >
-                            Báº¯t Ä‘áº§u tráº¯c nghiá»‡m miá»…n phĂ­ <ArrowRight size={18} />
+                            Bắt đầu trắc nghiệm miễn phí <ArrowRight size={18} />
                         </Link>
                     </motion.div>
                 </motion.div>
@@ -786,18 +874,18 @@ function FinalCTASection() {
     );
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════ */
 /* PAGE                                                                  */
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════ */
 
 export default function LandingPage() {
     return (
         <>
             <Helmet>
-                <title>IT Compass â€” La BĂ n Nghá» Nghiá»‡p IT</title>
+                <title>IT Compass — La Bàn Nghề Nghiệp IT</title>
                 <meta
                     name="description"
-                    content="KhĂ¡m phĂ¡ con Ä‘Æ°á»ng CĂ´ng nghá»‡ thĂ´ng tin phĂ¹ há»£p vá»›i báº¡n. Tráº¯c nghiá»‡m Holland khoa há»c, mentor thá»±c chiáº¿n, blog chuyĂªn sĂ¢u."
+                    content="Khám phá con đường Công nghệ thông tin phù hợp với bạn. Trắc nghiệm Holland khoa học, mentor thực chiến, blog chuyên sâu."
                 />
             </Helmet>
             <HeroSection />

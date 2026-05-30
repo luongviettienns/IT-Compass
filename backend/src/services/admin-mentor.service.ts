@@ -20,6 +20,7 @@ const normalizeSlugCandidate = (value: string) => {
   return candidate;
 };
 
+// Chuẩn hóa payload admin để create/update luôn đi qua cùng một lớp sanitize + parse id/slug.
 const sanitizeMentorPayload = (input: Record<string, unknown>) => ({
   userId: input.userId === undefined ? undefined : input.userId === null ? null : toBigIntId(String(input.userId), 'userId'),
   name: input.name === undefined ? undefined : sanitizeSingleLineText(String(input.name)),
@@ -80,6 +81,7 @@ const ensureUserMentorLinkAvailable = async (userId: bigint, excludeId?: bigint)
   }
 };
 
+// Build điều kiện lọc một lần để list + count + summary dùng chung đúng một tập filter.
 const mentorWhereBase = ({
   search,
   status,

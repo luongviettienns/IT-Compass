@@ -19,7 +19,7 @@ const NAV_ITEMS = [
 
 export function Header() {
     const { pathname } = useLocation();
-    const { user, isAuthenticated, logout } = useAuth();
+    const { user, isAuthenticated, isLoading, logout } = useAuth();
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -30,7 +30,7 @@ export function Header() {
     }, []);
 
     useEffect(() => {
-        setUserMenuOpen(false);
+        queueMicrotask(() => setUserMenuOpen(false));
     }, [pathname]);
 
     const handleLogout = async () => {
@@ -83,83 +83,91 @@ export function Header() {
                     ))}
                 </nav>
 
-                {/* Right side - Hidden on Mobile */}
-                <div className="hidden md:flex items-center gap-3">
-                    {isAuthenticated && <NotificationBell />}
-                    {isAuthenticated && user ? (
-                        <div className="relative">
-                            <button
-                                onClick={() => setUserMenuOpen(!userMenuOpen)}
-                                className="flex items-center gap-2 rounded-full p-1 hover:bg-secondary transition-colors"
-                            >
-                                <Avatar src={user.profile?.avatarUrl} alt={user.fullName} size="sm" />
-                                <span className="hidden sm:block text-sm font-medium text-foreground max-w-[120px] truncate">
-                                    {user.fullName}
-                                </span>
-                                <ChevronDown size={14} className="hidden sm:block text-muted-foreground" />
-                            </button>
-
-                            <AnimatePresence>
-                                {userMenuOpen && (
-                                    <>
-                                        <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
-                                        <motion.div
-                                            initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                                            exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                                            transition={{ duration: 0.15 }}
-                                            className="absolute right-0 top-full mt-2 z-50 w-52 rounded-xl border bg-background/95 backdrop-blur-xl shadow-xl py-1"
-                                        >
-                                            <div className="px-3 py-2 border-b">
-                                                <p className="text-sm font-medium truncate">{user.fullName}</p>
-                                                <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                                            </div>
-                                            <Link
-                                                to="/profile"
-                                                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
-                                                onClick={() => setUserMenuOpen(false)}
-                                            >
-                                                <User size={16} /> Hồ sơ cá nhân
-                                            </Link>
-                                            {user.role === 'STUDENT' && (
-                                                <Link
-                                                    to="/bookings"
-                                                    className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
-                                                    onClick={() => setUserMenuOpen(false)}
-                                                >
-                                                    <CalendarClock size={16} /> Lịch tư vấn
-                                                </Link>
-                                            )}
-                                            {user.role === 'ADMIN' && (
-                                                <Link
-                                                    to="/admin"
-                                                    className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
-                                                    onClick={() => setUserMenuOpen(false)}
-                                                >
-                                                    <LayoutDashboard size={16} /> Quản trị
-                                                </Link>
-                                            )}
-                                            {user.role === 'MENTOR' && (
-                                                <Link
-                                                    to="/mentor"
-                                                    className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
-                                                    onClick={() => setUserMenuOpen(false)}
-                                                >
-                                                    <LayoutDashboard size={16} /> Mentor
-                                                </Link>
-                                            )}
-                                            <div className="border-t" />
-                                            <button
-                                                onClick={handleLogout}
-                                                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/5 transition-colors"
-                                            >
-                                                <LogOut size={16} /> Đăng xuất
-                                            </button>
-                                        </motion.div>
-                                    </>
-                                )}
-                            </AnimatePresence>
+                {/* Right side — fixed min-width prevents nav from shifting when auth state resolves */}
+                <div className="hidden md:flex items-center justify-end gap-3 min-w-[280px]">
+                    {/* Skeleton while auth resolves — same dimensions as authenticated state to prevent CLS */}
+                    {isLoading ? (
+                        <div className="flex items-center gap-2 h-10">
+                            <div className="h-8 w-8 rounded-full bg-secondary/40 shrink-0" />
+                            <div className="h-4 w-24 rounded bg-secondary/40" />
                         </div>
+                    ) : isAuthenticated && user ? (
+                        <>
+                            <NotificationBell />
+                            <div className="relative">
+                                <button
+                                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                                    className="flex items-center gap-2 rounded-full p-1 hover:bg-secondary transition-colors"
+                                >
+                                    <Avatar src={user.profile?.avatarUrl} alt={user.fullName} size="sm" />
+                                    <span className="hidden sm:block text-sm font-medium text-foreground max-w-[120px] truncate">
+                                        {user.fullName}
+                                    </span>
+                                    <ChevronDown size={14} className="hidden sm:block text-muted-foreground" />
+                                </button>
+
+                                <AnimatePresence>
+                                    {userMenuOpen && (
+                                        <>
+                                            <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                                                transition={{ duration: 0.15 }}
+                                                className="absolute right-0 top-full mt-2 z-50 w-52 rounded-xl border bg-background/95 backdrop-blur-xl shadow-xl py-1"
+                                            >
+                                                <div className="px-3 py-2 border-b">
+                                                    <p className="text-sm font-medium truncate">{user.fullName}</p>
+                                                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                                                </div>
+                                                <Link
+                                                    to="/profile"
+                                                    className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
+                                                    onClick={() => setUserMenuOpen(false)}
+                                                >
+                                                    <User size={16} /> Hồ sơ cá nhân
+                                                </Link>
+                                                {user.role === 'STUDENT' && (
+                                                    <Link
+                                                        to="/bookings"
+                                                        className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
+                                                        onClick={() => setUserMenuOpen(false)}
+                                                    >
+                                                        <CalendarClock size={16} /> Lịch tư vấn
+                                                    </Link>
+                                                )}
+                                                {user.role === 'ADMIN' && (
+                                                    <Link
+                                                        to="/admin"
+                                                        className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
+                                                        onClick={() => setUserMenuOpen(false)}
+                                                    >
+                                                        <LayoutDashboard size={16} /> Quản trị
+                                                    </Link>
+                                                )}
+                                                {user.role === 'MENTOR' && (
+                                                    <Link
+                                                        to="/mentor"
+                                                        className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-secondary transition-colors"
+                                                        onClick={() => setUserMenuOpen(false)}
+                                                    >
+                                                        <LayoutDashboard size={16} /> Mentor
+                                                    </Link>
+                                                )}
+                                                <div className="border-t" />
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/5 transition-colors"
+                                                >
+                                                    <LogOut size={16} /> Đăng xuất
+                                                </button>
+                                            </motion.div>
+                                        </>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        </>
                     ) : (
                         <div className="flex items-center gap-2">
                             <Link to="/auth/login" className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'px-2 sm:px-3')}>
@@ -170,7 +178,6 @@ export function Header() {
                             </Link>
                         </div>
                     )}
-
                 </div>
             </div>
         </header>

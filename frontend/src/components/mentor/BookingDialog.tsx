@@ -106,12 +106,14 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
     }, [onOpenChange, open]);
 
     useEffect(() => {
-        if (open) {
-            setStep('select');
-        } else {
-            setBookingMode('slot');
-            setCustomStartTime('');
-        }
+        queueMicrotask(() => {
+            if (open) {
+                setStep('select');
+            } else {
+                setBookingMode('slot');
+                setCustomStartTime('');
+            }
+        });
     }, [open]);
 
     const createBookingMutation = useMutation({

@@ -1,14 +1,14 @@
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'motion/react';
 import {
+    ArrowRight,
     CalendarClock,
-    MessageCircle,
     Clock,
     Filter,
-    ArrowRight,
+    MessageCircle,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -17,15 +17,16 @@ import { Badge } from '../components/ui/Badge';
 import { Button, buttonVariants } from '../components/ui/Button';
 import { BookingCancelDialog } from '../components/mentor/BookingCancelDialog';
 import { BookingStatusBadge } from '../components/mentor/BookingStatusBadge';
+import { ReviewDialog } from '../components/mentor/ReviewDialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
 import { EmptyState } from '../components/ui/EmptyState';
 import { Skeleton } from '../components/ui/Skeleton';
 import { useAuth } from '../contexts/AuthContext';
+import { getErrorMessage } from '../lib/appError';
 import { bookingApi, getBookingStatusLabel, type BookingStatus, type MentorBooking } from '../lib/bookingApi';
 import { bookingQueryKeys } from '../lib/bookingQueryKeys';
 import { conversationApi } from '../lib/conversationApi';
 import { formatMentorHourlyRate, getMentorHeadline } from '../lib/mentorApi';
-import { getErrorMessage } from '../lib/appError';
 import { cn } from '../lib/utils';
 
 const FILTERS: Array<{ label: string; status?: BookingStatus }> = [
@@ -94,7 +95,9 @@ export default function StudentBookingsPage() {
     const [selectedStatus, setSelectedStatus] = useState<BookingStatus | undefined>(undefined);
     const [page, setPage] = useState(1);
     const [bookingToCancel, setBookingToCancel] = useState<MentorBooking | null>(null);
+    const [bookingToReview, setBookingToReview] = useState<MentorBooking | null>(null);
     const [openingChatBookingId, setOpeningChatBookingId] = useState('');
+    const [reviewedBookingIds, setReviewedBookingIds] = useState<Set<string>>(new Set());
 
     const params = useMemo(() => ({
         status: selectedStatus,
@@ -121,6 +124,20 @@ export default function StudentBookingsPage() {
         },
     });
 
+    const reviewMutation = useMutation({
+        mutationFn: ({ booking, rating, comment }: { booking: MentorBooking; rating: number; comment: string }) =>
+            bookingApi.createStudentBookingReview(booking.id, { rating, comment: comment || null }),
+        onSuccess: async (_data, vars) => {
+            await queryClient.invalidateQueries({ queryKey: bookingQueryKeys.studentRoot });
+            setReviewedBookingIds((current) => new Set(current).add(vars.booking.id));
+            setBookingToReview(null);
+            toast.success('Đã gửi đánh giá mentor.');
+        },
+        onError: (error) => {
+            toast.error(getErrorMessage(error, 'Không thể gửi đánh giá mentor.'));
+        },
+    });
+
     const openStudentChat = useCallback(async (booking: MentorBooking) => {
         setOpeningChatBookingId(booking.id);
         try {
@@ -132,6 +149,10 @@ export default function StudentBookingsPage() {
             setOpeningChatBookingId('');
         }
     }, [navigate]);
+
+    const openReviewDialog = useCallback((booking: MentorBooking) => {
+        setBookingToReview(booking);
+    }, []);
 
     const bookings = bookingsQuery.data?.bookings ?? [];
     const pagination = bookingsQuery.data?.pagination;
@@ -263,6 +284,11 @@ export default function StudentBookingsPage() {
                                                 <Link to={`/mentors/${booking.mentor.slug}`} className={cn(buttonVariants({ variant: 'outline' }), 'flex-1 justify-center')}>
                                                     Xem mentor
                                                 </Link>
+                                                {booking.status === 'COMPLETED' && !reviewedBookingIds.has(booking.id) && (
+                                                    <Button type="button" className="flex-1" onClick={() => openReviewDialog(booking)}>
+                                                        Đánh giá mentor
+                                                    </Button>
+                                                )}
                                                 {booking.status === 'CONFIRMED' && (
                                                     <Button
                                                         type="button"
@@ -327,6 +353,15 @@ export default function StudentBookingsPage() {
                     onClose={() => setBookingToCancel(null)}
                     onConfirm={(_booking, reason) => cancelMutation.mutate({ booking: bookingToCancel, reason })}
                     isPending={cancelMutation.isPending}
+                />
+            )}
+
+            {bookingToReview && (
+                <ReviewDialog
+                    booking={bookingToReview}
+                    onClose={() => setBookingToReview(null)}
+                    isPending={reviewMutation.isPending}
+                    onConfirm={(booking, input) => reviewMutation.mutate({ booking, rating: input.rating, comment: input.comment })}
                 />
             )}
         </>

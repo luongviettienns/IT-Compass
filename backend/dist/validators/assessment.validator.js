@@ -65,3 +65,9 @@ export const getAssessmentAttemptByIdSchema = attemptIdParam;
 export const getAdminAssessmentStatsSchema = z.object({
     query: z.object({}).optional().default({}),
 });
+export const getAdminAssessmentAttemptsSchema = z.object({
+    query: z.object({
+        page: z.coerce.number().int().min(1).optional().default(1),
+        limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+    }),
+});

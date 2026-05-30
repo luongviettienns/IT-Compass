@@ -18,6 +18,7 @@ import {
     Settings,
     ClipboardList,
     MessageSquare,
+    CalendarRange,
     X,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -31,6 +32,7 @@ const MENU_ITEMS: ReadonlyArray<{ label: string; path: string; icon: typeof Layo
     { label: 'Nội dung (CMS)', path: '/admin/blogs', icon: FileText },
     { label: 'Bình luận blog', path: '/admin/blog-comments', icon: MessageSquare },
     { label: 'Assessment', path: '/admin/assessments', icon: ClipboardList },
+    { label: 'Lịch tư vấn', path: '/admin/bookings', icon: CalendarRange },
     { label: 'Nhật ký hệ thống', path: '/admin/audit-logs', icon: ShieldAlert },
     { label: 'Cài đặt', path: '/admin/settings', icon: Settings },
 ];

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * @file AuthContext.tsx - Context quản lý trạng thái xác thực.
  *

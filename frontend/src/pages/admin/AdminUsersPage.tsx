@@ -1,17 +1,56 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'motion/react';
-import { adminUserApi } from '../../lib/adminUserApi';
-import type { UserStatus } from '../../lib/adminUserApi';
+import { adminUserApi, type UserStatus } from '../../lib/adminUserApi';
 import { adminQueryKeys } from '../../lib/adminQueryKeys';
 import { Loader } from '../../components/ui/Loader';
 import { useMemo, useState } from 'react';
 import { AdminUserEditModal } from '../../components/admin/AdminUserEditModal';
 import { AdminActionDialog } from '../../components/admin/AdminActionDialog';
-import { Key, CheckSquare, Settings, Search } from 'lucide-react';
+import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
+import { Key, CheckSquare, Settings, Search, Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { getRoleBadge, getUserStatusLabel } from '../../lib/userDisplay';
 import { getErrorMessage } from '../../lib/appError';
+import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
+
+const userExportColumns: ExportColumn[] = [
+    { header: 'User ID', key: 'id', width: 14 },
+    { header: 'Full name', key: 'fullName', width: 24 },
+    { header: 'Email', key: 'email', width: 28 },
+    { header: 'Role', key: 'role', width: 14 },
+    { header: 'Status', key: 'status', width: 14 },
+    { header: 'Email verified', key: 'emailVerified', width: 16 },
+    { header: 'Has profile', key: 'hasProfile', width: 14 },
+    { header: 'Created at', key: 'createdAt', width: 22 },
+    { header: 'Updated at', key: 'updatedAt', width: 22 },
+];
+
+// Gom filter vào 1 chuỗi để subtitle export/log đọc nhanh hơn.
+const formatUserFilters = (
+    statusFilter: 'all' | 'active' | 'suspended' | 'blocked',
+    search: string,
+    selectedCount: number,
+) => {
+    const parts = [statusFilter !== 'all' ? `status=${statusFilter}` : null, search ? `search=${search}` : null, selectedCount ? `selected=${selectedCount}` : null].filter(Boolean);
+    return parts.length ? parts.join(' · ') : 'No filters';
+};
+
+const getStatusActionCopy = (status: UserStatus) => {
+    if (status === 'ACTIVE') return { label: 'Mở khóa', tone: 'success' as const, title: 'Mở khóa người dùng', description: 'Hành động này sẽ kích hoạt lại tài khoản và ghi vào audit log.' };
+    if (status === 'SUSPENDED') return { label: 'Tạm ngưng', tone: 'warning' as const, title: 'Tạm ngưng người dùng', description: 'Hành động này sẽ hạn chế quyền truy cập và ghi vào audit log.' };
+    return { label: 'Chặn', tone: 'destructive' as const, title: 'Chặn người dùng', description: 'Hành động này sẽ khóa tài khoản và ghi vào audit log.' };
+};
+
+const getBulkStatusActionCopy = (status: UserStatus) => {
+    if (status === 'ACTIVE') return { confirmText: 'Mở khóa hàng loạt', tone: 'success' as const };
+    if (status === 'SUSPENDED') return { confirmText: 'Tạm ngưng hàng loạt', tone: 'warning' as const };
+    return { confirmText: 'Chặn hàng loạt', tone: 'destructive' as const };
+};
+
+const toExportStatus = (statusFilter: 'all' | 'active' | 'suspended' | 'blocked') => (statusFilter === 'all' ? undefined : statusFilter.toUpperCase() as 'ACTIVE' | 'SUSPENDED' | 'BLOCKED');
+
+const formatDateTime = (value: string) => new Date(value).toLocaleString('vi-VN');
 
 export default function AdminUsersPage() {
     const [page, setPage] = useState(1);
@@ -27,6 +66,10 @@ export default function AdminUsersPage() {
     });
     const [bulkStatusDialog, setBulkStatusDialog] = useState<{ open: boolean; status: UserStatus }>({ open: false, status: 'ACTIVE' });
     const [bulkRevokeDialogOpen, setBulkRevokeDialogOpen] = useState(false);
+    const [exportOpen, setExportOpen] = useState(false);
+    const [exportError, setExportError] = useState<string | null>(null);
+    const [isExporting, setIsExporting] = useState(false);
+
 
     const queryClient = useQueryClient();
     const usersQuery = useMemo(
@@ -36,7 +79,7 @@ export default function AdminUsersPage() {
 
     const { data, isLoading } = useQuery({
         queryKey: adminQueryKeys.users(usersQuery),
-        queryFn: () => adminUserApi.listUsers({ page, limit: 10, search: search || undefined, status: statusFilter === 'all' ? undefined : statusFilter.toUpperCase() as any }),
+        queryFn: () => adminUserApi.listUsers({ page, limit: 10, search: search || undefined, status: statusFilter === 'all' ? undefined : statusFilter.toUpperCase() as UserStatus }),
     });
 
     const invalidateUsersData = (userId?: string) => {
@@ -81,8 +124,8 @@ export default function AdminUsersPage() {
 
     const handleUpdateStatus = (id: string, currentStatus: UserStatus) => {
         const newStatus = currentStatus === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE';
-        const actionLabel = newStatus === 'ACTIVE' ? 'Mở khóa' : 'Khóa';
-        setStatusDialog({ open: true, id, status: newStatus, actionLabel });
+        const action = getStatusActionCopy(newStatus);
+        setStatusDialog({ open: true, id, status: newStatus, actionLabel: action.label });
     };
 
     const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,6 +173,63 @@ export default function AdminUsersPage() {
         return true;
     };
 
+    const handleExport = async ({ format, scope, selectedColumnKeys, filePrefix }: { format: 'xlsx' | 'csv'; scope: ExportScope; selectedColumnKeys: string[]; filePrefix: string }) => {
+        try {
+            setIsExporting(true);
+            setExportError(null);
+            const columns = userExportColumns.filter((column) => selectedColumnKeys.includes(column.key));
+            const query = {
+                page: 1,
+                limit: 100,
+                search: search || undefined,
+                status: toExportStatus(statusFilter),
+            };
+            const firstPage = await adminUserApi.listUsers(query);
+            const selectedSet = new Set(selectedUserIds);
+            const allFilteredUsers = scope === 'all' || scope === 'selected'
+                ? await collectPagedItems({
+                    initialPage: firstPage,
+                    fetchPage: (currentPage, limit) => adminUserApi.listUsers({ ...query, page: currentPage, limit }),
+                    selectItems: (response) => response.users,
+                    selectPagination: (response) => response.pagination,
+                })
+                : firstPage.users;
+            const users = scope === 'selected' ? allFilteredUsers.filter((user) => selectedSet.has(user.id)) : allFilteredUsers;
+
+            await exportWorkbook({
+                fileName: buildExportFileName(filePrefix, format),
+                title: 'IT Compass — Export Users',
+                subtitle: formatUserFilters(statusFilter, search, scope === 'selected' ? users.length : 0),
+                format,
+                sheets: [
+                    {
+                        name: 'Users',
+                        columns,
+                        rows: users.map((user) => ({
+                            id: user.id,
+                            fullName: user.fullName,
+                            email: user.email,
+                            role: user.role,
+                            status: user.status,
+                            emailVerified: user.emailVerified ? 'Yes' : 'No',
+                            hasProfile: user.hasProfile ? 'Yes' : 'No',
+                            createdAt: formatDateTime(user.createdAt),
+                            updatedAt: formatDateTime(user.updatedAt),
+                        })),
+                    },
+                ],
+            });
+            setExportOpen(false);
+            toast.success('Đã xuất file users.');
+        } catch {
+            const message = 'Không thể xuất dữ liệu users.';
+            setExportError(message);
+            toast.error(message);
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
     return (
         <>
             <Helmet><title>Quản lý Người dùng — Admin — IT Compass</title></Helmet>
@@ -142,6 +242,9 @@ export default function AdminUsersPage() {
                             Tổng cộng: <span className="font-bold">{data?.summary?.total || 0}</span> người dùng.
                         </p>
                     </div>
+                    <button onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/15">
+                        <Download className="h-4 w-4" /> Export
+                    </button>
                 </div>
 
                 {/* Search + Filter Tabs */}
@@ -177,7 +280,7 @@ export default function AdminUsersPage() {
                         <span className="font-bold text-sm text-primary flex items-center gap-2"><CheckSquare className="w-4 h-4" /> Đã chọn {selectedUserIds.length} người dùng</span>
                         <div className="flex items-center gap-2">
                             <button disabled={bulkStatusMutation.isPending} onClick={() => handleBulkStatus('ACTIVE')} className="text-xs font-bold px-3 py-1.5 bg-emerald-500 text-white rounded-lg hover:scale-105 active:scale-95 transition-all">Mở khóa</button>
-                            <button disabled={bulkStatusMutation.isPending} onClick={() => handleBulkStatus('SUSPENDED')} className="text-xs font-bold px-3 py-1.5 bg-amber-500 text-white rounded-lg hover:scale-105 active:scale-95 transition-all">Giao ngưng</button>
+                            <button disabled={bulkStatusMutation.isPending} onClick={() => handleBulkStatus('SUSPENDED')} className="text-xs font-bold px-3 py-1.5 bg-amber-500 text-white rounded-lg hover:scale-105 active:scale-95 transition-all">Tạm ngưng</button>
                             <button disabled={bulkStatusMutation.isPending} onClick={() => handleBulkStatus('BLOCKED')} className="text-xs font-bold px-3 py-1.5 bg-destructive text-white rounded-lg hover:scale-105 active:scale-95 transition-all">Chặn</button>
                             <div className="w-px h-6 bg-primary/20 mx-2"></div>
                             <button disabled={bulkRevokeMutation.isPending} onClick={handleBulkRevoke} className="text-xs font-bold px-3 py-1.5 bg-secondary text-foreground hover:bg-secondary/70 flex items-center gap-1 rounded-lg hover:scale-105 active:scale-95 transition-all"><Key className="w-3 h-3" /> Hủy phiên</button>
@@ -295,8 +398,8 @@ export default function AdminUsersPage() {
                 <AdminUserEditModal isOpen={!!editingUserId} userId={editingUserId} onClose={() => setEditingUserId(null)} />
                 <AdminActionDialog
                     isOpen={statusDialog.open}
-                    title={`${statusDialog.actionLabel} người dùng`}
-                    description="Hành động này sẽ cập nhật trạng thái tài khoản và ghi vào audit log."
+                    title={getStatusActionCopy(statusDialog.status).title}
+                    description={getStatusActionCopy(statusDialog.status).description}
                     inputLabel="Lý do thay đổi"
                     inputPlaceholder={`Quản trị viên thực hiện ${statusDialog.actionLabel.toLowerCase()}`}
                     inputDefaultValue={`Quản trị viên thực hiện ${statusDialog.actionLabel.toLowerCase()}`}
@@ -304,7 +407,7 @@ export default function AdminUsersPage() {
                     minLength={3}
                     maxLength={500}
                     confirmText={statusDialog.actionLabel || 'Xác nhận'}
-                    tone={statusDialog.status === 'ACTIVE' ? 'success' : 'warning'}
+                    tone={getStatusActionCopy(statusDialog.status).tone}
                     isPending={statusMutation.isPending}
                     onClose={() => setStatusDialog({ open: false, id: null, status: 'ACTIVE', actionLabel: '' })}
                     onConfirm={(reason) => {
@@ -323,8 +426,8 @@ export default function AdminUsersPage() {
                     requireInput
                     minLength={3}
                     maxLength={500}
-                    confirmText={bulkStatusDialog.status === 'ACTIVE' ? 'Mở khóa hàng loạt' : bulkStatusDialog.status === 'SUSPENDED' ? 'Tạm ngưng hàng loạt' : 'Chặn hàng loạt'}
-                    tone={bulkStatusDialog.status === 'ACTIVE' ? 'success' : bulkStatusDialog.status === 'SUSPENDED' ? 'warning' : 'destructive'}
+                    confirmText={getBulkStatusActionCopy(bulkStatusDialog.status).confirmText}
+                    tone={getBulkStatusActionCopy(bulkStatusDialog.status).tone}
                     isPending={bulkStatusMutation.isPending}
                     onClose={() => setBulkStatusDialog({ open: false, status: 'ACTIVE' })}
                     onConfirm={(reason) => {
@@ -357,6 +460,24 @@ export default function AdminUsersPage() {
                         }
                         if (!validateActionReason(reason)) return;
                         bulkRevokeMutation.mutate({ userIds: selectedUserIds, reason: reason.trim() });
+                    }}
+                />
+                <AdminExportModal
+                    isOpen={exportOpen}
+                    onClose={() => setExportOpen(false)}
+                    onExport={handleExport}
+                    config={{
+                        moduleLabel: 'Users',
+                        filePrefix: 'users-export',
+                        totalRows: data?.summary?.total || 0,
+                        filteredRows: data?.pagination?.total || 0,
+                        selectedRows: selectedUserIds.length,
+                        supportsSelected: selectedUserIds.length > 0,
+                        availableColumns: userExportColumns,
+                        defaultScope: selectedUserIds.length ? 'selected' : 'current',
+                        defaultFormat: 'xlsx',
+                        errorMessage: exportError,
+                        isGenerating: isExporting,
                     }}
                 />
             </motion.div>

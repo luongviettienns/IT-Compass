@@ -57,6 +57,7 @@ const HOLLAND_META: Record<string, { label: string; accent: string }> = {
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
+// Lọc draft cũ theo template hiện tại để không restore nhầm câu hỏi đã đổi.
 const filterDraftAnswers = (template: AssessmentTemplate, draft: QuizDraft | null) => {
     const hollandQuestionIds = new Set(template.hollandQuestions.map((question) => question.id));
     const situationalQuestionMap = new Map(
@@ -143,22 +144,24 @@ export default function QuizPage() {
             Math.max(template.situationalQuestions.length - 1, 0),
         );
 
-        setHollandAnswers(filtered.hollandAnswers);
-        setSituationalAnswers(filtered.situationalAnswers);
-        setHollandIndex(restoredHollandIndex);
-        setSituationalIndex(restoredSituationalIndex);
-        setQuizStartedAt(draft?.quizStartedAt ?? new Date().toISOString());
+        queueMicrotask(() => {
+            setHollandAnswers(filtered.hollandAnswers);
+            setSituationalAnswers(filtered.situationalAnswers);
+            setHollandIndex(restoredHollandIndex);
+            setSituationalIndex(restoredSituationalIndex);
+            setQuizStartedAt(draft?.quizStartedAt ?? new Date().toISOString());
 
-        const pending = getPendingQuizResult();
-        if (pending) {
-            if (isPendingQuizResultComplete(pending, template)) {
-                setPendingResult(pending);
-            } else {
-                clearPendingQuizResult();
+            const pending = getPendingQuizResult();
+            if (pending) {
+                if (isPendingQuizResultComplete(pending, template)) {
+                    setPendingResult(pending);
+                } else {
+                    clearPendingQuizResult();
+                }
             }
-        }
 
-        setHasRestoredDraft(true);
+            setHasRestoredDraft(true);
+        });
     }, [hasRestoredDraft, template]);
 
     useEffect(() => {

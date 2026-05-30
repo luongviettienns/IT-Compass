@@ -164,6 +164,7 @@ model User {
   conversationsAsStudent     Conversation[]           @relation("ConversationStudent")
   messages                   Message[]
   notifications              Notification[]
+  bookingReviewsAsStudent    BookingReview[]
   userAdminAuditLogsAsActor  UserAdminAuditLog[]      @relation("UserAdminAuditActor")
   userAdminAuditLogsAsTarget UserAdminAuditLog[]      @relation("UserAdminAuditTarget")
   adminAuditLogsAsActor      AdminAuditLog[]          @relation("AdminAuditActor")
@@ -294,6 +295,7 @@ model Mentor {
   availabilityBlocks MentorAvailability[]
   bookingSetting     MentorBookingSetting?
   bookings           MentorBooking[]
+  reviews            BookingReview[]
   conversations      Conversation[]
 
   @@map("mentor")
@@ -356,11 +358,31 @@ model MentorBooking {
   mentor       Mentor        @relation(fields: [mentorId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_datlich_mentor")
   student      User          @relation(fields: [studentUserId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_datlich_hoc_vien")
   conversation Conversation?
+  review       BookingReview?
 
   @@index([mentorId, status, startAt], map: "idx_datlich_mentor_trang_thai_bat_dau")
   @@index([studentUserId, status, startAt], map: "idx_datlich_hoc_vien_trang_thai_bat_dau")
   @@index([startAt, endAt], map: "idx_datlich_khoang_thoi_gian")
   @@map("dat_lich_mentor")
+}
+
+model BookingReview {
+  id            BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  bookingId     BigInt   @unique @map("dat_lich_id") @db.UnsignedBigInt
+  mentorId      BigInt   @map("mentor_id") @db.UnsignedBigInt
+  studentUserId BigInt   @map("hoc_vien_id") @db.UnsignedBigInt
+  rating        Int      @map("so_sao") @db.UnsignedTinyInt
+  comment       String?  @map("nhan_xet") @db.VarChar(1000)
+  createdAt     DateTime @default(now()) @map("tao_luc") @db.DateTime(0)
+  updatedAt     DateTime @updatedAt @map("cap_nhat_luc") @db.DateTime(0)
+
+  booking MentorBooking @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_danhgia_datlich")
+  mentor  Mentor        @relation(fields: [mentorId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_danhgia_mentor")
+  student User          @relation(fields: [studentUserId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_danhgia_hoc_vien")
+
+  @@index([mentorId, createdAt], map: "idx_danhgia_mentor_tao_luc")
+  @@index([studentUserId, createdAt], map: "idx_danhgia_hoc_vien_tao_luc")
+  @@map("danh_gia_mentor")
 }
 
 model Conversation {

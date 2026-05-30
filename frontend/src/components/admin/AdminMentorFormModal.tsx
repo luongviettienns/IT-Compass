@@ -7,6 +7,8 @@ import type { AdminMentorInput } from '../../lib/adminMentorApi';
 import { adminQueryKeys } from '../../lib/adminQueryKeys';
 import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../ui/Loader';
+import type { MentorLevel, MentorStatus } from '../../lib/mentorApi';
+
 
 type AdminMentorFormModalProps = {
     isOpen: boolean;
@@ -51,31 +53,34 @@ export const AdminMentorFormModal: React.FC<AdminMentorFormModalProps> = ({ isOp
     };
 
     useEffect(() => {
-        if (mentorToEdit) {
-            setName(mentorToEdit.name || '');
-            setSlug(mentorToEdit.slug || '');
-            setTitle(mentorToEdit.title || '');
-            setBio(mentorToEdit.bio || '');
-            setExpertiseArea(mentorToEdit.expertiseArea || '');
-            setLevel(mentorToEdit.level || 'JUNIOR');
-            setYearsOfExperience(mentorToEdit.yearsOfExperience ?? '');
-            setHourlyRate(mentorToEdit.hourlyRate ?? '');
-            setCurrentSchool(mentorToEdit.currentSchool || '');
-            setCurrentCompany(mentorToEdit.currentCompany || '');
-            setCurrentJobTitle(mentorToEdit.currentJobTitle || '');
-            setConsultationLang(mentorToEdit.consultationLang || 'vi');
-            setAvatarUrl(mentorToEdit.avatarUrl || '');
-            setIsVerified(mentorToEdit.isVerified || false);
-            setStatus(mentorToEdit.status || 'ACTIVE');
-        } else {
-            setName(''); setSlug(''); setTitle(''); setBio('');
-            setExpertiseArea(''); setLevel('JUNIOR');
-            setYearsOfExperience(''); setHourlyRate('');
-            setCurrentSchool(''); setCurrentCompany('');
-            setCurrentJobTitle(''); setConsultationLang('vi');
-            setAvatarUrl(''); setIsVerified(false); setStatus('ACTIVE');
-        }
-        setErrorMessage(null);
+        if (!isOpen) return;
+        queueMicrotask(() => {
+            if (mentorToEdit) {
+                setName(mentorToEdit.name || '');
+                setSlug(mentorToEdit.slug || '');
+                setTitle(mentorToEdit.title || '');
+                setBio(mentorToEdit.bio || '');
+                setExpertiseArea(mentorToEdit.expertiseArea || '');
+                setLevel(mentorToEdit.level || 'JUNIOR');
+                setYearsOfExperience(mentorToEdit.yearsOfExperience ?? '');
+                setHourlyRate(mentorToEdit.hourlyRate ?? '');
+                setCurrentSchool(mentorToEdit.currentSchool || '');
+                setCurrentCompany(mentorToEdit.currentCompany || '');
+                setCurrentJobTitle(mentorToEdit.currentJobTitle || '');
+                setConsultationLang(mentorToEdit.consultationLang || 'vi');
+                setAvatarUrl(mentorToEdit.avatarUrl || '');
+                setIsVerified(mentorToEdit.isVerified || false);
+                setStatus(mentorToEdit.status || 'ACTIVE');
+            } else {
+                setName(''); setSlug(''); setTitle(''); setBio('');
+                setExpertiseArea(''); setLevel('JUNIOR');
+                setYearsOfExperience(''); setHourlyRate('');
+                setCurrentSchool(''); setCurrentCompany('');
+                setCurrentJobTitle(''); setConsultationLang('vi');
+                setAvatarUrl(''); setIsVerified(false); setStatus('ACTIVE');
+            }
+            setErrorMessage(null);
+        });
     }, [mentorToEdit, isOpen]);
 
     const showFormError = (message: string) => {
@@ -115,7 +120,7 @@ export const AdminMentorFormModal: React.FC<AdminMentorFormModalProps> = ({ isOp
                 title: title.trim() || null,
                 bio: bio.trim() || null,
                 expertiseArea: expertiseArea.trim() || null,
-                level: level as any,
+                level: level as MentorLevel,
                 yearsOfExperience: yearsOfExperience === '' ? null : Number(yearsOfExperience),
                 hourlyRate: hourlyRate === '' ? null : Number(hourlyRate),
                 currentSchool: currentSchool.trim() || null,
@@ -124,7 +129,7 @@ export const AdminMentorFormModal: React.FC<AdminMentorFormModalProps> = ({ isOp
                 consultationLang: consultationLang.trim() || null,
                 avatarUrl: avatarUrl.trim() || null,
                 isVerified,
-                status: status as any,
+                status: status as MentorStatus,
             };
             if (mentorToEdit) {
                 return adminMentorApi.updateMentor(mentorToEdit.id, payload);

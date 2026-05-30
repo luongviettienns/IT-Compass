@@ -29,6 +29,7 @@ export default function MessagesPage() {
     const location = useLocation();
     const navigate = useNavigate();
 
+    // Mentor vào URL chung thì tự đẩy sang route mentor riêng để đúng flow.
     useEffect(() => {
         if (user?.role === 'MENTOR' && location.pathname === '/messages') {
             navigate(`/mentor/messages${location.search}`, { replace: true });
@@ -44,9 +45,10 @@ export default function MessagesPage() {
     const conversations = conversationsQuery.data?.conversations ?? [];
     const selectedConversation = conversations.find((conversation) => conversation.id === selectedConversationId) ?? conversations[0] ?? null;
 
+    // Tự chọn conversation đầu tiên nếu chưa có conversationId trên URL.
     useEffect(() => {
         if (!selectedConversation || selectedConversationId) return;
-        setSelectedConversationId(selectedConversation.id);
+        queueMicrotask(() => setSelectedConversationId(selectedConversation.id));
     }, [selectedConversation, selectedConversationId]);
 
     const messagesQuery = useQuery({
@@ -74,6 +76,7 @@ export default function MessagesPage() {
         onError: (error) => toast.error(getErrorMessage(error, 'Không thể kết thúc sớm buổi tư vấn.')),
     });
 
+    // Fallback gửi tin nhắn qua API khi thread chưa gắn vào composer sẵn.
     const sendFallback = async (content: string): Promise<ConversationMessage> => {
         if (!selectedConversation) {
             toast.error('Vui lòng chọn cuộc trò chuyện trước khi gửi tin nhắn.');

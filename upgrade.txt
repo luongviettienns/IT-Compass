@@ -1,0 +1,517 @@
+# Business Flow Upgrade Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Nối các module hiện có thành một flow nghiệp vụ end-to-end đủ chặt để website trông như một platform vận hành thật, không chỉ là tập hợp màn hình rời.
+
+**Architecture:** Tập trung vào một luồng chính: `guest → auth → profile → assessment → recommendation → booking → messaging/follow-up → mentor/admin handling`. Mỗi phase phải tạo ra trạng thái rõ ràng, chuyển tiếp có điều kiện, và màn hình/endpoint hỗ trợ trạng thái đó. Ưu tiên tối ưu luồng người dùng trước, rồi mới thêm polish và proof-of-quality.
+
+**Tech Stack:** React + Vite + TypeScript + React Router + React Query + Socket.IO client, Node.js + Express + TypeScript + Prisma + Socket.IO + Zod + Redis.
+
+---
+
+### Phase 0: Lock the target flow and definitions
+
+**Files:**
+- Create: `docs/superpowers/plans/2026-05-16-business-flow-upgrade.md`
+- Modify: `frontend/src/App.tsx`
+- Modify: `frontend/src/contexts/AuthContext.tsx`
+- Modify: `backend/src/routes/*.ts`
+- Modify: `backend/src/services/*.ts`
+
+- [x] **Step 1: Define the primary user journey**
+
+```text
+Guest browses majors/mentors/blog → signs up → verifies email → completes profile → takes assessment → receives recommendation → books mentor → chats/follows up → sees booking status updates.
+```
+
+- [x] **Step 2: Define the role-specific journeys**
+
+```text
+User: browse → auth → profile → assessment → booking → messaging → history
+Mentor: availability → bookings → chat → status updates → profile edit
+Admin: user management → mentor management → blog moderation → audit/review
+```
+
+- [x] **Step 3: Define the required states**
+
+```text
+pending, verified, profile_incomplete, profile_complete, assessment_started, assessment_done, recommendation_ready, booking_pending, booking_confirmed, booking_completed, booking_cancelled, follow_up_pending, follow_up_done
+```
+
+- [x] **Step 4: Write the acceptance rule for the whole upgrade**
+
+```text
+A user can start from the homepage and reach a meaningful end state without hitting dead ends: recommendation, booking, and follow-up are all connected and visible in history.
+```
+
+**Exit criteria:**
+- One written source of truth for the target journey.
+- No ambiguity about the main lifecycle or state names.
+
+---
+
+### Phase 1: Onboarding, auth, and profile completeness
+
+**Files:**
+- Modify: `frontend/src/pages/auth/AuthPage.tsx`
+- Modify: `frontend/src/pages/auth/ForgotPasswordPage.tsx`
+- Modify: `frontend/src/pages/auth/ResetPasswordPage.tsx`
+- Modify: `frontend/src/contexts/AuthContext.tsx`
+- Modify: `frontend/src/components/auth/ProtectedRoute.tsx`
+- Modify: `frontend/src/pages/ProfilePage.tsx`
+- Modify: `frontend/src/lib/authApi.ts`
+- Modify: `frontend/src/lib/authNavigation.ts`
+- Modify: `backend/src/controllers/auth.controller.ts`
+- Modify: `backend/src/services/auth.service.ts`
+- Modify: `backend/src/services/auth-session.service.ts`
+- Modify: `backend/src/validators/auth.validator.ts`
+- Modify: `backend/src/routes/auth.routes.ts`
+- Modify: `backend/src/routes/user.routes.ts`
+- Modify: `backend/prisma/schema.prisma`
+
+- [ ] **Step 1: Make profile completeness explicit**
+
+```text
+Treat profile as complete only when required fields exist: name, email verified, school/grade or equivalent background, and at least one goal/preference field.
+```
+
+- [ ] **Step 2: Add route guards for incomplete users**
+
+```text
+If a user is authenticated but profile is incomplete, redirect them to the profile completion flow instead of letting them jump to booking or recommendation actions.
+```
+
+- [ ] **Step 3: Make auth feedback stateful**
+
+```text
+Show clear states for loading, invalid credentials, unverified email, password reset expiry, and session expiration.
+```
+
+- [ ] **Step 4: Add the backend condition for “can proceed”**
+
+```text
+The backend should expose profile completion status so the frontend can decide whether to block booking/test follow-up actions.
+```
+
+- [ ] **Step 5: Verify the onboarding exit condition**
+
+```text
+A signed-in user can tell, from UI alone, whether they are ready to continue or must complete profile verification first.
+```
+
+**Exit criteria:**
+- Auth flow leads to a clear next step.
+- Incomplete accounts cannot silently fall through into later business actions.
+- Profile state is usable by the rest of the app.
+
+---
+
+### Phase 2: Assessment → recommendation flow
+
+**Files:**
+- Modify: `frontend/src/pages/assessment/TestPage.tsx`
+- Modify: `frontend/src/pages/assessment/QuizPage.tsx`
+- Modify: `frontend/src/pages/assessment/ResultPage.tsx`
+- Modify: `frontend/src/lib/quizDraft.ts`
+- Modify: `frontend/src/lib/quizScoring.ts`
+- Modify: `frontend/src/lib/assessmentApi.ts`
+- Modify: `frontend/src/lib/assessmentQueryKeys.ts`
+- Modify: `frontend/src/pages/MajorsPage.tsx`
+- Modify: `frontend/src/pages/MentorPage.tsx`
+- Modify: `frontend/src/pages/MentorDetailPage.tsx`
+- Modify: `backend/src/controllers/assessment.controller.ts`
+- Modify: `backend/src/services/assessment.service.ts`
+- Modify: `backend/src/services/assessment.scoring.ts`
+- Modify: `backend/src/services/assessment.results.ts`
+- Modify: `backend/src/services/assessment.questions.ts`
+- Modify: `backend/src/services/assessment.catalog.ts`
+- Modify: `backend/src/validators/assessment.validator.ts`
+- Modify: `backend/src/routes/assessment.routes.ts`
+- Modify: `backend/prisma/schema.prisma`
+
+- [ ] **Step 1: Make the test output actionable**
+
+```text
+The result page must not stop at a score. It should show 3 things: matched majors, matched mentors, and the next recommended action.
+```
+
+- [ ] **Step 2: Ensure result routing creates a next step**
+
+```text
+After completion, route users to either a recommendation summary or a call-to-action page that points to booking or mentor detail.
+```
+
+- [ ] **Step 3: Persist assessment history**
+
+```text
+Store at least the latest assessment attempt and its result so users can revisit it from profile/history.
+```
+
+- [ ] **Step 4: Add fallback when no strong match exists**
+
+```text
+If the algorithm cannot produce a strong match, show a soft recommendation set instead of an empty state.
+```
+
+- [ ] **Step 5: Verify the decision layer exit condition**
+
+```text
+A user who finishes the test should always leave with a meaningful recommendation path, even if the match confidence is low.
+```
+
+**Exit criteria:**
+- Assessment produces business value, not just a score.
+- Recommendation acts as a bridge to booking and mentor discovery.
+- History exists for repeat use.
+
+---
+
+### Phase 3: Booking, schedule, and lifecycle states
+
+**Progress so far:**
+- [x] Student booking screen now shows state summary + action hint per status.
+- [x] Mentor booking screen copy is aligned to the same lifecycle language.
+- [ ] Realtime updates still need to be wired.
+- [ ] Booking history / backend lifecycle work is still pending.
+
+**Files:**
+- Modify: `frontend/src/pages/mentor/MentorAvailabilityPage.tsx`
+- Modify: `frontend/src/components/mentor/BookingDialog.tsx`
+- Modify: `frontend/src/components/mentor/BookingCancelDialog.tsx`
+- Modify: `frontend/src/components/mentor/BookingStatusBadge.tsx`
+- Modify: `frontend/src/pages/mentor/MentorBookingsPage.tsx`
+- Modify: `frontend/src/lib/bookingApi.ts`
+- Modify: `frontend/src/lib/bookingQueryKeys.ts`
+- Modify: `frontend/src/components/shared/RealtimeBookingListener.tsx`
+- Modify: `backend/src/controllers/booking.controller.ts`
+- Modify: `backend/src/services/booking.service.ts`
+- Modify: `backend/src/validators/booking.validator.ts`
+- Modify: `backend/src/routes/booking.routes.ts`
+- Modify: `backend/src/socket/booking.events.ts`
+- Modify: `backend/src/tasks/scheduled.tasks.ts`
+- Modify: `backend/prisma/schema.prisma`
+
+- [ ] **Step 1: Define booking lifecycle states**
+
+```text
+Use a small fixed set of booking states: pending, confirmed, completed, cancelled.
+```
+
+- [ ] **Step 2: Make booking actions state-aware**
+
+```text
+The UI must show whether a slot can be booked, is already booked, was cancelled, or is waiting on mentor/admin confirmation.
+```
+
+- [ ] **Step 3: Add a visible booking history surface**
+
+```text
+Users and mentors need a list of past and upcoming bookings with status badges and clear timestamps.
+```
+
+- [ ] **Step 4: Connect realtime updates to booking changes**
+
+```text
+Use socket events or polling so booking changes propagate without requiring a hard refresh.
+```
+
+- [ ] **Step 5: Verify the action layer exit condition**
+
+```text
+A recommendation can be turned into a booking, and the booking state is always visible to both sides.
+```
+
+**Exit criteria:**
+- Booking is not a dead end.
+- Status changes are visible and understandable.
+- Mentors and users see the same lifecycle language.
+
+---
+
+### Phase 4: Messaging and follow-up loop
+
+**Files:**
+- Modify: `frontend/src/components/chat/ConversationList.tsx`
+- Modify: `frontend/src/components/chat/MessageBubble.tsx`
+- Modify: `frontend/src/components/chat/MessageComposer.tsx`
+- Modify: `frontend/src/lib/conversationApi.ts`
+- Modify: `frontend/src/lib/conversationQueryKeys.ts`
+- Modify: `frontend/src/lib/chatSocket.ts`
+- Modify: `frontend/src/components/shared/RealtimeNotificationListener.tsx`
+- Modify: `frontend/src/pages/ProfilePage.tsx`
+- Modify: `frontend/src/pages/mentor/MentorPage.tsx`
+- Modify: `backend/src/controllers/conversation.controller.ts`
+- Modify: `backend/src/services/conversation.service.ts`
+- Modify: `backend/src/validators/conversation.validator.ts`
+- Modify: `backend/src/routes/conversation.routes.ts`
+- Modify: `backend/src/socket/chat.handlers.ts`
+- Modify: `backend/src/socket/index.ts`
+- Modify: `backend/src/socket/notification.events.ts`
+- Modify: `backend/src/services/notification.service.ts`
+- Modify: `backend/src/routes/notification.routes.ts`
+- Modify: `backend/prisma/schema.prisma`
+
+- [ ] **Step 1: Tie messages to a business event**
+
+```text
+The chat entry point should come from booking, mentor detail, or follow-up context rather than being a standalone inbox with no purpose.
+```
+
+- [ ] **Step 2: Show conversation state**
+
+```text
+Display whether a conversation is linked to an active booking, a past booking, or a pre-booking inquiry.
+```
+
+- [ ] **Step 3: Add follow-up prompts after booking**
+
+```text
+After a booking is confirmed or completed, surface the next action: leave feedback, ask a follow-up question, or schedule again.
+```
+
+- [ ] **Step 4: Connect notifications to chat and booking**
+
+```text
+A new message or booking update should produce a visible notification path, not only a silent backend event.
+```
+
+- [ ] **Step 5: Verify the retention loop exit condition**
+
+```text
+The platform should support at least one meaningful follow-up after the first booking, so the user journey does not end at confirmation.
+```
+
+**Exit criteria:**
+- Messaging has context.
+- Notifications reinforce the lifecycle.
+- Follow-up feels like part of the product, not an afterthought.
+
+---
+
+### Phase 5: Mentor and admin handling
+
+**Files:**
+- Modify: `frontend/src/pages/mentor/MentorOverview.tsx`
+- Modify: `frontend/src/pages/mentor/MentorAvailabilityPage.tsx`
+- Modify: `frontend/src/pages/mentor/MentorBookingsPage.tsx`
+- Modify: `frontend/src/pages/mentor/MentorProfileEdit.tsx`
+- Modify: `frontend/src/pages/admin/AdminDashboard.tsx`
+- Modify: `frontend/src/pages/admin/AdminUsersPage.tsx`
+- Modify: `frontend/src/pages/admin/AdminMentorsPage.tsx`
+- Modify: `frontend/src/pages/admin/AdminBlogsPage.tsx`
+- Modify: `frontend/src/pages/admin/AdminBlogCommentsPage.tsx`
+- Modify: `frontend/src/pages/admin/AdminAuditLogsPage.tsx`
+- Modify: `frontend/src/pages/admin/AdminSettingsPage.tsx`
+- Modify: `frontend/src/components/admin/AdminActionDialog.tsx`
+- Modify: `frontend/src/components/admin/AdminUserEditModal.tsx`
+- Modify: `frontend/src/components/admin/AdminMentorFormModal.tsx`
+- Modify: `frontend/src/components/admin/AdminBlogFormModal.tsx`
+- Modify: `frontend/src/components/admin/AdminBlogCommentsModal.tsx`
+- Modify: `backend/src/controllers/admin-user.controller.ts`
+- Modify: `backend/src/controllers/admin-mentor.controller.ts`
+- Modify: `backend/src/services/admin-user.service.ts`
+- Modify: `backend/src/services/admin-mentor.service.ts`
+- Modify: `backend/src/services/admin-audit.service.ts`
+- Modify: `backend/src/routes/admin-user.routes.ts`
+- Modify: `backend/src/routes/admin-mentor.routes.ts`
+- Modify: `backend/src/routes/admin-blog.routes.ts`
+- Modify: `backend/src/routes/admin-comment.routes.ts`
+- Modify: `backend/prisma/schema.prisma`
+
+- [ ] **Step 1: Make mentor work operational**
+
+```text
+Mentors should be able to manage availability, see bookings by status, and update profile details without going through admin.
+```
+
+- [ ] **Step 2: Make admin work supervisory**
+
+```text
+Admins should manage exceptions, moderation, and user/mentor lifecycle rather than doing everyday user tasks.
+```
+
+- [ ] **Step 3: Keep audit visibility for impactful actions**
+
+```text
+Major changes like mentor edits, comment moderation, and user state changes should be traceable in audit logs.
+```
+
+- [ ] **Step 4: Reduce overlap between mentor and admin responsibilities**
+
+```text
+If a mentor can do it in the mentor dashboard, the admin panel should not duplicate it unless it is for oversight or moderation.
+```
+
+- [ ] **Step 5: Verify the operator layer exit condition**
+
+```text
+Mentor and admin pages should feel like real operating surfaces, not just extra menus.
+```
+
+**Exit criteria:**
+- Mentor/admin responsibilities are separated.
+- Operational pages support the platform lifecycle.
+- Audit exists for important actions.
+
+---
+
+### Phase 6: UX states and dead-end removal
+
+**Files:**
+- Modify: `frontend/src/components/ui/Skeleton.tsx`
+- Modify: `frontend/src/components/ui/Loader.tsx`
+- Modify: `frontend/src/components/ui/EmptyState.tsx`
+- Modify: `frontend/src/components/shared/ErrorBoundary.tsx`
+- Modify: `frontend/src/pages/NotFoundPage.tsx`
+- Modify: `frontend/src/pages/MajorsPage.tsx`
+- Modify: `frontend/src/pages/MajorDetailPage.tsx`
+- Modify: `frontend/src/pages/BlogPage.tsx`
+- Modify: `frontend/src/pages/BlogDetailPage.tsx`
+- Modify: `frontend/src/pages/MentorPage.tsx`
+- Modify: `frontend/src/pages/MentorDetailPage.tsx`
+- Modify: `frontend/src/pages/ProfilePage.tsx`
+- Modify: `frontend/src/pages/assessment/ResultPage.tsx`
+
+- [ ] **Step 1: Add explicit loading treatment to every key surface**
+
+```text
+Show skeletons or loaders for content fetches that would otherwise look broken or empty during network delay.
+```
+
+- [ ] **Step 2: Add explicit empty-state copy**
+
+```text
+When there is no data, explain why and what the user can do next instead of showing a blank panel.
+```
+
+- [ ] **Step 3: Add explicit recovery paths for errors**
+
+```text
+For failed fetches, show retry-oriented UI and a clear next action rather than generic failure text.
+```
+
+- [ ] **Step 4: Ensure every dead end points somewhere useful**
+
+```text
+A not-found page, empty list, or no-match result should still direct the user to a useful next action.
+```
+
+- [ ] **Step 5: Verify the UX safety exit condition**
+
+```text
+No important page should leave the user without a next step, even when data is missing or the request fails.
+```
+
+**Exit criteria:**
+- Every important flow has loading/empty/error states.
+- No dead-end screen feels like a product gap.
+- Recovery is visible and obvious.
+
+---
+
+### Phase 7: Validation and QA for the upgraded flow
+
+**Files:**
+- Modify: `frontend/package.json`
+- Modify: `backend/package.json`
+- Modify: `backend/src/server.ts`
+- Modify: `backend/src/app.ts`
+- Modify: `backend/src/routes/*.ts`
+- Modify: `backend/src/controllers/*.ts`
+- Modify: `backend/src/services/*.ts`
+- Modify: `frontend/src/pages/**/*.tsx`
+
+- [ ] **Step 1: Add a flow checklist for manual QA**
+
+```text
+Test the full journey in order: auth, profile completion, assessment, recommendation, booking, message, status update, history.
+```
+
+- [ ] **Step 2: Identify the highest-value regression paths**
+
+```text
+Protect the paths most likely to break the business story: profile gate, booking flow, result routing, realtime updates, admin moderation.
+```
+
+- [ ] **Step 3: Add missing scripts if needed**
+
+```text
+Frontend and backend should expose the minimal commands needed to build, typecheck, lint, and run the app reliably.
+```
+
+- [ ] **Step 4: Verify the full flow with a real data seed**
+
+```text
+Use seeded accounts and seeded content so QA can run the journey without manual database setup.
+```
+
+- [ ] **Step 5: Decide the completion gate**
+
+```text
+The upgrade is done only when the flow can be demonstrated end-to-end on a clean run without hitting unhandled dead ends.
+```
+
+**Exit criteria:**
+- There is a repeatable QA path.
+- The most important regressions are covered.
+- The demo story can be replayed consistently.
+
+---
+
+### Phase 8: Final polish and thesis readiness
+
+**Files:**
+- Modify: `docs/README.md` or project docs if they exist
+- Modify: `backend/prisma/seed.ts`
+- Modify: `backend/prisma/seed-accounts.md`
+- Modify: `frontend/src/pages/AboutUsPage.tsx`
+- Modify: `frontend/src/pages/MentorPage.tsx`
+- Modify: `frontend/src/pages/MajorsPage.tsx`
+
+- [ ] **Step 1: Make the demo story obvious**
+
+```text
+Add visible cues for the intended journey so reviewers can follow the platform story without guessing.
+```
+
+- [ ] **Step 2: Make seed data support the story**
+
+```text
+Seed content should reflect the full business loop: users, mentors, bookings, assessments, and editorial content.
+```
+
+- [ ] **Step 3: Add review-ready wording**
+
+```text
+Copy should explain the business value of the platform in terms a thesis reviewer can understand quickly.
+```
+
+- [ ] **Step 4: Verify the thesis readiness exit condition**
+
+```text
+A reviewer should be able to open the app, follow the flow, and understand what problem the project solves in one sitting.
+```
+
+**Exit criteria:**
+- The app is easy to demo.
+- Seed data supports the narrative.
+- The project reads as a complete business system.
+
+---
+
+### Delivery order
+
+1. Phase 0 — lock the target flow.
+2. Phase 1 — onboarding/auth/profile gate.
+3. Phase 2 — assessment/recommendation bridge.
+4. Phase 3 — booking lifecycle.
+5. Phase 4 — messaging/follow-up loop.
+6. Phase 5 — mentor/admin operations.
+7. Phase 6 — UX states/dead-end removal.
+8. Phase 7 — validation/QA.
+9. Phase 8 — thesis polish.
+
+### Done definition
+
+The upgrade is done when the platform supports a continuous user journey from discovery to follow-up, and every major role has a clear operational surface with no dead-end screens.

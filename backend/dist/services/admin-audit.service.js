@@ -49,7 +49,7 @@ const parseJsonValue = (value) => {
     }
     return value;
 };
-const buildWhereSql = ({ actorUserId, action, targetType, targetId }) => {
+const buildWhereSql = ({ actorUserId, action, targetType, targetId, createdFrom, createdTo }) => {
     const conditions = [];
     if (actorUserId) {
         conditions.push(Prisma.sql `a.nguoi_thuc_hien_id = ${toBigIntId(actorUserId, 'actor user id')}`);
@@ -63,11 +63,21 @@ const buildWhereSql = ({ actorUserId, action, targetType, targetId }) => {
     if (targetId) {
         conditions.push(Prisma.sql `a.doi_tuong_id = ${String(targetId)}`);
     }
+    if (createdFrom) {
+        conditions.push(Prisma.sql `a.tao_luc >= ${new Date(createdFrom)}`);
+    }
+    if (createdTo) {
+        conditions.push(Prisma.sql `a.tao_luc <= ${new Date(createdTo)}`);
+    }
     if (conditions.length === 0) {
         return Prisma.empty;
     }
     return Prisma.sql `WHERE ${Prisma.join(conditions, ' AND ')}`;
 };
+const normalizeDateRange = (createdFrom, createdTo) => ({
+    createdFrom: typeof createdFrom === 'string' ? createdFrom : undefined,
+    createdTo: typeof createdTo === 'string' ? createdTo : undefined,
+});
 const normalizeAuditLog = (log) => ({
     id: String(log.id),
     action: ADMIN_AUDIT_ACTION_FROM_DB[log.action] || log.action,
@@ -106,11 +116,11 @@ export const createAdminAuditLog = async ({ actorUserId, action, targetType, tar
     )
   `;
 };
-export const listAdminAuditLogs = async ({ page = 1, limit = 20, actorUserId, action, targetType, targetId }) => {
+export const listAdminAuditLogs = async ({ page = 1, limit = 20, actorUserId, action, targetType, targetId, createdFrom, createdTo }) => {
     const parsedPage = normalizePositiveInt(page, 1);
     const parsedLimit = Math.min(normalizePositiveInt(limit, 20), 100);
     const offset = (parsedPage - 1) * parsedLimit;
-    const whereSql = buildWhereSql({ actorUserId, action, targetType, targetId });
+    const whereSql = buildWhereSql({ actorUserId, action, targetType, targetId, ...normalizeDateRange(createdFrom, createdTo) });
     const [countRows, logs] = await Promise.all([
         prisma.$queryRaw(Prisma.sql `
       SELECT COUNT(*) AS total

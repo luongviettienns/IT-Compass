@@ -151,7 +151,10 @@ export default function MentorAvailabilityPage() {
         queryFn: bookingApi.getMentorBookingSettings,
     });
 
-    const blocks = blocksDraft ?? availabilityQuery.data?.blocks.map(toDraftBlock) ?? [];
+    const blocks = useMemo(
+        () => blocksDraft ?? availabilityQuery.data?.blocks.map(toDraftBlock) ?? [],
+        [availabilityQuery.data?.blocks, blocksDraft],
+    );
     const settingsForm = settingsFormDraft ?? (
         settingsQuery.data?.settings ? settingsToForm(settingsQuery.data.settings) : defaultSettingsForm
     );

@@ -46,6 +46,7 @@ const getBookingRequestTypeLabel = (booking: MentorBooking) => (
     booking.requestType === 'CUSTOM_TIME' ? 'Đề xuất giờ riêng' : 'Theo lịch mentor'
 );
 
+// Mô tả trạng thái chat theo booking để mentor biết khi nào có thể mở convo.
 const getChatStatusText = (booking: MentorBooking) => {
     switch (booking.status) {
         case 'REQUESTED':

@@ -22,7 +22,7 @@ import { adminBlogRoutes, blogRoutes } from './routes/blog.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 import adminUserRoutes from './routes/admin-user.routes.js';
 import { mentorRoutes, publicMentorRoutes } from './routes/mentor.routes.js';
-import { mentorBookingRoutes, publicMentorBookingRoutes, studentBookingRoutes } from './routes/booking.routes.js';
+import { adminBookingRoutes, mentorBookingRoutes, publicMentorBookingRoutes, studentBookingRoutes } from './routes/booking.routes.js';
 import { bookingConversationRoutes, conversationRoutes } from './routes/conversation.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
 import adminMentorRoutes from './routes/admin-mentor.routes.js';
@@ -91,6 +91,7 @@ app.use('/api/admin', adminBlogRoutes);
 app.use('/api/admin', adminAssessmentRoutes);
 app.use('/api/admin', adminUserRoutes);
 app.use('/api/admin', adminMentorRoutes);
+app.use('/api/admin', adminBookingRoutes);
 app.use('/api/uploads', uploadRoutes);
 app.use('/uploads', express.static('uploads'));
 

@@ -184,6 +184,7 @@ const ensureTargetIsNotProtectedAdmin = async (targetUserId: bigint) => {
   }
 };
 
+// Tập trung toàn bộ filter list ở đây để count, page và summary không lệch nhau.
 const buildUserWhere = ({
   search,
   role,

@@ -165,7 +165,7 @@ export default function MentorPage() {
     const [verifiedOnly, setVerifiedOnly] = useState(true);
 
     useEffect(() => {
-        setPage(1);
+        queueMicrotask(() => setPage(1));
     }, [search, expertiseArea, level, sortBy, verifiedOnly]);
 
     const params = useMemo<MentorListParams>(() => {

@@ -23,6 +23,24 @@ const normalizeAttempt = (attempt) => {
         updatedAt: attempt.updatedAt,
     };
 };
+const normalizeAdminAttempt = (attempt) => ({
+    id: String(attempt.id),
+    userId: String(attempt.userId),
+    userName: attempt.user.fullName,
+    userEmail: attempt.user.email,
+    quizType: attempt.quizType,
+    quizVersion: attempt.quizVersion,
+    status: attempt.status,
+    resultCode: attempt.resultCode,
+    topTraits: attempt.topTraits,
+    rawScores: attempt.rawScoresJson,
+    answers: attempt.answersJson,
+    summary: attempt.summaryJson,
+    startedAt: attempt.startedAt,
+    submittedAt: attempt.submittedAt,
+    createdAt: attempt.createdAt,
+    updatedAt: attempt.updatedAt,
+});
 export const getCurrentTemplate = async () => ({
     quizType: assessmentCatalog.quizType,
     version: assessmentCatalog.version,
@@ -130,6 +148,35 @@ export const getAttemptById = async ({ userId, attemptId }) => {
         throw new HttpError(404, 'Assessment attempt not found');
     }
     return normalizeAttempt(attempt);
+};
+export const getAdminAssessmentAttempts = async ({ page, limit }) => {
+    const normalizedPage = Number(page);
+    const normalizedLimit = Number(limit);
+    const [total, attempts] = await prisma.$transaction([
+        prisma.assessmentAttempt.count(),
+        prisma.assessmentAttempt.findMany({
+            orderBy: { submittedAt: 'desc' },
+            skip: (normalizedPage - 1) * normalizedLimit,
+            take: normalizedLimit,
+            include: {
+                user: {
+                    select: {
+                        fullName: true,
+                        email: true,
+                    },
+                },
+            },
+        }),
+    ]);
+    return {
+        attempts: attempts.map((attempt) => normalizeAdminAttempt(attempt)),
+        pagination: {
+            page: normalizedPage,
+            limit: normalizedLimit,
+            total,
+            totalPages: Math.max(1, Math.ceil(total / normalizedLimit)),
+        },
+    };
 };
 export const getAdminAssessmentStats = async () => {
     const [totalAttempts, latestRows, distinctCompletedRows, totalUsers] = await Promise.all([

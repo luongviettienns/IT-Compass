@@ -68,15 +68,54 @@ export type MentorBooking = {
     updatedAt: string;
     mentor: PublicMentor;
     student: BookingStudent;
+    review: BookingReview | null;
 };
 
 export type BookingListParams = {
     status?: BookingStatus;
+    search?: string;
     from?: string;
     to?: string;
     page?: number;
     limit?: number;
 };
+
+export type BookingDetailResponse = {
+    booking: MentorBooking;
+};
+
+export type BookingMutationResponse = {
+    message: string;
+    booking: MentorBooking;
+};
+
+export type BookingReview = {
+    id: string;
+    bookingId: string;
+    mentorId: string;
+    studentUserId: string;
+    rating: number;
+    comment: string | null;
+    createdAt: string;
+    updatedAt: string;
+};
+
+export type BookingReviewMutationResponse = {
+    message: string;
+    review: BookingReview;
+};
+
+export type CreateBookingReviewInput = {
+    rating: number;
+    comment?: string | null;
+};
+
+export type AdminBookingListResponse = BookingListResponse;
+export type AdminBookingExportResponse = { bookings: MentorBooking[] };
+export type AdminBookingDetailResponse = BookingDetailResponse;
+export type AdminBookingMutationResponse = BookingMutationResponse;
+export type AdminCancelBookingInput = { reason?: string | null };
+export type AdminBookingAction = 'confirm' | 'cancel' | 'complete' | 'no-show';
 
 export type BookingPagination = {
     page: number;
@@ -162,6 +201,16 @@ export const bookingApi = {
     getStudentBookingDetail: (bookingId: string) =>
         request<{ booking: MentorBooking }>(`/users/me/bookings/${bookingId}`, {}, 'Không thể tải chi tiết lịch tư vấn'),
 
+    createStudentBookingReview: (bookingId: string, input: CreateBookingReviewInput) =>
+        request<BookingReviewMutationResponse>(
+            `/users/me/bookings/${bookingId}/review`,
+            {
+                method: 'POST',
+                body: JSON.stringify(input),
+            },
+            'Không thể gửi đánh giá mentor',
+        ),
+
     cancelStudentBooking: (bookingId: string, reason?: string | null) =>
         request<{ message: string; booking: MentorBooking }>(
             `/users/me/bookings/${bookingId}/cancel`,
@@ -236,6 +285,38 @@ export const bookingApi = {
             { method: 'PATCH' },
             'Không thể đánh dấu hoàn thành lịch tư vấn',
         ),
+
+    adminListBookings: (params: BookingListParams = {}) => {
+        const query = buildQueryString(params);
+        return request<BookingListResponse>(`/admin/bookings${query}`, {}, 'Không thể tải danh sách booking admin');
+    },
+
+    adminExportBookings: (params: BookingListParams = {}) => {
+        const query = buildQueryString(params);
+        return request<{ bookings: MentorBooking[] }>(`/admin/bookings/export${query}`, {}, 'Không thể xuất booking admin');
+    },
+
+    adminGetBookingDetail: (bookingId: string) =>
+        request<{ booking: MentorBooking }>(`/admin/bookings/${bookingId}`, {}, 'Không thể tải chi tiết booking admin'),
+
+    adminConfirmBooking: (bookingId: string) =>
+        request<{ message: string; booking: MentorBooking }>(`/admin/bookings/${bookingId}/confirm`, { method: 'PATCH' }, 'Không thể xác nhận booking admin'),
+
+    adminCancelBooking: (bookingId: string, reason?: string | null) =>
+        request<{ message: string; booking: MentorBooking }>(
+            `/admin/bookings/${bookingId}/cancel`,
+            {
+                method: 'PATCH',
+                body: JSON.stringify({ reason }),
+            },
+            'Không thể hủy booking admin',
+        ),
+
+    adminCompleteBooking: (bookingId: string) =>
+        request<{ message: string; booking: MentorBooking }>(`/admin/bookings/${bookingId}/complete`, { method: 'PATCH' }, 'Không thể hoàn thành booking admin'),
+
+    adminMarkNoShowBooking: (bookingId: string) =>
+        request<{ message: string; booking: MentorBooking }>(`/admin/bookings/${bookingId}/no-show`, { method: 'PATCH' }, 'Không thể đánh dấu no-show booking admin'),
 };
 
 export const getBookingStatusLabel = (status: BookingStatus) => {

@@ -5,8 +5,14 @@ import { requireActiveUser, requireAuth, requireRole } from '../middlewares/auth
 import { bookingCreateLimiter } from '../middlewares/rate-limit.middleware.js';
 import { validate } from '../middlewares/validate.middleware.js';
 import {
+  adminBookingActionSchema,
+  adminBookingDetailSchema,
+  adminCancelBookingSchema,
+  adminExportBookingsSchema,
+  adminListBookingsSchema,
   cancelMentorBookingSchema,
   cancelStudentBookingSchema,
+  createBookingReviewSchema,
   createBookingSchema,
   getBookingDetailSchema,
   getMentorAvailabilitySchema,
@@ -23,6 +29,16 @@ import {
 const publicMentorBookingRoutes = Router();
 const studentBookingRoutes = Router();
 const mentorBookingRoutes = Router();
+const adminBookingRoutes = Router();
+
+adminBookingRoutes.use(requireAuth, requireActiveUser, requireRole('ADMIN'));
+adminBookingRoutes.get('/bookings', validate(adminListBookingsSchema), bookingController.adminListBookings);
+adminBookingRoutes.get('/bookings/export', validate(adminExportBookingsSchema), bookingController.adminExportBookings);
+adminBookingRoutes.get('/bookings/:bookingId', validate(adminBookingDetailSchema), bookingController.adminGetBookingDetail);
+adminBookingRoutes.patch('/bookings/:bookingId/confirm', validate(adminBookingActionSchema), bookingController.adminConfirmBooking);
+adminBookingRoutes.patch('/bookings/:bookingId/cancel', validate(adminCancelBookingSchema), bookingController.adminCancelBooking);
+adminBookingRoutes.patch('/bookings/:bookingId/complete', validate(adminBookingActionSchema), bookingController.adminCompleteBooking);
+adminBookingRoutes.patch('/bookings/:bookingId/no-show', validate(adminBookingActionSchema), bookingController.adminMarkNoShowBooking);
 
 publicMentorBookingRoutes.get(
   '/:slug/booking-config',
@@ -47,6 +63,7 @@ publicMentorBookingRoutes.post(
 studentBookingRoutes.use(requireAuth, requireActiveUser, requireRole('STUDENT'));
 studentBookingRoutes.get('/me/bookings', validate(listStudentBookingsSchema), bookingController.listStudentBookings);
 studentBookingRoutes.get('/me/bookings/:bookingId', validate(getBookingDetailSchema), bookingController.getStudentBookingDetail);
+studentBookingRoutes.post('/me/bookings/:bookingId/review', validate(createBookingReviewSchema), bookingController.createBookingReview);
 studentBookingRoutes.patch(
   '/me/bookings/:bookingId/cancel',
   validate(cancelStudentBookingSchema),
@@ -64,4 +81,4 @@ mentorBookingRoutes.patch('/bookings/:bookingId/confirm', validate(mentorBooking
 mentorBookingRoutes.patch('/bookings/:bookingId/cancel', validate(cancelMentorBookingSchema), bookingController.cancelMentorBooking);
 mentorBookingRoutes.patch('/bookings/:bookingId/complete', validate(mentorBookingActionSchema), bookingController.completeMentorBooking);
 
-export { mentorBookingRoutes, publicMentorBookingRoutes, studentBookingRoutes };
+export { adminBookingRoutes, mentorBookingRoutes, publicMentorBookingRoutes, studentBookingRoutes };

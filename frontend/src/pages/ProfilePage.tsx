@@ -73,11 +73,13 @@ const formatDateTime = (value: string | null | undefined) => {
 };
 
 
+// Chuẩn hóa input rỗng thành null trước khi gửi lên API.
 const normalizeNullable = (value: string) => {
     const normalized = value.trim();
     return normalized ? normalized : null;
 };
 
+// Map user profile sang state form để render/edit đồng nhất.
 const createFormState = (user: AuthUser): ProfileFormState => ({
     fullName: user.fullName ?? '',
     avatarUrl: user.profile?.avatarUrl ?? '',
@@ -158,11 +160,13 @@ export default function ProfilePage() {
         setForm((current) => (current ? { ...current, [field]: value } : current));
     };
 
+    // Cập nhật lại form theo response mới rồi refresh auth store.
     const applyUserResponse = async (nextUser: AuthUser) => {
         setForm(createFormState(nextUser));
         await refreshUser();
     };
 
+    // Validate nhẹ ở client trước, rồi mới gọi API cập nhật hồ sơ.
     const handleSaveProfile = async () => {
         setFormError(null);
 
@@ -205,6 +209,7 @@ export default function ProfilePage() {
         }
     };
 
+    // Upload ảnh riêng rồi gắn URL trả về vào profile.
     const handleAssetUpload = async (field: 'avatarUrl' | 'coverImageUrl', target: 'avatar' | 'cover', file: File | null) => {
         if (!file) return;
 
@@ -222,6 +227,7 @@ export default function ProfilePage() {
         }
     };
 
+    // Xóa ảnh hiện tại bằng cách set field đó về null.
     const handleAssetClear = async (field: 'avatarUrl' | 'coverImageUrl', target: 'avatar' | 'cover') => {
         setFormError(null);
         setUploadingTarget(target);

@@ -7,6 +7,7 @@ import { requireAuthenticatedUser } from '../utils/requireUser.js';
 import type {
   CancelBookingBody,
   CreateBookingBody,
+  CreateBookingReviewBody,
   ListBookingsQuery,
   UpdateMentorAvailabilityBody,
   UpdateMentorBookingSettingsBody,
@@ -84,6 +85,20 @@ export const cancelStudentBooking = asyncHandler(async (req: Request, res: Respo
   });
 });
 
+export const createBookingReview = asyncHandler(async (req: Request, res: Response) => {
+  const user = requireAuthenticatedUser(req);
+  const review = await bookingService.createBookingReview({
+    userId: user.id,
+    bookingId: parseBookingId(req.params.bookingId),
+    input: req.body as CreateBookingReviewBody,
+  });
+
+  return res.status(201).json({
+    message: 'Booking review created successfully',
+    review,
+  });
+});
+
 export const getMentorAvailability = asyncHandler(async (req: Request, res: Response) => {
   const user = requireAuthenticatedUser(req);
   const result = await bookingService.getMentorAvailability({ userId: user.id });
@@ -130,6 +145,63 @@ export const listMentorBookings = asyncHandler(async (req: Request, res: Respons
   });
 
   return res.status(200).json(result);
+});
+
+export const adminListBookings = asyncHandler(async (req: Request, res: Response) => {
+  const result = await bookingService.adminListBookings({
+    query: req.query as unknown as ListBookingsQuery,
+  });
+
+  return res.status(200).json(result);
+});
+
+export const adminExportBookings = asyncHandler(async (req: Request, res: Response) => {
+  const bookings = await bookingService.adminExportBookings({
+    query: req.query as unknown as ListBookingsQuery,
+  });
+
+  return res.status(200).json({ bookings });
+});
+
+export const adminGetBookingDetail = asyncHandler(async (req: Request, res: Response) => {
+  const booking = await bookingService.adminGetBookingDetail({
+    bookingId: parseBookingId(req.params.bookingId),
+  });
+
+  return res.status(200).json({ booking });
+});
+
+export const adminConfirmBooking = asyncHandler(async (req: Request, res: Response) => {
+  const booking = await bookingService.adminConfirmBooking({
+    bookingId: parseBookingId(req.params.bookingId),
+  });
+
+  return res.status(200).json({ message: 'Booking confirmed successfully', booking });
+});
+
+export const adminCancelBooking = asyncHandler(async (req: Request, res: Response) => {
+  const booking = await bookingService.adminCancelBooking({
+    bookingId: parseBookingId(req.params.bookingId),
+    reason: (req.body as CancelBookingBody).reason,
+  });
+
+  return res.status(200).json({ message: 'Booking cancelled successfully', booking });
+});
+
+export const adminCompleteBooking = asyncHandler(async (req: Request, res: Response) => {
+  const booking = await bookingService.adminCompleteBooking({
+    bookingId: parseBookingId(req.params.bookingId),
+  });
+
+  return res.status(200).json({ message: 'Booking completed successfully', booking });
+});
+
+export const adminMarkNoShowBooking = asyncHandler(async (req: Request, res: Response) => {
+  const booking = await bookingService.adminMarkNoShowBooking({
+    bookingId: parseBookingId(req.params.bookingId),
+  });
+
+  return res.status(200).json({ message: 'Booking marked as no-show successfully', booking });
 });
 
 export const getMentorBookingDetail = asyncHandler(async (req: Request, res: Response) => {

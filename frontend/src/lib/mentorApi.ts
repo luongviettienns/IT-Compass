@@ -25,6 +25,15 @@ export type MentorStatus = 'ACTIVE' | 'PAUSED';
 export type MentorSortOrder = 'asc' | 'desc';
 export type MentorListSortBy = 'reviewCount' | 'yearsOfExperience' | 'updatedAt' | 'createdAt' | 'hourlyRate' | 'name';
 
+export type MentorReview = {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+  studentName: string;
+  studentAvatarUrl: string | null;
+};
+
 export type PublicMentor = {
   id: string;
   slug: string;
@@ -43,6 +52,8 @@ export type PublicMentor = {
   consultationLang: string | null;
   reviewCount: number;
   isVerified: boolean;
+  avgRating?: number | null;
+  reviews?: MentorReview[];
 };
 
 export type MentorProfile = PublicMentor & {

@@ -34,7 +34,7 @@ export const CAREER_PATHS: CareerPath[] = [
         resultCode: 'SE',
         icon: Code2,
         title: 'Kỹ thuật phần mềm',
-        headline: 'Xây dựng sản phẩm số từ ý tưởng đến thực tế',
+        headline: 'Xây dựng cốt lõi của thế giới số',
         description:
             'Biến các yêu cầu mơ hồ thành sản phẩm chạy được — từ frontend, backend đến mobile. Tư duy hệ thống, khả năng phân tích và sự kiên trì là chìa khóa.',
         matchedCareers: ['Frontend Developer', 'Backend Developer', 'Full-stack Engineer', 'Mobile Developer'],
@@ -44,11 +44,11 @@ export const CAREER_PATHS: CareerPath[] = [
         iconBg: 'bg-blue-100',
     },
     {
-        slug: 'du-lieu-va-ai',
+        slug: 'khoa-hoc-du-lieu',
         resultCode: 'Data',
         icon: Database,
         title: 'Dữ liệu và AI',
-        headline: 'Khai phá giá trị từ dữ liệu',
+        headline: 'Khai phá giá trị từ những con số',
         description:
             'Tìm quy luật ẩn trong dữ liệu, xây dựng mô hình dự đoán và hệ thống AI thông minh. Phù hợp với tư duy phân tích sâu và sự kiên nhẫn.',
         matchedCareers: ['Data Analyst', 'Data Engineer', 'ML Engineer', 'AI Engineer'],
@@ -62,7 +62,7 @@ export const CAREER_PATHS: CareerPath[] = [
         resultCode: 'Cybersecurity',
         icon: ShieldCheck,
         title: 'An toàn thông tin',
-        headline: 'Bảo vệ thế giới số',
+        headline: 'Bảo vệ hệ thống khỏi các mối đe dọa',
         description:
             'Kết hợp tò mò kỹ thuật và phản xạ thực chiến — bảo vệ hệ thống, phát hiện lỗ hổng và xử lý sự cố bảo mật.',
         matchedCareers: ['Security Engineer', 'Pentester', 'Security Analyst', 'AppSec Engineer'],
@@ -76,7 +76,7 @@ export const CAREER_PATHS: CareerPath[] = [
         resultCode: 'UXUI',
         icon: Palette,
         title: 'Thiết kế UI/UX',
-        headline: 'Kiến tạo trải nghiệm số',
+        headline: 'Sự giao thoa giữa nghệ thuật và logic',
         description:
             'Nhìn công nghệ qua lăng kính con người — kết hợp thẩm mỹ, sự đồng cảm và khả năng tổ chức trải nghiệm người dùng.',
         matchedCareers: ['UI Designer', 'UX Designer', 'Product Designer', 'Frontend UI Engineer'],
@@ -86,11 +86,11 @@ export const CAREER_PATHS: CareerPath[] = [
         iconBg: 'bg-violet-100',
     },
     {
-        slug: 'quan-ly-du-an',
+        slug: 'phan-tich-nghiep-vu',
         resultCode: 'QLDA',
         icon: Briefcase,
         title: 'Quản lý dự án & Nghiệp vụ',
-        headline: 'Cầu nối giữa kinh doanh và kỹ thuật',
+        headline: 'Cầu nối giữa kỹ thuật và doanh nghiệp',
         description:
             'Điều phối, phân tích và dẫn dắt sản phẩm — kết nối nhu cầu kinh doanh với giải pháp công nghệ.',
         matchedCareers: ['Business Analyst', 'Project Manager', 'Product Owner', 'Scrum Master'],
@@ -100,11 +100,11 @@ export const CAREER_PATHS: CareerPath[] = [
         iconBg: 'bg-amber-100',
     },
     {
-        slug: 'devops-he-thong',
+        slug: 'cloud-devops',
         resultCode: 'DevOps',
         icon: Server,
         title: 'DevOps và Hệ thống',
-        headline: 'Vận hành hạ tầng công nghệ',
+        headline: 'Vận hành hạ tầng công nghệ hiện đại',
         description:
             'Tự động hóa, ổn định hệ thống và scale ứng dụng — phù hợp với người thích cloud, CI/CD và giải quyết bài toán hạ tầng.',
         matchedCareers: ['DevOps Engineer', 'Cloud Engineer', 'Platform Engineer', 'System Engineer'],

@@ -119,6 +119,52 @@ export type AdminAssessmentStats = {
     resultCode: AssessmentResultCode;
     total: number;
   }>;
+  trend?: Array<{
+    period: string;
+    total: number;
+  }>;
+};
+
+export type AdminAssessmentAttemptListQuery = {
+  page?: number;
+  limit?: number;
+  status?: string;
+  resultCode?: string;
+  search?: string;
+  createdFrom?: string;
+  createdTo?: string;
+};
+
+export type AdminAssessmentAttempt = {
+  id: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  quizType: string;
+  quizVersion: string;
+  status: string;
+  resultCode: AssessmentResultCode;
+  topTraits: string[];
+  rawScores: Record<string, number>;
+  answers: {
+    holland: Array<{ questionId: string; group: string; value: number }>;
+    situational: Array<{
+      questionId: string;
+      optionId: string;
+      specialAction: string | null;
+      bonus: Record<string, number>;
+    }>;
+  };
+  summary: AssessmentSummary;
+  startedAt: string | null;
+  submittedAt: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AdminAssessmentAttemptsResponse = {
+  attempts: AdminAssessmentAttempt[];
+  pagination: { page: number; limit: number; total: number; totalPages: number };
 };
 
 const request = async <T>(path: string, options: RequestInit = {}): Promise<T> =>
@@ -143,5 +189,28 @@ export const assessmentApi = {
     request<{ attempts: AssessmentAttempt[]; pagination: { page: number; limit: number; total: number; totalPages: number } }>(
       `/assessments/me/history?page=${page}&limit=${limit}`,
     ),
+  getAdminAttempts: (query: AdminAssessmentAttemptListQuery = {}) => {
+    const params = new URLSearchParams();
+    if (query.page) params.set('page', String(query.page));
+    if (query.limit) params.set('limit', String(query.limit));
+    if (query.status) params.set('status', query.status);
+    if (query.resultCode) params.set('resultCode', query.resultCode);
+    if (query.search) params.set('search', query.search);
+    if (query.createdFrom) params.set('createdFrom', query.createdFrom);
+    if (query.createdTo) params.set('createdTo', query.createdTo);
+    return request<AdminAssessmentAttemptsResponse>(`/admin/assessments${params.toString() ? `?${params}` : ''}`);
+  },
+  getAdminExportAttempts: (query: AdminAssessmentAttemptListQuery = {}) => {
+    const params = new URLSearchParams();
+    if (query.page) params.set('page', String(query.page));
+    if (query.limit) params.set('limit', String(query.limit));
+    if (query.status) params.set('status', query.status);
+    if (query.resultCode) params.set('resultCode', query.resultCode);
+    if (query.search) params.set('search', query.search);
+    if (query.createdFrom) params.set('createdFrom', query.createdFrom);
+    if (query.createdTo) params.set('createdTo', query.createdTo);
+    return request<AdminAssessmentAttemptsResponse>(`/admin/assessments/export${params.toString() ? `?${params}` : ''}`);
+  },
   getAdminStats: () => request<{ stats: AdminAssessmentStats }>('/admin/assessments/stats'),
+  getAdminTrend: () => request<{ stats: AdminAssessmentStats }>('/admin/assessments/trend'),
 };

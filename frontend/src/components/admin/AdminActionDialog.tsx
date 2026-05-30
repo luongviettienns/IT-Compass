@@ -64,9 +64,8 @@ export const AdminActionDialog: React.FC<AdminActionDialogProps> = ({
     const isConfirmDisabled = isPending || isValueMissing || isValueTooShort || isValueTooLong;
 
     useEffect(() => {
-        if (isOpen) {
-            setValue(inputDefaultValue);
-        }
+        if (!isOpen) return;
+        queueMicrotask(() => setValue(inputDefaultValue));
     }, [inputDefaultValue, isOpen]);
 
     useEffect(() => {

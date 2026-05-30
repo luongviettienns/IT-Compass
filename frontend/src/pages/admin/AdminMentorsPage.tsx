@@ -8,9 +8,29 @@ import { adminQueryKeys } from '../../lib/adminQueryKeys';
 import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../../components/ui/Loader';
 import { useMemo, useState } from 'react';
-import { Search, UserPlus, Settings } from 'lucide-react';
+import { Search, UserPlus, Settings, Download } from 'lucide-react';
 import { AdminMentorFormModal } from '../../components/admin/AdminMentorFormModal';
 import { AdminActionDialog } from '../../components/admin/AdminActionDialog';
+import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
+import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
+
+const mentorExportColumns: ExportColumn[] = [
+    { header: 'Mentor ID', key: 'id', width: 14 },
+    { header: 'Name', key: 'name', width: 24 },
+    { header: 'Email', key: 'email', width: 28 },
+    { header: 'Slug', key: 'slug', width: 22 },
+    { header: 'Level', key: 'level', width: 14 },
+    { header: 'Expertise', key: 'expertiseArea', width: 24 },
+    { header: 'Verified', key: 'isVerified', width: 14 },
+    { header: 'Status', key: 'status', width: 14 },
+    { header: 'Created at', key: 'createdAt', width: 22 },
+];
+
+// Gom filter thành 1 chuỗi để export/subtitle dễ đối chiếu.
+const formatMentorFilters = (statusFilter: 'all' | 'ACTIVE' | 'PAUSED', search: string) => {
+    const parts = [statusFilter !== 'all' ? `status=${statusFilter}` : null, search ? `search=${search}` : null].filter(Boolean);
+    return parts.length ? parts.join(' · ') : 'No filters';
+};
 
 const MENTOR_LEVEL_LABEL: Record<string, string> = {
     STUDENT: 'Sinh viên',
@@ -34,6 +54,9 @@ export default function AdminMentorsPage() {
         type: 'verify' | 'unverify' | 'activate' | 'pause';
         mentorId?: string;
     }>({ open: false, type: 'verify' });
+    const [exportOpen, setExportOpen] = useState(false);
+    const [exportError, setExportError] = useState<string | null>(null);
+    const [isExporting, setIsExporting] = useState(false);
     const queryClient = useQueryClient();
     const mentorsQuery = useMemo(
         () => ({ page, limit: 10, search, status: statusFilter }),
@@ -42,9 +65,10 @@ export default function AdminMentorsPage() {
 
     const { data, isLoading } = useQuery({
         queryKey: adminQueryKeys.mentors(mentorsQuery),
-        queryFn: () => adminMentorApi.listMentors({ page, limit: 10, search: search || undefined, status: statusFilter === 'all' ? undefined : statusFilter as any }),
+        queryFn: () => adminMentorApi.listMentors({ page, limit: 10, search: search || undefined, status: statusFilter === 'all' ? undefined : statusFilter.toUpperCase() as 'ACTIVE' | 'PAUSED' }),
     });
 
+    // Refresh danh sách và detail mentor sau khi đổi trạng thái.
     const invalidateMentorData = (mentorId?: string) => {
         queryClient.invalidateQueries({ queryKey: adminQueryKeys.mentorsRoot });
         if (mentorId) {
@@ -78,8 +102,58 @@ export default function AdminMentorsPage() {
         setActionDialog({ open: true, type: status === 'ACTIVE' ? 'activate' : 'pause', mentorId: id });
     };
 
+    // Mở modal tạo mentor mới.
     const openCreateForm = () => { setEditingMentorId(null); setIsFormOpen(true); };
+    // Mở modal sửa mentor đang chọn.
     const openEditForm = (mentor: AdminMentor) => { setEditingMentorId(mentor.id); setIsFormOpen(true); };
+
+    // Xuất mentor theo filter hiện tại hoặc toàn bộ dữ liệu đã lọc.
+    const handleExport = async ({ format, scope, selectedColumnKeys, filePrefix }: { format: 'xlsx' | 'csv'; scope: ExportScope; selectedColumnKeys: string[]; filePrefix: string }) => {
+        try {
+            setIsExporting(true);
+            setExportError(null);
+            const columns = mentorExportColumns.filter((column) => selectedColumnKeys.includes(column.key));
+            const firstPage = await adminMentorApi.listMentors({ page: 1, limit: 100, search: search || undefined, status: statusFilter === 'all' ? undefined : statusFilter });
+            const mentors = scope === 'all'
+                ? await collectPagedItems({
+                    initialPage: firstPage,
+                    fetchPage: (currentPage, limit) => adminMentorApi.listMentors({ page: currentPage, limit, search: search || undefined, status: statusFilter === 'all' ? undefined : statusFilter }),
+                    selectItems: (response) => response.mentors,
+                    selectPagination: (response) => response.pagination,
+                })
+                : firstPage.mentors;
+
+            await exportWorkbook({
+                fileName: buildExportFileName(filePrefix, format),
+                title: 'IT Compass — Export Mentors',
+                subtitle: formatMentorFilters(statusFilter, search),
+                format,
+                sheets: [{
+                    name: 'Mentors',
+                    columns,
+                    rows: mentors.map((mentor) => ({
+                        id: mentor.id,
+                        name: mentor.name,
+                        email: mentor.user?.email ?? '—',
+                        slug: mentor.slug,
+                        level: mentor.level ?? '—',
+                        expertiseArea: mentor.expertiseArea ?? '—',
+                        isVerified: mentor.isVerified ? 'Yes' : 'No',
+                        status: mentor.status,
+                        createdAt: new Date(mentor.createdAt).toLocaleString('vi-VN'),
+                    })),
+                }],
+            });
+            setExportOpen(false);
+            toast.success('Đã xuất file mentor.');
+        } catch {
+            const message = 'Không thể xuất dữ liệu mentor.';
+            setExportError(message);
+            toast.error(message);
+        } finally {
+            setIsExporting(false);
+        }
+    };
 
     const isMutating = verifyMutation.isPending || statusMutation.isPending;
 
@@ -94,10 +168,32 @@ export default function AdminMentorsPage() {
                             Phê duyệt, quản lý hồ sơ và trạng thái Mentor.
                         </p>
                     </div>
-                    <button onClick={openCreateForm} className="bg-primary text-primary-foreground font-bold px-6 py-2.5 rounded-xl hover:scale-105 active:scale-95 transition-transform flex items-center gap-2">
-                        <UserPlus className="w-4 h-4" /> Tạo Mentor mới
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <button onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/15">
+                            <Download className="h-4 w-4" /> Export
+                        </button>
+                        <button onClick={openCreateForm} className="bg-primary text-primary-foreground font-bold px-6 py-2.5 rounded-xl hover:scale-105 active:scale-95 transition-transform flex items-center gap-2">
+                            <UserPlus className="w-4 h-4" /> Tạo Mentor mới
+                        </button>
+                    </div>
                 </div>
+
+                <AdminExportModal
+                    isOpen={exportOpen}
+                    onClose={() => setExportOpen(false)}
+                    onExport={handleExport}
+                    config={{
+                        moduleLabel: 'Mentors',
+                        filePrefix: 'mentors-export',
+                        totalRows: data?.summary?.total || 0,
+                        filteredRows: data?.pagination?.total || 0,
+                        availableColumns: mentorExportColumns,
+                        defaultScope: 'current',
+                        defaultFormat: 'xlsx',
+                        errorMessage: exportError,
+                        isGenerating: isExporting,
+                    }}
+                />
 
                 {/* Search + Filter Tabs */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">

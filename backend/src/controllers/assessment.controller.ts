@@ -85,3 +85,40 @@ export const getAdminAssessmentStats = asyncHandler(async (_req: Request, res: R
   const stats = await assessmentService.getAdminAssessmentStats();
   return res.status(200).json({ stats });
 });
+
+export const getAdminAssessmentExport = asyncHandler(async (req: Request, res: Response) => {
+  const query = req.query as unknown as { page?: number; limit?: number; status?: string; resultCode?: string; search?: string; createdFrom?: string; createdTo?: string };
+  const result = await assessmentService.getAdminAssessmentAttempts({
+    page: query.page ?? 1,
+    limit: query.limit ?? 100,
+    status: query.status,
+    resultCode: query.resultCode,
+    search: query.search,
+    createdFrom: query.createdFrom,
+    createdTo: query.createdTo,
+  });
+
+  return res.status(200).json(result);
+});
+
+export const getAdminAssessmentAttempts = asyncHandler(async (req: Request, res: Response) => {
+  const query = req.query as unknown as { page?: number; limit?: number; status?: string; resultCode?: string; search?: string; createdFrom?: string; createdTo?: string };
+  const result = await assessmentService.getAdminAssessmentAttempts({
+    page: query.page ?? 1,
+    limit: query.limit ?? 20,
+    status: query.status,
+    resultCode: query.resultCode,
+    search: query.search,
+    createdFrom: query.createdFrom,
+    createdTo: query.createdTo,
+  });
+
+  return res.status(200).json(result);
+});
+
+export const getAdminAssessmentTrend = asyncHandler(async (_req: Request, res: Response) => {
+  const stats = await assessmentService.getAdminAssessmentTrend();
+  return res.status(200).json({ stats });
+});
+
+

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Search, X, EyeOff, Eye, Trash2, ShieldAlert } from 'lucide-react';
+import { Search, X, EyeOff, Eye, Trash2, ShieldAlert, Download } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { blogApi } from '../../lib/blogApi';
@@ -9,6 +9,22 @@ import { adminQueryKeys } from '../../lib/adminQueryKeys';
 import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../../components/ui/Loader';
 import { AdminActionDialog } from './AdminActionDialog';
+import { AdminExportModal, type ExportScope } from './AdminExportModal';
+import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
+
+const commentExportColumns: ExportColumn[] = [
+    { header: 'Comment ID', key: 'id', width: 14 },
+    { header: 'User', key: 'user', width: 24 },
+    { header: 'Content', key: 'content', width: 40 },
+    { header: 'Post title', key: 'postTitle', width: 28 },
+    { header: 'Status', key: 'status', width: 14 },
+    { header: 'Created at', key: 'createdAt', width: 22 },
+];
+
+const formatCommentFilters = (status: CommentFilterStatus, search: string, postId?: string) => {
+    const parts = [status !== 'all' ? `status=${status}` : null, search ? `search=${search}` : null, postId ? `postId=${postId}` : null].filter(Boolean);
+    return parts.length ? parts.join(' · ') : 'No filters';
+};
 
 type CommentFilterStatus = 'all' | 'visible' | 'hidden' | 'deleted';
 
@@ -55,6 +71,9 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
     const [filterStatus, setFilterStatus] = useState<CommentFilterStatus>('all');
     const [search, setSearch] = useState(initialSearch);
     const [commentToDelete, setCommentToDelete] = useState<BlogComment | null>(null);
+    const [exportOpen, setExportOpen] = useState(false);
+    const [exportError, setExportError] = useState<string | null>(null);
+    const [isExporting, setIsExporting] = useState(false);
 
     const queryClient = useQueryClient();
     const query = useMemo(
@@ -108,6 +127,50 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
         onClose();
     };
 
+    const handleExport = async ({ format, scope, selectedColumnKeys }: { format: 'xlsx' | 'csv'; scope: ExportScope; selectedColumnKeys: string[] }) => {
+        try {
+            setIsExporting(true);
+            setExportError(null);
+            const columns = commentExportColumns.filter((column) => selectedColumnKeys.includes(column.key));
+            const firstPage = await blogApi.adminListComments({ page: 1, limit: 100, status: filterStatus, search: search || undefined, postId });
+            const comments = scope === 'all'
+                ? await collectPagedItems({
+                    initialPage: firstPage,
+                    fetchPage: (currentPage, limit) => blogApi.adminListComments({ page: currentPage, limit, status: filterStatus, search: search || undefined, postId }),
+                    selectItems: (response) => response.comments,
+                    selectPagination: (response) => response.pagination,
+                })
+                : firstPage.comments;
+
+            await exportWorkbook({
+                fileName: buildExportFileName('comments-export', format),
+                title: 'IT Compass — Export Comments',
+                subtitle: formatCommentFilters(filterStatus, search, postId),
+                format,
+                sheets: [{
+                    name: 'Comments',
+                    columns,
+                    rows: comments.map((comment) => ({
+                        id: comment.id,
+                        user: comment.user ? comment.user.fullName : comment.guestName || AnonymousName,
+                        content: comment.content,
+                        postTitle: comment.post?.title || '—',
+                        status: comment.deletedAt ? 'DELETED' : comment.status,
+                        createdAt: new Date(comment.createdAt).toLocaleString('vi-VN'),
+                    })),
+                }],
+            });
+            setExportOpen(false);
+            toast.success('Đã xuất file comment.');
+        } catch {
+            const message = 'Không thể xuất dữ liệu comment.';
+            setExportError(message);
+            toast.error(message);
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
     const shellClassName = embedded
         ? 'bg-card w-full rounded-[32px] border shadow-sm flex flex-col overflow-hidden'
         : 'bg-card w-full max-w-6xl max-h-[88vh] border shadow-2xl rounded-[32px] flex flex-col overflow-hidden';
@@ -135,10 +198,32 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
                             ) : null}
                         </div>
                     </div>
-                    {showCloseButton && onClose ? (
-                        <button onClick={onClose} className="p-2 bg-secondary rounded-full hover:bg-secondary/70 transition-colors shrink-0"><X className="w-5 h-5" /></button>
-                    ) : null}
+                    <div className="flex items-center gap-3">
+                        <button onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border bg-background px-4 py-2 text-sm font-bold hover:bg-secondary transition-colors">
+                            <Download className="h-4 w-4" /> Export
+                        </button>
+                        {showCloseButton && onClose ? (
+                            <button onClick={onClose} className="p-2 bg-secondary rounded-full hover:bg-secondary/70 transition-colors shrink-0"><X className="w-5 h-5" /></button>
+                        ) : null}
+                    </div>
                 </div>
+
+                <AdminExportModal
+                    isOpen={exportOpen}
+                    onClose={() => setExportOpen(false)}
+                    onExport={handleExport}
+                    config={{
+                        moduleLabel: 'Comments',
+                        filePrefix: 'comments-export',
+                        totalRows: data?.pagination?.total || 0,
+                        filteredRows: data?.pagination?.total || 0,
+                        availableColumns: commentExportColumns,
+                        defaultScope: 'current',
+                        defaultFormat: 'xlsx',
+                        errorMessage: exportError,
+                        isGenerating: isExporting,
+                    }}
+                />
 
                 <div className="p-4 border-b bg-muted/20 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex flex-wrap items-center gap-2">
@@ -198,7 +283,7 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
                                     </td>
                                     <td className="px-6 py-4 align-top">
                                         <p className="text-sm font-medium line-clamp-3">{comment.content}</p>
-                                        {comment.deletedAt && <span className="text-[10px] bg-destructive/10 text-destructive font-bold px-1.5 py-0.5 rounded mt-1 inline-block">ĐÃ XÓA MỀM</span>}
+                                        {comment.deletedAt && <span className="text-[10px] bg-destructive/10 text-destructive font-bold px-1.5 py-0.5 rounded mt-1 inline-block">Đã xóa mềm</span>}
                                         {comment.status === 'HIDDEN' && !comment.deletedAt && <span className="text-[10px] bg-amber-500/10 text-amber-500 font-bold px-1.5 py-0.5 rounded mt-1 inline-block">BỊ ẨN</span>}
                                     </td>
                                     <td className="px-6 py-4 align-top">

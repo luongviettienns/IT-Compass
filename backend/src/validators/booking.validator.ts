@@ -32,6 +32,7 @@ const availabilityBlockSchema = z.object({
 
 const listBookingsQuerySchema = z.object({
   status: bookingStatusFilterSchema.optional(),
+  search: z.string().trim().min(1).max(200).optional(),
   from: dateSchema.optional(),
   to: dateSchema.optional(),
   page: z.coerce.number().int().min(1).optional().default(1),
@@ -76,6 +77,14 @@ export const cancelStudentBookingSchema = z.object({
   }).optional().default({}),
 });
 
+export const createBookingReviewSchema = z.object({
+  params: idParamSchema,
+  body: z.object({
+    rating: z.coerce.number().int().min(1).max(5),
+    comment: z.string().trim().max(1000).nullable().optional(),
+  }),
+});
+
 export const getMentorAvailabilitySchema = z.object({
   query: z.object({}).optional().default({}),
 });
@@ -108,6 +117,29 @@ export const listMentorBookingsSchema = z.object({
   query: listBookingsQuerySchema,
 });
 
+export const adminListBookingsSchema = z.object({
+  query: listBookingsQuerySchema,
+});
+
+export const adminExportBookingsSchema = z.object({
+  query: listBookingsQuerySchema,
+});
+
+export const adminBookingDetailSchema = z.object({
+  params: idParamSchema,
+});
+
+export const adminBookingActionSchema = z.object({
+  params: idParamSchema,
+});
+
+export const adminCancelBookingSchema = z.object({
+  params: idParamSchema,
+  body: z.object({
+    reason: z.string().trim().max(500).nullable().optional(),
+  }).optional().default({}),
+});
+
 export const mentorBookingActionSchema = z.object({
   params: idParamSchema,
 });
@@ -124,3 +156,4 @@ export type ListBookingsQuery = z.infer<typeof listBookingsQuerySchema>;
 export type UpdateMentorAvailabilityBody = z.infer<typeof updateMentorAvailabilitySchema.shape.body>;
 export type UpdateMentorBookingSettingsBody = z.infer<typeof updateMentorBookingSettingsSchema.shape.body>;
 export type CancelBookingBody = z.infer<typeof cancelStudentBookingSchema.shape.body>;
+export type CreateBookingReviewBody = z.infer<typeof createBookingReviewSchema.shape.body>;

@@ -26,7 +26,7 @@ export function BottomNav() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
-        setMenuOpen(false);
+        queueMicrotask(() => setMenuOpen(false));
     }, [pathname]);
 
     const TABS = getTabs(user?.role);

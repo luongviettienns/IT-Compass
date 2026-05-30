@@ -77,6 +77,25 @@ export const getAdminAssessmentStatsSchema = z.object({
   query: z.object({}).optional().default({}),
 });
 
+export const getAdminAssessmentAttemptsSchema = z.object({
+  query: z.object({
+    page: z.coerce.number().int().min(1).optional().default(1),
+    limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+    status: z.string().trim().optional(),
+    resultCode: z.string().trim().optional(),
+    search: z.string().trim().optional(),
+    createdFrom: z.string().datetime().optional(),
+    createdTo: z.string().datetime().optional(),
+  }),
+});
+
+export const getAdminAssessmentTrendSchema = z.object({
+  query: z.object({}).optional().default({}),
+});
+
+export type AdminAssessmentTrendQuery = z.infer<typeof getAdminAssessmentTrendSchema.shape.query>;
+
 export type SubmitAssessmentAttemptBody = z.infer<typeof submitAssessmentAttemptSchema.shape.body>;
 export type AssessmentHistoryQuery = z.infer<typeof getAssessmentHistorySchema.shape.query>;
 export type AssessmentAttemptByIdParams = z.infer<typeof attemptIdParam.shape.params>;
+export type AdminAssessmentAttemptsQuery = z.infer<typeof getAdminAssessmentAttemptsSchema.shape.query>;

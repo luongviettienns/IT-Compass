@@ -431,33 +431,36 @@ export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, 
     const [showTemplateSelector, setShowTemplateSelector] = useState(false);
 
     useEffect(() => {
-        if (postToEdit) {
-            setTitle(postToEdit.title);
-            setSlug(postToEdit.slug);
-            setExcerpt(postToEdit.excerpt || '');
-            setContent(postToEdit.content);
-            setTag(postToEdit.tag || '');
-            setCoverImageUrl(postToEdit.coverImageUrl || '');
-            setStatus(postToEdit.status);
-            setScheduledAt(postToEdit.scheduledAt ? new Date(postToEdit.scheduledAt).toISOString().slice(0, 16) : '');
-            setMetaTitle(postToEdit.metaTitle || '');
-            setMetaDescription(postToEdit.metaDescription || '');
-        } else {
-            setTitle('');
-            setSlug('');
-            setExcerpt('');
-            setContent('');
-            setTag('');
-            setCoverImageUrl('');
-            setStatus('DRAFT');
-            setScheduledAt('');
-            setMetaTitle('');
-            setMetaDescription('');
-        }
-        setCurrentStep('content');
-        setSlugStatus('IDLE');
-        setErrorMessage(null);
-        setShowTemplateSelector(false);
+        if (!isOpen) return;
+        queueMicrotask(() => {
+            if (postToEdit) {
+                setTitle(postToEdit.title);
+                setSlug(postToEdit.slug);
+                setExcerpt(postToEdit.excerpt || '');
+                setContent(postToEdit.content);
+                setTag(postToEdit.tag || '');
+                setCoverImageUrl(postToEdit.coverImageUrl || '');
+                setStatus(postToEdit.status);
+                setScheduledAt(postToEdit.scheduledAt ? new Date(postToEdit.scheduledAt).toISOString().slice(0, 16) : '');
+                setMetaTitle(postToEdit.metaTitle || '');
+                setMetaDescription(postToEdit.metaDescription || '');
+            } else {
+                setTitle('');
+                setSlug('');
+                setExcerpt('');
+                setContent('');
+                setTag('');
+                setCoverImageUrl('');
+                setStatus('DRAFT');
+                setScheduledAt('');
+                setMetaTitle('');
+                setMetaDescription('');
+            }
+            setCurrentStep('content');
+            setSlugStatus('IDLE');
+            setErrorMessage(null);
+            setShowTemplateSelector(false);
+        });
     }, [postToEdit, isOpen]);
 
     const showFormError = (message: string) => {

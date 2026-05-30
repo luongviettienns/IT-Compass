@@ -22,6 +22,7 @@ import { assessmentQueryKeys } from '../../lib/assessmentQueryKeys';
 import { cn } from '../../lib/utils';
 import { HOLLAND_TRAIT_MAP } from '../../lib/constants/holland';
 
+// Format thời gian phiên làm bài để hiển thị trạng thái gần nhất.
 const formatDateTime = (value: string | null | undefined) => {
     if (!value) return 'Chưa có dữ liệu';
     return new Date(value).toLocaleString('vi-VN', {
@@ -33,6 +34,7 @@ const formatDateTime = (value: string | null | undefined) => {
     });
 };
 
+// Skeleton cho hero để giữ layout ổn định trong lúc tải template.
 function HeroSkeleton() {
     return (
         <div className="space-y-8">
@@ -65,6 +67,7 @@ export default function TestPage() {
         queryFn: () => assessmentApi.getCurrentTemplate(),
     });
 
+    // Load kết quả gần nhất chỉ khi user đã đăng nhập.
     const latestAttemptQuery = useQuery({
         queryKey: assessmentQueryKeys.latestAttempt,
         queryFn: () => assessmentApi.getLatestAttempt(),
@@ -73,6 +76,7 @@ export default function TestPage() {
 
     const template = templateQuery.data?.template ?? null;
     const latestAttempt = latestAttemptQuery.data?.attempt ?? null;
+    // Lấy gợi ý cao nhất để làm CTA phụ ở khối phiên gần nhất.
     const topRecommendation = latestAttempt?.summary.ranking?.[0] ?? null;
 
     return (

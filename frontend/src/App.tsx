@@ -42,7 +42,7 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function PageLoader() {
   return (
-    <div className="flex min-h-[60vh] items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center">
       <Loader size="lg" />
     </div>
   );
@@ -97,44 +97,50 @@ function AppShell() {
 
   return (
     <SmoothScroll>
-      <div className="min-h-screen bg-background font-sans pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0">
+      <div className="min-h-screen bg-background font-sans pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0 flex flex-col">
         {showLayout && <Header />}
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            {/* Public pages */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:slug" element={<BlogDetailPage />} />
-            <Route path="/mentors" element={<MentorPage />} />
-            <Route path="/mentors/:slug" element={<MentorDetailPage />} />
-            <Route path="/majors" element={<MajorsPage />} />
-            <Route path="/majors/:slug" element={<MajorDetailPage />} />
-            <Route path="/test" element={<TestPage />} />
-            <Route path="/test/result" element={<ResultPage />} />
-            <Route path="/about" element={<AboutUsPage />} />
+        {/* min-h-0 flex-1 ensures Footer stays at bottom during lazy load without shifting */}
+        <main className="flex-1">
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              {/* Public pages */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:slug" element={<BlogDetailPage />} />
+              <Route path="/mentors" element={<MentorPage />} />
+              <Route path="/mentors/:slug" element={<MentorDetailPage />} />
+              <Route path="/majors" element={<MajorsPage />} />
+              <Route path="/majors/:slug" element={<MajorDetailPage />} />
+              <Route path="/test" element={<TestPage />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/test/result" element={<ResultPage />} />
+              </Route>
+              <Route path="/about" element={<AboutUsPage />} />
 
-            {/* Auth pages */}
-            <Route path="/auth/login" element={<AuthPage />} />
-            <Route path="/auth/register" element={<AuthPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
+              {/* Auth pages */}
+              <Route path="/auth/login" element={<AuthPage />} />
+              <Route path="/auth/register" element={<AuthPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-            {/* Protected: any logged-in user */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/messages" element={<MessagesPage />} />
-              <Route path="/bookings" element={<StudentBookingsPage />} />
-            </Route>
+              {/* Protected: any logged-in user */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/messages" element={<MessagesPage />} />
+                <Route path="/bookings" element={<StudentBookingsPage />} />
+              </Route>
 
-            {/* 404 */}
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Suspense>
+              {/* 404 */}
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
+        </main>
         {showLayout && <Footer />}
         {showLayout && <BottomNav />}
       </div>
     </SmoothScroll>
   );
+
 }
 
 export default function App() {

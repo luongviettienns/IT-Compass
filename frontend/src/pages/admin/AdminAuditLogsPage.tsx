@@ -6,6 +6,55 @@ import { adminUserApi, type AdminAuditLog, type AuditAction } from '../../lib/ad
 import { blogApi, type AdminBlogAuditAction, type AdminBlogAuditLog } from '../../lib/blogApi';
 import { adminQueryKeys } from '../../lib/adminQueryKeys';
 import { Loader } from '../../components/ui/Loader';
+import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
+import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
+import { Download, X } from 'lucide-react';
+import { toast } from 'sonner';
+
+const auditUserColumns: ExportColumn[] = [
+    { header: 'Time', key: 'createdAt', width: 22 },
+    { header: 'Action', key: 'action', width: 18 },
+    { header: 'Actor', key: 'actor', width: 24 },
+    { header: 'Target', key: 'target', width: 24 },
+    { header: 'Reason', key: 'reason', width: 36 },
+];
+
+const auditBlogColumns: ExportColumn[] = [
+    { header: 'Time', key: 'createdAt', width: 22 },
+    { header: 'Action', key: 'action', width: 18 },
+    { header: 'Actor', key: 'actor', width: 24 },
+    { header: 'Target type', key: 'targetType', width: 18 },
+    { header: 'Target ID', key: 'targetId', width: 18 },
+    { header: 'Reason', key: 'reason', width: 36 },
+];
+
+// Gom filter audit log để subtitle export phản ánh đúng query hiện tại.
+const formatAuditFilters = (tab: AuditTab, userQuery: Record<string, unknown>, blogQuery: Record<string, unknown>) => tab === 'users'
+    ? [userQuery.actorUserId ? `actor=${userQuery.actorUserId}` : null, userQuery.targetUserId ? `target=${userQuery.targetUserId}` : null, userQuery.action !== 'all' ? `action=${userQuery.action}` : null, userQuery.createdFrom ? `from=${userQuery.createdFrom}` : null, userQuery.createdTo ? `to=${userQuery.createdTo}` : null].filter(Boolean).join(' · ') || 'No filters'
+    : [blogQuery.actorUserId ? `actor=${blogQuery.actorUserId}` : null, blogQuery.action !== 'all' ? `action=${blogQuery.action}` : null, blogQuery.targetType !== 'all' ? `targetType=${blogQuery.targetType}` : null, blogQuery.targetId ? `targetId=${blogQuery.targetId}` : null, blogQuery.createdFrom ? `from=${blogQuery.createdFrom}` : null, blogQuery.createdTo ? `to=${blogQuery.createdTo}` : null].filter(Boolean).join(' · ') || 'No filters';
+// Đổi record audit log sang dạng phẳng để export được sạch và đồng nhất.
+const auditExportRows = (log: AdminAuditLog | AdminBlogAuditLog, tab: AuditTab) => tab === 'users'
+    ? ({
+        createdAt: new Date((log as AdminAuditLog).createdAt).toLocaleString('vi-VN'),
+        action: (log as AdminAuditLog).action,
+        actor: (log as AdminAuditLog).actorUser?.fullName || 'Hệ thống',
+        target: (log as AdminAuditLog).targetUser?.fullName || 'N/A',
+        reason: (log as AdminAuditLog).reason || '-',
+      })
+    : ({
+        createdAt: new Date((log as AdminBlogAuditLog).createdAt).toLocaleString('vi-VN'),
+        action: (log as AdminBlogAuditLog).action,
+        actor: (log as AdminBlogAuditLog).actorUser?.fullName || 'N/A',
+        targetType: (log as AdminBlogAuditLog).targetType,
+        targetId: (log as AdminBlogAuditLog).targetId || '—',
+        reason: (log as AdminBlogAuditLog).reason || '-',
+      });
+// Tiêu đề export theo tab audit đang mở.
+const auditTitle = (tab: AuditTab) => (tab === 'users' ? 'IT Compass — Export User Audit Logs' : 'IT Compass — Export Blog Audit Logs');
+// Tên sheet export theo loại audit log.
+const auditSheetName = (tab: AuditTab) => (tab === 'users' ? 'User Audit' : 'Blog Audit');
+// Chọn bộ cột export tương ứng với tab hiện tại.
+const auditColumns = (tab: AuditTab) => (tab === 'users' ? auditUserColumns : auditBlogColumns);
 
 type AuditTab = 'users' | 'blogs';
 type BlogTargetType = 'all' | 'BLOG_POST' | 'BLOG_COMMENT';
@@ -74,6 +123,11 @@ export default function AdminAuditLogsPage() {
     const [blogAction, setBlogAction] = useState<'all' | AdminBlogAuditAction>('all');
     const [blogTargetType, setBlogTargetType] = useState<BlogTargetType>('all');
     const [blogTargetId, setBlogTargetId] = useState('');
+    const [exportOpen, setExportOpen] = useState(false);
+    const [exportError, setExportError] = useState<string | null>(null);
+    const [isExporting, setIsExporting] = useState(false);
+    const [selectedUserLog, setSelectedUserLog] = useState<AdminAuditLog | null>(null);
+    const [selectedBlogLog, setSelectedBlogLog] = useState<AdminBlogAuditLog | null>(null);
 
     const userAuditQuery = useMemo(
         () => ({
@@ -132,6 +186,67 @@ export default function AdminAuditLogsPage() {
     const isLoading = activeTab === 'users' ? usersAudit.isLoading : blogsAudit.isLoading;
     const data = activeTab === 'users' ? usersAudit.data : blogsAudit.data;
 
+    const handleExport = async ({ format, scope, selectedColumnKeys, filePrefix }: { format: 'xlsx' | 'csv'; scope: ExportScope; selectedColumnKeys: string[]; filePrefix: string }) => {
+        try {
+            setIsExporting(true);
+            setExportError(null);
+            const isUserTab = activeTab === 'users';
+            void scope;
+            const columns = auditColumns(activeTab).filter((column) => selectedColumnKeys.includes(column.key));
+
+            if (isUserTab) {
+                const firstPage = await adminUserApi.listAuditLogs({ page: 1, limit: 100, actorUserId: actorUserId || undefined, targetUserId: targetUserId || undefined, action: userAction === 'all' ? undefined : userAction, createdFrom: createdFrom ? new Date(createdFrom).toISOString() : undefined, createdTo: createdTo ? new Date(createdTo).toISOString() : undefined });
+                const exportRows = await collectPagedItems<Awaited<ReturnType<typeof adminUserApi.listAuditLogs>>, AdminAuditLog>({
+                    initialPage: firstPage,
+                    fetchPage: (currentPage, limit) => adminUserApi.listAuditLogs({ page: currentPage, limit, actorUserId: actorUserId || undefined, targetUserId: targetUserId || undefined, action: userAction === 'all' ? undefined : userAction, createdFrom: createdFrom ? new Date(createdFrom).toISOString() : undefined, createdTo: createdTo ? new Date(createdTo).toISOString() : undefined }),
+                    selectItems: (response) => response.logs,
+                    selectPagination: (response) => response.pagination,
+                });
+
+                await exportWorkbook({
+                    fileName: buildExportFileName(filePrefix, format),
+                    title: auditTitle(activeTab),
+                    subtitle: formatAuditFilters(activeTab, userAuditQuery, blogAuditQuery),
+                    format,
+                    sheets: [{
+                        name: auditSheetName(activeTab),
+                        columns,
+                        rows: exportRows.map((log) => auditExportRows(log, activeTab)),
+                    }],
+                });
+            } else {
+                const firstPage = await blogApi.adminListAuditLogs({ page: 1, limit: 100, actorUserId: actorUserId || undefined, action: blogAction === 'all' ? undefined : blogAction, targetType: blogTargetType === 'all' ? undefined : blogTargetType, targetId: blogTargetId || undefined });
+                const exportRows = await collectPagedItems<Awaited<ReturnType<typeof blogApi.adminListAuditLogs>>, AdminBlogAuditLog>({
+                    initialPage: firstPage,
+                    fetchPage: (currentPage, limit) => blogApi.adminListAuditLogs({ page: currentPage, limit, actorUserId: actorUserId || undefined, action: blogAction === 'all' ? undefined : blogAction, targetType: blogTargetType === 'all' ? undefined : blogTargetType, targetId: blogTargetId || undefined }),
+                    selectItems: (response) => response.logs,
+                    selectPagination: (response) => response.pagination,
+                });
+
+                await exportWorkbook({
+                    fileName: buildExportFileName(filePrefix, format),
+                    title: auditTitle(activeTab),
+                    subtitle: formatAuditFilters(activeTab, userAuditQuery, blogAuditQuery),
+                    format,
+                    sheets: [{
+                        name: auditSheetName(activeTab),
+                        columns,
+                        rows: exportRows.map((log) => auditExportRows(log, activeTab)),
+                    }],
+                });
+            }
+
+            setExportOpen(false);
+            toast.success('Đã xuất audit log.');
+        } catch {
+            const message = 'Không thể xuất audit log.';
+            setExportError(message);
+            toast.error(message);
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
     const handleTabChange = (tab: AuditTab) => {
         setActiveTab(tab);
         setPage(1);
@@ -165,7 +280,27 @@ export default function AdminAuditLogsPage() {
                             Theo dõi thao tác quản trị cho người dùng và blog theo đúng dữ liệu backend đang cung cấp.
                         </p>
                     </div>
+                    <button onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/15">
+                        <Download className="h-4 w-4" /> Export
+                    </button>
                 </div>
+
+                <AdminExportModal
+                    isOpen={exportOpen}
+                    onClose={() => setExportOpen(false)}
+                    onExport={handleExport}
+                    config={{
+                        moduleLabel: activeTab === 'users' ? 'User Audit Logs' : 'Blog Audit Logs',
+                        filePrefix: activeTab === 'users' ? 'audit-users-export' : 'audit-blogs-export',
+                        totalRows: data?.pagination?.total || 0,
+                        filteredRows: data?.pagination?.total || 0,
+                        availableColumns: activeTab === 'users' ? auditUserColumns : auditBlogColumns,
+                        defaultScope: 'current',
+                        defaultFormat: 'xlsx',
+                        errorMessage: exportError,
+                        isGenerating: isExporting,
+                    }}
+                />
 
                 <div className="flex flex-wrap items-center gap-2">
                     <button
@@ -287,7 +422,7 @@ export default function AdminAuditLogsPage() {
                             </thead>
                             <tbody className="divide-y relative">
                                 {usersAudit.data?.logs?.map((log: AdminAuditLog) => (
-                                    <tr key={log.id} className="hover:bg-secondary/10 transition-colors">
+                                    <tr key={log.id} className="hover:bg-secondary/10 transition-colors cursor-pointer" onClick={() => setSelectedUserLog(log)}>
                                         <td className="px-6 py-4 whitespace-nowrap text-muted-foreground">
                                             {new Date(log.createdAt).toLocaleString('vi-VN')}
                                         </td>
@@ -335,7 +470,7 @@ export default function AdminAuditLogsPage() {
                             </thead>
                             <tbody className="divide-y relative">
                                 {blogsAudit.data?.logs?.map((log: AdminBlogAuditLog) => (
-                                    <tr key={log.id} className="hover:bg-secondary/10 transition-colors">
+                                    <tr key={log.id} className="hover:bg-secondary/10 transition-colors cursor-pointer" onClick={() => setSelectedBlogLog(log)}>
                                         <td className="px-6 py-4 whitespace-nowrap text-muted-foreground">
                                             {new Date(log.createdAt).toLocaleString('vi-VN')}
                                         </td>
@@ -397,6 +532,49 @@ export default function AdminAuditLogsPage() {
                     )}
                 </div>
             </motion.div>
+
+            {selectedUserLog ? (
+                <div className="fixed inset-0 z-[140] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedUserLog(null)}>
+                    <div className="w-full max-w-xl rounded-[24px] border bg-background p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Drill-down</div>
+                                <h3 className="mt-1 text-xl font-bold">User audit detail</h3>
+                            </div>
+                            <button onClick={() => setSelectedUserLog(null)} className="rounded-full bg-secondary p-2"><X className="h-4 w-4" /></button>
+                        </div>
+                        <div className="mt-6 grid gap-3 text-sm">
+                            <div><span className="font-bold">Action:</span> {selectedUserLog.action}</div>
+                            <div><span className="font-bold">Actor:</span> {selectedUserLog.actorUser?.fullName || 'Hệ thống'} ({selectedUserLog.actorUser?.email || '—'})</div>
+                            <div><span className="font-bold">Target:</span> {selectedUserLog.targetUser?.fullName || 'N/A'} ({selectedUserLog.targetUser?.email || '—'})</div>
+                            <div><span className="font-bold">Time:</span> {new Date(selectedUserLog.createdAt).toLocaleString('vi-VN')}</div>
+                            <div><span className="font-bold">Reason:</span> {selectedUserLog.reason || '-'}</div>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
+
+            {selectedBlogLog ? (
+                <div className="fixed inset-0 z-[140] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedBlogLog(null)}>
+                    <div className="w-full max-w-xl rounded-[24px] border bg-background p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Drill-down</div>
+                                <h3 className="mt-1 text-xl font-bold">Blog audit detail</h3>
+                            </div>
+                            <button onClick={() => setSelectedBlogLog(null)} className="rounded-full bg-secondary p-2"><X className="h-4 w-4" /></button>
+                        </div>
+                        <div className="mt-6 grid gap-3 text-sm">
+                            <div><span className="font-bold">Action:</span> {selectedBlogLog.action}</div>
+                            <div><span className="font-bold">Actor:</span> {selectedBlogLog.actorUser?.fullName || 'N/A'} ({selectedBlogLog.actorUser?.email || '—'})</div>
+                            <div><span className="font-bold">Target type:</span> {selectedBlogLog.targetType}</div>
+                            <div><span className="font-bold">Target ID:</span> {selectedBlogLog.targetId || '—'}</div>
+                            <div><span className="font-bold">Time:</span> {new Date(selectedBlogLog.createdAt).toLocaleString('vi-VN')}</div>
+                            <div><span className="font-bold">Reason:</span> {selectedBlogLog.reason || '-'}</div>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
         </>
     );
 }

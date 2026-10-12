@@ -10,7 +10,6 @@
  */
 import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
-import { markOverdueBookingsAsNoShow } from '../services/booking.service.js';
 import { sendBookingReminderNotifications } from '../services/notification.service.js';
 import { logger } from '../utils/logger.js';
 /**
@@ -62,24 +61,7 @@ export const purgeExpiredAuthData = async () => {
     }
     return { sessions: sessions.count, emailTokens: emailTokens.count, resetTokens: resetTokens.count };
 };
-/**
- * Tự động xuất bản bài viết blog có scheduledAt đã đến.
- * Được gọi định kỳ (mỗi 2 phút) bởi scheduler.
- *
- * Quy trình:
- * 1. Tìm tất cả bài viết status = SCHEDULED và scheduledAt <= now.
- * 2. Cập nhật hàng loạt: status → PUBLISHED, publishedAt = now, scheduledAt = null.
- * 3. Ghi log danh sách bài viết đã xuất bản.
- *
- * @returns Số lượng bài viết đã xuất bản.
- */
-export const markNoShowBookings = async () => {
-    const result = await markOverdueBookingsAsNoShow();
-    if (result.marked > 0) {
-        logger.info('Marked overdue mentor bookings as no-show', { count: result.marked });
-    }
-    return result;
-};
+/** Gửi nhắc lịch trước giờ hẹn; không tự kết luận kết quả tham dự. */
 export const sendBookingReminders = async () => {
     const result = await sendBookingReminderNotifications();
     if (result.bookings > 0) {
@@ -87,6 +69,7 @@ export const sendBookingReminders = async () => {
     }
     return result;
 };
+/** Tự động xuất bản bài viết SCHEDULED đã đến giờ, chạy mỗi 2 phút. */
 export const publishScheduledPosts = async () => {
     const now = new Date();
     const overduePosts = await prisma.blogPost.findMany({

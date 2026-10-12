@@ -25,6 +25,7 @@ const availabilityBlockSchema = z.object({
 });
 const listBookingsQuerySchema = z.object({
     status: bookingStatusFilterSchema.optional(),
+    search: z.string().trim().min(1).max(200).optional(),
     from: dateSchema.optional(),
     to: dateSchema.optional(),
     page: z.coerce.number().int().min(1).optional().default(1),
@@ -107,6 +108,10 @@ export const adminBookingDetailSchema = z.object({
 });
 export const adminBookingActionSchema = z.object({
     params: idParamSchema,
+});
+export const adminMarkNoShowBookingSchema = z.object({
+    params: idParamSchema,
+    body: z.object({ reason: z.string().trim().min(3).max(500) }),
 });
 export const adminCancelBookingSchema = z.object({
     params: idParamSchema,

@@ -29,7 +29,9 @@ export function sanitizeEmailAddress(value) {
 export function sanitizeRichText(value) {
     if (typeof value !== 'string')
         return value;
-    return stripControlCharacters(value)
+    return value
+        // eslint-disable-next-line no-control-regex -- Intentionally remove control characters from rich text.
+        .replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, '')
         .replace(/\r\n/g, '\n')
         .trim();
 }

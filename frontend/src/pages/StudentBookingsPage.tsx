@@ -109,6 +109,7 @@ export default function StudentBookingsPage() {
         queryKey: bookingQueryKeys.studentBookings(params),
         queryFn: () => bookingApi.listStudentBookings(params),
         enabled: user?.role === 'STUDENT',
+        refetchInterval: 60_000,
     });
 
     const cancelMutation = useMutation({
@@ -242,7 +243,7 @@ export default function StudentBookingsPage() {
                                                         </Badge>
                                                     </div>
                                                 </div>
-                                                <BookingStatusBadge status={booking.status} />
+                                                <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} />
                                             </div>
 
                                             <div className="mt-4 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
@@ -262,6 +263,12 @@ export default function StudentBookingsPage() {
                                                 <div className="mt-4 rounded-2xl border border-primary/20 bg-primary/5 p-4 text-sm leading-6 text-primary">
                                                     Bạn đã đề xuất một khung giờ riêng. Mentor sẽ xác nhận nếu thời gian này phù hợp.
                                                 </div>
+                                            )}
+
+                                            {booking.outcomeReviewRequired && (
+                                                <p className="mt-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm leading-6 text-amber-800">
+                                                    Giờ tư vấn đã kết thúc. Mentor cần xác nhận kết quả buổi tư vấn; lịch này chưa được xác định là không tham dự. Nếu có thông tin chưa đúng, hãy trao đổi với mentor qua chat.
+                                                </p>
                                             )}
 
                                             {(booking.note || (isCancelledBooking(booking) && booking.cancelReason)) && (

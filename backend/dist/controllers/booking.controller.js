@@ -145,14 +145,19 @@ export const adminCancelBooking = asyncHandler(async (req, res) => {
     return res.status(200).json({ message: 'Booking cancelled successfully', booking });
 });
 export const adminCompleteBooking = asyncHandler(async (req, res) => {
+    const user = requireAuthenticatedUser(req);
     const booking = await bookingService.adminCompleteBooking({
         bookingId: parseBookingId(req.params.bookingId),
+        actorUserId: user.id,
     });
     return res.status(200).json({ message: 'Booking completed successfully', booking });
 });
 export const adminMarkNoShowBooking = asyncHandler(async (req, res) => {
+    const user = requireAuthenticatedUser(req);
     const booking = await bookingService.adminMarkNoShowBooking({
         bookingId: parseBookingId(req.params.bookingId),
+        actorUserId: user.id,
+        reason: req.body.reason,
     });
     return res.status(200).json({ message: 'Booking marked as no-show successfully', booking });
 });

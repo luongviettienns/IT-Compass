@@ -3,7 +3,7 @@ import * as bookingController from '../controllers/booking.controller.js';
 import { requireActiveUser, requireAuth, requireRole } from '../middlewares/auth.middleware.js';
 import { bookingCreateLimiter } from '../middlewares/rate-limit.middleware.js';
 import { validate } from '../middlewares/validate.middleware.js';
-import { adminBookingActionSchema, adminBookingDetailSchema, adminCancelBookingSchema, adminExportBookingsSchema, adminListBookingsSchema, cancelMentorBookingSchema, cancelStudentBookingSchema, createBookingReviewSchema, createBookingSchema, getBookingDetailSchema, getMentorAvailabilitySchema, getMentorBookingSettingsSchema, getPublicAvailabilitySchema, getPublicBookingConfigSchema, listMentorBookingsSchema, listStudentBookingsSchema, mentorBookingActionSchema, updateMentorAvailabilitySchema, updateMentorBookingSettingsSchema, } from '../validators/booking.validator.js';
+import { adminBookingActionSchema, adminBookingDetailSchema, adminCancelBookingSchema, adminExportBookingsSchema, adminListBookingsSchema, adminMarkNoShowBookingSchema, cancelMentorBookingSchema, cancelStudentBookingSchema, createBookingReviewSchema, createBookingSchema, getBookingDetailSchema, getMentorAvailabilitySchema, getMentorBookingSettingsSchema, getPublicAvailabilitySchema, getPublicBookingConfigSchema, listMentorBookingsSchema, listStudentBookingsSchema, mentorBookingActionSchema, updateMentorAvailabilitySchema, updateMentorBookingSettingsSchema, } from '../validators/booking.validator.js';
 const publicMentorBookingRoutes = Router();
 const studentBookingRoutes = Router();
 const mentorBookingRoutes = Router();
@@ -15,7 +15,7 @@ adminBookingRoutes.get('/bookings/:bookingId', validate(adminBookingDetailSchema
 adminBookingRoutes.patch('/bookings/:bookingId/confirm', validate(adminBookingActionSchema), bookingController.adminConfirmBooking);
 adminBookingRoutes.patch('/bookings/:bookingId/cancel', validate(adminCancelBookingSchema), bookingController.adminCancelBooking);
 adminBookingRoutes.patch('/bookings/:bookingId/complete', validate(adminBookingActionSchema), bookingController.adminCompleteBooking);
-adminBookingRoutes.patch('/bookings/:bookingId/no-show', validate(adminBookingActionSchema), bookingController.adminMarkNoShowBooking);
+adminBookingRoutes.patch('/bookings/:bookingId/no-show', validate(adminMarkNoShowBookingSchema), bookingController.adminMarkNoShowBooking);
 publicMentorBookingRoutes.get('/:slug/booking-config', validate(getPublicBookingConfigSchema), bookingController.getPublicBookingConfig);
 publicMentorBookingRoutes.get('/:slug/availability', validate(getPublicAvailabilitySchema), bookingController.getPublicAvailability);
 publicMentorBookingRoutes.post('/:slug/bookings', requireAuth, requireActiveUser, requireRole('STUDENT'), bookingCreateLimiter, validate(createBookingSchema), bookingController.createBooking);

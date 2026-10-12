@@ -133,6 +133,11 @@ export const adminBookingActionSchema = z.object({
   params: idParamSchema,
 });
 
+export const adminMarkNoShowBookingSchema = z.object({
+  params: idParamSchema,
+  body: z.object({ reason: z.string().trim().min(3).max(500) }),
+});
+
 export const adminCancelBookingSchema = z.object({
   params: idParamSchema,
   body: z.object({
@@ -156,4 +161,5 @@ export type ListBookingsQuery = z.infer<typeof listBookingsQuerySchema>;
 export type UpdateMentorAvailabilityBody = z.infer<typeof updateMentorAvailabilitySchema.shape.body>;
 export type UpdateMentorBookingSettingsBody = z.infer<typeof updateMentorBookingSettingsSchema.shape.body>;
 export type CancelBookingBody = z.infer<typeof cancelStudentBookingSchema.shape.body>;
+export type MarkNoShowBookingBody = z.infer<typeof adminMarkNoShowBookingSchema.shape.body>;
 export type CreateBookingReviewBody = z.infer<typeof createBookingReviewSchema.shape.body>;

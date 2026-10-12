@@ -12,7 +12,7 @@
  * - publish-scheduled-posts: Tự động xuất bản bài viết đã lên lịch (mỗi 2 phút).
  */
 import { logger } from '../utils/logger.js';
-import { markNoShowBookings, purgeExpiredAuthData, publishScheduledPosts, sendBookingReminders } from './scheduled.tasks.js';
+import { purgeExpiredAuthData, publishScheduledPosts, sendBookingReminders } from './scheduled.tasks.js';
 /** Danh sách tác vụ nền cần lập lịch. */
 const jobs = [
     {
@@ -29,11 +29,6 @@ const jobs = [
         name: 'send-booking-reminders',
         intervalMs: 60 * 1000, // mỗi 1 phút
         task: sendBookingReminders,
-    },
-    {
-        name: 'mark-no-show-bookings',
-        intervalMs: 15 * 60 * 1000, // mỗi 15 phút
-        task: markNoShowBookings,
     },
 ];
 /**

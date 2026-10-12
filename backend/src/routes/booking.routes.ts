@@ -10,6 +10,7 @@ import {
   adminCancelBookingSchema,
   adminExportBookingsSchema,
   adminListBookingsSchema,
+  adminMarkNoShowBookingSchema,
   cancelMentorBookingSchema,
   cancelStudentBookingSchema,
   createBookingReviewSchema,
@@ -38,7 +39,7 @@ adminBookingRoutes.get('/bookings/:bookingId', validate(adminBookingDetailSchema
 adminBookingRoutes.patch('/bookings/:bookingId/confirm', validate(adminBookingActionSchema), bookingController.adminConfirmBooking);
 adminBookingRoutes.patch('/bookings/:bookingId/cancel', validate(adminCancelBookingSchema), bookingController.adminCancelBooking);
 adminBookingRoutes.patch('/bookings/:bookingId/complete', validate(adminBookingActionSchema), bookingController.adminCompleteBooking);
-adminBookingRoutes.patch('/bookings/:bookingId/no-show', validate(adminBookingActionSchema), bookingController.adminMarkNoShowBooking);
+adminBookingRoutes.patch('/bookings/:bookingId/no-show', validate(adminMarkNoShowBookingSchema), bookingController.adminMarkNoShowBooking);
 
 publicMentorBookingRoutes.get(
   '/:slug/booking-config',

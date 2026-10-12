@@ -87,7 +87,7 @@ function BookingCard({
                     <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                             <h2 className="text-lg font-bold text-foreground">{booking.student.fullName}</h2>
-                            <BookingStatusBadge status={booking.status} />
+                            <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} />
                             <Badge variant="outline" className={cn(
                                 'border-border/70 px-3 py-1 text-xs font-semibold',
                                 booking.requestType === 'CUSTOM_TIME' ? 'border-primary/30 bg-primary/10 text-primary' : 'bg-surface/50 text-muted-foreground',
@@ -115,7 +115,7 @@ function BookingCard({
                     )}
                     {canCompleteBooking(booking) && (
                         <Button type="button" size="sm" variant="secondary" isLoading={actionPending} onClick={() => onComplete(booking)}>
-                            <CalendarCheck2 size={15} /> Hoàn thành
+                            <CalendarCheck2 size={15} /> Xác nhận đã tư vấn
                         </Button>
                     )}
                     {booking.status === 'CONFIRMED' && (
@@ -135,6 +135,12 @@ function BookingCard({
                 <div className="mt-5 rounded-2xl border border-primary/20 bg-primary/5 p-4 text-sm leading-6 text-primary">
                     Học viên đề xuất thời gian ngoài lịch bạn đã mở. Nếu phù hợp, bạn có thể xác nhận để mở chat và giữ lịch này.
                 </div>
+            )}
+
+            {booking.outcomeReviewRequired && (
+                <p className="mt-5 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm leading-6 text-amber-800">
+                    Buổi tư vấn đã hết giờ và cần xác nhận kết quả. Chọn “Xác nhận đã tư vấn” nếu buổi tư vấn đã diễn ra. Nếu có vấn đề về tham dự, hãy trao đổi với học viên và nhờ quản trị viên xem xét.
+                </p>
             )}
 
             {booking.note && (
@@ -170,6 +176,7 @@ export default function MentorBookingsPage() {
     const bookingsQuery = useQuery({
         queryKey: bookingQueryKeys.mentorBookings(params),
         queryFn: () => bookingApi.listMentorBookings(params),
+        refetchInterval: 60_000,
     });
 
     const filteredBookings = useMemo(() => {

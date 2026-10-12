@@ -7,14 +7,14 @@ import { Download, Search, CheckCircle2, XCircle, CircleDashed, Clock, Calendar,
 import { toast } from 'sonner';
 
 import { Loader } from '../../components/ui/Loader';
-import { Badge } from '../../components/ui/Badge';
 import { Avatar } from '../../components/ui/Avatar';
 import { Button } from '../../components/ui/Button';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
 import { AdminActionDialog } from '../../components/admin/AdminActionDialog';
+import { BookingStatusBadge } from '../../components/mentor/BookingStatusBadge';
 import { buildExportFileName, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
-import { bookingApi, type BookingListParams, type BookingStatus, type MentorBooking } from '../../lib/bookingApi';
+import { bookingApi, getBookingStatusLabel, type BookingListParams, type BookingStatus, type MentorBooking } from '../../lib/bookingApi';
 import { bookingQueryKeys } from '../../lib/bookingQueryKeys';
 import { getErrorMessage } from '../../lib/appError';
 
@@ -24,16 +24,7 @@ const BOOKING_STATUS_LABEL: Record<BookingStatus, string> = {
     CANCELLED_BY_STUDENT: 'Học viên hủy',
     CANCELLED_BY_MENTOR: 'Mentor hủy',
     COMPLETED: 'Hoàn thành',
-    NO_SHOW: 'No-show',
-};
-
-const BOOKING_STATUS_VARIANT: Record<BookingStatus, 'default' | 'secondary' | 'accent' | 'destructive' | 'success'> = {
-    REQUESTED: 'accent',
-    CONFIRMED: 'default',
-    CANCELLED_BY_STUDENT: 'destructive',
-    CANCELLED_BY_MENTOR: 'destructive',
-    COMPLETED: 'success',
-    NO_SHOW: 'secondary',
+    NO_SHOW: 'Không tham dự',
 };
 
 const bookingExportColumns: ExportColumn[] = [
@@ -66,6 +57,7 @@ export default function AdminBookingsPage() {
     const [to, setTo] = useState('');
     const [selectedBooking, setSelectedBooking] = useState<MentorBooking | null>(null);
     const [actionType, setActionType] = useState<'confirm' | 'cancel' | 'complete' | 'no-show' | null>(null);
+    const [outcomeError, setOutcomeError] = useState<string | null>(null);
     const [exportOpen, setExportOpen] = useState(false);
     const [exportError, setExportError] = useState<string | null>(null);
     const [isExporting, setIsExporting] = useState(false);
@@ -82,6 +74,7 @@ export default function AdminBookingsPage() {
     const bookingsQuery = useQuery({
         queryKey: bookingQueryKeys.adminBookings(params),
         queryFn: () => bookingApi.adminListBookings(params),
+        refetchInterval: 60_000,
     });
 
     const detailQuery = useQuery({
@@ -89,6 +82,7 @@ export default function AdminBookingsPage() {
         queryFn: () => bookingApi.adminGetBookingDetail(selectedBooking!.id),
         enabled: Boolean(selectedBooking),
         staleTime: 0,
+        refetchInterval: 60_000,
     });
 
     const invalidateData = async (bookingId?: string) => {
@@ -127,12 +121,16 @@ export default function AdminBookingsPage() {
     });
 
     const noShowMutation = useMutation({
-        mutationFn: (booking: MentorBooking) => bookingApi.adminMarkNoShowBooking(booking.id),
-        onSuccess: async (_data, booking) => {
-            await invalidateData(booking.id);
-            toast.success('Đã đánh dấu no-show.');
+        mutationFn: ({ booking, reason }: { booking: MentorBooking; reason: string }) => bookingApi.adminMarkNoShowBooking(booking.id, reason.trim()),
+        onSuccess: async (data, vars) => {
+            queryClient.setQueryData(bookingQueryKeys.adminBookingDetail(vars.booking.id), { booking: data.booking });
+            setSelectedBooking(data.booking);
+            await invalidateData(vars.booking.id);
+            setActionType(null);
+            setOutcomeError(null);
+            toast.success('Đã xác nhận lịch không tham dự.');
         },
-        onError: (error) => toast.error(getErrorMessage(error, 'Không thể cập nhật no-show.')),
+        onError: (error) => setOutcomeError(getErrorMessage(error, 'Không thể lưu kết quả.')),
     });
 
     const handleExport = async ({ format, scope, selectedColumnKeys, filePrefix }: { format: 'xlsx' | 'csv'; scope: ExportScope; selectedColumnKeys: string[]; filePrefix: string }) => {
@@ -161,7 +159,7 @@ export default function AdminBookingsPage() {
                         id: booking.id,
                         mentor: booking.mentor.name,
                         student: booking.student.fullName,
-                        status: BOOKING_STATUS_LABEL[booking.status],
+                        status: getBookingStatusLabel(booking.status, booking.outcomeReviewRequired),
                         requestType: booking.requestType,
                         startAt: formatDateTime(booking.startAt),
                         endAt: formatDateTime(booking.endAt),
@@ -285,7 +283,7 @@ export default function AdminBookingsPage() {
                                                 </div>
                                             </td>
                                             <td className="px-5 py-4">
-                                                <Badge variant={BOOKING_STATUS_VARIANT[booking.status]}>{BOOKING_STATUS_LABEL[booking.status]}</Badge>
+                                                <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} />
                                             </td>
                                             <td className="px-5 py-4">
                                                 <div className="font-medium text-sm">{booking.date}</div>
@@ -357,12 +355,17 @@ export default function AdminBookingsPage() {
                                     <div className="p-6 border-b flex-shrink-0 pr-12">
                                         <div className="flex items-center gap-4 mb-2">
                                             <h2 className="text-xl font-bold tracking-tight">Chi tiết Booking</h2>
-                                            <Badge variant={BOOKING_STATUS_VARIANT[detail.status]} className="text-[11px]">{BOOKING_STATUS_LABEL[detail.status]}</Badge>
+                                            <BookingStatusBadge status={detail.status} outcomeReviewRequired={detail.outcomeReviewRequired} />
                                         </div>
                                         <div className="text-sm text-muted-foreground font-mono bg-secondary/50 p-2 rounded-lg break-all inline-block">ID: {detail.id}</div>
                                     </div>
                                     
                                     <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                                        {detail.outcomeReviewRequired && (
+                                            <p className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm leading-6 text-amber-800">
+                                                Giờ tư vấn đã kết thúc nhưng kết quả chưa được xác nhận. Chỉ ghi nhận không tham dự sau khi đã kiểm tra thông tin với người tham gia.
+                                            </p>
+                                        )}
                                         <div className="grid gap-4">
                                             <div className="flex gap-4 items-start p-4 rounded-xl border bg-secondary/20">
                                                 <div className="mt-0.5 text-primary"><Calendar size={18} /></div>
@@ -426,11 +429,11 @@ export default function AdminBookingsPage() {
                                             <Button variant="default" className="bg-emerald-600 hover:bg-emerald-700 text-white border-transparent w-full" disabled={confirmMutation.isPending} onClick={() => { confirmMutation.mutate(detail); setSelectedBooking(null); }}>
                                                 <CheckCircle2 size={16} /> Xác nhận
                                             </Button>
-                                            <Button variant="default" className="w-full" disabled={completeMutation.isPending} onClick={() => { completeMutation.mutate(detail); setSelectedBooking(null); }}>
+                                            <Button variant="default" className="w-full" disabled={completeMutation.isPending || detail.status !== 'CONFIRMED' || !detail.outcomeReviewRequired} onClick={() => { completeMutation.mutate(detail); setSelectedBooking(null); }}>
                                                 <CheckCircle2 size={16} /> Hoàn thành
                                             </Button>
-                                            <Button variant="secondary" className="bg-slate-700 hover:bg-slate-800 text-white w-full" disabled={noShowMutation.isPending} onClick={() => { noShowMutation.mutate(detail); setSelectedBooking(null); }}>
-                                                <CircleDashed size={16} /> No-show
+                                            <Button variant="secondary" className="bg-slate-700 hover:bg-slate-800 text-white w-full" disabled={noShowMutation.isPending || detail.status !== 'CONFIRMED' || !detail.outcomeReviewRequired} onClick={() => { setOutcomeError(null); setActionType('no-show'); }}>
+                                                <CircleDashed size={16} /> Không tham dự
                                             </Button>
                                             <Button variant="destructive" className="w-full" onClick={() => setActionType('cancel')}>
                                                 <XCircle size={16} /> Hủy lịch
@@ -466,19 +469,28 @@ export default function AdminBookingsPage() {
             />
 
             <AdminActionDialog
-                isOpen={actionType === 'cancel'}
-                title="Hủy booking"
-                description="Nhập lý do hủy để tiếp tục."
-                confirmText="Hủy booking"
+                isOpen={actionType === 'cancel' || actionType === 'no-show'}
+                title={actionType === 'no-show' ? 'Xác nhận không tham dự' : 'Hủy booking'}
+                description={actionType === 'no-show' ? 'Ghi rõ căn cứ đã kiểm tra với mentor hoặc học viên. Việc hết giờ không đủ để kết luận không tham dự.' : 'Nhập lý do hủy để tiếp tục.'}
+                confirmText={actionType === 'no-show' ? 'Xác nhận không tham dự' : 'Hủy booking'}
                 tone="destructive"
+                overlayZIndex={140}
+                isPending={actionType === 'no-show' ? noShowMutation.isPending : cancelMutation.isPending}
+                errorMessage={actionType === 'no-show' ? outcomeError : null}
                 inputType="textarea"
-                inputLabel="Lý do"
+                inputLabel={actionType === 'no-show' ? 'Căn cứ xác nhận' : 'Lý do'}
                 requireInput
                 minLength={3}
+                maxLength={500}
                 onClose={() => setActionType(null)}
                 onConfirm={(reason) => {
                     if (!selectedBooking) return;
-                    cancelMutation.mutate({ booking: selectedBooking, reason });
+                    if (actionType === 'no-show') {
+                        setOutcomeError(null);
+                        noShowMutation.mutate({ booking: selectedBooking, reason });
+                    } else {
+                        cancelMutation.mutate({ booking: selectedBooking, reason });
+                    }
                 }}
             />
         </>

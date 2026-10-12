@@ -9,6 +9,7 @@ import type {
   CreateBookingBody,
   CreateBookingReviewBody,
   ListBookingsQuery,
+  MarkNoShowBookingBody,
   UpdateMentorAvailabilityBody,
   UpdateMentorBookingSettingsBody,
 } from '../validators/booking.validator.js';
@@ -189,16 +190,21 @@ export const adminCancelBooking = asyncHandler(async (req: Request, res: Respons
 });
 
 export const adminCompleteBooking = asyncHandler(async (req: Request, res: Response) => {
+  const user = requireAuthenticatedUser(req);
   const booking = await bookingService.adminCompleteBooking({
     bookingId: parseBookingId(req.params.bookingId),
+    actorUserId: user.id,
   });
 
   return res.status(200).json({ message: 'Booking completed successfully', booking });
 });
 
 export const adminMarkNoShowBooking = asyncHandler(async (req: Request, res: Response) => {
+  const user = requireAuthenticatedUser(req);
   const booking = await bookingService.adminMarkNoShowBooking({
     bookingId: parseBookingId(req.params.bookingId),
+    actorUserId: user.id,
+    reason: (req.body as MarkNoShowBookingBody).reason,
   });
 
   return res.status(200).json({ message: 'Booking marked as no-show successfully', booking });

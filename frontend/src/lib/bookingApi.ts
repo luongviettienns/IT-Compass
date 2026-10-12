@@ -51,6 +51,7 @@ export type BookingStudent = {
 export type MentorBooking = {
     id: string;
     status: BookingStatus;
+    outcomeReviewRequired: boolean;
     requestType: BookingRequestType;
     date: string;
     startTime: string;
@@ -315,11 +316,14 @@ export const bookingApi = {
     adminCompleteBooking: (bookingId: string) =>
         request<{ message: string; booking: MentorBooking }>(`/admin/bookings/${bookingId}/complete`, { method: 'PATCH' }, 'Không thể hoàn thành booking admin'),
 
-    adminMarkNoShowBooking: (bookingId: string) =>
-        request<{ message: string; booking: MentorBooking }>(`/admin/bookings/${bookingId}/no-show`, { method: 'PATCH' }, 'Không thể đánh dấu no-show booking admin'),
+    adminMarkNoShowBooking: (bookingId: string, reason: string) =>
+        request<{ message: string; booking: MentorBooking }>(`/admin/bookings/${bookingId}/no-show`, {
+            method: 'PATCH', body: JSON.stringify({ reason }),
+        }, 'Không thể xác nhận lịch không tham dự'),
 };
 
-export const getBookingStatusLabel = (status: BookingStatus) => {
+export const getBookingStatusLabel = (status: BookingStatus, outcomeReviewRequired = false) => {
+    if (status === 'CONFIRMED' && outcomeReviewRequired) return 'Chờ xác nhận kết quả';
     switch (status) {
         case 'REQUESTED': return 'Chờ mentor xác nhận';
         case 'CONFIRMED': return 'Đã xác nhận';

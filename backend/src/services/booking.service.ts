@@ -1,4 +1,4 @@
-import type { BookingRequestType, BookingStatus, Prisma } from '@prisma/client';
+import { Prisma, type BookingRequestType, type BookingStatus } from '@prisma/client';
 
 import { prisma } from '../db/prisma.js';
 import type {
@@ -30,7 +30,6 @@ const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 20;
 const MAX_ACTIVE_BOOKINGS_PER_STUDENT = 5;
 const MAX_DAILY_REQUESTS_PER_STUDENT_MENTOR = 3;
-const NO_SHOW_GRACE_MINUTE = 15;
 const ACTIVE_BOOKING_STATUSES: BookingStatus[] = ['REQUESTED', 'CONFIRMED'];
 const CANCELLABLE_STATUSES: BookingStatus[] = ['REQUESTED', 'CONFIRMED'];
 
@@ -224,6 +223,7 @@ const buildDurationOptions = (setting: BookingSettingRecord) => {
 const serializeBooking = (booking: BookingRecord) => ({
   id: String(booking.id),
   status: booking.status,
+  outcomeReviewRequired: booking.status === 'CONFIRMED' && booking.endAt.getTime() <= Date.now(),
   requestType: booking.requestType,
   date: formatDate(booking.startAt),
   startTime: formatTime(booking.startAt),
@@ -304,7 +304,7 @@ const logBookingTransition = ({
 }: {
   booking: BookingRecord;
   actorUserId: bigint | null;
-  actorType: 'STUDENT' | 'MENTOR' | 'SYSTEM';
+  actorType: 'STUDENT' | 'MENTOR' | 'ADMIN' | 'SYSTEM';
   action: 'CREATE' | 'CONFIRM' | 'CANCEL' | 'COMPLETE' | 'NO_SHOW';
   fromStatus: BookingStatus | null;
   toStatus: BookingStatus;
@@ -538,6 +538,9 @@ const assertBookingAbuseLimits = async (
       where: {
         studentUserId,
         status: { in: ACTIVE_BOOKING_STATUSES },
+        // Ended sessions awaiting an attendance decision are historical, not
+        // future reservations consuming the student's active-booking quota.
+        endAt: { gt: new Date() },
       },
     }),
     tx.mentorBooking.count({
@@ -1149,26 +1152,41 @@ export const adminConfirmBooking = async ({ bookingId }: { bookingId: bigint }) 
   return serializeBooking(booking);
 };
 
-export const adminCompleteBooking = async ({ bookingId }: { bookingId: bigint }) => {
+// Guard the write as well as the initial read: a concurrent reviewer must not
+// overwrite attendance that another participant has already acknowledged.
+const saveConfirmedBookingOutcome = async (bookingId: bigint, status: 'COMPLETED' | 'NO_SHOW') => {
+  const now = new Date();
+  try {
+    return await prisma.mentorBooking.update({
+      where: { id: bookingId, status: 'CONFIRMED', endAt: { lte: now } },
+      data: { status, ...(status === 'COMPLETED' ? { completedAt: now } : {}) },
+      select: bookingSelect,
+    });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      throw new HttpError(409, 'Booking outcome changed; reload before reviewing it again', undefined, 'BOOKING_OUTCOME_CHANGED');
+    }
+    throw error;
+  }
+};
+
+export const adminCompleteBooking = async ({ bookingId, actorUserId }: { bookingId: bigint; actorUserId: bigint }) => {
   const currentBooking = await getBookingDetailOrThrow({ id: bookingId });
 
   if (currentBooking.status !== 'CONFIRMED') {
     throw new HttpError(400, 'Only confirmed bookings can be completed', undefined, 'BOOKING_CANNOT_COMPLETE');
   }
 
-  const booking = await prisma.mentorBooking.update({
-    where: { id: bookingId },
-    data: {
-      status: 'COMPLETED',
-      completedAt: new Date(),
-    },
-    select: bookingSelect,
-  });
+  if (currentBooking.endAt > new Date()) {
+    throw new HttpError(400, 'Booking can only be completed after the session ends', undefined, 'BOOKING_CANNOT_COMPLETE_EARLY');
+  }
+
+  const booking = await saveConfirmedBookingOutcome(bookingId, 'COMPLETED');
 
   logBookingTransition({
     booking,
-    actorUserId: null,
-    actorType: 'SYSTEM',
+    actorUserId,
+    actorType: 'ADMIN',
     action: 'COMPLETE',
     fromStatus: 'CONFIRMED',
     toStatus: booking.status,
@@ -1177,30 +1195,42 @@ export const adminCompleteBooking = async ({ bookingId }: { bookingId: bigint })
   return serializeBooking(booking);
 };
 
-export const adminMarkNoShowBooking = async ({ bookingId }: { bookingId: bigint }) => {
+export const adminMarkNoShowBooking = async ({ bookingId, actorUserId, reason }: {
+  bookingId: bigint;
+  actorUserId: bigint;
+  reason: string;
+}) => {
   const currentBooking = await getBookingDetailOrThrow({ id: bookingId });
 
   if (currentBooking.status !== 'CONFIRMED') {
     throw new HttpError(400, 'Only confirmed bookings can be marked no-show', undefined, 'BOOKING_CANNOT_NO_SHOW');
   }
 
-  const booking = await prisma.mentorBooking.update({
-    where: { id: bookingId },
-    data: {
-      status: 'NO_SHOW',
-    },
-    select: bookingSelect,
-  });
+  if (currentBooking.endAt > new Date()) {
+    throw new HttpError(400, 'Attendance can only be reviewed after the session ends', undefined, 'BOOKING_CANNOT_NO_SHOW_EARLY');
+  }
+
+  const reviewReason = sanitizeNullableSingleLineText(reason);
+  if (!reviewReason || reviewReason.length < 3 || reviewReason.length > 500) {
+    throw new HttpError(400, 'A review reason of 3 to 500 characters is required', undefined, 'BOOKING_OUTCOME_REASON_REQUIRED');
+  }
+
+  const booking = await saveConfirmedBookingOutcome(bookingId, 'NO_SHOW');
 
   logBookingTransition({
     booking,
-    actorUserId: null,
-    actorType: 'SYSTEM',
+    actorUserId,
+    actorType: 'ADMIN',
     action: 'NO_SHOW',
     fromStatus: 'CONFIRMED',
     toStatus: booking.status,
+    reason: reviewReason,
   });
   notifyBookingUpdated(booking);
+  await sendBookingNotificationSafely(() => notifyBookingNoShow(toBookingNotificationSource(booking)), {
+    bookingId: booking.id,
+    event: 'BOOKING_NO_SHOW',
+  });
   return serializeBooking(booking);
 };
 
@@ -1344,51 +1374,6 @@ export const cancelMentorBooking = async ({
   return serializeBooking(booking);
 };
 
-export const markOverdueBookingsAsNoShow = async () => {
-  const cutoffAt = new Date(Date.now() - NO_SHOW_GRACE_MINUTE * 60_000);
-  const overdueBookings = await prisma.mentorBooking.findMany({
-    where: {
-      status: 'CONFIRMED',
-      endAt: { lt: cutoffAt },
-    },
-    select: bookingSelect,
-    take: 100,
-  });
-
-  if (overdueBookings.length === 0) return { marked: 0 };
-
-  const updatedBookings = await prisma.$transaction(async (tx) => Promise.all(
-    overdueBookings.map((booking) => tx.mentorBooking.update({
-      where: {
-        id: booking.id,
-        status: 'CONFIRMED',
-      },
-      data: {
-        status: 'NO_SHOW',
-      },
-      select: bookingSelect,
-    })),
-  ));
-
-  for (const booking of updatedBookings) {
-    logBookingTransition({
-      booking,
-      actorUserId: null,
-      actorType: 'SYSTEM',
-      action: 'NO_SHOW',
-      fromStatus: 'CONFIRMED',
-      toStatus: booking.status,
-    });
-    notifyBookingUpdated(booking);
-    await sendBookingNotificationSafely(() => notifyBookingNoShow(toBookingNotificationSource(booking)), {
-      bookingId: booking.id,
-      event: 'BOOKING_NO_SHOW',
-    });
-  }
-
-  return { marked: updatedBookings.length };
-};
-
 export const createBookingReview = async ({
   userId,
   bookingId,
@@ -1472,14 +1457,7 @@ export const completeMentorBooking = async ({ userId, bookingId }: { userId: big
     throw new HttpError(400, 'Booking can only be completed after the session ends', undefined, 'BOOKING_CANNOT_COMPLETE_EARLY');
   }
 
-  const booking = await prisma.mentorBooking.update({
-    where: { id: bookingId },
-    data: {
-      status: 'COMPLETED',
-      completedAt: new Date(),
-    },
-    select: bookingSelect,
-  });
+  const booking = await saveConfirmedBookingOutcome(bookingId, 'COMPLETED');
 
   logBookingTransition({
     booking,

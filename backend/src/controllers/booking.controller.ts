@@ -44,6 +44,7 @@ export const createBooking = asyncHandler(async (req: Request, res: Response) =>
     userId: user.id,
     slug: String(req.params.slug),
     input: req.body as CreateBookingBody,
+    idempotencyKey: req.get('Idempotency-Key'),
   });
 
   return res.status(201).json({
@@ -173,16 +174,20 @@ export const adminGetBookingDetail = asyncHandler(async (req: Request, res: Resp
 });
 
 export const adminConfirmBooking = asyncHandler(async (req: Request, res: Response) => {
+  const user = requireAuthenticatedUser(req);
   const booking = await bookingService.adminConfirmBooking({
     bookingId: parseBookingId(req.params.bookingId),
+    actorUserId: user.id,
   });
 
   return res.status(200).json({ message: 'Booking confirmed successfully', booking });
 });
 
 export const adminCancelBooking = asyncHandler(async (req: Request, res: Response) => {
+  const user = requireAuthenticatedUser(req);
   const booking = await bookingService.adminCancelBooking({
     bookingId: parseBookingId(req.params.bookingId),
+    actorUserId: user.id,
     reason: (req.body as CancelBookingBody).reason,
   });
 

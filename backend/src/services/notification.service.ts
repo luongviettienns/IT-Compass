@@ -63,6 +63,7 @@ export type BookingNotificationSource = {
   status: BookingStatus;
   requestType: BookingRequestType;
   cancelReason?: string | null;
+  cancelledBy?: 'STUDENT' | 'MENTOR' | 'SYSTEM' | null;
 };
 
 type NotificationCreateInput = {
@@ -134,7 +135,7 @@ const isPrismaUniqueConstraintError = (error: unknown) => (
   typeof error === 'object' && error !== null && 'code' in error && (error as { code?: unknown }).code === 'P2002'
 );
 
-const createNotificationRecord = async (input: NotificationCreateInput, client: NotificationClient = prisma) => {
+const createNotificationRecord = async (input: NotificationCreateInput, client: NotificationClient = prisma, emit = true) => {
   if (input.dedupeKey) {
     const existing = await client.notification.findUnique({
       where: { dedupeKey: input.dedupeKey },
@@ -160,7 +161,7 @@ const createNotificationRecord = async (input: NotificationCreateInput, client: 
     });
 
     const serialized = serializeNotification(notification);
-    emitNotificationCreated(serialized);
+    if (emit) emitNotificationCreated(serialized);
     return serialized;
   } catch (error) {
     if (input.dedupeKey && isPrismaUniqueConstraintError(error)) {
@@ -193,6 +194,7 @@ const buildBookingNotificationData = (
   status: booking.status,
   requestType: booking.requestType,
   cancelReason: booking.cancelReason ?? null,
+  cancelledBy: booking.cancelledBy ?? null,
   ...extra,
 });
 
@@ -246,7 +248,7 @@ const buildBookingNotificationTargets = (
         targets,
         booking.studentUserId,
         'Lịch tư vấn đã được xác nhận',
-        `Mentor ${booking.mentorName} đã xác nhận lịch tư vấn vào ${timeLabel}. Bạn có thể mở chat ngay bây giờ.`,
+        `Lịch tư vấn với mentor ${booking.mentorName} đã được xác nhận vào ${timeLabel}. Bạn có thể mở chat ngay bây giờ.`,
         'confirmed',
       );
       break;
@@ -263,8 +265,10 @@ const buildBookingNotificationTargets = (
       pushTarget(
         targets,
         booking.studentUserId,
-        'Mentor đã hủy lịch',
-        `Mentor ${booking.mentorName} đã hủy lịch tư vấn vào ${timeLabel}.${cancelReasonLabel}`,
+        booking.cancelledBy === 'SYSTEM' ? 'Quản trị viên đã hủy lịch' : 'Mentor đã hủy lịch',
+        booking.cancelledBy === 'SYSTEM'
+          ? `Quản trị viên đã hủy lịch tư vấn với mentor ${booking.mentorName} vào ${timeLabel}.${cancelReasonLabel}`
+          : `Mentor ${booking.mentorName} đã hủy lịch tư vấn vào ${timeLabel}.${cancelReasonLabel}`,
         'cancelled-by-mentor',
       );
       break;
@@ -464,6 +468,22 @@ export const markAllNotificationsAsRead = async ({ userId }: { userId: bigint })
   }
 
   return { updatedCount: refreshedNotifications.length };
+};
+
+// Persist transactionally; the caller publishes only after the transaction
+// commits. A process failure after commit still leaves the notification inbox.
+export const persistBookingNotifications = async (
+  tx: Prisma.TransactionClient, booking: BookingNotificationSource, type: NotificationType,
+) => {
+  const notifications = [];
+  for (const target of buildBookingNotificationTargets(booking, type)) {
+    notifications.push(await createNotificationRecord(target, tx, false));
+  }
+  return notifications;
+};
+
+export const publishBookingNotifications = (notifications: Awaited<ReturnType<typeof persistBookingNotifications>>) => {
+  for (const notification of notifications) emitNotificationCreated(notification);
 };
 
 export const notifyBookingRequested = async (booking: BookingNotificationSource) => {

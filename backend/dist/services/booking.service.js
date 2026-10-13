@@ -1,12 +1,14 @@
 import { Prisma } from '@prisma/client';
+import { createHash } from 'node:crypto';
 import { prisma } from '../db/prisma.js';
 import { HttpError } from '../utils/httpError.js';
 import { logger } from '../utils/logger.js';
 import { publicMentorSelect, serializePublicMentor } from '../utils/serializeMentor.js';
 import { sanitizeNullableRichText, sanitizeNullableSingleLineText } from '../utils/sanitize.js';
 import { ensureConversationForConfirmedBooking } from './conversation.service.js';
+import { withBookingTransaction } from './booking-transaction.js';
 import { emitBookingUpdated } from '../socket/booking.events.js';
-import { notifyBookingCancelledByMentor, notifyBookingCancelledByStudent, notifyBookingCompleted, notifyBookingConfirmed, notifyBookingNoShow, notifyBookingRequested, } from './notification.service.js';
+import { notifyBookingCompleted, notifyBookingNoShow, persistBookingNotifications, publishBookingNotifications, } from './notification.service.js';
 const DURATION_STEP_MINUTE = 30;
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 20;
@@ -45,6 +47,8 @@ const bookingSelect = {
     durationMinute: true,
     status: true,
     requestType: true,
+    requestKeyHash: true,
+    requestPayloadHash: true,
     note: true,
     cancelReason: true,
     cancelledBy: true,
@@ -215,6 +219,7 @@ const toBookingNotificationSource = (booking) => ({
     status: booking.status,
     requestType: booking.requestType,
     cancelReason: booking.cancelReason,
+    cancelledBy: booking.cancelledBy,
 });
 const sendBookingNotificationSafely = async (notificationTask, context) => {
     try {
@@ -248,8 +253,8 @@ const serializeAvailabilityBlock = (block) => ({
     endTime: minuteToTime(block.endMinute),
     isActive: block.isActive,
 });
-const getBookingSettingOrDefault = async (mentorId) => {
-    const setting = await prisma.mentorBookingSetting.findUnique({
+const getBookingSettingOrDefault = async (mentorId, tx = prisma) => {
+    const setting = await tx.mentorBookingSetting.findUnique({
         where: { mentorId },
         select: bookingSettingSelect,
     });
@@ -278,11 +283,13 @@ const getSelfMentor = async (userId) => {
         },
     });
 };
-const getPublicMentorForBooking = async (slug) => {
-    const mentor = await prisma.mentor.findFirst({
+const getPublicMentorForBooking = async (slug, options = {}) => {
+    const tx = options.tx ?? prisma;
+    const mentor = await tx.mentor.findFirst({
         where: {
             slug,
-            status: 'ACTIVE',
+            ...(options.mentorId ? { id: options.mentorId } : {}),
+            ...(options.activeOnly === false ? {} : { status: 'ACTIVE' }),
         },
         select: {
             ...publicMentorSelect,
@@ -314,8 +321,8 @@ const assertBookingWindowAllowed = (startAt, setting) => {
         throw new HttpError(400, 'Booking date is too far in advance', undefined, 'BOOKING_TOO_FAR_IN_ADVANCE');
     }
 };
-const assertWithinAvailability = async ({ mentorId, weekday, startMinute, endMinute, }) => {
-    const block = await prisma.mentorAvailability.findFirst({
+const assertWithinAvailability = async ({ mentorId, weekday, startMinute, endMinute, }, tx = prisma) => {
+    const block = await tx.mentorAvailability.findFirst({
         where: {
             mentorId,
             weekday,
@@ -332,11 +339,14 @@ const assertWithinAvailability = async ({ mentorId, weekday, startMinute, endMin
 const isOverlapping = ({ startAt, endAt, existingStartAt, existingEndAt, setting, }) => {
     const blockedStartAt = new Date(existingStartAt.getTime() - setting.bufferBeforeMinute * 60_000);
     const blockedEndAt = new Date(existingEndAt.getTime() + setting.bufferAfterMinute * 60_000);
-    return startAt < blockedEndAt && endAt > blockedStartAt;
+    const candidateStartAt = new Date(startAt.getTime() - setting.bufferBeforeMinute * 60_000);
+    const candidateEndAt = new Date(endAt.getTime() + setting.bufferAfterMinute * 60_000);
+    return candidateStartAt < blockedEndAt && candidateEndAt > blockedStartAt;
 };
 const findOverlappingBooking = async (tx, { mentorId, startAt, endAt, setting, excludeBookingId, }) => {
-    const queryStartAt = new Date(startAt.getTime() - setting.bufferAfterMinute * 60_000);
-    const queryEndAt = new Date(endAt.getTime() + setting.bufferBeforeMinute * 60_000);
+    const padding = (setting.bufferBeforeMinute + setting.bufferAfterMinute) * 60_000;
+    const queryStartAt = new Date(startAt.getTime() - padding);
+    const queryEndAt = new Date(endAt.getTime() + padding);
     const bookings = await tx.mentorBooking.findMany({
         where: {
             mentorId,
@@ -500,7 +510,6 @@ const getBookingDetailOrThrow = async (where, tx = prisma) => {
     }
     return booking;
 };
-const canAdminCancelBooking = (status) => ['REQUESTED', 'CONFIRMED'].includes(status);
 export const getPublicBookingConfig = async ({ slug }) => {
     const mentor = await getPublicMentorForBooking(slug);
     const setting = await getBookingSettingOrDefault(mentor.id);
@@ -535,8 +544,8 @@ export const getPublicAvailability = async ({ slug, date, durationMinute, }) => 
             where: {
                 mentorId: mentor.id,
                 status: { in: ACTIVE_BOOKING_STATUSES },
-                startAt: { lt: new Date(dayEndAt.getTime() + setting.bufferBeforeMinute * 60_000) },
-                endAt: { gt: new Date(dayStartAt.getTime() - setting.bufferAfterMinute * 60_000) },
+                startAt: { lt: new Date(dayEndAt.getTime() + (setting.bufferBeforeMinute + setting.bufferAfterMinute) * 60_000) },
+                endAt: { gt: new Date(dayStartAt.getTime() - (setting.bufferBeforeMinute + setting.bufferAfterMinute) * 60_000) },
             },
             select: {
                 startAt: true,
@@ -587,27 +596,59 @@ export const getPublicAvailability = async ({ slug, date, durationMinute, }) => 
         slots,
     };
 };
-export const createBooking = async ({ userId, slug, input, }) => {
-    const mentor = await getPublicMentorForBooking(slug);
-    if (mentor.userId === userId) {
-        throw new HttpError(400, 'Mentor cannot book their own schedule', undefined, 'BOOKING_SELF_NOT_ALLOWED');
+export const createBooking = async ({ userId, slug, input, idempotencyKey, }) => {
+    if (idempotencyKey !== undefined && !/^[A-Za-z0-9._:-]{1,128}$/.test(idempotencyKey)) {
+        throw new HttpError(400, 'Invalid Idempotency-Key', undefined, 'BOOKING_INVALID_IDEMPOTENCY_KEY');
     }
-    const setting = await getBookingSettingOrDefault(mentor.id);
-    const requestType = input.requestType;
-    assertDurationAllowed(input.durationMinute, setting);
-    const parsedDateTime = parseLocalDateTime(input);
-    assertBookingWindowAllowed(parsedDateTime.startAt, setting);
-    if (requestType === 'AVAILABILITY_SLOT') {
-        await assertWithinAvailability({ mentorId: mentor.id, ...parsedDateTime });
-    }
-    const booking = await prisma.$transaction(async (tx) => {
+    const hash = (value) => createHash('sha256').update(value).digest('hex');
+    const requestKeyHash = idempotencyKey ? hash(idempotencyKey) : null;
+    const requestType = input.requestType ?? 'AVAILABILITY_SLOT';
+    const note = sanitizeNullableRichText(input.note) ?? null;
+    const requestPayloadHash = requestKeyHash ? hash(JSON.stringify({
+        slug, date: input.date, startTime: input.startTime,
+        durationMinute: input.durationMinute, requestType, note,
+    })) : null;
+    const findReplay = async (tx) => {
+        if (!requestKeyHash)
+            return null;
+        const existing = await tx.mentorBooking.findUnique({
+            where: { studentUserId_requestKeyHash: { studentUserId: userId, requestKeyHash } },
+            select: bookingSelect,
+        });
+        if (existing && existing.requestPayloadHash !== requestPayloadHash) {
+            throw new HttpError(409, 'Idempotency-Key was used for a different request', undefined, 'BOOKING_IDEMPOTENCY_CONFLICT');
+        }
+        return existing;
+    };
+    // Replays remain valid after cancellation, mentor pause or policy changes.
+    const replay = await findReplay(prisma);
+    if (replay)
+        return serializeBooking(replay);
+    // Resolve the lock identity without eligibility: the original request may
+    // commit and the mentor may pause after the optimistic replay read above.
+    const mentor = await getPublicMentorForBooking(slug, { activeOnly: false });
+    const result = await withBookingTransaction({ studentUserId: userId, mentorId: mentor.id }, async (tx) => {
+        const concurrentReplay = await findReplay(tx);
+        if (concurrentReplay)
+            return { booking: concurrentReplay, changed: false, notifications: [] };
+        const currentMentor = await getPublicMentorForBooking(slug, { tx, mentorId: mentor.id });
+        if (currentMentor.userId === userId) {
+            throw new HttpError(400, 'Mentor cannot book their own schedule', undefined, 'BOOKING_SELF_NOT_ALLOWED');
+        }
+        const setting = await getBookingSettingOrDefault(mentor.id, tx);
+        assertDurationAllowed(input.durationMinute, setting);
+        const parsedDateTime = parseLocalDateTime(input);
+        assertBookingWindowAllowed(parsedDateTime.startAt, setting);
+        if (requestType === 'AVAILABILITY_SLOT') {
+            await assertWithinAvailability({ mentorId: mentor.id, ...parsedDateTime }, tx);
+        }
         await assertBookingAbuseLimits(tx, {
             studentUserId: userId,
             mentorId: mentor.id,
             startAt: parsedDateTime.startAt,
         });
         await assertNoOverlap(tx, { mentorId: mentor.id, ...parsedDateTime, setting });
-        return tx.mentorBooking.create({
+        const booking = await tx.mentorBooking.create({
             data: {
                 mentorId: mentor.id,
                 studentUserId: userId,
@@ -616,11 +657,18 @@ export const createBooking = async ({ userId, slug, input, }) => {
                 durationMinute: input.durationMinute,
                 status: 'REQUESTED',
                 requestType,
-                note: sanitizeNullableRichText(input.note) ?? null,
+                note,
+                requestKeyHash,
+                requestPayloadHash,
             },
             select: bookingSelect,
         });
+        const notifications = await persistBookingNotifications(tx, toBookingNotificationSource(booking), 'BOOKING_REQUESTED');
+        return { booking, changed: true, notifications };
     });
+    const { booking } = result;
+    if (!result.changed)
+        return serializeBooking(booking);
     logBookingTransition({
         booking,
         actorUserId: userId,
@@ -630,10 +678,7 @@ export const createBooking = async ({ userId, slug, input, }) => {
         toStatus: booking.status,
     });
     notifyBookingUpdated(booking);
-    await sendBookingNotificationSafely(() => notifyBookingRequested(toBookingNotificationSource(booking)), {
-        bookingId: booking.id,
-        event: 'BOOKING_REQUESTED',
-    });
+    publishBookingNotifications(result.notifications);
     return serializeBooking(booking);
 };
 export const listStudentBookings = async ({ userId, query, }) => {
@@ -658,40 +703,42 @@ export const getStudentBookingDetail = async ({ userId, bookingId }) => {
     });
     return serializeBooking(booking);
 };
-export const cancelStudentBooking = async ({ userId, bookingId, input, }) => {
-    const currentBooking = await getBookingDetailOrThrow({
-        id: bookingId,
-        studentUserId: userId,
+const cancelBooking = async ({ where, actorUserId, actorType, cancelledBy, reason }) => {
+    const identity = await getBookingDetailOrThrow(where);
+    const targetStatus = cancelledBy === 'STUDENT' ? 'CANCELLED_BY_STUDENT' : 'CANCELLED_BY_MENTOR';
+    const result = await withBookingTransaction(identity, async (tx) => {
+        const currentBooking = await getBookingDetailOrThrow(where, tx);
+        if (currentBooking.status === targetStatus && currentBooking.cancelledBy === cancelledBy) {
+            return { booking: currentBooking, changed: false, fromStatus: currentBooking.status, notifications: [] };
+        }
+        if (!CANCELLABLE_STATUSES.includes(currentBooking.status)) {
+            throw new HttpError(400, 'Booking cannot be cancelled in current status', undefined, 'BOOKING_CANNOT_CANCEL');
+        }
+        const booking = await tx.mentorBooking.update({
+            where: { id: currentBooking.id, status: currentBooking.status },
+            data: {
+                status: targetStatus,
+                cancelReason: sanitizeNullableSingleLineText(reason) ?? null,
+                cancelledBy, cancelledAt: new Date(),
+            },
+            select: bookingSelect,
+        });
+        const type = cancelledBy === 'STUDENT' ? 'BOOKING_CANCELLED_BY_STUDENT' : 'BOOKING_CANCELLED_BY_MENTOR';
+        const notifications = await persistBookingNotifications(tx, toBookingNotificationSource(booking), type);
+        return { booking, changed: true, fromStatus: currentBooking.status, notifications };
     });
-    if (!CANCELLABLE_STATUSES.includes(currentBooking.status)) {
-        throw new HttpError(400, 'Booking cannot be cancelled in current status', undefined, 'BOOKING_CANNOT_CANCEL');
+    if (result.changed) {
+        logBookingTransition({ booking: result.booking, actorUserId, actorType, action: 'CANCEL',
+            fromStatus: result.fromStatus, toStatus: result.booking.status, reason: result.booking.cancelReason });
+        notifyBookingUpdated(result.booking);
+        publishBookingNotifications(result.notifications);
     }
-    const booking = await prisma.mentorBooking.update({
-        where: { id: bookingId },
-        data: {
-            status: 'CANCELLED_BY_STUDENT',
-            cancelReason: sanitizeNullableSingleLineText(input.reason) ?? null,
-            cancelledBy: 'STUDENT',
-            cancelledAt: new Date(),
-        },
-        select: bookingSelect,
-    });
-    logBookingTransition({
-        booking,
-        actorUserId: userId,
-        actorType: 'STUDENT',
-        action: 'CANCEL',
-        fromStatus: currentBooking.status,
-        toStatus: booking.status,
-        reason: booking.cancelReason,
-    });
-    notifyBookingUpdated(booking);
-    await sendBookingNotificationSafely(() => notifyBookingCancelledByStudent(toBookingNotificationSource(booking)), {
-        bookingId: booking.id,
-        event: 'BOOKING_CANCELLED_BY_STUDENT',
-    });
-    return serializeBooking(booking);
+    return serializeBooking(result.booking);
 };
+export const cancelStudentBooking = ({ userId, bookingId, input }) => cancelBooking({
+    where: { id: bookingId, studentUserId: userId }, actorUserId: userId,
+    actorType: 'STUDENT', cancelledBy: 'STUDENT', reason: input.reason,
+});
 export const getMentorAvailability = async ({ userId }) => {
     const mentor = await getSelfMentor(userId);
     const blocks = await prisma.mentorAvailability.findMany({
@@ -804,34 +851,40 @@ export const adminListBookings = async ({ query }) => {
 };
 export const adminExportBookings = async ({ query }) => collectAllBookings(buildBookingWhere(query));
 export const adminGetBookingDetail = async ({ bookingId }) => serializeBooking(await getBookingDetailOrThrow({ id: bookingId }));
-export const adminConfirmBooking = async ({ bookingId }) => {
-    const currentBooking = await getBookingDetailOrThrow({ id: bookingId });
-    if (currentBooking.status !== 'REQUESTED') {
-        throw new HttpError(400, 'Only requested bookings can be confirmed', undefined, 'BOOKING_CANNOT_CONFIRM');
-    }
-    const booking = await prisma.$transaction(async (tx) => {
-        const confirmedBooking = await tx.mentorBooking.update({
-            where: { id: bookingId },
-            data: {
-                status: 'CONFIRMED',
-                confirmedAt: new Date(),
-            },
+const confirmBooking = async ({ where, actorUserId, actorType }) => {
+    const identity = await getBookingDetailOrThrow(where);
+    const result = await withBookingTransaction(identity, async (tx) => {
+        const currentBooking = await getBookingDetailOrThrow(where, tx);
+        if (currentBooking.status === 'CONFIRMED') {
+            await ensureConversationForConfirmedBooking(tx, currentBooking);
+            return { booking: currentBooking, changed: false, notifications: [] };
+        }
+        if (currentBooking.status !== 'REQUESTED') {
+            throw new HttpError(400, 'Only requested bookings can be confirmed', undefined, 'BOOKING_CANNOT_CONFIRM');
+        }
+        const setting = await getBookingSettingOrDefault(currentBooking.mentorId, tx);
+        await assertNoOverlap(tx, {
+            mentorId: currentBooking.mentorId, startAt: currentBooking.startAt,
+            endAt: currentBooking.endAt, setting, excludeBookingId: currentBooking.id,
+        });
+        const booking = await tx.mentorBooking.update({
+            where: { id: currentBooking.id, status: 'REQUESTED' },
+            data: { status: 'CONFIRMED', confirmedAt: new Date() },
             select: bookingSelect,
         });
-        await ensureConversationForConfirmedBooking(tx, confirmedBooking);
-        return confirmedBooking;
+        await ensureConversationForConfirmedBooking(tx, booking);
+        const notifications = await persistBookingNotifications(tx, toBookingNotificationSource(booking), 'BOOKING_CONFIRMED');
+        return { booking, changed: true, notifications };
     });
-    logBookingTransition({
-        booking,
-        actorUserId: null,
-        actorType: 'SYSTEM',
-        action: 'CONFIRM',
-        fromStatus: 'REQUESTED',
-        toStatus: booking.status,
-    });
-    notifyBookingUpdated(booking);
-    return serializeBooking(booking);
+    if (result.changed) {
+        logBookingTransition({ booking: result.booking, actorUserId, actorType, action: 'CONFIRM',
+            fromStatus: 'REQUESTED', toStatus: result.booking.status });
+        notifyBookingUpdated(result.booking);
+        publishBookingNotifications(result.notifications);
+    }
+    return serializeBooking(result.booking);
 };
+export const adminConfirmBooking = ({ bookingId, actorUserId = null }) => confirmBooking({ where: { id: bookingId }, actorUserId, actorType: actorUserId ? 'ADMIN' : 'SYSTEM' });
 // Guard the write as well as the initial read: a concurrent reviewer must not
 // overwrite attendance that another participant has already acknowledged.
 const saveConfirmedBookingOutcome = async (bookingId, status) => {
@@ -899,33 +952,9 @@ export const adminMarkNoShowBooking = async ({ bookingId, actorUserId, reason })
     });
     return serializeBooking(booking);
 };
-export const adminCancelBooking = async ({ bookingId, reason }) => {
-    const currentBooking = await getBookingDetailOrThrow({ id: bookingId });
-    if (!canAdminCancelBooking(currentBooking.status)) {
-        throw new HttpError(400, 'Booking cannot be cancelled in current status', undefined, 'BOOKING_CANNOT_CANCEL');
-    }
-    const booking = await prisma.mentorBooking.update({
-        where: { id: bookingId },
-        data: {
-            status: 'CANCELLED_BY_MENTOR',
-            cancelReason: sanitizeNullableSingleLineText(reason) ?? null,
-            cancelledBy: 'SYSTEM',
-            cancelledAt: new Date(),
-        },
-        select: bookingSelect,
-    });
-    logBookingTransition({
-        booking,
-        actorUserId: null,
-        actorType: 'SYSTEM',
-        action: 'CANCEL',
-        fromStatus: currentBooking.status,
-        toStatus: booking.status,
-        reason: booking.cancelReason,
-    });
-    notifyBookingUpdated(booking);
-    return serializeBooking(booking);
-};
+export const adminCancelBooking = ({ bookingId, reason, actorUserId = null }) => cancelBooking({
+    where: { id: bookingId }, actorUserId, actorType: actorUserId ? 'ADMIN' : 'SYSTEM', cancelledBy: 'SYSTEM', reason,
+});
 export const getMentorBookingDetail = async ({ userId, bookingId }) => {
     const mentor = await getSelfMentor(userId);
     const booking = await getBookingDetailOrThrow({
@@ -936,82 +965,12 @@ export const getMentorBookingDetail = async ({ userId, bookingId }) => {
 };
 export const confirmMentorBooking = async ({ userId, bookingId }) => {
     const mentor = await getSelfMentor(userId);
-    const setting = await getBookingSettingOrDefault(mentor.id);
-    const booking = await prisma.$transaction(async (tx) => {
-        const currentBooking = await getBookingDetailOrThrow({
-            id: bookingId,
-            mentorId: mentor.id,
-        }, tx);
-        if (currentBooking.status !== 'REQUESTED') {
-            throw new HttpError(400, 'Only requested bookings can be confirmed', undefined, 'BOOKING_CANNOT_CONFIRM');
-        }
-        await assertNoOverlap(tx, {
-            mentorId: mentor.id,
-            startAt: currentBooking.startAt,
-            endAt: currentBooking.endAt,
-            setting,
-            excludeBookingId: currentBooking.id,
-        });
-        const confirmedBooking = await tx.mentorBooking.update({
-            where: { id: bookingId },
-            data: {
-                status: 'CONFIRMED',
-                confirmedAt: new Date(),
-            },
-            select: bookingSelect,
-        });
-        await ensureConversationForConfirmedBooking(tx, confirmedBooking);
-        return confirmedBooking;
-    });
-    logBookingTransition({
-        booking,
-        actorUserId: userId,
-        actorType: 'MENTOR',
-        action: 'CONFIRM',
-        fromStatus: 'REQUESTED',
-        toStatus: booking.status,
-    });
-    notifyBookingUpdated(booking);
-    await sendBookingNotificationSafely(() => notifyBookingConfirmed(toBookingNotificationSource(booking)), {
-        bookingId: booking.id,
-        event: 'BOOKING_CONFIRMED',
-    });
-    return serializeBooking(booking);
+    return confirmBooking({ where: { id: bookingId, mentorId: mentor.id }, actorUserId: userId, actorType: 'MENTOR' });
 };
-export const cancelMentorBooking = async ({ userId, bookingId, input, }) => {
+export const cancelMentorBooking = async ({ userId, bookingId, input }) => {
     const mentor = await getSelfMentor(userId);
-    const currentBooking = await getBookingDetailOrThrow({
-        id: bookingId,
-        mentorId: mentor.id,
-    });
-    if (!CANCELLABLE_STATUSES.includes(currentBooking.status)) {
-        throw new HttpError(400, 'Booking cannot be cancelled in current status', undefined, 'BOOKING_CANNOT_CANCEL');
-    }
-    const booking = await prisma.mentorBooking.update({
-        where: { id: bookingId },
-        data: {
-            status: 'CANCELLED_BY_MENTOR',
-            cancelReason: sanitizeNullableSingleLineText(input.reason) ?? null,
-            cancelledBy: 'MENTOR',
-            cancelledAt: new Date(),
-        },
-        select: bookingSelect,
-    });
-    logBookingTransition({
-        booking,
-        actorUserId: userId,
-        actorType: 'MENTOR',
-        action: 'CANCEL',
-        fromStatus: currentBooking.status,
-        toStatus: booking.status,
-        reason: booking.cancelReason,
-    });
-    notifyBookingUpdated(booking);
-    await sendBookingNotificationSafely(() => notifyBookingCancelledByMentor(toBookingNotificationSource(booking)), {
-        bookingId: booking.id,
-        event: 'BOOKING_CANCELLED_BY_MENTOR',
-    });
-    return serializeBooking(booking);
+    return cancelBooking({ where: { id: bookingId, mentorId: mentor.id }, actorUserId: userId,
+        actorType: 'MENTOR', cancelledBy: 'MENTOR', reason: input.reason });
 };
 export const createBookingReview = async ({ userId, bookingId, input, }) => {
     const booking = await getBookingDetailOrThrow({

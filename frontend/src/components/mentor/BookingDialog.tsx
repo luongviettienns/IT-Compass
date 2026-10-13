@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CalendarClock, CheckCircle2, Clock3, FileText, UserRound, X } from 'lucide-react';
 import { toast } from 'sonner';
@@ -58,6 +58,7 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
     const [customStartTime, setCustomStartTime] = useState('');
     const [note, setNote] = useState('');
     const [step, setStep] = useState<BookingStep>('select');
+    const requestIdentity = useRef<{ fingerprint: string; key: string } | null>(null);
 
     const configQuery = useQuery({
         queryKey: bookingQueryKeys.config(slug),
@@ -122,24 +123,30 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
                 throw new Error(bookingMode === 'slot' ? 'Vui lòng chọn khung giờ tư vấn.' : 'Vui lòng nhập giờ đề xuất hợp lệ.');
             }
 
-            return bookingApi.createBooking(slug, {
+            const requestInput = {
                 date,
                 startTime: selectedStartTime,
                 durationMinute,
-                requestType: bookingMode === 'slot' ? 'AVAILABILITY_SLOT' : 'CUSTOM_TIME',
+                requestType: bookingMode === 'slot' ? 'AVAILABILITY_SLOT' as const : 'CUSTOM_TIME' as const,
                 note: note.trim() || null,
-            });
+            };
+            const fingerprint = JSON.stringify({ slug, ...requestInput });
+            if (requestIdentity.current?.fingerprint !== fingerprint) {
+                requestIdentity.current = { fingerprint, key: crypto.randomUUID() };
+            }
+            return bookingApi.createBooking(slug, requestInput, requestIdentity.current.key);
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: bookingQueryKeys.availability(slug, date, durationMinute) });
             await queryClient.invalidateQueries({ queryKey: bookingQueryKeys.studentRoot });
-            toast.success('Đã gửi yêu cầu đặt lịch. Vui lòng chờ mentor xác nhận.');
+            toast.success('Yêu cầu đặt lịch đã được lưu.');
             onOpenChange(false);
             setSelectedSlot(null);
             setBookingMode('slot');
             setCustomStartTime('');
             setNote('');
             setStep('select');
+            requestIdentity.current = null;
         },
         onError: (error) => {
             toast.error(getErrorMessage(error, 'Không thể gửi yêu cầu đặt lịch.'));

@@ -43,6 +43,9 @@ export const getPublicAvailabilitySchema = z.object({
 });
 export const createBookingSchema = z.object({
     params: slugParamSchema,
+    headers: z.object({
+        'idempotency-key': z.string().regex(/^[A-Za-z0-9._:-]{1,128}$/, 'Invalid Idempotency-Key').optional(),
+    }).passthrough().optional(),
     body: z.object({
         date: dateSchema,
         startTime: timeSchema,

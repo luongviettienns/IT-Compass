@@ -14,6 +14,7 @@ const doubles = vi.hoisted(() => ({
     passwordResetToken: { deleteMany: vi.fn() },
     blogPost: { findMany: vi.fn() },
     $transaction: vi.fn(),
+    $queryRaw: vi.fn(),
   },
   logger: { info: vi.fn(), error: vi.fn() },
   notifications: {
@@ -24,6 +25,8 @@ const doubles = vi.hoisted(() => ({
     notifyBookingNoShow: vi.fn(),
     notifyBookingRequested: vi.fn(),
     sendBookingReminderNotifications: vi.fn(),
+    persistBookingNotifications: vi.fn(),
+    publishBookingNotifications: vi.fn(),
   },
 }));
 
@@ -56,6 +59,8 @@ const makeBooking = () => ({
   durationMinute: 60,
   status: 'CONFIRMED' as Prisma.MentorBookingGetPayload<object>['status'],
   requestType: 'AVAILABILITY_SLOT' as const,
+  requestKeyHash: null,
+  requestPayloadHash: null,
   note: null, cancelReason: null, cancelledBy: null, cancelledAt: null,
   confirmedAt: new Date('2026-10-11T08:00:00Z'),
   completedAt: null as Date | null,
@@ -79,6 +84,8 @@ beforeEach(() => {
   vi.useFakeTimers();
   vi.setSystemTime(new Date('2026-10-12T10:00:00Z'));
   savedBooking = makeBooking();
+  doubles.prisma.$queryRaw.mockResolvedValue([{ id: 1n }]);
+  doubles.notifications.persistBookingNotifications.mockResolvedValue([]);
   doubles.prisma.mentorBooking.findFirst.mockImplementation(async ({ where }: { where: { mentorId?: bigint; studentUserId?: bigint } }) => (
     (where.mentorId && where.mentorId !== savedBooking.mentorId)
     || (where.studentUserId && where.studentUserId !== savedBooking.studentUserId)

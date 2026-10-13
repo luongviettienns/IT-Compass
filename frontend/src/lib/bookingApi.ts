@@ -184,11 +184,12 @@ export const bookingApi = {
         }>(`/mentors/${slug}/availability${query}`, {}, 'Không thể tải khung giờ trống');
     },
 
-    createBooking: (slug: string, input: { date: string; startTime: string; durationMinute: number; requestType?: BookingRequestType; note?: string | null }) =>
+    createBooking: (slug: string, input: { date: string; startTime: string; durationMinute: number; requestType?: BookingRequestType; note?: string | null }, idempotencyKey?: string) =>
         request<{ message: string; booking: MentorBooking }>(
             `/mentors/${slug}/bookings`,
             {
                 method: 'POST',
+                headers: idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : undefined,
                 body: JSON.stringify(input),
             },
             'Không thể gửi yêu cầu đặt lịch',

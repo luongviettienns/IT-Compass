@@ -10,6 +10,8 @@
     "typecheck:tests": "tsc -p tsconfig.test.json",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:prepare-db": "node scripts/prepare-test-database.mjs",
     "build": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "start": "node dist/server.js",

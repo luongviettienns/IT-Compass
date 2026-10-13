@@ -25,6 +25,7 @@ export const validate = (schema) => (req, _res, next) => {
         body: req.body,
         query: req.query,
         params: req.params,
+        headers: req.headers,
     });
     if (!result.success) {
         return next(new HttpError(400, 'Validation failed', result.error.issues.map((issue) => ({

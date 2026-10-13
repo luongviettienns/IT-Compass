@@ -81,7 +81,7 @@ const serializeNotification = (notification) => ({
     isRead: notification.readAt !== null,
 });
 const isPrismaUniqueConstraintError = (error) => (typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2002');
-const createNotificationRecord = async (input, client = prisma) => {
+const createNotificationRecord = async (input, client = prisma, emit = true) => {
     if (input.dedupeKey) {
         const existing = await client.notification.findUnique({
             where: { dedupeKey: input.dedupeKey },
@@ -104,7 +104,8 @@ const createNotificationRecord = async (input, client = prisma) => {
             select: notificationSelect,
         });
         const serialized = serializeNotification(notification);
-        emitNotificationCreated(serialized);
+        if (emit)
+            emitNotificationCreated(serialized);
         return serialized;
     }
     catch (error) {
@@ -132,6 +133,7 @@ const buildBookingNotificationData = (booking, extra = {}) => ({
     status: booking.status,
     requestType: booking.requestType,
     cancelReason: booking.cancelReason ?? null,
+    cancelledBy: booking.cancelledBy ?? null,
     ...extra,
 });
 const buildBookingNotificationTargets = (booking, type) => {
@@ -162,13 +164,15 @@ const buildBookingNotificationTargets = (booking, type) => {
             pushTarget(targets, booking.mentorUserId, 'Yêu cầu tư vấn mới', `${booking.studentName} đã ${requestTypeLabel} vào ${timeLabel}.`, 'requested');
             break;
         case 'BOOKING_CONFIRMED':
-            pushTarget(targets, booking.studentUserId, 'Lịch tư vấn đã được xác nhận', `Mentor ${booking.mentorName} đã xác nhận lịch tư vấn vào ${timeLabel}. Bạn có thể mở chat ngay bây giờ.`, 'confirmed');
+            pushTarget(targets, booking.studentUserId, 'Lịch tư vấn đã được xác nhận', `Lịch tư vấn với mentor ${booking.mentorName} đã được xác nhận vào ${timeLabel}. Bạn có thể mở chat ngay bây giờ.`, 'confirmed');
             break;
         case 'BOOKING_CANCELLED_BY_STUDENT':
             pushTarget(targets, booking.mentorUserId, 'Học viên đã hủy lịch', `${booking.studentName} đã hủy lịch tư vấn vào ${timeLabel}.${cancelReasonLabel}`, 'cancelled-by-student');
             break;
         case 'BOOKING_CANCELLED_BY_MENTOR':
-            pushTarget(targets, booking.studentUserId, 'Mentor đã hủy lịch', `Mentor ${booking.mentorName} đã hủy lịch tư vấn vào ${timeLabel}.${cancelReasonLabel}`, 'cancelled-by-mentor');
+            pushTarget(targets, booking.studentUserId, booking.cancelledBy === 'SYSTEM' ? 'Quản trị viên đã hủy lịch' : 'Mentor đã hủy lịch', booking.cancelledBy === 'SYSTEM'
+                ? `Quản trị viên đã hủy lịch tư vấn với mentor ${booking.mentorName} vào ${timeLabel}.${cancelReasonLabel}`
+                : `Mentor ${booking.mentorName} đã hủy lịch tư vấn vào ${timeLabel}.${cancelReasonLabel}`, 'cancelled-by-mentor');
             break;
         case 'BOOKING_COMPLETED':
             pushTarget(targets, booking.mentorUserId, 'Buổi tư vấn đã hoàn thành', `Buổi tư vấn với ${booking.studentName} vào ${timeLabel} đã được đánh dấu hoàn thành.`, 'completed');
@@ -309,6 +313,19 @@ export const markAllNotificationsAsRead = async ({ userId }) => {
         emitNotificationUpdated(serializeNotification(notification));
     }
     return { updatedCount: refreshedNotifications.length };
+};
+// Persist transactionally; the caller publishes only after the transaction
+// commits. A process failure after commit still leaves the notification inbox.
+export const persistBookingNotifications = async (tx, booking, type) => {
+    const notifications = [];
+    for (const target of buildBookingNotificationTargets(booking, type)) {
+        notifications.push(await createNotificationRecord(target, tx, false));
+    }
+    return notifications;
+};
+export const publishBookingNotifications = (notifications) => {
+    for (const notification of notifications)
+        emitNotificationCreated(notification);
 };
 export const notifyBookingRequested = async (booking) => {
     await dispatchBookingNotifications(booking, 'BOOKING_REQUESTED');

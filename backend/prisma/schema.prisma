@@ -346,6 +346,8 @@ model MentorBooking {
   durationMinute Int                       @map("thoi_luong_phut") @db.UnsignedSmallInt
   status         BookingStatus             @default(REQUESTED) @map("trang_thai")
   requestType    BookingRequestType        @default(AVAILABILITY_SLOT) @map("loai_yeu_cau")
+  requestKeyHash String?                   @map("request_key_hash") @db.Char(64)
+  requestPayloadHash String?               @map("request_payload_hash") @db.Char(64)
   note           String?                   @map("ghi_chu") @db.VarChar(1000)
   cancelReason   String?                   @map("ly_do_huy") @db.VarChar(500)
   cancelledBy    BookingCancellationActor? @map("huy_boi")
@@ -361,6 +363,7 @@ model MentorBooking {
   review       BookingReview?
 
   @@index([mentorId, status, startAt], map: "idx_datlich_mentor_trang_thai_bat_dau")
+  @@unique([studentUserId, requestKeyHash], map: "uq_datlich_hocvien_request_key")
   @@index([studentUserId, status, startAt], map: "idx_datlich_hoc_vien_trang_thai_bat_dau")
   @@index([startAt, endAt], map: "idx_datlich_khoang_thoi_gian")
   @@map("dat_lich_mentor")

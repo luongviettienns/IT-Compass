@@ -18,6 +18,7 @@ type RequestSchema = ZodType<{
   body?: unknown;
   query?: unknown;
   params?: unknown;
+  headers?: unknown;
 }>;
 
 /**
@@ -37,6 +38,7 @@ export const validate = (schema: RequestSchema) => (req: Request, _res: Response
     body: req.body,
     query: req.query,
     params: req.params,
+    headers: req.headers,
   });
 
   if (!result.success) {

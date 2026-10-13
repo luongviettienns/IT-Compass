@@ -1,0 +1,173 @@
+
+> frontend@0.0.0 test
+> vitest run tests/admin-comment-deletion.test.tsx
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+stderr | tests/admin-comment-deletion.test.tsx > comment deletion > keeps failed deletion open with an inline error and lets the operator retry
+You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+
+ ❯ tests/admin-comment-deletion.test.tsx (2 tests | 1 failed) 1840ms
+   ❯ comment deletion (2)
+     × keeps failed deletion open with an inline error and lets the operator retry 1314ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/admin-comment-deletion.test.tsx > comment deletion > keeps failed deletion open with an inline error and lets the operator retry
+TestingLibraryElementError: Unable to find role="alert"
+
+Ignored nodes: comments, script, style
+<div
+  aria-busy="false"
+  aria-labelledby="_r_0_"
+  aria-modal="true"
+  class="w-full max-w-md rounded-[28px] border bg-card shadow-2xl"
+  role="dialog"
+  style="opacity: 1; transform: none;"
+>
+  <div
+    class="flex items-start justify-between gap-4 border-b p-6"
+  >
+    <div
+      class="space-y-1"
+    >
+      <h2
+        class="text-xl font-black"
+        id="_r_0_"
+      >
+        Xóa vĩnh viễn bình luận
+      </h2>
+      <p
+        class="text-sm text-muted-foreground"
+      >
+        Bình luận của Khách kiểm thử sẽ bị xóa và không thể khôi phục.
+      </p>
+    </div>
+    <button
+      aria-label="Đóng"
+      class="rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/70"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-x h-4 w-4"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M18 6 6 18"
+        />
+        <path
+          d="m6 6 12 12"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="flex items-center justify-end gap-3 p-6"
+  >
+    <button
+      class="rounded-xl bg-secondary px-5 py-2.5 text-sm font-bold transition-colors hover:bg-secondary/70"
+    >
+      Hủy
+    </button>
+    <button
+      class="rounded-xl px-5 py-2.5 text-sm font-bold transition-all disabled:opacity-50 hover:scale-105 active:scale-95 bg-destructive text-white hover:bg-destructive/90"
+    >
+      Xóa bình luận
+    </button>
+  </div>
+</div>
+
+Ignored nodes: comments, script, style
+<div
+  aria-busy="false"
+  aria-labelledby="_r_0_"
+  aria-modal="true"
+  class="w-full max-w-md rounded-[28px] border bg-card shadow-2xl"
+  role="dialog"
+  style="opacity: 1; transform: none;"
+>
+  <div
+    class="flex items-start justify-between gap-4 border-b p-6"
+  >
+    <div
+      class="space-y-1"
+    >
+      <h2
+        class="text-xl font-black"
+        id="_r_0_"
+      >
+        Xóa vĩnh viễn bình luận
+      </h2>
+      <p
+        class="text-sm text-muted-foreground"
+      >
+        Bình luận của Khách kiểm thử sẽ bị xóa và không thể khôi phục.
+      </p>
+    </div>
+    <button
+      aria-label="Đóng"
+      class="rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/70"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-x h-4 w-4"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M18 6 6 18"
+        />
+        <path
+          d="m6 6 12 12"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="flex items-center justify-end gap-3 p-6"
+  >
+    <button
+      class="rounded-xl bg-secondary px-5 py-2.5 text-sm font-bold transition-colors hover:bg-secondary/70"
+    >
+      Hủy
+    </button>
+    <button
+      class="rounded-xl px-5 py-2.5 text-sm font-bold transition-all disabled:opacity-50 hover:scale-105 active:scale-95 bg-destructive text-white hover:bg-destructive/90"
+    >
+      Xóa bình luận
+    </button>
+  </div>
+</div>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ tests/admin-comment-deletion.test.tsx:33:34
+     31|     const dialog = await screen.findByRole('dialog');
+     32|     await user.click(within(dialog).getByRole('button', { name: 'Xóa b…
+     33|     expect((await within(dialog).findByRole('alert')).textContent).toC…
+       |                                  ^
+     34|     expect(screen.getByRole('dialog')).toBe(dialog);
+     35|     await user.click(within(dialog).getByRole('button', { name: 'Xóa b…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  17:16:38
+   Duration  3.73s (tests 51%, import 27%, environment 19%, transform 3%)

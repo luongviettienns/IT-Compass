@@ -53,7 +53,7 @@ const FILTER_LABEL: Record<CommentFilterStatus, string> = {
     all: 'Tất cả',
     visible: 'Hiển thị',
     hidden: 'Đã ẩn',
-    deleted: 'Bị xóa',
+    deleted: 'Đã xóa',
 };
 
 const AnonymousName = 'Ẩn danh';
@@ -71,6 +71,7 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
     const [filterStatus, setFilterStatus] = useState<CommentFilterStatus>('all');
     const [search, setSearch] = useState(initialSearch);
     const [commentToDelete, setCommentToDelete] = useState<BlogComment | null>(null);
+    const [deleteError, setDeleteError] = useState<string | null>(null);
     const [exportOpen, setExportOpen] = useState(false);
     const [exportError, setExportError] = useState<string | null>(null);
     const [isExporting, setIsExporting] = useState(false);
@@ -109,8 +110,10 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
             queryClient.invalidateQueries({ queryKey: adminQueryKeys.commentsRoot });
             queryClient.invalidateQueries({ queryKey: adminQueryKeys.blogStats });
             setCommentToDelete(null);
+            setDeleteError(null);
+            toast.success('Đã chuyển bình luận vào mục Đã xóa.');
         },
-        onError: (error) => toast.error(getErrorMessage(error, 'Không thể xóa bình luận.')),
+        onError: (error) => setDeleteError(getErrorMessage(error, 'Không thể xóa bình luận. Vui lòng thử lại.')),
     });
 
     const handleToggleHide = (comment: BlogComment) => {
@@ -119,6 +122,8 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
     };
 
     const handleDelete = (comment: BlogComment) => {
+        if (deleteMutation.isPending) return;
+        setDeleteError(null);
         setCommentToDelete(comment);
     };
 
@@ -283,7 +288,7 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
                                     </td>
                                     <td className="px-6 py-4 align-top">
                                         <p className="text-sm font-medium line-clamp-3">{comment.content}</p>
-                                        {comment.deletedAt && <span className="text-[10px] bg-destructive/10 text-destructive font-bold px-1.5 py-0.5 rounded mt-1 inline-block">Đã xóa mềm</span>}
+                                        {comment.deletedAt && <span className="text-[10px] bg-destructive/10 text-destructive font-bold px-1.5 py-0.5 rounded mt-1 inline-block">Đã xóa</span>}
                                         {comment.status === 'HIDDEN' && !comment.deletedAt && <span className="text-[10px] bg-amber-500/10 text-amber-500 font-bold px-1.5 py-0.5 rounded mt-1 inline-block">BỊ ẨN</span>}
                                     </td>
                                     <td className="px-6 py-4 align-top">
@@ -306,7 +311,8 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
                                                 <button
                                                     onClick={() => handleDelete(comment)}
                                                     className="text-destructive hover:bg-destructive/10 p-1.5 rounded-lg transition-colors"
-                                                    title="Xóa vĩnh viễn"
+                                                    title="Xóa bình luận"
+                                                    aria-label="Xóa bình luận"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
@@ -350,14 +356,20 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
             </div>
             <AdminActionDialog
                 isOpen={!!commentToDelete}
-                title="Xóa vĩnh viễn bình luận"
-                description={commentToDelete ? `Bình luận của ${commentToDelete.user ? commentToDelete.user.fullName : commentToDelete.guestName || AnonymousName} sẽ bị xóa và không thể khôi phục.` : 'Bình luận sẽ bị xóa vĩnh viễn.'}
+                title="Xóa bình luận"
+                description={`${commentToDelete ? `Bình luận của ${commentToDelete.user ? commentToDelete.user.fullName : commentToDelete.guestName || AnonymousName}` : 'Bình luận'} sẽ không còn hiển thị công khai và được chuyển vào mục Đã xóa để quản trị viên xem lại. Hệ thống ghi nhận thời điểm và người xóa. Hiện chưa có chức năng khôi phục bình luận.`}
                 confirmText="Xóa bình luận"
                 tone="destructive"
                 isPending={deleteMutation.isPending}
-                onClose={() => setCommentToDelete(null)}
+                errorMessage={deleteError}
+                onClose={() => {
+                    if (deleteMutation.isPending) return;
+                    setCommentToDelete(null);
+                    setDeleteError(null);
+                }}
                 onConfirm={() => {
-                    if (!commentToDelete) return;
+                    if (!commentToDelete || deleteMutation.isPending) return;
+                    setDeleteError(null);
                     deleteMutation.mutate(commentToDelete.id);
                 }}
             />

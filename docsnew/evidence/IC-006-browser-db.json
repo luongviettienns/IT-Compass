@@ -1,0 +1,28 @@
+{
+  "database": "itcompass_ic006_browser_test",
+  "retainedComment": true,
+  "comment": {
+    "id": "6201",
+    "postId": "6101",
+    "userId": null,
+    "guestName": "Khách kiểm thử IC-006",
+    "content": "Bình luận tổng hợp để kiểm tra mục Đã xóa.",
+    "status": "VISIBLE",
+    "deletedAt": "2026-10-13T10:21:03.000Z",
+    "deletedBy": "993003",
+    "createdAt": "2026-10-13T10:18:32.000Z",
+    "updatedAt": "2026-10-13T10:21:03.000Z"
+  },
+  "publicComments": [],
+  "audit": [
+    {
+      "hanh_dong": "xoa_binh_luan",
+      "nguoi_thuc_hien_id": "993003",
+      "doi_tuong_id": "6201",
+      "du_lieu_json": {
+        "postId": "6101",
+        "commentId": "6201"
+      }
+    }
+  ]
+}

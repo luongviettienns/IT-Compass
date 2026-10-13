@@ -11,6 +11,9 @@ import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColu
 import { Download, X } from 'lucide-react';
 import { toast } from 'sonner';
 
+const commentDeletionAuditLabel = 'Chuyển bình luận vào mục Đã xóa';
+const auditActionLabel = (action: string) => action === 'DELETE_COMMENT' ? commentDeletionAuditLabel : action;
+
 const auditUserColumns: ExportColumn[] = [
     { header: 'Time', key: 'createdAt', width: 22 },
     { header: 'Action', key: 'action', width: 18 },
@@ -43,7 +46,7 @@ const auditExportRows = (log: AdminAuditLog | AdminBlogAuditLog, tab: AuditTab) 
       })
     : ({
         createdAt: new Date((log as AdminBlogAuditLog).createdAt).toLocaleString('vi-VN'),
-        action: (log as AdminBlogAuditLog).action,
+        action: auditActionLabel((log as AdminBlogAuditLog).action),
         actor: (log as AdminBlogAuditLog).actorUser?.fullName || 'N/A',
         targetType: (log as AdminBlogAuditLog).targetType,
         targetId: (log as AdminBlogAuditLog).targetId || '—',
@@ -80,7 +83,7 @@ const blogActionOptions: Array<{ value: 'all' | AdminBlogAuditAction; label: str
     { value: 'DELETE_POST', label: 'Xóa bài viết' },
     { value: 'RESTORE_POST', label: 'Khôi phục bài viết' },
     { value: 'MODERATE_COMMENT', label: 'Kiểm duyệt bình luận' },
-    { value: 'DELETE_COMMENT', label: 'Xóa bình luận' },
+    { value: 'DELETE_COMMENT', label: commentDeletionAuditLabel },
 ];
 
 const actionBadgeMap: Record<string, string> = {
@@ -107,7 +110,7 @@ const inputClass = 'bg-secondary/50 rounded-xl py-2 px-4 text-sm outline-none ri
 function ActionBadge({ action }: { action: string }) {
     return (
         <span className={`font-bold text-[10px] uppercase tracking-widest px-2 py-1 rounded inline-block ${actionBadgeMap[action] || 'bg-secondary text-foreground'}`}>
-            {action}
+            {auditActionLabel(action)}
         </span>
     );
 }

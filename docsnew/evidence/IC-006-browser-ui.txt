@@ -1,0 +1,66 @@
+Browser tab: 3, Title: "Quản lý Bình luận — Admin — IT Compass", URL: "http://127.0.0.1:54015/admin/blog-comments".
+1 AXWebArea Quản lý Bình luận — Admin — IT Compass, URL: 127.0.0.1:54015/admin/blog-comments
+	2 container root
+		3 container Notifications alt+T
+		8 container
+			9 container
+				10 text IT COMPASS ADMINISTRATOR
+			11 button
+			12 link Description: Tổng quan, Value: 127.0.0.1:54015/admin
+			13 link Description: Người dùng, Value: 127.0.0.1:54015/admin/users
+			14 link Description: Mentor, Value: 127.0.0.1:54015/admin/mentors
+			15 link Description: Nội dung (CMS), Value: 127.0.0.1:54015/admin/blogs
+			16 link Description: Bình luận blog, Value: 127.0.0.1:54015/admin/blog-comments
+			17 link Description: Assessment, Value: 127.0.0.1:54015/admin/assessments
+			18 link Description: Lịch tư vấn, Value: 127.0.0.1:54015/admin/bookings
+			19 link Description: Nhật ký hệ thống, Value: 127.0.0.1:54015/admin/audit-logs
+			20 link Description: Cài đặt, Value: 127.0.0.1:54015/admin/settings
+			21 text IC006 Kiểm thử quản trị admin@ic006.example.test
+			22 link Description: Về trang chính, Value: 127.0.0.1:54015/
+			23 button Đăng xuất
+		24 container
+			25 text Admin / Bình luận blog
+			26 text field (settable)
+			27 text IC006 Kiểm thử quản trị
+		28 container
+			29 heading Quản lý bình luận blog, Value: 1
+				30 text Quản lý bình luận blog
+			31 text Theo dõi, ẩn hoặc xóa bình luận trên toàn bộ hệ thống blog.  Bạn có thể lọc theo bài viết ngay từ trang quản lý bài viết.
+			32 button Quay lại bài viết
+			33 heading Toàn bộ bình luận blog, Value: 2
+				34 text Toàn bộ bình luận blog
+			35 text Kiểm soát toàn bộ bình luận blog tại một nơi tập trung.
+			36 button Export
+			37 button Tất cả
+			38 button Hiển thị
+			39 button Đã ẩn
+			40 button Đã xóa
+			41 text field (settable)
+			42 text Tổng:  1
+			43 table
+				44 row
+					45 cell
+						46 text NGƯỜI DÙNG
+					47 cell
+						48 text BÌNH LUẬN
+					49 cell
+						50 text BÀI VIẾT
+					51 cell
+						52 text THAO TÁC
+				53 row
+					54 cell
+						55 text Khách kiểm thử IC-006 13/10/2026
+					56 cell
+						57 text Bình luận tổng hợp để kiểm tra mục Đã xóa.
+						58 text Đã xóa
+					59 cell
+						60 link Description: Bài viết kiểm thử IC-006, Value: 127.0.0.1:54015/blog/ic006-test-post
+
+The focused UI element is 40 button Đã xóa
+
+Browser tab: 3, Title: "Nhật ký Hệ thống — Admin — IT Compass", URL: "http://127.0.0.1:54015/admin/audit-logs".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~			78 pop up button (collapsed, settable) Value: Chuyển bình luận vào mục Đã xóa, Secondary Actions: Expand
+~					80 Tất cả hành động
+~					89 (selected) Chuyển bình luận vào mục Đã xóa
+The focused UI element is 34 button Audit blog

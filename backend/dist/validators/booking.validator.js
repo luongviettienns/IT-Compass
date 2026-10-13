@@ -93,6 +93,7 @@ export const updateMentorBookingSettingsSchema = z.object({
         maxAdvanceDay: z.number().int().min(1).max(180).optional(),
         bufferBeforeMinute: z.number().int().min(0).max(120).optional(),
         bufferAfterMinute: z.number().int().min(0).max(120).optional(),
+        autoConfirm: z.boolean().optional(),
     }).refine((value) => Object.keys(value).length > 0, {
         message: 'At least one booking setting is required',
     }),

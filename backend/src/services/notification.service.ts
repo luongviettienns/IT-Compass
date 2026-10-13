@@ -5,6 +5,7 @@ import { HttpError } from '../utils/httpError.js';
 import { logger } from '../utils/logger.js';
 import { emitNotificationCreated, emitNotificationUpdated, type SerializedNotification } from '../socket/notification.events.js';
 import type { ListNotificationsQuery } from '../validators/notification.validator.js';
+import { BOOKING_TIMEZONE } from './booking-time.js';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 20;
@@ -64,6 +65,9 @@ export type BookingNotificationSource = {
   requestType: BookingRequestType;
   cancelReason?: string | null;
   cancelledBy?: 'STUDENT' | 'MENTOR' | 'SYSTEM' | null;
+  responseDueAt?: Date | null;
+  expiredAt?: Date | null;
+  autoConfirmed?: boolean;
 };
 
 type NotificationCreateInput = {
@@ -96,6 +100,7 @@ const normalizePagination = (query: ListNotificationsQuery) => ({
 
 const formatBookingDateTime = (startAt: Date, endAt: Date) => {
   const date = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: BOOKING_TIMEZONE,
     weekday: 'long',
     day: '2-digit',
     month: '2-digit',
@@ -103,18 +108,20 @@ const formatBookingDateTime = (startAt: Date, endAt: Date) => {
   }).format(startAt);
 
   const startTime = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: BOOKING_TIMEZONE,
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
   }).format(startAt);
 
   const endTime = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: BOOKING_TIMEZONE,
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
   }).format(endAt);
 
-  return `${date}, ${startTime} - ${endTime}`;
+  return `${date}, ${startTime} - ${endTime} (${BOOKING_TIMEZONE}, UTC+07:00)`;
 };
 
 const serializeNotification = (notification: NotificationRecord): SerializedNotification => ({
@@ -193,6 +200,9 @@ const buildBookingNotificationData = (
   durationMinute: booking.durationMinute,
   status: booking.status,
   requestType: booking.requestType,
+  timezone: BOOKING_TIMEZONE,
+  responseDueAt: booking.responseDueAt?.toISOString() ?? null,
+  expiredAt: booking.expiredAt?.toISOString() ?? null,
   cancelReason: booking.cancelReason ?? null,
   cancelledBy: booking.cancelledBy ?? null,
   ...extra,
@@ -244,6 +254,10 @@ const buildBookingNotificationTargets = (
       );
       break;
     case 'BOOKING_CONFIRMED':
+      if (booking.autoConfirmed) {
+        pushTarget(targets, booking.mentorUserId, 'Lịch tư vấn mới đã tự động xác nhận',
+          `Lịch tư vấn với ${booking.studentName} vào ${timeLabel} đã được tự động xác nhận. Bạn có thể mở chat ngay.`, 'auto-confirmed');
+      }
       pushTarget(
         targets,
         booking.studentUserId,
@@ -262,6 +276,13 @@ const buildBookingNotificationTargets = (
       );
       break;
     case 'BOOKING_CANCELLED_BY_MENTOR':
+      if (booking.expiredAt) {
+        for (const userId of [booking.studentUserId, booking.mentorUserId]) {
+          pushTarget(targets, userId, 'Yêu cầu tư vấn đã hết hạn',
+            `Yêu cầu tư vấn với mentor ${booking.mentorName} vào ${timeLabel} đã hết hạn xác nhận. Bạn có thể chọn một lịch mới.`, 'expired');
+        }
+        break;
+      }
       pushTarget(
         targets,
         booking.studentUserId,

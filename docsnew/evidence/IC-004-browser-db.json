@@ -1,0 +1,43 @@
+{
+  "database": "itcompass_ic004_browser_test",
+  "backendHostTimezone": "UTC",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "conversationCount": 1,
+  "notificationCount": 5,
+  "bookings": [
+    {
+      "id": "1",
+      "status": "REQUESTED",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "startAt": "2026-10-15T05:30:52.000Z",
+      "endAt": "2026-10-15T06:30:52.000Z",
+      "createdAt": "2026-10-12T04:30:52.000Z",
+      "confirmedAt": null,
+      "responseDueAt": "2026-10-13T04:30:52.000Z",
+      "expiredAt": "2026-10-13T05:31:15.000Z"
+    },
+    {
+      "id": "2",
+      "status": "CONFIRMED",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "startAt": "2026-10-13T06:00:00.000Z",
+      "endAt": "2026-10-13T07:00:00.000Z",
+      "createdAt": "2026-10-13T05:37:04.000Z",
+      "confirmedAt": "2026-10-13T05:37:04.000Z",
+      "responseDueAt": null,
+      "expiredAt": null
+    },
+    {
+      "id": "3",
+      "status": "REQUESTED",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "startAt": "2026-10-13T07:00:00.000Z",
+      "endAt": "2026-10-13T08:00:00.000Z",
+      "createdAt": "2026-10-13T05:41:35.000Z",
+      "confirmedAt": null,
+      "responseDueAt": "2026-10-13T07:00:00.000Z",
+      "expiredAt": null
+    }
+  ],
+  "checked": "Mentor settings UI -> authenticated student booking -> UTC persistence -> ready chat; expired history retained"
+}

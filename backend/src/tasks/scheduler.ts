@@ -13,7 +13,7 @@
  */
 
 import { logger } from '../utils/logger.js';
-import { purgeExpiredAuthData, publishScheduledPosts, sendBookingReminders } from './scheduled.tasks.js';
+import { purgeExpiredAuthData, publishScheduledPosts, sendBookingReminders, expireBookingRequests } from './scheduled.tasks.js';
 
 /** Cấu hình cho một tác vụ nền được lập lịch. */
 interface ScheduledJob {
@@ -29,6 +29,11 @@ interface ScheduledJob {
 
 /** Danh sách tác vụ nền cần lập lịch. */
 const jobs: ScheduledJob[] = [
+  {
+    name: 'expire-booking-requests',
+    intervalMs: 60 * 1000,
+    task: expireBookingRequests,
+  },
   {
     name: 'purge-expired-auth-data',
     intervalMs: 60 * 60 * 1000, // mỗi 1 giờ

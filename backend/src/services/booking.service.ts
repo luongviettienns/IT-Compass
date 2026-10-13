@@ -16,6 +16,8 @@ import { publicMentorSelect, serializePublicMentor } from '../utils/serializeMen
 import { sanitizeNullableRichText, sanitizeNullableSingleLineText } from '../utils/sanitize.js';
 import { ensureConversationForConfirmedBooking } from './conversation.service.js';
 import { withBookingTransaction } from './booking-transaction.js';
+import { BOOKING_TIMEZONE, REQUEST_RESPONSE_WINDOW_HOUR, formatDate, formatTime, parseDateBoundary,
+  parseLocalDateTime, getResponseDueAt, isRequestExpired } from './booking-time.js';
 import { emitBookingUpdated } from '../socket/booking.events.js';
 import {
   notifyBookingCompleted,
@@ -70,6 +72,9 @@ const bookingSelect = {
   requestType: true,
   requestKeyHash: true,
   requestPayloadHash: true,
+  timezone: true,
+  responseDueAt: true,
+  expiredAt: true,
   note: true,
   cancelReason: true,
   cancelledBy: true,
@@ -115,82 +120,24 @@ type TimeRange = {
   endAt: Date;
 };
 
-type ParsedDateTime = TimeRange & {
-  weekday: number;
-  startMinute: number;
-  endMinute: number;
-};
-
 const pad2 = (value: number) => String(value).padStart(2, '0');
-
-const formatDate = (date: Date) => (
-  `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`
-);
-
-const formatTime = (date: Date) => `${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
-
 const minuteToTime = (minute: number) => `${pad2(Math.floor(minute / 60))}:${pad2(minute % 60)}`;
-
 const parseTimeToMinute = (value: string) => {
-  const [hourPart, minutePart] = value.split(':');
-  return Number(hourPart) * 60 + Number(minutePart);
+  const [hour, minute] = value.split(':').map(Number);
+  return hour * 60 + minute;
 };
 
-// Parse theo giờ local để booking không bị lệch ngày/giờ khi client gửi ISO khác timezone.
-const parseLocalDateTime = ({ date, startTime, durationMinute }: Pick<CreateBookingBody, 'date' | 'startTime' | 'durationMinute'>): ParsedDateTime => {
-  const [yearPart, monthPart, dayPart] = date.split('-');
-  const [hourPart, minutePart] = startTime.split(':');
-  const year = Number(yearPart);
-  const monthIndex = Number(monthPart) - 1;
-  const day = Number(dayPart);
-  const hour = Number(hourPart);
-  const minute = Number(minutePart);
-  const startAt = new Date(year, monthIndex, day, hour, minute, 0, 0);
+const pendingRequestWhere = (now = new Date()): Prisma.MentorBookingWhereInput => ({
+  status: 'REQUESTED', expiredAt: null, startAt: { gt: now }, OR: [
+    { responseDueAt: { gt: now } },
+    { responseDueAt: null, createdAt: { gt: new Date(now.getTime() - REQUEST_RESPONSE_WINDOW_HOUR * 3_600_000) } },
+  ],
+});
 
-  if (
-    startAt.getFullYear() !== year ||
-    startAt.getMonth() !== monthIndex ||
-    startAt.getDate() !== day ||
-    startAt.getHours() !== hour ||
-    startAt.getMinutes() !== minute
-  ) {
-    throw new HttpError(400, 'Invalid booking date or time', undefined, 'BOOKING_INVALID_DATE_TIME');
-  }
-
-  const endAt = new Date(startAt.getTime() + durationMinute * 60_000);
-  const startMinute = hour * 60 + minute;
-  const endMinute = startMinute + durationMinute;
-
-  if (endMinute > 24 * 60) {
-    throw new HttpError(400, 'Booking must end within the selected date', undefined, 'BOOKING_ENDS_NEXT_DAY');
-  }
-
-  return {
-    startAt,
-    endAt,
-    weekday: startAt.getDay(),
-    startMinute,
-    endMinute,
-  };
-};
-
-const parseDateBoundary = (date: string, mode: 'start' | 'end') => {
-  const [yearPart, monthPart, dayPart] = date.split('-');
-  const year = Number(yearPart);
-  const monthIndex = Number(monthPart) - 1;
-  const day = Number(dayPart);
-  const result = new Date(year, monthIndex, day, 0, 0, 0, 0);
-
-  if (result.getFullYear() !== year || result.getMonth() !== monthIndex || result.getDate() !== day) {
-    throw new HttpError(400, 'Invalid date filter', undefined, 'BOOKING_INVALID_DATE_FILTER');
-  }
-
-  if (mode === 'end') {
-    result.setDate(result.getDate() + 1);
-  }
-
-  return result;
-};
+const activeBookingWhere = (now = new Date()): Prisma.MentorBookingWhereInput => ({
+  status: { in: ACTIVE_BOOKING_STATUSES },
+  OR: [{ status: 'CONFIRMED' }, pendingRequestWhere(now)],
+});
 
 const toPositiveInteger = (value: unknown, fallback: number) => {
   const numberValue = Number(value);
@@ -212,6 +159,8 @@ const serializeSetting = (setting: BookingSettingRecord) => ({
   bufferBeforeMinute: setting.bufferBeforeMinute,
   bufferAfterMinute: setting.bufferAfterMinute,
   autoConfirm: setting.autoConfirm,
+  timezone: BOOKING_TIMEZONE,
+  responseWindowHour: REQUEST_RESPONSE_WINDOW_HOUR,
 });
 
 const buildDurationOptions = (setting: BookingSettingRecord) => {
@@ -226,6 +175,10 @@ const serializeBooking = (booking: BookingRecord) => ({
   id: String(booking.id),
   status: booking.status,
   outcomeReviewRequired: booking.status === 'CONFIRMED' && booking.endAt.getTime() <= Date.now(),
+  timezone: booking.timezone,
+  responseDueAt: booking.status === 'REQUESTED' ? getResponseDueAt(booking) : booking.responseDueAt,
+  expiredAt: booking.expiredAt,
+  requestExpired: isRequestExpired(booking),
   requestType: booking.requestType,
   date: formatDate(booking.startAt),
   startTime: formatTime(booking.startAt),
@@ -280,6 +233,8 @@ const toBookingNotificationSource = (booking: BookingRecord): BookingNotificatio
   requestType: booking.requestType,
   cancelReason: booking.cancelReason,
   cancelledBy: booking.cancelledBy,
+  responseDueAt: booking.status === 'REQUESTED' ? getResponseDueAt(booking) : booking.responseDueAt,
+  expiredAt: booking.expiredAt,
 });
 
 const sendBookingNotificationSafely = async (
@@ -308,7 +263,7 @@ const logBookingTransition = ({
   booking: BookingRecord;
   actorUserId: bigint | null;
   actorType: 'STUDENT' | 'MENTOR' | 'ADMIN' | 'SYSTEM';
-  action: 'CREATE' | 'CONFIRM' | 'CANCEL' | 'COMPLETE' | 'NO_SHOW';
+  action: 'CREATE' | 'CONFIRM' | 'CANCEL' | 'COMPLETE' | 'NO_SHOW' | 'EXPIRE';
   fromStatus: BookingStatus | null;
   toStatus: BookingStatus;
   reason?: string | null;
@@ -414,8 +369,7 @@ const assertDurationAllowed = (durationMinute: number, setting: BookingSettingRe
 const assertBookingWindowAllowed = (startAt: Date, setting: BookingSettingRecord) => {
   const now = new Date();
   const earliestStartAt = new Date(now.getTime() + setting.bookingNoticeHour * 60 * 60_000);
-  const latestStartAt = new Date(now);
-  latestStartAt.setDate(latestStartAt.getDate() + setting.maxAdvanceDay);
+  const latestStartAt = new Date(now.getTime() + setting.maxAdvanceDay * 86_400_000);
 
   if (startAt < earliestStartAt) {
     throw new HttpError(400, 'Booking is too soon for this mentor notice policy', undefined, 'BOOKING_NOTICE_TOO_SHORT');
@@ -493,7 +447,7 @@ const findOverlappingBooking = async (
   const bookings = await tx.mentorBooking.findMany({
     where: {
       mentorId,
-      status: { in: ACTIVE_BOOKING_STATUSES },
+      ...activeBookingWhere(),
       ...(excludeBookingId ? { id: { not: excludeBookingId } } : {}),
       startAt: { lt: queryEndAt },
       endAt: { gt: queryStartAt },
@@ -533,26 +487,23 @@ const assertBookingAbuseLimits = async (
   {
     studentUserId,
     mentorId,
-    startAt,
   }: {
     studentUserId: bigint;
     mentorId: bigint;
-    startAt: Date;
   },
 ) => {
-  const dayStartAt = new Date(startAt);
-  dayStartAt.setHours(0, 0, 0, 0);
-  const dayEndAt = new Date(dayStartAt);
-  dayEndAt.setDate(dayEndAt.getDate() + 1);
+  const now = new Date();
+  const dayStartAt = parseDateBoundary(formatDate(now), 'start');
+  const dayEndAt = parseDateBoundary(formatDate(now), 'end');
 
   const [activeBookingCount, dailyMentorRequestCount] = await Promise.all([
     tx.mentorBooking.count({
       where: {
         studentUserId,
-        status: { in: ACTIVE_BOOKING_STATUSES },
+        ...activeBookingWhere(now),
         // Ended sessions awaiting an attendance decision are historical, not
         // future reservations consuming the student's active-booking quota.
-        endAt: { gt: new Date() },
+        endAt: { gt: now },
       },
     }),
     tx.mentorBooking.count({
@@ -606,6 +557,7 @@ const buildBookingWhere = ({
 
   return {
     ...(status ? { status } : {}),
+    ...(status === 'REQUESTED' ? { AND: [activeBookingWhere()] } : {}),
     ...(searchTerms.length ? { OR: searchTerms } : {}),
     ...(from || to
       ? {
@@ -713,6 +665,49 @@ const getBookingDetailOrThrow = async (where: Prisma.MentorBookingWhereInput, tx
   return booking;
 };
 
+export const expireOverdueBookingRequests = async () => {
+  const now = new Date();
+  const dueWhere = {
+    status: 'REQUESTED', expiredAt: null,
+    OR: [
+      { responseDueAt: { lte: now } },
+      { startAt: { lte: now } },
+      { responseDueAt: null, createdAt: { lte: new Date(now.getTime() - 24 * 3_600_000) } },
+    ],
+  } satisfies Prisma.MentorBookingWhereInput;
+  const candidates = await prisma.mentorBooking.findMany({
+    where: dueWhere, select: { id: true, studentUserId: true, mentorId: true },
+    orderBy: [{ responseDueAt: 'asc' }, { id: 'asc' }], take: 100,
+  });
+  let expired = 0;
+  let failed = 0;
+  for (const identity of candidates) {
+    try {
+      const result = await withBookingTransaction(identity, async (tx) => {
+        const current = await getBookingDetailOrThrow({ id: identity.id }, tx);
+        const checkedAt = new Date();
+        if (current.expiredAt || !isRequestExpired(current, checkedAt)) return null;
+        const booking = await tx.mentorBooking.update({
+          where: { id: current.id, status: 'REQUESTED', expiredAt: null },
+          data: { expiredAt: checkedAt, responseDueAt: getResponseDueAt(current) }, select: bookingSelect,
+        });
+        const notifications = await persistBookingNotifications(tx, toBookingNotificationSource(booking), 'BOOKING_CANCELLED_BY_MENTOR');
+        return { booking, notifications };
+      });
+      if (!result) continue;
+      expired++;
+      logBookingTransition({ booking: result.booking, actorUserId: null, actorType: 'SYSTEM', action: 'EXPIRE',
+        fromStatus: 'REQUESTED', toStatus: 'REQUESTED', reason: 'Response deadline passed' });
+      notifyBookingUpdated(result.booking);
+      publishBookingNotifications(result.notifications);
+    } catch (error) {
+      failed++;
+      logger.error('Failed to expire booking request', { bookingId: String(identity.id), error });
+    }
+  }
+  return { expired, failed };
+};
+
 export const getPublicBookingConfig = async ({ slug }: { slug: string }) => {
   const mentor = await getPublicMentorForBooking(slug);
   const setting = await getBookingSettingOrDefault(mentor.id);
@@ -739,8 +734,7 @@ export const getPublicAvailability = async ({
 
   const parsedDate = parseLocalDateTime({ date, startTime: '00:00', durationMinute });
   const dayStartAt = new Date(parsedDate.startAt);
-  const dayEndAt = new Date(dayStartAt);
-  dayEndAt.setDate(dayEndAt.getDate() + 1);
+  const dayEndAt = parseDateBoundary(date, 'end');
 
   const [blocks, bookings] = await Promise.all([
     prisma.mentorAvailability.findMany({
@@ -758,7 +752,7 @@ export const getPublicAvailability = async ({
     prisma.mentorBooking.findMany({
       where: {
         mentorId: mentor.id,
-        status: { in: ACTIVE_BOOKING_STATUSES },
+        ...activeBookingWhere(),
         startAt: { lt: new Date(dayEndAt.getTime() + (setting.bufferBeforeMinute + setting.bufferAfterMinute) * 60_000) },
         endAt: { gt: new Date(dayStartAt.getTime() - (setting.bufferBeforeMinute + setting.bufferAfterMinute) * 60_000) },
       },
@@ -776,8 +770,7 @@ export const getPublicAvailability = async ({
       startMinute + durationMinute <= block.endMinute;
       startMinute += DURATION_STEP_MINUTE
     ) {
-      const startAt = new Date(dayStartAt);
-      startAt.setMinutes(startMinute);
+      const startAt = new Date(dayStartAt.getTime() + startMinute * 60_000);
       const endAt = new Date(startAt.getTime() + durationMinute * 60_000);
 
       const withinPolicy = (() => {
@@ -871,16 +864,16 @@ export const createBooking = async ({
     assertDurationAllowed(input.durationMinute, setting);
     const parsedDateTime = parseLocalDateTime(input);
     assertBookingWindowAllowed(parsedDateTime.startAt, setting);
-    if (requestType === 'AVAILABILITY_SLOT') {
+    if (requestType === 'AVAILABILITY_SLOT' || setting.autoConfirm) {
       await assertWithinAvailability({ mentorId: mentor.id, ...parsedDateTime }, tx);
     }
     await assertBookingAbuseLimits(tx, {
       studentUserId: userId,
       mentorId: mentor.id,
-      startAt: parsedDateTime.startAt,
     });
     await assertNoOverlap(tx, { mentorId: mentor.id, ...parsedDateTime, setting });
 
+    const createdAt = new Date(Math.floor(Date.now() / 1000) * 1000);
     const booking = await tx.mentorBooking.create({
       data: {
         mentorId: mentor.id,
@@ -888,7 +881,11 @@ export const createBooking = async ({
         startAt: parsedDateTime.startAt,
         endAt: parsedDateTime.endAt,
         durationMinute: input.durationMinute,
-        status: 'REQUESTED',
+        status: setting.autoConfirm ? 'CONFIRMED' : 'REQUESTED',
+        timezone: BOOKING_TIMEZONE,
+        createdAt,
+        confirmedAt: setting.autoConfirm ? createdAt : null,
+        responseDueAt: setting.autoConfirm ? null : getResponseDueAt({ ...parsedDateTime, createdAt, responseDueAt: null }),
         requestType,
         note,
         requestKeyHash,
@@ -896,7 +893,10 @@ export const createBooking = async ({
       },
       select: bookingSelect,
     });
-    const notifications = await persistBookingNotifications(tx, toBookingNotificationSource(booking), 'BOOKING_REQUESTED');
+    if (setting.autoConfirm) await ensureConversationForConfirmedBooking(tx, booking);
+    const notifications = await persistBookingNotifications(tx,
+      { ...toBookingNotificationSource(booking), autoConfirmed: setting.autoConfirm },
+      setting.autoConfirm ? 'BOOKING_CONFIRMED' : 'BOOKING_REQUESTED');
     return { booking, changed: true, notifications };
   });
   const { booking } = result;
@@ -971,12 +971,17 @@ const cancelBooking = async ({ where, actorUserId, actorType, cancelledBy, reaso
     if (!CANCELLABLE_STATUSES.includes(currentBooking.status)) {
       throw new HttpError(400, 'Booking cannot be cancelled in current status', undefined, 'BOOKING_CANNOT_CANCEL');
     }
+    if (isRequestExpired(currentBooking)) {
+      throw new HttpError(409, 'Booking request has expired', undefined, 'BOOKING_REQUEST_EXPIRED');
+    }
+    const cancelledAt = new Date();
     const booking = await tx.mentorBooking.update({
-      where: { id: currentBooking.id, status: currentBooking.status },
+      where: { id: currentBooking.id, status: currentBooking.status,
+        ...(currentBooking.status === 'REQUESTED' ? { AND: [pendingRequestWhere(cancelledAt)] } : {}) },
       data: {
         status: targetStatus,
         cancelReason: sanitizeNullableSingleLineText(reason) ?? null,
-        cancelledBy, cancelledAt: new Date(),
+        cancelledBy, cancelledAt,
       },
       select: bookingSelect,
     });
@@ -1093,7 +1098,6 @@ export const updateMentorBookingSettings = async ({
     ...currentSetting,
     ...input,
     durationStepMinute: DURATION_STEP_MINUTE,
-    autoConfirm: false,
   } satisfies BookingSettingRecord;
 
   validateSetting(nextSetting);
@@ -1173,14 +1177,21 @@ const confirmBooking = async ({ where, actorUserId, actorType }: {
     if (currentBooking.status !== 'REQUESTED') {
       throw new HttpError(400, 'Only requested bookings can be confirmed', undefined, 'BOOKING_CANNOT_CONFIRM');
     }
+    if (isRequestExpired(currentBooking)) {
+      throw new HttpError(409, 'Booking request has expired', undefined, 'BOOKING_REQUEST_EXPIRED');
+    }
     const setting = await getBookingSettingOrDefault(currentBooking.mentorId, tx);
     await assertNoOverlap(tx, {
       mentorId: currentBooking.mentorId, startAt: currentBooking.startAt,
       endAt: currentBooking.endAt, setting, excludeBookingId: currentBooking.id,
     });
+    const confirmedAt = new Date();
+    if (isRequestExpired(currentBooking, confirmedAt)) {
+      throw new HttpError(409, 'Booking request has expired', undefined, 'BOOKING_REQUEST_EXPIRED');
+    }
     const booking = await tx.mentorBooking.update({
-      where: { id: currentBooking.id, status: 'REQUESTED' },
-      data: { status: 'CONFIRMED', confirmedAt: new Date() },
+      where: { id: currentBooking.id, status: 'REQUESTED', AND: [pendingRequestWhere(confirmedAt)] },
+      data: { status: 'CONFIRMED', confirmedAt },
       select: bookingSelect,
     });
     await ensureConversationForConfirmedBooking(tx, booking);

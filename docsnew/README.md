@@ -93,3 +93,4 @@ Agent **không được** đổi RISK thành 'lỗi đã tái hiện' hoặc PRO
 
 - 2026-10-12: [IC-002 — Booking outcome review](IC-002-EXECUTION-REPORT.md), kèm nền test/CI tối thiểu của IC-010. Báo cáo ghi rõ phạm vi đã sửa, bằng chứng local và các kiểm tra chưa chạy; chưa kết luận readiness của toàn hệ thống.
 - 2026-10-12: [IC-003 — Booking concurrency and idempotence](IC-003-EXECUTION-REPORT.md), có kiểm thử MySQL thật, migration tương thích lịch cũ, idempotency và notification trong transaction. Báo cáo gồm bằng chứng 62 test local, yêu cầu rollout và các giới hạn chưa kiểm thử.
+- 2026-10-13: [IC-004 — Booking expiry, timezone and autoConfirm](IC-004-EXECUTION-REPORT.md), theo policy đã được chốt; có 90 test, MySQL trên hai TZ và browser smoke local. Báo cáo nêu mapping expiry, migration/backfill, ảnh desktop/mobile và rollout/rollback.

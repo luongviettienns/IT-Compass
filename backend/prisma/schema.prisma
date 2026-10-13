@@ -348,6 +348,9 @@ model MentorBooking {
   requestType    BookingRequestType        @default(AVAILABILITY_SLOT) @map("loai_yeu_cau")
   requestKeyHash String?                   @map("request_key_hash") @db.Char(64)
   requestPayloadHash String?               @map("request_payload_hash") @db.Char(64)
+  timezone       String                    @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
+  responseDueAt  DateTime?                  @map("response_due_at") @db.DateTime(0)
+  expiredAt      DateTime?                  @map("expired_at") @db.DateTime(0)
   note           String?                   @map("ghi_chu") @db.VarChar(1000)
   cancelReason   String?                   @map("ly_do_huy") @db.VarChar(500)
   cancelledBy    BookingCancellationActor? @map("huy_boi")
@@ -366,6 +369,7 @@ model MentorBooking {
   @@unique([studentUserId, requestKeyHash], map: "uq_datlich_hocvien_request_key")
   @@index([studentUserId, status, startAt], map: "idx_datlich_hoc_vien_trang_thai_bat_dau")
   @@index([startAt, endAt], map: "idx_datlich_khoang_thoi_gian")
+  @@index([status, expiredAt, responseDueAt], map: "idx_datlich_response_deadline")
   @@map("dat_lich_mentor")
 }
 

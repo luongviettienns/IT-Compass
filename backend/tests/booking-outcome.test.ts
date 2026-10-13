@@ -61,6 +61,7 @@ const makeBooking = () => ({
   requestType: 'AVAILABILITY_SLOT' as const,
   requestKeyHash: null,
   requestPayloadHash: null,
+  timezone: 'Asia/Ho_Chi_Minh', responseDueAt: null, expiredAt: null,
   note: null, cancelReason: null, cancelledBy: null, cancelledAt: null,
   confirmedAt: new Date('2026-10-11T08:00:00Z'),
   completedAt: null as Date | null,

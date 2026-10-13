@@ -1,3 +1,5 @@
+import { BOOKING_TIMEZONE_LABEL, formatBookingInstant, isBookingRequestExpired } from '../../lib/bookingTime';
+import { BookingRequestDeadline } from '../../components/mentor/BookingRequestDeadline';
 import { useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -37,6 +39,8 @@ const bookingExportColumns: ExportColumn[] = [
     { header: 'End', key: 'endAt', width: 22 },
     { header: 'Duration', key: 'durationMinute', width: 12 },
     { header: 'Created at', key: 'createdAt', width: 22 },
+    { header: 'Timezone', key: 'timezone', width: 26 },
+    { header: 'Response due', key: 'responseDueAt', width: 22 },
 ];
 
 // Gom filter vào 1 chuỗi để export subtitle phản ánh đúng trạng thái list hiện tại.
@@ -45,7 +49,7 @@ const formatFilters = (status: 'all' | BookingStatus, search: string, from: stri
     return parts.length ? parts.join(' · ') : 'No filters';
 };
 
-const formatDateTime = (value: string) => new Date(value).toLocaleString('vi-VN');
+const formatDateTime = formatBookingInstant;
 
 
 export default function AdminBookingsPage() {
@@ -159,12 +163,14 @@ export default function AdminBookingsPage() {
                         id: booking.id,
                         mentor: booking.mentor.name,
                         student: booking.student.fullName,
-                        status: getBookingStatusLabel(booking.status, booking.outcomeReviewRequired),
+                        status: getBookingStatusLabel(booking.status, booking.outcomeReviewRequired, isBookingRequestExpired(booking)),
                         requestType: booking.requestType,
                         startAt: formatDateTime(booking.startAt),
                         endAt: formatDateTime(booking.endAt),
                         durationMinute: booking.durationMinute,
                         createdAt: formatDateTime(booking.createdAt),
+                        timezone: booking.timezone ?? BOOKING_TIMEZONE_LABEL,
+                        responseDueAt: booking.responseDueAt ? formatDateTime(booking.responseDueAt) : '',
                     })),
                 }],
             });
@@ -283,13 +289,14 @@ export default function AdminBookingsPage() {
                                                 </div>
                                             </td>
                                             <td className="px-5 py-4">
-                                                <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} />
+                                                <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} requestExpired={isBookingRequestExpired(booking)} />
+                                                <BookingRequestDeadline booking={booking} />
                                             </td>
                                             <td className="px-5 py-4">
                                                 <div className="font-medium text-sm">{booking.date}</div>
                                                 <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
                                                     <Clock size={12} />
-                                                    {booking.startTime} - {booking.endTime}
+                                                    {booking.startTime} - {booking.endTime} · {BOOKING_TIMEZONE_LABEL}
                                                 </div>
                                             </td>
                                             <td className="px-5 py-4 text-right">
@@ -355,8 +362,9 @@ export default function AdminBookingsPage() {
                                     <div className="p-6 border-b flex-shrink-0 pr-12">
                                         <div className="flex items-center gap-4 mb-2">
                                             <h2 className="text-xl font-bold tracking-tight">Chi tiết Booking</h2>
-                                            <BookingStatusBadge status={detail.status} outcomeReviewRequired={detail.outcomeReviewRequired} />
+                                            <BookingStatusBadge status={detail.status} outcomeReviewRequired={detail.outcomeReviewRequired} requestExpired={isBookingRequestExpired(detail)} />
                                         </div>
+                                        <BookingRequestDeadline booking={detail} />
                                         <div className="text-sm text-muted-foreground font-mono bg-secondary/50 p-2 rounded-lg break-all inline-block">ID: {detail.id}</div>
                                     </div>
                                     
@@ -374,7 +382,7 @@ export default function AdminBookingsPage() {
                                                     <div className="font-semibold text-base">{detail.date}</div>
                                                     <div className="text-sm flex items-center gap-2 mt-1">
                                                         <Clock size={14} className="text-muted-foreground" />
-                                                        {detail.startTime} - {detail.endTime} ({detail.durationMinute} phút)
+                                                        {detail.startTime} - {detail.endTime} ({detail.durationMinute} phút) · {BOOKING_TIMEZONE_LABEL}
                                                     </div>
                                                 </div>
                                             </div>
@@ -426,7 +434,7 @@ export default function AdminBookingsPage() {
                                     <div className="p-6 border-t flex-shrink-0 bg-secondary/10">
                                         <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-3">Thao tác can thiệp</div>
                                         <div className="grid grid-cols-2 gap-3">
-                                            <Button variant="default" className="bg-emerald-600 hover:bg-emerald-700 text-white border-transparent w-full" disabled={confirmMutation.isPending} onClick={() => { confirmMutation.mutate(detail); setSelectedBooking(null); }}>
+                                            <Button variant="default" className="bg-emerald-600 hover:bg-emerald-700 text-white border-transparent w-full" disabled={confirmMutation.isPending || isBookingRequestExpired(detail)} onClick={() => { confirmMutation.mutate(detail); setSelectedBooking(null); }}>
                                                 <CheckCircle2 size={16} /> Xác nhận
                                             </Button>
                                             <Button variant="default" className="w-full" disabled={completeMutation.isPending || detail.status !== 'CONFIRMED' || !detail.outcomeReviewRequired} onClick={() => { completeMutation.mutate(detail); setSelectedBooking(null); }}>
@@ -435,7 +443,7 @@ export default function AdminBookingsPage() {
                                             <Button variant="secondary" className="bg-slate-700 hover:bg-slate-800 text-white w-full" disabled={noShowMutation.isPending || detail.status !== 'CONFIRMED' || !detail.outcomeReviewRequired} onClick={() => { setOutcomeError(null); setActionType('no-show'); }}>
                                                 <CircleDashed size={16} /> Không tham dự
                                             </Button>
-                                            <Button variant="destructive" className="w-full" onClick={() => setActionType('cancel')}>
+                                            <Button variant="destructive" className="w-full" disabled={isBookingRequestExpired(detail)} onClick={() => setActionType('cancel')}>
                                                 <XCircle size={16} /> Hủy lịch
                                             </Button>
                                         </div>

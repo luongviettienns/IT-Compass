@@ -12,9 +12,14 @@
  * - publish-scheduled-posts: Tự động xuất bản bài viết đã lên lịch (mỗi 2 phút).
  */
 import { logger } from '../utils/logger.js';
-import { purgeExpiredAuthData, publishScheduledPosts, sendBookingReminders } from './scheduled.tasks.js';
+import { purgeExpiredAuthData, publishScheduledPosts, sendBookingReminders, expireBookingRequests } from './scheduled.tasks.js';
 /** Danh sách tác vụ nền cần lập lịch. */
 const jobs = [
+    {
+        name: 'expire-booking-requests',
+        intervalMs: 60 * 1000,
+        task: expireBookingRequests,
+    },
     {
         name: 'purge-expired-auth-data',
         intervalMs: 60 * 60 * 1000, // mỗi 1 giờ

@@ -1,3 +1,5 @@
+import { BOOKING_TIMEZONE, BOOKING_TIMEZONE_LABEL, isBookingRequestExpired } from '../../lib/bookingTime';
+import { BookingRequestDeadline } from '../../components/mentor/BookingRequestDeadline';
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -32,12 +34,13 @@ const FILTERS: Array<{ label: string; status?: BookingStatus }> = [
 
 const formatBookingDateTime = (booking: MentorBooking) => {
     const date = new Date(booking.startAt).toLocaleDateString('vi-VN', {
+        timeZone: BOOKING_TIMEZONE,
         weekday: 'long',
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
     });
-    return `${date}, ${booking.startTime} - ${booking.endTime}`;
+    return `${date}, ${booking.startTime} - ${booking.endTime} — ${BOOKING_TIMEZONE_LABEL}`;
 };
 
 const canCompleteBooking = (booking: MentorBooking) => booking.status === 'CONFIRMED' && new Date(booking.endAt).getTime() <= Date.now();
@@ -48,6 +51,7 @@ const getBookingRequestTypeLabel = (booking: MentorBooking) => (
 
 // Mô tả trạng thái chat theo booking để mentor biết khi nào có thể mở convo.
 const getChatStatusText = (booking: MentorBooking) => {
+    if (isBookingRequestExpired(booking)) return 'Yêu cầu đã hết hạn; hãy chọn một lịch mới.';
     switch (booking.status) {
         case 'REQUESTED':
             return 'Chat sẽ mở sau khi mentor xác nhận lịch.';
@@ -87,7 +91,7 @@ function BookingCard({
                     <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                             <h2 className="text-lg font-bold text-foreground">{booking.student.fullName}</h2>
-                            <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} />
+                            <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} requestExpired={isBookingRequestExpired(booking)} />
                             <Badge variant="outline" className={cn(
                                 'border-border/70 px-3 py-1 text-xs font-semibold',
                                 booking.requestType === 'CUSTOM_TIME' ? 'border-primary/30 bg-primary/10 text-primary' : 'bg-surface/50 text-muted-foreground',
@@ -96,6 +100,7 @@ function BookingCard({
                             </Badge>
                         </div>
                         <p className="mt-1 text-sm text-muted-foreground">{booking.student.email}</p>
+                        <BookingRequestDeadline booking={booking} />
                         <div className="mt-3 flex flex-wrap gap-2 text-sm text-muted-foreground">
                             <Badge variant="outline" className="gap-1 border-border/70 bg-surface/50 px-3 py-1">
                                 <Clock3 size={14} /> {formatBookingDateTime(booking)}
@@ -108,7 +113,7 @@ function BookingCard({
                 </div>
 
                 <div className="flex flex-wrap gap-2 lg:justify-end">
-                    {booking.status === 'REQUESTED' && (
+                    {booking.status === 'REQUESTED' && !isBookingRequestExpired(booking) && (
                         <Button type="button" size="sm" isLoading={actionPending} onClick={() => onConfirm(booking)}>
                             <CheckCircle2 size={15} /> Xác nhận
                         </Button>
@@ -123,7 +128,7 @@ function BookingCard({
                             <MessageCircle size={15} /> Mở chat
                         </Button>
                     )}
-                    {(booking.status === 'REQUESTED' || booking.status === 'CONFIRMED') && (
+                    {!isBookingRequestExpired(booking) && (booking.status === 'REQUESTED' || booking.status === 'CONFIRMED') && (
                         <Button type="button" size="sm" variant="outline" isLoading={actionPending} onClick={() => onCancel(booking)}>
                             <XCircle size={15} /> Hủy
                         </Button>
@@ -131,7 +136,7 @@ function BookingCard({
                 </div>
             </div>
 
-            {booking.requestType === 'CUSTOM_TIME' && booking.status === 'REQUESTED' && (
+            {booking.requestType === 'CUSTOM_TIME' && booking.status === 'REQUESTED' && !isBookingRequestExpired(booking) && (
                 <div className="mt-5 rounded-2xl border border-primary/20 bg-primary/5 p-4 text-sm leading-6 text-primary">
                     Học viên đề xuất thời gian ngoài lịch bạn đã mở. Nếu phù hợp, bạn có thể xác nhận để mở chat và giữ lịch này.
                 </div>
@@ -262,7 +267,7 @@ export default function MentorBookingsPage() {
                             <div>
                                 <CardTitle className="text-2xl font-black tracking-tight">Danh sách booking</CardTitle>
                                 <CardDescription className="mt-2 text-sm leading-6">
-                                    Booking mới luôn ở trạng thái chờ xác nhận trước khi trở thành lịch chính thức.
+                                    Yêu cầu chờ xác nhận hết hạn sau tối đa 24 giờ hoặc khi buổi tư vấn bắt đầu. Khi bật tự động xác nhận, lịch hợp lệ và chat được mở ngay.
                                 </CardDescription>
                             </div>
                             <div className="relative w-full lg:w-80">

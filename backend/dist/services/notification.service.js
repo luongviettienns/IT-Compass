@@ -2,6 +2,7 @@ import { prisma } from '../db/prisma.js';
 import { HttpError } from '../utils/httpError.js';
 import { logger } from '../utils/logger.js';
 import { emitNotificationCreated, emitNotificationUpdated } from '../socket/notification.events.js';
+import { BOOKING_TIMEZONE } from './booking-time.js';
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 20;
 const BOOKING_REMINDER_MINUTE = 30;
@@ -50,22 +51,25 @@ const normalizePagination = (query) => ({
 });
 const formatBookingDateTime = (startAt, endAt) => {
     const date = new Intl.DateTimeFormat('vi-VN', {
+        timeZone: BOOKING_TIMEZONE,
         weekday: 'long',
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
     }).format(startAt);
     const startTime = new Intl.DateTimeFormat('vi-VN', {
+        timeZone: BOOKING_TIMEZONE,
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
     }).format(startAt);
     const endTime = new Intl.DateTimeFormat('vi-VN', {
+        timeZone: BOOKING_TIMEZONE,
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
     }).format(endAt);
-    return `${date}, ${startTime} - ${endTime}`;
+    return `${date}, ${startTime} - ${endTime} (${BOOKING_TIMEZONE}, UTC+07:00)`;
 };
 const serializeNotification = (notification) => ({
     id: String(notification.id),
@@ -132,6 +136,9 @@ const buildBookingNotificationData = (booking, extra = {}) => ({
     durationMinute: booking.durationMinute,
     status: booking.status,
     requestType: booking.requestType,
+    timezone: BOOKING_TIMEZONE,
+    responseDueAt: booking.responseDueAt?.toISOString() ?? null,
+    expiredAt: booking.expiredAt?.toISOString() ?? null,
     cancelReason: booking.cancelReason ?? null,
     cancelledBy: booking.cancelledBy ?? null,
     ...extra,
@@ -164,12 +171,21 @@ const buildBookingNotificationTargets = (booking, type) => {
             pushTarget(targets, booking.mentorUserId, 'Yêu cầu tư vấn mới', `${booking.studentName} đã ${requestTypeLabel} vào ${timeLabel}.`, 'requested');
             break;
         case 'BOOKING_CONFIRMED':
+            if (booking.autoConfirmed) {
+                pushTarget(targets, booking.mentorUserId, 'Lịch tư vấn mới đã tự động xác nhận', `Lịch tư vấn với ${booking.studentName} vào ${timeLabel} đã được tự động xác nhận. Bạn có thể mở chat ngay.`, 'auto-confirmed');
+            }
             pushTarget(targets, booking.studentUserId, 'Lịch tư vấn đã được xác nhận', `Lịch tư vấn với mentor ${booking.mentorName} đã được xác nhận vào ${timeLabel}. Bạn có thể mở chat ngay bây giờ.`, 'confirmed');
             break;
         case 'BOOKING_CANCELLED_BY_STUDENT':
             pushTarget(targets, booking.mentorUserId, 'Học viên đã hủy lịch', `${booking.studentName} đã hủy lịch tư vấn vào ${timeLabel}.${cancelReasonLabel}`, 'cancelled-by-student');
             break;
         case 'BOOKING_CANCELLED_BY_MENTOR':
+            if (booking.expiredAt) {
+                for (const userId of [booking.studentUserId, booking.mentorUserId]) {
+                    pushTarget(targets, userId, 'Yêu cầu tư vấn đã hết hạn', `Yêu cầu tư vấn với mentor ${booking.mentorName} vào ${timeLabel} đã hết hạn xác nhận. Bạn có thể chọn một lịch mới.`, 'expired');
+                }
+                break;
+            }
             pushTarget(targets, booking.studentUserId, booking.cancelledBy === 'SYSTEM' ? 'Quản trị viên đã hủy lịch' : 'Mentor đã hủy lịch', booking.cancelledBy === 'SYSTEM'
                 ? `Quản trị viên đã hủy lịch tư vấn với mentor ${booking.mentorName} vào ${timeLabel}.${cancelReasonLabel}`
                 : `Mentor ${booking.mentorName} đã hủy lịch tư vấn vào ${timeLabel}.${cancelReasonLabel}`, 'cancelled-by-mentor');

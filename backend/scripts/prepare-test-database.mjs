@@ -19,7 +19,7 @@ console.log('Integration schema prepared in the guarded test database.');
 // Verify the actual ALTER migration against the preceding schema, including
 // multiple legacy NULL keys, in a second fresh test database.
 const legacySchema = readFileSync('prisma/schema.prisma', 'utf8')
-  .replace(/^.*(?:requestKeyHash|requestPayloadHash).*\r?\n/gm, '');
+  .replace(/^.*(?:requestKeyHash|requestPayloadHash|responseDueAt|expiredAt|timezone).*\r?\n/gm, '');
 const schemaDirectory = mkdtempSync(path.join(os.tmpdir(), 'ITCompass-IC003-schema-'));
 const schemaFile = path.join(schemaDirectory, 'schema.prisma');
 writeFileSync(schemaFile, legacySchema);
@@ -48,15 +48,37 @@ try {
       (mentor_id, hoc_vien_id, bat_dau_luc, ket_thuc_luc, thoi_luong_phut, ghi_chu, cap_nhat_luc)
       VALUES (${mentor.id}, ${student.id}, ${startAt}, ${endAt}, 60, 'legacy booking', NOW())`;
   }
+  await database.$executeRaw`INSERT INTO dat_lich_mentor
+    (mentor_id, hoc_vien_id, bat_dau_luc, ket_thuc_luc, thoi_luong_phut, ghi_chu, tao_luc, cap_nhat_luc)
+    VALUES (${mentor.id}, ${student.id}, '2099-10-01 03:00:00', '2099-10-01 04:00:00', 60,
+      'future legacy request', '2026-10-12 05:00:00', '2026-10-12 05:00:00')`;
+  await database.$executeRaw`INSERT INTO dat_lich_mentor
+    (mentor_id, hoc_vien_id, bat_dau_luc, ket_thuc_luc, thoi_luong_phut, trang_thai, ghi_chu, cap_nhat_luc)
+    VALUES (${mentor.id}, ${student.id}, '2026-10-01 03:00:00', '2026-10-01 04:00:00', 60,
+      'da_xac_nhan', 'legacy confirmed session', NOW())`;
   const migration = readFileSync('prisma/migrations/0009_booking_idempotency/migration.sql', 'utf8');
   runPrisma(['db', 'execute', '--stdin', '--url', migrationDatabaseUrl], migrationDatabaseUrl, migration);
+  const policyMigration = readFileSync('prisma/migrations/0010_booking_policy/migration.sql', 'utf8');
+  runPrisma(['db', 'execute', '--stdin', '--url', migrationDatabaseUrl], migrationDatabaseUrl, policyMigration);
   const bookings = await database.mentorBooking.findMany();
-  assert.equal(bookings.length, 2);
-  assert.ok(bookings.every((booking) => booking.note === 'legacy booking'
+  assert.equal(bookings.length, 4);
+  const oldRequests = bookings.filter((booking) => booking.note === 'legacy booking');
+  assert.equal(oldRequests.length, 2);
+  assert.ok(oldRequests.every((booking) => booking.note === 'legacy booking'
     && booking.status === 'REQUESTED' && booking.requestKeyHash === null && booking.requestPayloadHash === null));
+  assert.ok(oldRequests.every((booking) => booking.timezone === 'Asia/Ho_Chi_Minh'
+    && booking.expiredAt === null && booking.responseDueAt.getTime() === booking.startAt.getTime()));
+  const future = bookings.find((booking) => booking.note === 'future legacy request');
+  assert.equal(future.startAt.toISOString(), '2099-10-01T03:00:00.000Z');
+  assert.equal(future.responseDueAt.toISOString(), '2026-10-13T05:00:00.000Z');
+  const confirmed = bookings.find((booking) => booking.note === 'legacy confirmed session');
+  assert.equal(confirmed.status, 'CONFIRMED');
+  assert.equal(confirmed.startAt.toISOString(), '2026-10-01T03:00:00.000Z');
+  assert.equal(confirmed.responseDueAt, null);
+  assert.equal(confirmed.expiredAt, null);
   const requestKeyHash = 'a'.repeat(64);
-  await database.mentorBooking.update({ where: { id: bookings[0].id }, data: { requestKeyHash } });
-  await assert.rejects(database.mentorBooking.update({ where: { id: bookings[1].id }, data: { requestKeyHash } }),
+  await database.mentorBooking.update({ where: { id: oldRequests[0].id }, data: { requestKeyHash } });
+  await assert.rejects(database.mentorBooking.update({ where: { id: oldRequests[1].id }, data: { requestKeyHash } }),
     (error) => error.code === 'P2002');
   const otherStudent = await database.user.create({ data: { fullName: 'Other Test Student', email: 'other-legacy@example.test', passwordHash: 'test-only' } });
   await database.mentorBooking.create({ data: {
@@ -64,6 +86,7 @@ try {
     startAt: new Date('2026-10-01T14:00:00Z'), endAt: new Date('2026-10-01T15:00:00Z'), durationMinute: 60,
   } });
   console.log('0009 migration preserved legacy rows and enforced student-scoped unique request keys.');
+  console.log('0010 migration preserved legacy instants/statuses and backfilled the approved response deadline.');
 } finally {
   await database.$disconnect();
 }

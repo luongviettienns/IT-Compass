@@ -12,6 +12,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../db/prisma.js';
 import { sendBookingReminderNotifications } from '../services/notification.service.js';
 import { logger } from '../utils/logger.js';
+export { expireOverdueBookingRequests as expireBookingRequests } from '../services/booking.service.js';
 /**
  * Dọn dẹp dữ liệu auth đã hết hạn hoặc đã sử dụng.
  * Được gọi định kỳ (mỗi 1 giờ) bởi scheduler.

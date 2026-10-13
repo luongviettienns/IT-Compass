@@ -1,3 +1,5 @@
+import { BOOKING_TIMEZONE, BOOKING_TIMEZONE_LABEL, isBookingRequestExpired } from '../lib/bookingTime';
+import { BookingRequestDeadline } from '../components/mentor/BookingRequestDeadline';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
@@ -39,12 +41,13 @@ const FILTERS: Array<{ label: string; status?: BookingStatus }> = [
 
 const formatBookingDateTime = (booking: MentorBooking) => {
     const date = new Date(booking.startAt).toLocaleDateString('vi-VN', {
+        timeZone: BOOKING_TIMEZONE,
         weekday: 'long',
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
     });
-    return `${date}, ${booking.startTime} - ${booking.endTime}`;
+    return `${date}, ${booking.startTime} - ${booking.endTime} — ${BOOKING_TIMEZONE_LABEL}`;
 };
 
 const formatRelativeBookingTime = (booking: MentorBooking) => {
@@ -66,9 +69,10 @@ const isCancelledBooking = (booking: MentorBooking) =>
     booking.status === 'CANCELLED_BY_STUDENT' || booking.status === 'CANCELLED_BY_MENTOR';
 
 const canCancelBooking = (booking: MentorBooking) =>
-    booking.status === 'REQUESTED' || booking.status === 'CONFIRMED';
+    !isBookingRequestExpired(booking) && (booking.status === 'REQUESTED' || booking.status === 'CONFIRMED');
 
 const getStudentChatStatusText = (booking: MentorBooking) => {
+    if (isBookingRequestExpired(booking)) return 'Yêu cầu đã hết hạn; hãy chọn một lịch mới.';
     switch (booking.status) {
         case 'REQUESTED':
             return 'Chat sẽ mở sau khi mentor xác nhận lịch.';
@@ -243,8 +247,9 @@ export default function StudentBookingsPage() {
                                                         </Badge>
                                                     </div>
                                                 </div>
-                                                <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} />
+                                                <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} requestExpired={isBookingRequestExpired(booking)} />
                                             </div>
+                                            <BookingRequestDeadline booking={booking} />
 
                                             <div className="mt-4 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
                                                 <div className="rounded-2xl border border-border/60 bg-surface/30 p-3">
@@ -259,7 +264,7 @@ export default function StudentBookingsPage() {
                                                 </div>
                                             </div>
 
-                                            {booking.requestType === 'CUSTOM_TIME' && booking.status === 'REQUESTED' && (
+                                            {booking.requestType === 'CUSTOM_TIME' && booking.status === 'REQUESTED' && !isBookingRequestExpired(booking) && (
                                                 <div className="mt-4 rounded-2xl border border-primary/20 bg-primary/5 p-4 text-sm leading-6 text-primary">
                                                     Bạn đã đề xuất một khung giờ riêng. Mentor sẽ xác nhận nếu thời gian này phù hợp.
                                                 </div>

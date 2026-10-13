@@ -1,0 +1,102 @@
+- region "Notifications alt+T"
+- banner:
+  - link "IT Compass":
+    - /url: /
+    - generic: IT Compass
+- main:
+  - main:
+    - heading "Lịch tư vấn của bạn" [level=3]
+    - paragraph: Theo dõi lịch hẹn với mentor, mở chat và quản lý các buổi tư vấn.
+    - button "Tất cả"
+    - button "Chờ xác nhận"
+    - button "Đã xác nhận"
+    - button "Hoàn thành"
+    - button "Đã hủy"
+    - article:
+      - heading "IC004 Browser Mentor" [level=3]
+      - paragraph: Test mentor
+      - generic: Theo lịch mentor
+      - generic: Hết hạn xác nhận
+      - paragraph: Yêu cầu đã hết hạn xác nhận. Bạn có thể chọn một lịch mới.
+      - paragraph: Thời gian
+      - paragraph: Thứ Năm, 15/10/2026, 12:30 - 13:30 — Asia/Ho_Chi_Minh (UTC+07:00)
+      - paragraph: Còn 2 ngày nữa
+      - paragraph: Chi tiết
+      - paragraph: 60 phút
+      - paragraph: Liên hệ / buổi
+      - text: Yêu cầu đã hết hạn; hãy chọn một lịch mới.
+      - link "Xem mentor":
+        - /url: /mentors/ic004-browser-mentor
+    - article:
+      - heading "IC004 Browser Mentor" [level=3]
+      - paragraph: Test mentor
+      - generic: Theo lịch mentor
+      - generic: Chờ mentor xác nhận
+      - paragraph: Xác nhận trước 14:00:00 13/10/2026 — Asia/Ho_Chi_Minh (UTC+07:00).
+      - paragraph: Thời gian
+      - paragraph: Thứ Ba, 13/10/2026, 14:00 - 15:00 — Asia/Ho_Chi_Minh (UTC+07:00)
+      - paragraph: Còn 1 giờ nữa
+      - paragraph: Chi tiết
+      - paragraph: 60 phút
+      - paragraph: Liên hệ / buổi
+      - text: Chat sẽ mở sau khi mentor xác nhận lịch.
+      - link "Xem mentor":
+        - /url: /mentors/ic004-browser-mentor
+      - button "Hủy lịch"
+    - article:
+      - heading "IC004 Browser Mentor" [level=3]
+      - paragraph: Test mentor
+      - generic: Theo lịch mentor
+      - generic: Đã xác nhận
+      - paragraph: Thời gian
+      - paragraph: Thứ Ba, 13/10/2026, 13:00 - 14:00 — Asia/Ho_Chi_Minh (UTC+07:00)
+      - paragraph: Còn 17 phút nữa
+      - paragraph: Chi tiết
+      - paragraph: 60 phút
+      - paragraph: Liên hệ / buổi
+      - text: Chat đã sẵn sàng. Bạn có thể mở cuộc trò chuyện với mentor.
+      - link "Xem mentor":
+        - /url: /mentors/ic004-browser-mentor
+      - button "Mở chat":
+        - text: Mở chat
+      - button "Hủy lịch"
+- contentinfo:
+  - link "IT Compass":
+    - /url: /
+    - generic: IT Compass
+  - paragraph: Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+  - heading "Khám phá" [level=3]
+  - list:
+    - link "Trắc nghiệm":
+      - /url: /test
+    - link "Blog":
+      - /url: /blog
+    - link "Mentor":
+      - /url: /mentors
+    - link "Ngành học":
+      - /url: /majors
+    - link "Về chúng tôi":
+      - /url: /about
+  - heading "Liên hệ" [level=3]
+  - list:
+    - text: contact@itcompass.vn
+    - text: TP. Hồ Chí Minh, Việt Nam
+    - link "GitHub":
+      - /url: https://github.com
+      - text: GitHub
+  - generic: © 2026 IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.
+- navigation:
+  - link "Trang chủ":
+    - /url: /
+    - generic: Trang chủ
+  - link "Trắc nghiệm":
+    - /url: /test
+    - generic: Trắc nghiệm
+  - link "Mentor":
+    - /url: /mentors
+    - generic: Mentor
+  - link "Blog":
+    - /url: /blog
+    - generic: Blog
+  - button "Tôi":
+    - generic: Tôi

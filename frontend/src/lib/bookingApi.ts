@@ -22,6 +22,8 @@ export type BookingSettings = {
     bufferBeforeMinute: number;
     bufferAfterMinute: number;
     autoConfirm: boolean;
+    timezone?: string;
+    responseWindowHour?: number;
 };
 
 export type AvailabilitySlot = {
@@ -52,6 +54,10 @@ export type MentorBooking = {
     id: string;
     status: BookingStatus;
     outcomeReviewRequired: boolean;
+    timezone?: string;
+    responseDueAt?: string | null;
+    expiredAt?: string | null;
+    requestExpired?: boolean;
     requestType: BookingRequestType;
     date: string;
     startTime: string;
@@ -148,6 +154,7 @@ export type UpdateBookingSettingsInput = Partial<Pick<
     | 'maxAdvanceDay'
     | 'bufferBeforeMinute'
     | 'bufferAfterMinute'
+    | 'autoConfirm'
 >>;
 
 const buildQueryString = (params: Record<string, string | number | undefined>) => {
@@ -323,7 +330,8 @@ export const bookingApi = {
         }, 'Không thể xác nhận lịch không tham dự'),
 };
 
-export const getBookingStatusLabel = (status: BookingStatus, outcomeReviewRequired = false) => {
+export const getBookingStatusLabel = (status: BookingStatus, outcomeReviewRequired = false, requestExpired = false) => {
+    if (status === 'REQUESTED' && requestExpired) return 'Hết hạn xác nhận';
     if (status === 'CONFIRMED' && outcomeReviewRequired) return 'Chờ xác nhận kết quả';
     switch (status) {
         case 'REQUESTED': return 'Chờ mentor xác nhận';

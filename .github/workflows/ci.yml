@@ -74,4 +74,11 @@ jobs:
       - run: npm ci
       - run: npm run prisma:generate
       - run: npm run test:prepare-db
-      - run: npm run test:integration
+      - name: Booking integration on UTC host
+        run: npm run test:integration
+        env:
+          TZ: UTC
+      - name: Booking integration on Vietnam host
+        run: npm run test:integration
+        env:
+          TZ: Asia/Ho_Chi_Minh

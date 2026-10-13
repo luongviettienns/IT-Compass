@@ -14,14 +14,15 @@ const statusClassName: Record<BookingStatus, string> = {
 type BookingStatusBadgeProps = {
     status: BookingStatus;
     outcomeReviewRequired?: boolean;
+    requestExpired?: boolean;
     className?: string;
 };
 
-export function BookingStatusBadge({ status, outcomeReviewRequired = false, className }: BookingStatusBadgeProps) {
+export function BookingStatusBadge({ status, outcomeReviewRequired = false, requestExpired = false, className }: BookingStatusBadgeProps) {
     const needsReview = status === 'CONFIRMED' && outcomeReviewRequired;
     return (
-        <Badge variant="outline" className={cn('px-3 py-1', statusClassName[needsReview ? 'REQUESTED' : status], className)}>
-            {getBookingStatusLabel(status, needsReview)}
+        <Badge variant="outline" className={cn('px-3 py-1', statusClassName[requestExpired ? 'CANCELLED_BY_STUDENT' : needsReview ? 'REQUESTED' : status], className)}>
+            {getBookingStatusLabel(status, needsReview, requestExpired)}
         </Badge>
     );
 }

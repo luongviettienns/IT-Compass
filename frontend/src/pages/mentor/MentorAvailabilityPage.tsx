@@ -12,6 +12,7 @@ import { Loader } from '../../components/ui/Loader';
 import { bookingApi, type MentorAvailabilityBlock } from '../../lib/bookingApi';
 import { bookingQueryKeys } from '../../lib/bookingQueryKeys';
 import { getErrorMessage } from '../../lib/appError';
+import { BOOKING_TIMEZONE_LABEL } from '../../lib/bookingTime';
 
 const WEEKDAYS = [
     { value: 1, label: 'Thứ hai' },
@@ -32,6 +33,7 @@ type AvailabilityDraftBlock = {
 };
 
 type SettingsForm = {
+    autoConfirm: boolean;
     minDurationMinute: string;
     maxDurationMinute: string;
     defaultDurationMinute: string;
@@ -42,6 +44,7 @@ type SettingsForm = {
 };
 
 const defaultSettingsForm: SettingsForm = {
+    autoConfirm: false,
     minDurationMinute: '30',
     maxDurationMinute: '120',
     defaultDurationMinute: '60',
@@ -52,6 +55,7 @@ const defaultSettingsForm: SettingsForm = {
 };
 
 const settingsToForm = (settings: {
+    autoConfirm: boolean;
     minDurationMinute: number;
     maxDurationMinute: number;
     defaultDurationMinute: number;
@@ -60,6 +64,7 @@ const settingsToForm = (settings: {
     bufferBeforeMinute: number;
     bufferAfterMinute: number;
 }): SettingsForm => ({
+    autoConfirm: settings.autoConfirm,
     minDurationMinute: String(settings.minDurationMinute),
     maxDurationMinute: String(settings.maxDurationMinute),
     defaultDurationMinute: String(settings.defaultDurationMinute),
@@ -133,7 +138,7 @@ const parseSettingsForm = (form: SettingsForm) => {
         throw new Error('Thời lượng tư vấn phải theo bước 30 phút.');
     }
 
-    return settings;
+    return { ...settings, autoConfirm: form.autoConfirm };
 };
 
 export default function MentorAvailabilityPage() {
@@ -224,7 +229,7 @@ export default function MentorAvailabilityPage() {
         setBlocksDraft((current) => (current ?? blocks).filter((block) => block.localId !== localId));
     };
 
-    const updateSettingsField = (field: keyof SettingsForm, value: string) => {
+    const updateSettingsField = (field: Exclude<keyof SettingsForm, 'autoConfirm'>, value: string) => {
         setSettingsFormDraft((current) => ({ ...(current ?? settingsForm), [field]: value }));
     };
 
@@ -340,6 +345,12 @@ export default function MentorAvailabilityPage() {
                                 <Input label="Buffer trước (phút)" type="number" min={0} step={30} value={settingsForm.bufferBeforeMinute} onChange={(event) => updateSettingsField('bufferBeforeMinute', event.target.value)} />
                                 <Input label="Buffer sau (phút)" type="number" min={0} step={30} value={settingsForm.bufferAfterMinute} onChange={(event) => updateSettingsField('bufferAfterMinute', event.target.value)} />
                             </div>
+                            <p className="text-sm text-muted-foreground">Múi giờ lịch: {BOOKING_TIMEZONE_LABEL}. Yêu cầu chờ xác nhận hết hạn sau 24 giờ hoặc khi buổi tư vấn bắt đầu.</p>
+                            <label className="flex items-start gap-3 text-sm">
+                                <input type="checkbox" checked={settingsForm.autoConfirm} disabled={saveSettingsMutation.isPending}
+                                    onChange={(event) => setSettingsFormDraft({ ...settingsForm, autoConfirm: event.target.checked })} className="mt-1" />
+                                <span>Tự động xác nhận yêu cầu hợp lệ trong khung giờ đã mở và mở chat ngay.</span>
+                            </label>
                             <Button type="button" className="w-full" isLoading={saveSettingsMutation.isPending} onClick={() => saveSettingsMutation.mutate()}>
                                 <Clock3 size={17} /> Lưu cài đặt
                             </Button>

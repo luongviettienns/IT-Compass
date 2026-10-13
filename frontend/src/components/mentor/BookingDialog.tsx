@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CalendarClock, CheckCircle2, Clock3, FileText, UserRound, X } from 'lucide-react';
 import { toast } from 'sonner';
@@ -9,6 +10,7 @@ import { getErrorMessage } from '../../lib/appError';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { AvailableSlotList } from './AvailableSlotList';
+import { BOOKING_TIMEZONE, BOOKING_TIMEZONE_LABEL, todayBookingDate } from '../../lib/bookingTime';
 
 type BookingDialogProps = {
     slug: string;
@@ -19,12 +21,13 @@ type BookingDialogProps = {
 type BookingStep = 'select' | 'confirm';
 type BookingMode = 'slot' | 'custom';
 
-const todayInputValue = () => new Date().toISOString().slice(0, 10);
+const todayInputValue = todayBookingDate;
 
 const formatReviewDate = (date: string) => {
     if (!date) return 'Chưa chọn ngày';
 
-    return new Date(`${date}T00:00:00`).toLocaleDateString('vi-VN', {
+    return new Date(`${date}T00:00:00+07:00`).toLocaleDateString('vi-VN', {
+        timeZone: BOOKING_TIMEZONE,
         weekday: 'long',
         day: '2-digit',
         month: '2-digit',
@@ -157,8 +160,8 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
 
     const showSelectionStep = step === 'select';
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
+    return createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-6">
             <button
                 type="button"
                 className="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"
@@ -181,9 +184,12 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
                         </h2>
                         <p className="mt-1 text-sm leading-6 text-muted-foreground">
                             {showSelectionStep
-                                ? 'Lịch sẽ ở trạng thái chờ cho đến khi mentor xác nhận.'
+                                ? configQuery.data?.settings.autoConfirm
+                                    ? 'Lịch hợp lệ sẽ được tự động xác nhận và mở chat ngay. Giờ đề xuất phải nằm trong lịch mentor đã mở.'
+                                    : 'Mentor cần xác nhận trong 24 giờ hoặc trước giờ bắt đầu, tùy mốc nào đến trước.'
                                 : 'Kiểm tra lại thông tin trước khi gửi yêu cầu cho mentor.'}
                         </p>
+                        <p className="mt-1 text-xs text-muted-foreground">Múi giờ: {BOOKING_TIMEZONE_LABEL}</p>
                     </div>
                     <button
                         type="button"
@@ -290,7 +296,9 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
                                         onChange={(event) => setCustomStartTime(event.target.value)}
                                     />
                                     <p className="text-sm leading-6 text-muted-foreground">
-                                        Mentor chưa cần mở sẵn khung giờ này. Nếu đồng ý, mentor sẽ xác nhận và chat sẽ mở sau đó.
+                                        {configQuery.data?.settings.autoConfirm
+                                            ? 'Mentor tự động xác nhận nên giờ đề xuất phải nằm trong khung giờ đã mở.'
+                                            : 'Mentor chưa cần mở sẵn khung giờ này. Nếu đồng ý, mentor sẽ xác nhận và chat sẽ mở sau đó.'}
                                     </p>
                                     {customStartTime && !customEndTime && (
                                         <p className="text-sm text-destructive">Khoảng giờ đề xuất phải kết thúc trong cùng ngày.</p>
@@ -316,9 +324,9 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
                                     <CheckCircle2 size={18} /> Sẵn sàng gửi yêu cầu
                                 </div>
                                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                                    {bookingMode === 'custom'
-                                        ? 'Đây là giờ bạn đề xuất riêng. Mentor sẽ xem xét và chat chỉ mở khi mentor đồng ý lịch tư vấn này.'
-                                        : 'Sau khi gửi, lịch sẽ ở trạng thái chờ xác nhận. Chat chỉ mở khi mentor đồng ý lịch tư vấn này.'}
+                                    {configQuery.data?.settings.autoConfirm
+                                        ? 'Sau khi gửi, lịch hợp lệ sẽ được tự động xác nhận và chat sẽ mở ngay.'
+                                        : 'Sau khi gửi, mentor cần xác nhận trong 24 giờ hoặc trước giờ bắt đầu, tùy mốc nào đến trước. Chat mở sau khi xác nhận.'}
                                 </p>
                             </div>
 
@@ -391,6 +399,6 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
                     )}
                 </footer>
             </section>
-        </div>
+        </div>, document.body
     );
 }

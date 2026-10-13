@@ -8,7 +8,7 @@
  *   thao tác hàng loạt, kiểm tra slug, kiểm duyệt bình luận, upload ảnh.
  */
 
-import { apiRequest, apiUploadRequest } from './authApi';
+import { apiRequest, apiUploadRequest, toApiAssetUrl } from './authApi';
 
 export type BlogPost = {
   id: string;
@@ -317,10 +317,11 @@ export const blogApi = {
   uploadImage: async (file: File) => {
     const formData = new FormData();
     formData.append('image', file);
-    return apiUploadRequest<{ url: string; filename: string }>('/uploads/images', formData, {
+    const uploaded = await apiUploadRequest<{ url: string; filename: string }>('/uploads/images', formData, {
       method: 'POST',
     }, {
       fallbackMessage: 'Tải ảnh thất bại',
     });
+    return { ...uploaded, url: toApiAssetUrl(uploaded.url) || uploaded.url };
   },
 };

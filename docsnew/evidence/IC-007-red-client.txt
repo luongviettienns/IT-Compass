@@ -1,0 +1,36 @@
+
+> frontend@0.0.0 test
+> vitest run tests/upload-client.test.tsx
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+ ❯ tests/upload-client.test.tsx (2 tests | 2 failed) 10ms
+   ❯ upload response URL compatibility (2)
+     × resolves profile relative image URLs against the API origin 8ms
+     × resolves CMS relative image URLs against the API origin 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/upload-client.test.tsx > upload response URL compatibility > resolves profile relative image URLs against the API origin
+ FAIL  tests/upload-client.test.tsx > upload response URL compatibility > resolves CMS relative image URLs against the API origin
+AssertionError: expected '/uploads/img_fixture.webp' to be 'http://localhost:5000/uploads/img_fix…' // Object.is equality
+
+Expected: "http://localhost:5000/uploads/img_fixture.webp"
+Received: "/uploads/img_fixture.webp"
+
+ ❯ tests/upload-client.test.tsx:11:24
+      9|     vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringi…
+     10|     const result = await api.uploadImage(new File(['test'], 'fixture.p…
+     11|     expect(result.url).toBe(`${API_ORIGIN}/uploads/img_fixture.webp`);
+       |                        ^
+     12|     expect(result.filename).toBe('img_fixture.webp');
+     13|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  17:55:55
+   Duration  795ms (environment 91%, transform 5%, import 2%, tests 1%, worker 1%)

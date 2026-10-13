@@ -1,0 +1,55 @@
+
+> backend@1.0.0 test:prepare-db
+> node scripts/prepare-test-database.mjs
+
+Integration schema prepared in the guarded test database.
+0009 migration preserved legacy rows and enforced student-scoped unique request keys.
+0010 migration preserved legacy instants/statuses and backfilled the approved response deadline.
+
+> backend@1.0.0 test:integration
+> vitest run --config vitest.integration.config.ts
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/backend
+
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Loaded Prisma config from prisma.config.ts.
+
+warn The Prisma config file in prisma.config.ts overrides the deprecated `package.json#prisma` property in package.json.
+  For more information, see: https://pris.ly/prisma-config
+
+Prisma config detected, skipping environment variable loading.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Loaded Prisma config from prisma.config.ts.
+
+warn The Prisma config file in prisma.config.ts overrides the deprecated `package.json#prisma` property in package.json.
+  For more information, see: https://pris.ly/prisma-config
+
+Prisma config detected, skipping environment variable loading.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Loaded Prisma config from prisma.config.ts.
+
+warn The Prisma config file in prisma.config.ts overrides the deprecated `package.json#prisma` property in package.json.
+  For more information, see: https://pris.ly/prisma-config
+
+Prisma config detected, skipping environment variable loading.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Loaded Prisma config from prisma.config.ts.
+
+warn The Prisma config file in prisma.config.ts overrides the deprecated `package.json#prisma` property in package.json.
+  For more information, see: https://pris.ly/prisma-config
+
+Prisma config detected, skipping environment variable loading.
+
+ Test Files  1 passed (1)
+      Tests  39 passed (39)
+   Start at  11:06:11
+   Duration  8.30s (tests 91%, import 6%, transform 3%)

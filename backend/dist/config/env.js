@@ -19,6 +19,7 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseTrustedProxies } from './proxy.js';
 const envFilePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../.env');
 dotenv.config({ path: envFilePath });
 /**
@@ -114,5 +115,6 @@ const resolvedEnv = {
     metricsToken: process.env.METRICS_TOKEN?.trim() || undefined,
     redisUrl: process.env.REDIS_URL?.trim() || undefined,
     rateLimitUseRedis: parseBoolean(process.env.RATE_LIMIT_USE_REDIS, isProduction || isStaging),
+    trustedProxies: parseTrustedProxies(process.env.TRUSTED_PROXIES),
 };
 export const env = resolvedEnv;

@@ -3,8 +3,7 @@
  *
  * File này chịu trách nhiệm:
  * - Tạo và quản lý kết nối Redis client dạng lazy singleton.
- * - Nếu Redis không được cấu hình hoặc kết nối thất bại, trả về null để
- *   rate limiter tự động fallback sang memory store.
+ * - Khi bật Redis, lỗi kết nối trả null để limiter từ chối request (503).
  * - Ghi log trạng thái kết nối để dễ debug.
  */
 
@@ -17,6 +16,7 @@ type AppRedisClient = ReturnType<typeof createClient>;
 
 /** Promise được cache để đảm bảo chỉ tạo một kết nối Redis duy nhất. */
 let redisClientPromise: Promise<AppRedisClient | null> | undefined;
+let retryAfter = 0;
 
 /**
  * Tạo kết nối Redis client mới.
@@ -29,6 +29,9 @@ const createRedisClient = async (): Promise<AppRedisClient | null> => {
 
   const client = createClient({
     url: env.redisUrl,
+    disableOfflineQueue: true,
+    commandsQueueMaxLength: 128,
+    socket: { connectTimeout: 2000, reconnectStrategy: false },
   });
 
   client.on('error', (error) => {
@@ -38,24 +41,36 @@ const createRedisClient = async (): Promise<AppRedisClient | null> => {
     });
   });
 
+  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    await client.connect();
+    // The SDK socket timeout ends at TCP connect; AUTH/CLIENT can still stall.
+    await Promise.race([
+      client.connect(),
+      new Promise<never>((_resolve, reject) => { timer = setTimeout(() => reject(new Error('Redis handshake timeout')), 2000); }),
+    ]);
     logger.info('Redis client connected', {
       feature: 'rate-limit',
     });
     return client;
   } catch (error) {
-    logger.warn('Redis client connection failed, falling back to memory store', {
+    logger.warn('Redis client connection failed; protected requests will be rejected', {
       error,
       feature: 'rate-limit',
     });
     try {
-      await client.disconnect();
+      client.destroy();
     } catch {
       // ignore disconnect errors when initial connect fails
     }
     return null;
-  }
+  } finally { if (timer) clearTimeout(timer); }
+};
+
+/** A stuck command must not leave a ready connection accepting an endless queue. */
+export const invalidateRedisClient = (client: AppRedisClient) => {
+  try { client.destroy(); } catch { /* already closed */ }
+  redisClientPromise = undefined;
+  retryAfter = Date.now() + 5000;
 };
 
 /**
@@ -65,8 +80,16 @@ const createRedisClient = async (): Promise<AppRedisClient | null> => {
  */
 export const getRedisClient = async (): Promise<AppRedisClient | null> => {
   if (!redisClientPromise) {
+    if (Date.now() < retryAfter) return null;
     redisClientPromise = createRedisClient();
   }
-
-  return redisClientPromise;
+  const client = await redisClientPromise;
+  if (!client?.isReady) {
+    // Let a later request attempt recovery instead of caching failure forever.
+    redisClientPromise = undefined;
+    retryAfter = Date.now() + 5000;
+    return null;
+  }
+  retryAfter = 0;
+  return client;
 };

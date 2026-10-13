@@ -20,6 +20,7 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseTrustedProxies } from './proxy.js';
 
 /** Các môi trường hợp lệ của ứng dụng. */
 export type NodeEnv = 'production' | 'staging' | 'development' | 'test';
@@ -48,6 +49,7 @@ export interface AppEnv {
   metricsToken?: string;
   redisUrl?: string;
   rateLimitUseRedis: boolean;
+  trustedProxies: false | string[];
 }
 
 const envFilePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../.env');
@@ -157,6 +159,7 @@ const resolvedEnv: AppEnv = {
   metricsToken: process.env.METRICS_TOKEN?.trim() || undefined,
   redisUrl: process.env.REDIS_URL?.trim() || undefined,
   rateLimitUseRedis: parseBoolean(process.env.RATE_LIMIT_USE_REDIS, isProduction || isStaging),
+  trustedProxies: parseTrustedProxies(process.env.TRUSTED_PROXIES),
 };
 
 export const env = resolvedEnv;

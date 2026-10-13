@@ -1,0 +1,176 @@
+
+> backend@1.0.0 test
+> vitest run tests/security-boundaries.test.ts
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/backend
+
+ ❯ tests/security-boundaries.test.ts (12 tests | 11 failed) 150ms
+   ❯ private metrics and headers (4)
+     × disables metrics when the server token is missing 21ms
+     × requires the configured token and marks successful metrics private 24ms
+     × does not record arbitrary identifiers or query secrets in metric labels 16ms
+     × sends protective API headers without exposing server details 2ms
+   ❯ rate limit identity (2)
+     × ignores rotating forged XFF headers on direct requests 12ms
+     × does not trust a hop count by default 0ms
+   ❯ verified uploads (6)
+     × rejects HTML disguised as a PNG 14ms
+     × rejects SVG disguised as a PNG 18ms
+     × rejects executable disguised as a PNG 11ms
+     × rejects truncated PNG disguised as a PNG 5ms
+     × re-encodes a valid image and never uses client Host to construct its URL 3ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/security-boundaries.test.ts > private metrics and headers > disables metrics when the server token is missing
+AssertionError: expected 200 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 200
+
+ ❯ tests/security-boundaries.test.ts:58:29
+     56|   it('disables metrics when the server token is missing', async () => {
+     57|     const response = await fetch(`${origin}/api/metrics`);
+     58|     expect(response.status).toBe(404);
+       |                             ^
+     59|     expect(await response.text()).not.toContain('totalRequests');
+     60|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  tests/security-boundaries.test.ts > private metrics and headers > requires the configured token and marks successful metrics private
+AssertionError: the given combination of arguments (null and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string
+ ❯ tests/security-boundaries.test.ts:69:51
+     67|     const response = await fetch(`${origin}/api/metrics`, { headers:{'…
+     68|     expect(response.status).toBe(200);
+     69|     expect(response.headers.get('cache-control')).toContain('no-store'…
+       |                                                   ^
+     70|   });
+     71|   it('does not record arbitrary identifiers or query secrets in metric…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  tests/security-boundaries.test.ts > private metrics and headers > does not record arbitrary identifiers or query secrets in metric labels
+AssertionError: expected '{"status":"ok","metrics":{"startedAt"…' not to contain 'private-person-73'
+
+Expected: "private-person-73"
+Received: "{"status":"ok","metrics":{"startedAt":"2026-10-13T10:52:42.122Z","totalRequests":5,"totalErrors":3,"totalRateLimited":0,"routes":[{"route":"GET /api/metrics","hits":4,"errors":2,"rateLimited":0,"averageDurationMs":1.02,"maxDurationMs":2.71,"lastStatusCode":200},{"route":"GET /not-a-route/private-person-73","hits":1,"errors":1,"rateLimited":0,"averageDurationMs":0.3,"maxDurationMs":0.3,"lastStatusCode":404}]}}"
+
+ ❯ tests/security-boundaries.test.ts:76:25
+     74|     const response = await fetch(`${origin}/api/metrics`, { headers:{'…
+     75|     const content = await response.text();
+     76|     expect(content).not.toContain('private-person-73');
+       |                         ^
+     77|     expect(content).not.toContain('never-a-metric-label');
+     78|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  tests/security-boundaries.test.ts > private metrics and headers > sends protective API headers without exposing server details
+AssertionError: expected null to be 'nosniff' // Object.is equality
+
+- Expected:
+"nosniff"
+
++ Received:
+null
+
+ ❯ tests/security-boundaries.test.ts:81:60
+     79|   it('sends protective API headers without exposing server details', a…
+     80|     const response = await fetch(`${origin}/api/health`);
+     81|     expect(response.headers.get('x-content-type-options')).toBe('nosni…
+       |                                                            ^
+     82|     expect(response.headers.get('referrer-policy')).toBe('no-referrer'…
+     83|     expect(response.headers.get('x-frame-options')).toBe('DENY');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  tests/security-boundaries.test.ts > rate limit identity > ignores rotating forged XFF headers on direct requests
+AssertionError: expected [ 204, 204, 204 ] to deeply equal [ 204, 204, 429 ]
+
+- Expected
++ Received
+
+  [
+    204,
+    204,
+-   429,
++   204,
+  ]
+
+ ❯ tests/security-boundaries.test.ts:101:24
+     99|       const statuses = [];
+    100|       for (let i=0;i<3;i++) statuses.push((await fetch(`http://127.0.0…
+    101|       expect(statuses).toEqual([204,204,429]);
+       |                        ^
+    102|     } finally { listener.closeAllConnections(); await new Promise<void…
+    103|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  tests/security-boundaries.test.ts > rate limit identity > does not trust a hop count by default
+AssertionError: expected 1 to be false // Object.is equality
+
+- Expected:
+false
+
++ Received:
+1
+
+ ❯ tests/security-boundaries.test.ts:104:86
+    102|     } finally { listener.closeAllConnections(); await new Promise<void…
+    103|   });
+    104|   it('does not trust a hop count by default', () => { expect(app.get('…
+       |                                                                                      ^
+    105| });
+    106|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  tests/security-boundaries.test.ts > verified uploads > rejects HTML disguised as a PNG
+ FAIL  tests/security-boundaries.test.ts > verified uploads > rejects SVG disguised as a PNG
+ FAIL  tests/security-boundaries.test.ts > verified uploads > rejects executable disguised as a PNG
+ FAIL  tests/security-boundaries.test.ts > verified uploads > rejects truncated PNG disguised as a PNG
+AssertionError: expected 201 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 201
+
+ ❯ tests/security-boundaries.test.ts:113:110
+    111|     ['executable', Buffer.from('MZ executable bytes')],
+    112|     ['truncated PNG', Buffer.from('89504e470d0a1a0a', 'hex')],
+    113|   ])('rejects %s disguised as a PNG', async (_label, data) => { expect…
+       |                                                                                                              ^
+    114|   it('requires authentication and an active account', async () => {
+    115|     expect((await upload(png, 'test.png', 'image/png', null)).response…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  tests/security-boundaries.test.ts > verified uploads > re-encodes a valid image and never uses client Host to construct its URL
+AssertionError: expected 'http://127.0.0.1:59424/uploads/img_17…' to be '/uploads/img_1791888762279_a8f4491a63…' // Object.is equality
+
+Expected: "/uploads/img_1791888762279_a8f4491a639c.png"
+Received: "http://127.0.0.1:59424/uploads/img_1791888762279_a8f4491a639c.png"
+
+ ❯ tests/security-boundaries.test.ts:122:22
+    120|     const {response,body} = await upload(png);
+    121|     expect(response.status).toBe(201);
+    122|     expect(body.url).toBe(`/uploads/${body.filename}`);
+       |                      ^
+    123|     expect(body.filename).toMatch(/\.webp$/);
+    124|     const imageResponse = await fetch(`${origin}${body.url}`);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  11 failed | 1 passed (12)
+   Start at  17:52:41
+   Duration  1.14s (transform 51%, import 34%, tests 15%)

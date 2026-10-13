@@ -1,0 +1,28 @@
+
+> backend@1.0.0 test
+> vitest run tests/upload-admission.test.ts
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/backend
+
+ ❯ tests/upload-admission.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/upload-admission.test.ts [ tests/upload-admission.test.ts ]
+Error: Cannot find module '../src/middlewares/upload-admission.middleware.js' imported from C:/Users/ASUS/Desktop/ITCompass/backend/tests/upload-admission.test.ts
+ ❯ tests/upload-admission.test.ts:4:1
+      2| import type { Request,Response } from 'express';
+      3| import { afterEach, describe, expect, it, vi } from 'vitest';
+      4| import { createUploadAdmission } from '../src/middlewares/upload-admis…
+       | ^
+      5| afterEach(()=>vi.useRealTimers());
+      6| const client=()=>({req:{destroy:vi.fn()} as unknown as Request,res:new…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  18:03:10
+   Duration  144ms (worker 96%, environment 4%)

@@ -1,0 +1,112 @@
+Browser tab: 4, Title: "Hồ sơ cá nhân — IT Compass", URL: "http://127.0.0.1:54015/profile".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~				114 text Tải ảnh đại diện
+~				115 button Tải ảnh đại diện
++			176 text Nội dung ảnh không hợp lệ, không khớp định dạng hoặc vượt giới hạn xử lý. Vui lòng chọn ảnh khác.
+The focused UI element is 115 button Tải ảnh đại diện
+
+Browser tab: 4, Title: "Hồ sơ cá nhân — IT Compass", URL: "http://127.0.0.1:54015/profile".
+1 AXWebArea Hồ sơ cá nhân — IT Compass, URL: 127.0.0.1:54015/profile
+	2 container root
+		3 container Notifications alt+T
+		4 container
+			5 link Description: IT Compass, Value: 127.0.0.1:54015/
+			6 link Description: Trang chủ, Value: 127.0.0.1:54015/
+			7 link Description: Trắc nghiệm, Value: 127.0.0.1:54015/test
+			8 link Description: Blog, Value: 127.0.0.1:54015/blog
+			9 link Description: Mentor, Value: 127.0.0.1:54015/mentors
+			10 link Description: Ngành học, Value: 127.0.0.1:54015/majors
+			11 button Thông báo
+			12 button IC007 Học viên kiểm thử IC007 Học viên kiểm thử
+				13 image IC007 Học viên kiểm thử
+				14 text IC007 Học viên kiểm thử
+		15 container
+			16 container
+				17 image IC007 Học viên kiểm thử
+				18 text HỌC VIÊN ACTIVE Email đã xác minh
+				19 heading IC007 Học viên kiểm thử, Value: 1
+					20 text IC007 Học viên kiểm thử
+				21 text student@ic007.example.test Tải ảnh bìa
+				22 button Tải ảnh bìa
+				23 text Tải ảnh đại diện
+				24 button Tải ảnh đại diện
+			25 heading Thông tin hồ sơ, Value: 3
+				26 text Thông tin hồ sơ
+			27 text Cập nhật thông tin nền tảng để kết quả định hướng và mentor gợi ý sát hơn với mục tiêu hiện tại của bạn.
+			28 container
+				29 text NHẬN DIỆN CÁ NHÂN Họ và tên
+				30 text field (settable) Họ và tên, Value: IC007 Học viên kiểm thử, ID: họ-và-tên
+				31 text Email
+				32 text field (disabled) Email, Value: <redacted>
+				33 text Chức danh hiện tại
+				34 text field (settable) Chức danh hiện tại, ID: chức-danh-hiện-tại
+				35 text Số điện thoại
+				36 text field (settable) Số điện thoại, ID: số-điện-thoại
+				37 text Địa điểm
+				38 text field (settable) Địa điểm, ID: địa-điểm
+				39 text Tỉnh / thành
+				40 text field (settable) Tỉnh / thành, ID: tỉnh-/-thành
+				41 text Năm sinh
+				42 stepper (settable) Năm sinh, ID: năm-sinh
+				43 text Giới tính
+				44 pop up button (collapsed, settable) Value: Chưa chọn, Secondary Actions: Expand
+					45 menu
+						46 (selected) Chưa chọn
+						47 Nam
+						48 Nữ
+						49 Khác
+			50 container
+				51 text HỌC TẬP & CÔNG VIỆC Trường học / công ty
+				52 text field (settable) Trường học / công ty, ID: trường-học-/-công-ty
+				53 text Khoa / bộ phận
+				54 text field (settable) Khoa / bộ phận, ID: khoa-/-bộ-phận
+				55 text GitHub URL
+				56 text field (settable) GitHub URL, ID: github-url
+				57 text LinkedIn URL
+				58 text field (settable) LinkedIn URL, ID: linkedin-url
+				59 text Giới thiệu ngắn
+				60 text entry area (settable)
+			61 button Lưu thay đổi
+			62 button Gỡ toàn bộ ảnh
+			63 container
+				64 text Cập nhật lần gần nhất:  18:06 13/10/2026
+			65 heading Tổng quan kết quả định hướng, Value: 3
+				66 text Tổng quan kết quả định hướng
+			67 text Tóm tắt nhanh kết quả gần nhất để nối tiếp sang mentor và lộ trình học phù hợp.
+			68 heading Chưa có kết quả bài định hướng, Value: 3
+				69 text Chưa có kết quả bài định hướng
+			70 text Làm bài trắc nghiệm đầu tiên để mở khóa gợi ý mentor và chuyên ngành phù hợp.
+			71 link Description: Bắt đầu bài định hướng, Value: 127.0.0.1:54015/test
+			72 heading Lịch sử bài định hướng, Value: 3
+				73 text Lịch sử bài định hướng
+			74 text Các lượt làm gần đây để bạn so sánh xu hướng và kiểm tra mức ổn định của kết quả.
+			75 heading Chưa có lịch sử bài định hướng, Value: 3
+				76 text Chưa có lịch sử bài định hướng
+			77 text Sau khi nộp bài, các lượt làm gần nhất sẽ xuất hiện ở đây.
+			78 heading Mentor gợi ý, Value: 3
+				79 text Mentor gợi ý
+			80 text Gợi ý mentor được suy ra từ kết quả bài định hướng gần nhất để bạn chuyển ngay sang bước hành động.
+			81 heading Chưa có mentor gợi ý, Value: 3
+				82 text Chưa có mentor gợi ý
+			83 text Hoàn thiện bài định hướng hoặc cập nhật hồ sơ để hệ thống đề xuất mentor phù hợp hơn.
+			84 link Description: Xem toàn bộ mentor, Value: 127.0.0.1:54015/mentors
+		85 container
+			86 link Description: IT Compass, Value: 127.0.0.1:54015/
+			87 text Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+			88 heading Khám phá, Value: 3
+				89 text Khám phá
+			90 content list
+				91 link Description: Trắc nghiệm, Value: 127.0.0.1:54015/test
+				92 link Description: Blog, Value: 127.0.0.1:54015/blog
+				93 link Description: Mentor, Value: 127.0.0.1:54015/mentors
+				94 link Description: Ngành học, Value: 127.0.0.1:54015/majors
+				95 link Description: Về chúng tôi, Value: 127.0.0.1:54015/about
+			96 heading Liên hệ, Value: 3
+				97 text Liên hệ
+			98 content list
+				99 text contact@itcompass.vn
+				100 text TP. Hồ Chí Minh, Việt Nam
+				101 link Description: GitHub, Value: github.com/
+			102 text ©  2026  IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.
+
+The focused UI element is 1 AXWebArea Hồ sơ cá nhân — IT Compass, URL: 127.0.0.1:54015/profile

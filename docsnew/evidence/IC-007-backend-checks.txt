@@ -1,0 +1,33 @@
+CHECK: lint EXIT: 0
+
+> backend@1.0.0 lint
+> eslint .
+
+CHECK: typecheck EXIT: 0
+
+> backend@1.0.0 typecheck
+> tsc --noEmit -p tsconfig.json
+
+CHECK: typecheck:tests EXIT: 0
+
+> backend@1.0.0 typecheck:tests
+> tsc -p tsconfig.test.json
+
+CHECK: test EXIT: 0
+
+> backend@1.0.0 test
+> vitest run
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/backend
+
+
+ Test Files  8 passed (8)
+      Tests  84 passed (84)
+   Start at  18:06:18
+   Duration  2.53s (tests 68%, import 24%, transform 7%, worker 1%)
+
+CHECK: build EXIT: 0
+
+> backend@1.0.0 build
+> tsc -p tsconfig.json

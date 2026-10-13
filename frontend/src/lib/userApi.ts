@@ -6,7 +6,7 @@
  * - uploadImage: upload ảnh đại diện hoặc ảnh bìa.
  */
 
-import { apiRequest, apiUploadRequest, type AuthUser, type UserProfile } from './authApi';
+import { apiRequest, apiUploadRequest, toApiAssetUrl, type AuthUser, type UserProfile } from './authApi';
 
 export const userApi = {
   updateProfile: (input: Partial<UserProfile & { fullName: string }>) =>
@@ -19,10 +19,11 @@ export const userApi = {
     const formData = new FormData();
     formData.append('image', file);
 
-    return apiUploadRequest<{ url: string; filename: string }>('/uploads/images', formData, {
+    const uploaded = await apiUploadRequest<{ url: string; filename: string }>('/uploads/images', formData, {
       method: 'POST',
     }, {
       fallbackMessage: 'Tải ảnh thất bại',
     });
+    return { ...uploaded, url: toApiAssetUrl(uploaded.url) || uploaded.url };
   },
 };

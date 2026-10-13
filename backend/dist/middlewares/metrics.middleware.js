@@ -11,7 +11,7 @@ const SLOW_REQUEST_THRESHOLD_MS = 1000;
 const getRouteKey = (req) => {
     const routePath = req.route?.path;
     if (!routePath) {
-        return `${req.method} ${req.path}`;
+        return `${req.method} ${req.path.startsWith('/uploads/') ? '/uploads/*' : 'unmatched'}`;
     }
     const baseUrl = req.baseUrl || '';
     return `${req.method} ${baseUrl}${String(routePath)}`;
@@ -57,7 +57,7 @@ export const metricsMiddleware = (req, res, next) => {
         const logMetadata = {
             requestId: req.requestId,
             method: req.method,
-            path: req.originalUrl,
+            path: req.path,
             route: routeKey,
             statusCode,
             durationMs: Number(durationMs.toFixed(2)),

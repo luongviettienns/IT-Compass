@@ -13,6 +13,8 @@ import cors, {} from 'cors';
 import cookieParser from 'cookie-parser';
 import express, {} from 'express';
 import multer from 'multer';
+import helmet from 'helmet';
+import { timingSafeEqual } from 'node:crypto';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import { adminAssessmentRoutes, assessmentRoutes } from './routes/assessment.routes.js';
@@ -26,6 +28,7 @@ import notificationRoutes from './routes/notification.routes.js';
 import adminMentorRoutes from './routes/admin-mentor.routes.js';
 import { authConfig } from './config/auth.js';
 import { env } from './config/env.js';
+import { uploadDirectory } from './config/upload.js';
 import { prisma } from './db/prisma.js';
 import { getMetricsSnapshot, metricsMiddleware } from './middlewares/metrics.middleware.js';
 import { requestContext } from './middlewares/request-context.middleware.js';
@@ -51,7 +54,15 @@ const corsOptions = {
 };
 // ── Middleware toàn cục ──────────────────────────────────────────────────────
 app.disable('x-powered-by');
-app.set('trust proxy', 1);
+app.set('trust proxy', env.trustedProxies);
+app.use(helmet({
+    contentSecurityPolicy: {
+        useDefaults: false,
+        directives: { defaultSrc: ["'none'"], baseUri: ["'none'"], frameAncestors: ["'none'"], formAction: ["'none'"] },
+    },
+    frameguard: { action: 'deny' },
+    strictTransportSecurity: env.isProduction ? { maxAge: 31536000, includeSubDomains: true } : false,
+}));
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json({ limit: env.requestBodyLimit }));
@@ -79,7 +90,7 @@ app.use('/api/admin', adminUserRoutes);
 app.use('/api/admin', adminMentorRoutes);
 app.use('/api/admin', adminBookingRoutes);
 app.use('/api/uploads', uploadRoutes);
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }), express.static(uploadDirectory, { dotfiles: 'deny', index: false }));
 // ── Health check endpoints ───────────────────────────────────────────────────
 /** Health check cơ bản: xác nhận server đang chạy. */
 app.get('/api/health', (_req, res) => {
@@ -112,7 +123,13 @@ app.get('/api/health/ready', async (_req, res, next) => {
 });
 /** Endpoint lấy snapshot metrics (số request, thời gian xử lý), bảo vệ bằng token. */
 app.get('/api/metrics', (req, res, next) => {
-    if (env.metricsToken && req.get('x-metrics-token') !== env.metricsToken) {
+    res.setHeader('Cache-Control', 'no-store');
+    if (!env.metricsToken) {
+        return next(new HttpError(404, 'Not found', undefined, 'METRICS_DISABLED'));
+    }
+    const supplied = Buffer.from(req.get('x-metrics-token') || '');
+    const expected = Buffer.from(env.metricsToken);
+    if (supplied.length !== expected.length || !timingSafeEqual(supplied, expected)) {
         return next(new HttpError(403, 'Forbidden', undefined, 'METRICS_FORBIDDEN'));
     }
     return res.status(200).json({
@@ -165,7 +182,7 @@ app.use((error, req, res, _next) => {
             logger.error('Handled HTTP error', {
                 requestId: req.requestId,
                 method: req.method,
-                path: req.originalUrl,
+                path: req.path,
                 statusCode: error.statusCode,
                 error,
             });
@@ -175,7 +192,7 @@ app.use((error, req, res, _next) => {
     logger.error('Unhandled application error', {
         requestId: req.requestId,
         method: req.method,
-        path: req.originalUrl,
+        path: req.path,
         error,
     });
     return res.status(500).json({

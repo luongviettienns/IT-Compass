@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import type { NextFunction, Request, Response } from 'express';
 
 import { env } from '../config/env.js';
-import { getRedisClient } from '../config/redis.js';
+import { getRedisClient, invalidateRedisClient } from '../config/redis.js';
 import { HttpError } from '../utils/httpError.js';
 
 interface MemoryBucket {
@@ -31,12 +31,7 @@ interface RateLimiterOptions {
 const stores = new Map<string, Map<string, MemoryBucket>>();
 
 const getClientIp = (req: Request): string => {
-  const forwarded = req.headers['x-forwarded-for'];
-  if (typeof forwarded === 'string' && forwarded.trim()) {
-    return forwarded.split(',')[0].trim();
-  }
-
-  return req.ip || 'unknown';
+  return req.ip || req.socket.remoteAddress || 'unknown';
 };
 
 const getStore = (name: string): Map<string, MemoryBucket> => {
@@ -133,23 +128,39 @@ const consumeFromRedisStore = async ({
   key: string;
   windowMs: number;
   maxRequests: number;
-}): Promise<RateLimitState | null> => {
+}): Promise<RateLimitState> => {
   const client = await getRedisClient();
 
   if (!client) {
-    return null;
+    throw new Error('Rate limit Redis unavailable');
   }
 
   const bucketKey = buildBucketKey(name, key);
-  const count = await client.incr(bucketKey);
-
-  if (count === 1) {
-    await client.pExpire(bucketKey, windowMs);
-  }
-
-  const ttlMs = Number(await client.pTTL(bucketKey));
-  const requestCount = Number(count);
-  const resetAt = Date.now() + Math.max(ttlMs, 0);
+  // Counter/expiry must change atomically, including legacy counters without TTL.
+  const command = client.eval(`
+    local count = redis.call('INCR', KEYS[1])
+    local ttl = redis.call('PTTL', KEYS[1])
+    if ttl < 0 then
+      redis.call('PEXPIRE', KEYS[1], ARGV[1])
+      ttl = tonumber(ARGV[1])
+    end
+    return {count, ttl}
+  `, { keys: [bucketKey], arguments: [String(windowMs)] });
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const result = await Promise.race([
+    command,
+    new Promise<never>((_resolve, reject) => {
+      timer = setTimeout(() => {
+        invalidateRedisClient(client);
+        reject(new Error('Rate limit Redis timeout'));
+      }, 2000);
+    }),
+  ]).finally(() => { if (timer) clearTimeout(timer); });
+  if (!Array.isArray(result) || result.length !== 2) throw new Error('Invalid rate limit Redis response');
+  const requestCount = Number(result[0]);
+  const ttlMs = Number(result[1]);
+  if (!Number.isInteger(requestCount) || requestCount < 1 || !Number.isFinite(ttlMs) || ttlMs < 0) throw new Error('Invalid rate limit Redis state');
+  const resetAt = Date.now() + ttlMs;
 
   return {
     limit: maxRequests,
@@ -172,8 +183,7 @@ export const createRateLimiter = ({
     try {
       const key = keyGenerator ? keyGenerator(req) : getClientIp(req);
       const rateLimitState = env.rateLimitUseRedis
-        ? (await consumeFromRedisStore({ name, key, windowMs, maxRequests })) ||
-          consumeFromMemoryStore({ name, key, windowMs, maxRequests })
+        ? await consumeFromRedisStore({ name, key, windowMs, maxRequests })
         : consumeFromMemoryStore({ name, key, windowMs, maxRequests });
 
       setRateLimitHeaders(res, rateLimitState);
@@ -184,6 +194,10 @@ export const createRateLimiter = ({
 
       return next();
     } catch (error) {
+      if (env.rateLimitUseRedis) {
+        res.setHeader('Retry-After', '5');
+        return next(new HttpError(503, 'Request protection temporarily unavailable. Please try again shortly.', undefined, 'RATE_LIMIT_UNAVAILABLE'));
+      }
       return next(error);
     }
   };

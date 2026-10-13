@@ -4,7 +4,6 @@ import { motion } from 'motion/react';
 import {
     ArrowRight,
     Brain,
-    Clock3,
     Compass,
     Sparkles,
     Target,
@@ -21,6 +20,7 @@ import { assessmentApi } from '../../lib/assessmentApi';
 import { assessmentQueryKeys } from '../../lib/assessmentQueryKeys';
 import { cn } from '../../lib/utils';
 import { HOLLAND_TRAIT_MAP } from '../../lib/constants/holland';
+import { AssessmentFacts } from '../../components/assessment/AssessmentFacts';
 
 // Format thời gian phiên làm bài để hiển thị trạng thái gần nhất.
 const formatDateTime = (value: string | null | undefined) => {
@@ -76,6 +76,7 @@ export default function TestPage() {
 
     const template = templateQuery.data?.template ?? null;
     const latestAttempt = latestAttemptQuery.data?.attempt ?? null;
+    const latestResultTitle = latestAttempt?.resultCode === 'Fallback' ? 'Chưa có hướng nổi bật' : latestAttempt?.summary.title;
     // Lấy gợi ý cao nhất để làm CTA phụ ở khối phiên gần nhất.
     const topRecommendation = latestAttempt?.summary.ranking?.[0] ?? null;
 
@@ -85,7 +86,7 @@ export default function TestPage() {
                 <title>Bài trắc nghiệm định hướng IT — IT Compass</title>
                 <meta
                     name="description"
-                    content="Làm bài trắc nghiệm định hướng CNTT để khám phá nhóm nghề phù hợp, xem gợi ý chuyên ngành và chuẩn bị lộ trình mentor sát với hồ sơ của bạn."
+                    content="Ghi nhận sở thích và lựa chọn tình huống CNTT để nhận gợi ý tham khảo về hướng nghề, ngành học và mentor."
                 />
             </Helmet>
 
@@ -119,22 +120,19 @@ export default function TestPage() {
                                         <Sparkles size={14} /> Trắc nghiệm khám phá
                                     </div>
                                     <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-tight text-foreground sm:text-5xl sm:leading-[1.04]">
-                                        Chọn hướng IT bằng dữ liệu cá nhân, thay vì đoán cảm tính.
+                                        Ghi nhận điều bạn thích để khám phá hướng đi IT.
                                     </h1>
                                     <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
-                                        Bài trắc nghiệm này kết hợp câu hỏi Holland và tình huống mô phỏng để xác định nhóm nghề phù hợp,
-                                        gợi ý chuyên ngành liên quan và tạo nền cho mentor recommendation sát với hồ sơ của bạn.
+                                        Bạn trả lời câu hỏi theo nhóm sở thích Holland và lựa chọn trong tình huống CNTT để xem hướng đi gợi ý.
+                                        Kết quả chỉ để tham khảo, không phải đánh giá năng lực hay dự đoán khả năng thành công trong nghề.
                                     </p>
 
                                     <div className="mt-7 flex flex-wrap gap-3 text-sm text-muted-foreground">
                                         <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/85 px-4 py-2 backdrop-blur">
-                                            <Clock3 size={15} className="text-primary" /> {template.estimatedMinutes} phút tập trung
+                                            <Target size={15} className="text-primary" /> <AssessmentFacts template={template} />
                                         </div>
                                         <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/85 px-4 py-2 backdrop-blur">
-                                            <Target size={15} className="text-primary" /> {template.questionCount} câu hỏi có chấm điểm
-                                        </div>
-                                        <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/85 px-4 py-2 backdrop-blur">
-                                            <Compass size={15} className="text-primary" /> {template.resultProfiles.length} nhóm kết quả nghề nghiệp
+                                            <Compass size={15} className="text-primary" /> {template.resultProfiles.filter(profile => profile.resultCode !== 'Fallback').length} hướng nghề để tìm hiểu
                                         </div>
                                     </div>
 
@@ -180,8 +178,8 @@ export default function TestPage() {
                                                     {latestAttempt.resultCode}
                                                 </Badge>
                                                 <div>
-                                                    <h2 className="text-2xl font-bold text-foreground">{latestAttempt.summary.title}</h2>
-                                                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{latestAttempt.summary.headline}</p>
+                                                    <h2 className="text-2xl font-bold text-foreground">{latestResultTitle}</h2>
+                                                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{latestAttempt.resultCode === 'Fallback' ? 'Chưa có hướng nổi bật từ lần làm bài gần nhất. Hãy tiếp tục tìm hiểu và so sánh các hướng CNTT.' : 'Gợi ý tham khảo từ lần làm bài gần nhất.'}</p>
                                                 </div>
                                                 <div className="rounded-[24px] border border-border/60 bg-surface/45 p-4 text-sm">
                                                     <p className="text-muted-foreground">Hoàn tất lúc</p>
@@ -196,9 +194,9 @@ export default function TestPage() {
                                                 </div>
                                                 {topRecommendation && (
                                                     <div className="rounded-[24px] border border-primary/15 bg-primary/10 p-4 text-sm">
-                                                        <p className="font-semibold text-primary">Gợi ý nổi bật</p>
+                                                        <p className="font-semibold text-primary">Để bạn tìm hiểu thêm</p>
                                                         <p className="mt-2 font-medium text-foreground">{topRecommendation.title}</p>
-                                                        <p className="mt-1 leading-6 text-muted-foreground">{topRecommendation.headline}</p>
+                                                        <p className="mt-1 leading-6 text-muted-foreground">Một hướng đi để bạn tìm hiểu thêm.</p>
                                                     </div>
                                                 )}
                                             </div>
@@ -221,13 +219,13 @@ export default function TestPage() {
                             {[
                                 {
                                     icon: <Brain size={20} />,
-                                    title: 'Nhóm động lực Holland',
+                                    title: 'Nhóm sở thích Holland',
                                     description: 'Bạn sẽ tự đánh giá mức độ hứng thú với từng loại công việc để lộ ra thiên hướng nổi trội.',
                                 },
                                 {
                                     icon: <Compass size={20} />,
-                                    title: 'Tình huống sát thực tế',
-                                    description: 'Phần situational kiểm tra cách bạn ưu tiên hành động trong bối cảnh học tập và công việc IT.',
+                                    title: 'Tình huống CNTT',
+                                    description: 'Chọn cách bạn muốn hành động trong các tình huống học tập và công việc CNTT được mô tả.',
                                 },
                                 {
                                     icon: <UserRound size={20} />,

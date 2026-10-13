@@ -134,6 +134,7 @@ export default function ResultPage() {
     });
 
     const attempt = latestAttemptQuery.data?.attempt ?? stateAttempt ?? null;
+    const resultTitle = attempt?.resultCode === 'Fallback' ? 'Chưa có hướng nổi bật' : attempt?.summary.title;
     const ranking = attempt?.summary.ranking ?? [];
     const breakdown = attempt?.summary.hollandBreakdown ?? [];
     const recommendations = ranking.slice(0, 3);
@@ -161,10 +162,10 @@ export default function ResultPage() {
     return (
         <>
             <Helmet>
-                <title>{attempt ? `${attempt.summary.title} — Kết quả assessment IT Compass` : 'Kết quả assessment — IT Compass'}</title>
+                <title>{attempt ? `${resultTitle} — Kết quả bài định hướng IT Compass` : 'Kết quả bài định hướng — IT Compass'}</title>
                 <meta
                     name="description"
-                    content={attempt?.summary.headline || 'Xem kết quả assessment mới nhất, nhóm nghề phù hợp và các gợi ý học tập tiếp theo từ IT Compass.'}
+                    content="Xem các hướng đi gợi ý tham khảo từ câu trả lời, điểm các nhóm sở thích và các bước tìm hiểu tiếp theo."
                 />
             </Helmet>
 
@@ -210,16 +211,19 @@ export default function ResultPage() {
                             <div className="absolute inset-0 bg-[linear-gradient(rgba(37,99,235,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(37,99,235,0.05)_1px,transparent_1px)] bg-[size:28px_28px] opacity-60" />
                             <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center">
                                 <Badge variant="secondary" className="border border-primary/15 bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-primary">
-                                    {attempt.resultCode} · Hồ sơ năng lực
+                                    {attempt.resultCode} · Gợi ý từ sở thích
                                 </Badge>
                                 <h1 className="mt-6 text-4xl font-black tracking-tight text-foreground sm:text-5xl lg:text-6xl sm:leading-[1.04]">
-                                    {attempt.summary.title}
+                                    {resultTitle}
                                 </h1>
                                 <p className="mt-6 text-lg leading-8 text-muted-foreground sm:text-xl">
-                                    {attempt.summary.headline}
+                                    {attempt.resultCode === 'Fallback'
+                                        ? 'Câu trả lời chưa làm nổi bật một hướng nghề cụ thể. Bạn có thể tiếp tục khám phá và so sánh các hướng CNTT.'
+                                        : `Câu trả lời trong lần làm bài này gợi ý bạn tìm hiểu hướng ${resultTitle}.`}
                                 </p>
                                 <p className="mt-4 whitespace-pre-wrap text-sm leading-7 text-foreground/90 sm:text-base">
-                                    {attempt.summary.description}
+                                    Kết quả chỉ để tham khảo, không đo năng lực hay dự đoán thành công trong nghề.
+                                    Hãy so sánh với trải nghiệm học tập, thông tin nghề và trao đổi với người có kinh nghiệm trước khi quyết định.
                                 </p>
 
                                 <div className="mt-8 flex flex-wrap justify-center gap-2.5">
@@ -247,11 +251,15 @@ export default function ResultPage() {
                                         <Sparkles size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Gợi ý phù hợp nhất</p>
-                                        <h2 className="mt-1 text-2xl font-bold text-foreground">Top hướng đi nên ưu tiên</h2>
+                                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Gợi ý để tìm hiểu</p>
+                                        <h2 className="mt-1 text-2xl font-bold text-foreground">Các hướng đi từ câu trả lời của bạn</h2>
                                     </div>
                                 </div>
 
+                                <p className="mt-4 text-sm leading-6 text-muted-foreground">
+                                    Điểm gợi ý trên thang 0–100 được tính bằng quy tắc của bài định hướng để sắp xếp các hướng đi.
+                                    Đây không phải phần trăm phù hợp, xác suất thành công hay độ tin cậy đã được kiểm chứng.
+                                </p>
                                 <div className="mt-6 grid gap-4">
                                     {recommendations.length > 0 ? (
                                         recommendations.map((item, index) => (
@@ -259,14 +267,13 @@ export default function ResultPage() {
                                                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                                     <div>
                                                         <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-                                                            #{index + 1} · {item.confidence}
+                                                            Gợi ý {index + 1}
                                                         </div>
                                                         <h3 className="mt-3 text-xl font-bold text-foreground">{item.title}</h3>
-                                                        <p className="mt-2 text-sm leading-7 text-muted-foreground">{item.headline}</p>
                                                     </div>
                                                     <div className="rounded-[20px] border border-primary/15 bg-background px-4 py-3 text-center sm:min-w-[96px]">
-                                                        <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Khớp</p>
-                                                        <p className="mt-1 text-2xl font-black text-primary">{item.matchPercent}%</p>
+                                                        <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Điểm gợi ý</p>
+                                                        <p className="mt-1 text-2xl font-black text-primary">{item.matchPercent}/100</p>
                                                     </div>
                                                 </div>
                                                 <div className="mt-4 flex flex-wrap gap-2">
@@ -300,11 +307,15 @@ export default function ResultPage() {
                                         <BarChart3 size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Holland breakdown</p>
-                                        <h2 className="mt-1 text-2xl font-bold text-foreground">Bức tranh thiên hướng của bạn</h2>
+                                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Điểm các nhóm sở thích</p>
+                                        <h2 className="mt-1 text-2xl font-bold text-foreground">Câu trả lời theo nhóm Holland</h2>
                                     </div>
                                 </div>
 
+                                <p className="mt-4 text-sm leading-6 text-muted-foreground">
+                                    Biểu đồ lấy nhóm có điểm cao nhất trong lần làm bài này làm mốc 100%; các nhóm còn lại thể hiện tỷ lệ điểm so với mốc đó.
+                                    Đây là so sánh sở thích trong câu trả lời, không phải tỷ lệ năng lực.
+                                </p>
                                 <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                                     {breakdown.length > 0 ? (
                                         breakdown.map((item) => <BreakdownCard key={item.code} item={item} />)
@@ -327,8 +338,8 @@ export default function ResultPage() {
                                         <GraduationCap size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-600">Academic Fit</p>
-                                        <h2 className="mt-1 text-2xl font-bold text-foreground">Ngành học được đề xuất</h2>
+                                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-amber-600">Thông tin để tìm hiểu</p>
+                                        <h2 className="mt-1 text-2xl font-bold text-foreground">Ngành học liên quan</h2>
                                     </div>
                                 </div>
 
@@ -360,7 +371,7 @@ export default function ResultPage() {
                                         })
                                     ) : (
                                         <div className="rounded-[24px] border border-border/60 bg-surface/45 p-5 text-sm text-muted-foreground sm:col-span-2">
-                                            Dựa trên kết quả, chúng tôi sẽ cập nhật gợi ý chuyên ngành.
+                                            Chưa có thông tin ngành học liên quan cho kết quả này. Bạn có thể xem danh sách ngành để tìm hiểu thêm.
                                         </div>
                                     )}
                                 </div>
@@ -374,10 +385,10 @@ export default function ResultPage() {
                             >
                                 <div className="flex items-center gap-3">
                                     <UserRound size={20} className="text-primary" />
-                                    <h3 className="text-xl font-bold text-foreground">Mentor phù hợp từ kết quả của bạn</h3>
+                                    <h3 className="text-xl font-bold text-foreground">Mentor có chuyên môn liên quan</h3>
                                 </div>
                                 <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                                    Dựa trên expertise đề xuất, đây là những mentor có khả năng phù hợp nhất để bạn bắt đầu trao đổi.
+                                    Danh sách dựa trên chuyên môn liên quan đến hướng đi gợi ý. Xem hồ sơ, lịch và nội dung tư vấn trước khi chọn mentor.
                                 </p>
                                 <div className="mt-5 flex flex-wrap gap-2">
                                     {matchedExpertise.length > 0 ? (
@@ -464,7 +475,7 @@ export default function ResultPage() {
                                     </div>
                                     <div className="mt-auto pt-6 border-t border-border/50">
                                         <Link to="/majors" className={cn(buttonVariants({ size: 'lg' }), 'w-full justify-center')}>
-                                            Xem ngành học phù hợp
+                                            Tìm hiểu các ngành học
                                         </Link>
                                     </div>
                                 </div>

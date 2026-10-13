@@ -1,0 +1,276 @@
+Browser tab: 5, Title: "IT Compass — La Bàn Nghề Nghiệp IT", URL: "http://127.0.0.1:54015/".
+0 AXWebArea IT Compass — La Bàn Nghề Nghiệp IT, URL: 127.0.0.1:54015/
+	1 container root
+		2 container Notifications alt+T
+		3 container
+			4 link Description: IT Compass, Value: 127.0.0.1:54015/
+			5 link Description: Trang chủ, Value: 127.0.0.1:54015/
+			6 link Description: Trắc nghiệm, Value: 127.0.0.1:54015/test
+			7 link Description: Blog, Value: 127.0.0.1:54015/blog
+			8 link Description: Mentor, Value: 127.0.0.1:54015/mentors
+			9 link Description: Ngành học, Value: 127.0.0.1:54015/majors
+			10 link Description: Đăng nhập, Value: 127.0.0.1:54015/auth/login
+			11 link Description: Đăng ký, Value: 127.0.0.1:54015/auth/register
+		31 container
+			32 container
+				33 text Khám phá hướng đi CNTT
+				34 heading Khám phá hướng đi CNTT từ điều bạn thích, Value: 1
+					35 text Khám phá hướng đi CNTT từ điều bạn thích
+				36 text Tìm hiểu công việc CNTT, ghi nhận sở thích và chọn một bước để khám phá tiếp. Bạn có thể bắt đầu mà chưa biết lập trình.
+				37 link Description: Khám phá bản thân, Value: 127.0.0.1:54015/test
+				38 link Description: Xem các hướng đi IT, Value: 127.0.0.1:54015/majors
+				39 text Bài định hướng gợi ý từ câu trả lời, không phải đánh giá năng lực hay kết luận nghề nghiệp.
+				40 container
+					41 image
+					42 text Software Engineer Data Science Cybersecurity UI/UX Design
+			43 text NỀN TẢNG TOÀN DIỆN
+			44 heading Tại sao chọn IT Compass?, Value: 2
+				45 text Tại sao chọn IT Compass?
+			46 container
+				47 heading Bài định hướng sở thích, Value: 3
+					48 text Bài định hướng sở thích
+				49 text Ghi nhận sở thích qua câu hỏi theo nhóm Holland và lựa chọn trong tình huống CNTT. 29 câu hỏi · Thời gian tham khảo: 3 phút
+			50 container
+				51 heading Phân tích chi tiết, Value: 3
+					52 text Phân tích chi tiết
+				53 text Xem điểm các nhóm sở thích cùng hướng nghề và ngành học liên quan để tìm hiểu thêm. Gợi ý tham khảo
+			54 container
+				55 heading Trao đổi với mentor, Value: 3
+					56 text Trao đổi với mentor
+				57 text Xem hồ sơ, chuyên môn và lịch tư vấn của mentor trước khi gửi yêu cầu đặt lịch. Tư vấn 1:1
+			58 container
+				59 heading Kiến thức nhập môn, Value: 3
+					60 text Kiến thức nhập môn
+				61 text Đọc các bài viết đang được công bố về học tập, công việc và kinh nghiệm trong CNTT. Khám phá blog
+			62 text KHÁM PHÁ LĨNH VỰC
+			63 heading 6 hướng đi trong ngành CNTT, Value: 2
+				64 text 6 hướng đi trong ngành CNTT
+			65 text Mỗi hướng đi phù hợp với một khuynh hướng tính cách khác nhau
+			66 link Value: 127.0.0.1:54015/majors/ky-thuat-phan-mem, Description: Kỹ thuật phần mềm Xây dựng cốt lõi của thế giới số Biến các yêu cầu mơ hồ thành sản phẩm chạy được — từ frontend, backend đến mobile. Tư duy hệ thống, khả năng phân tích và sự kiên trì là chìa khóa. Frontend Developer Backend Developer Full-stack Engineer Mobile Developer Tìm hiểu thêm
+			67 link Value: 127.0.0.1:54015/majors/khoa-hoc-du-lieu, Description: Dữ liệu và AI Khai phá giá trị từ những con số Tìm quy luật ẩn trong dữ liệu, xây dựng mô hình dự đoán và hệ thống AI thông minh. Phù hợp với tư duy phân tích sâu và sự kiên nhẫn. Data Analyst Data Engineer ML Engineer AI Engineer Tìm hiểu thêm
+			68 link Value: 127.0.0.1:54015/majors/an-toan-thong-tin, Description: An toàn thông tin Bảo vệ hệ thống khỏi các mối đe dọa Kết hợp tò mò kỹ thuật và phản xạ thực chiến — bảo vệ hệ thống, phát hiện lỗ hổng và xử lý sự cố bảo mật. Security Engineer Pentester Security Analyst AppSec Engineer Tìm hiểu thêm
+			69 link Value: 127.0.0.1:54015/majors/thiet-ke-ui-ux, Description: Thiết kế UI/UX Sự giao thoa giữa nghệ thuật và logic Nhìn công nghệ qua lăng kính con người — kết hợp thẩm mỹ, sự đồng cảm và khả năng tổ chức trải nghiệm người dùng. UI Designer UX Designer Product Designer Frontend UI Engineer Tìm hiểu thêm
+			70 link Value: 127.0.0.1:54015/majors/phan-tich-nghiep-vu, Description: Quản lý dự án & Nghiệp vụ Cầu nối giữa kỹ thuật và doanh nghiệp Điều phối, phân tích và dẫn dắt sản phẩm — kết nối nhu cầu kinh doanh với giải pháp công nghệ. Business Analyst Project Manager Product Owner Scrum Master Tìm hiểu thêm
+			71 link Value: 127.0.0.1:54015/majors/cloud-devops, Description: DevOps và Hệ thống Vận hành hạ tầng công nghệ hiện đại Tự động hóa, ổn định hệ thống và scale ứng dụng — phù hợp với người thích cloud, CI/CD và giải quyết bài toán hạ tầng. DevOps Engineer Cloud Engineer Platform Engineer System Engineer Tìm hiểu thêm
+			72 container how-it-works
+				73 text QUY TRÌNH ĐƠN GIẢN
+				74 heading Bắt đầu chỉ với 3 bước, Value: 2
+					75 text Bắt đầu chỉ với 3 bước
+				76 text 01
+				77 heading Làm bài trắc nghiệm, Value: 3
+					78 text Làm bài trắc nghiệm
+				79 text Trả lời câu hỏi về điều bạn thích và cách bạn lựa chọn trong tình huống. Thông tin số câu và thời gian tham khảo nằm ở trang bài định hướng.
+				80 text 02
+				81 heading Nhận kết quả chi tiết, Value: 3
+					82 text Nhận kết quả chi tiết
+				83 text Xem điểm các nhóm sở thích và hướng đi gợi ý. Kết quả phản ánh câu trả lời, không đo năng lực hay dự đoán thành công trong nghề.
+				84 text 03
+				85 heading Lên kế hoạch hành động, Value: 3
+					86 text Lên kế hoạch hành động
+				87 text Tìm hiểu ngành học, đọc blog và cân nhắc trao đổi với mentor để chọn bước tiếp theo.
+				88 link Description: Bắt đầu ngay, Value: 127.0.0.1:54015/test
+			89 text KIẾN THỨC
+			90 heading Blog nổi bật, Value: 2
+				91 text Blog nổi bật
+			92 link Description: Xem tất cả, Value: 127.0.0.1:54015/blog
+			93 text CỘNG ĐỒNG
+			94 heading Mentor tiêu biểu, Value: 2
+				95 text Mentor tiêu biểu
+			96 link Description: Xem tất cả, Value: 127.0.0.1:54015/mentors
+			97 container
+				98 image
+				99 image
+				100 heading Sẵn sàng tìm ra hướng đi?, Value: 2
+					101 text Sẵn sàng tìm ra hướng đi?
+				102 text Ghi nhận điều bạn thích, xem các hướng đi gợi ý và chọn một lĩnh vực để tìm hiểu thêm. Bạn có thể bắt đầu bài định hướng trước khi đăng nhập; cần đăng nhập để lưu và xem kết quả.
+				103 link Description: Bắt đầu trắc nghiệm miễn phí, Value: 127.0.0.1:54015/test
+		13 container
+			14 link Description: IT Compass, Value: 127.0.0.1:54015/
+			15 text Khám phá hướng đi CNTT qua sở thích, thông tin nghề nghiệp, bài viết và trao đổi với mentor. Gợi ý để bạn tìm hiểu thêm.
+			16 heading Khám phá, Value: 3
+				17 text Khám phá
+			18 content list
+				19 link Description: Trắc nghiệm, Value: 127.0.0.1:54015/test
+				20 link Description: Blog, Value: 127.0.0.1:54015/blog
+				21 link Description: Mentor, Value: 127.0.0.1:54015/mentors
+				22 link Description: Ngành học, Value: 127.0.0.1:54015/majors
+				23 link Description: Về chúng tôi, Value: 127.0.0.1:54015/about
+			24 heading Liên hệ, Value: 3
+				25 text Liên hệ
+			26 content list
+				27 text contact@itcompass.vn
+				28 text TP. Hồ Chí Minh, Việt Nam
+				29 link Description: GitHub, Value: github.com/
+			30 text ©  2026  IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.
+
+The focused UI element is 0 AXWebArea IT Compass — La Bàn Nghề Nghiệp IT, URL: 127.0.0.1:54015/
+
+Browser tab: 5, Title: "Làm bài trắc nghiệm IT — IT Compass", URL: "http://127.0.0.1:54015/test/quiz".
+0 AXWebArea Làm bài trắc nghiệm IT — IT Compass, URL: 127.0.0.1:54015/test/quiz
+	1 container root
+		2 container Notifications alt+T
+		3 container
+			4 text PHIÊN QUIZ TẬP TRUNG
+			5 heading Phần Holland, Value: 1
+				6 text Phần Holland
+			7 text Câu  1 / 29  · Tự động lưu trong phiên hiện tại TIẾN ĐỘ 3 % Bạn có thể bắt đầu bài định hướng trước khi đăng nhập. Khi nộp bài, cần đăng nhập để lưu và xem gợi ý từ kết quả. R  ·  KỸ THUẬT / THỰC TẾ Tự lượng giá mức độ phù hợp
+			8 text CÂU HỎI THIÊN HƯỚNG
+			9 heading Tôi thích tự tay tháo lắp, sửa chữa các thiết bị điện tử hoặc máy tính., Value: 2
+				10 text Tôi thích tự tay tháo lắp, sửa chữa các thiết bị điện tử hoặc máy tính.
+			11 text Chọn mức độ phản ánh đúng sở thích hoặc thiên hướng thật của bạn. Đừng nghĩ theo “nên làm”, hãy chọn theo “thực sự muốn làm”.
+			12 button 1 Rất không đúng Gần như không muốn làm
+				13 text 1
+				14 text Rất không đúng
+				15 text Gần như không muốn làm
+			16 button 2 Không đúng lắm Ít hứng thú
+				17 text 2
+				18 text Không đúng lắm
+				19 text Ít hứng thú
+			20 button 3 Trung lập Có thể cân nhắc
+				21 text 3
+				22 text Trung lập
+				23 text Có thể cân nhắc
+			24 button 4 Khá đúng Muốn thử nghiêm túc
+				25 text 4
+				26 text Khá đúng
+				27 text Muốn thử nghiêm túc
+			28 button 5 Rất đúng Rất phù hợp với tôi
+				29 text 5
+				30 text Rất đúng
+				31 text Rất phù hợp với tôi
+			32 button (disabled) Câu trước
+			33 link Description: Thoát quiz, Value: 127.0.0.1:54015/test
+			34 text Chọn một đáp án để tiếp tục
+			35 button (disabled) Tiếp tục
+
+The focused UI element is 0 AXWebArea Làm bài trắc nghiệm IT — IT Compass, URL: 127.0.0.1:54015/test/quiz
+
+Browser tab: 5, Title: "An toàn thông tin — Kết quả bài định hướng IT Compass", URL: "http://127.0.0.1:54015/test/result".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~			88 text THÔNG TIN ĐỂ TÌM HIỂU
+~			89 heading Ngành học liên quan, Value: 2
+~				90 text Ngành học liên quan
+~			91 text Chưa có thông tin ngành học liên quan cho kết quả này. Bạn có thể xem danh sách ngành để tìm hiểu thêm.
++			106 text Chưa tìm thấy mentor khớp trực tiếp. Bạn có thể xem toàn bộ danh sách mentor bên dưới.
+~			105 link Description: Tìm hiểu các ngành học, Value: 127.0.0.1:54015/majors
+The focused UI element is 1 AXWebArea An toàn thông tin — Kết quả bài định hướng IT Compass, URL: 127.0.0.1:54015/test/result
+
+Browser tab: 6, Title: "Chưa có hướng nổi bật — Kết quả bài định hướng IT Compass", URL: "http://127.0.0.1:54015/test/result".
+0 AXWebArea Chưa có hướng nổi bật — Kết quả bài định hướng IT Compass, URL: 127.0.0.1:54015/test/result
+	1 container root
+		2 container Notifications alt+T
+		3 container
+			4 link Description: IT Compass, Value: 127.0.0.1:54015/
+			5 link Description: Trang chủ, Value: 127.0.0.1:54015/
+			6 link Description: Trắc nghiệm, Value: 127.0.0.1:54015/test
+			7 link Description: Blog, Value: 127.0.0.1:54015/blog
+			8 link Description: Mentor, Value: 127.0.0.1:54015/mentors
+			9 link Description: Ngành học, Value: 127.0.0.1:54015/majors
+			10 button Thông báo
+			11 button IC008 Học viên kiểm thử
+		31 container
+			32 container
+				33 text FALLBACK  · GỢI Ý TỪ SỞ THÍCH
+				34 heading Chưa có hướng nổi bật, Value: 1
+					35 text Chưa có hướng nổi bật
+				36 text Câu trả lời chưa làm nổi bật một hướng nghề cụ thể. Bạn có thể tiếp tục khám phá và so sánh các hướng CNTT. Kết quả chỉ để tham khảo, không đo năng lực hay dự đoán thành công trong nghề. Hãy so sánh với trải nghiệm học tập, thông tin nghề và trao đổi với người có kinh nghiệm trước khi quyết định. I  -  NGHIÊN CỨU / TÌM TÒI E  -  QUẢN LÝ / LÃNH ĐẠO S  -  XÃ HỘI / HỖ TRỢ
+			37 text GỢI Ý ĐỂ TÌM HIỂU
+			38 heading Các hướng đi từ câu trả lời của bạn, Value: 2
+				39 text Các hướng đi từ câu trả lời của bạn
+			40 text Điểm gợi ý trên thang 0–100 được tính bằng quy tắc của bài định hướng để sắp xếp các hướng đi. Đây không phải phần trăm phù hợp, xác suất thành công hay độ tin cậy đã được kiểm chứng.
+			41 container
+				42 text GỢI Ý  1
+			43 heading Quản lý dự án và nghiệp vụ, Value: 3
+				44 text Quản lý dự án và nghiệp vụ
+			45 text ĐIỂM GỢI Ý
+			46 container
+				47 text 100 /100
+			48 text E  -  QUẢN LÝ / LÃNH ĐẠO C  -  TỔ CHỨC / CHI TIẾT
+			49 container
+				50 text GỢI Ý  2
+			51 heading Kỹ thuật phần mềm, Value: 3
+				52 text Kỹ thuật phần mềm
+			53 text ĐIỂM GỢI Ý
+			54 container
+				55 text 99 /100
+			56 text C  -  TỔ CHỨC / CHI TIẾT I  -  NGHIÊN CỨU / TÌM TÒI
+			57 container
+				58 text GỢI Ý  3
+			59 heading Dữ liệu và AI, Value: 3
+				60 text Dữ liệu và AI
+			61 text ĐIỂM GỢI Ý
+			62 container
+				63 text 93 /100
+			64 text I  -  NGHIÊN CỨU / TÌM TÒI C  -  TỔ CHỨC / CHI TIẾT
+			65 text ĐIỂM CÁC NHÓM SỞ THÍCH
+			66 heading Câu trả lời theo nhóm Holland, Value: 2
+				67 text Câu trả lời theo nhóm Holland
+			68 text Biểu đồ lấy nhóm có điểm cao nhất trong lần làm bài này làm mốc 100%; các nhóm còn lại thể hiện tỷ lệ điểm so với mốc đó. Đây là so sánh sở thích trong câu trả lời, không phải tỷ lệ năng lực.
+			69 text R  -  KỸ THUẬT / THỰC TẾ TOP  5
+			70 container
+				71 text 36 %
+			72 text I  -  NGHIÊN CỨU / TÌM TÒI TOP  1
+			73 container
+				74 text 100 %
+			75 text A  -  SÁNG TẠO / NGHỆ THUẬT TOP  6
+			76 container
+				77 text 36 %
+			78 text S  -  XÃ HỘI / HỖ TRỢ TOP  3
+			79 container
+				80 text 73 %
+			81 text E  -  QUẢN LÝ / LÃNH ĐẠO TOP  2
+			82 container
+				83 text 82 %
+			84 text C  -  TỔ CHỨC / CHI TIẾT TOP  4
+			85 container
+				86 text 64 %
+			87 text THÔNG TIN ĐỂ TÌM HIỂU
+			88 heading Ngành học liên quan, Value: 2
+				89 text Ngành học liên quan
+			90 text Chưa có thông tin ngành học liên quan cho kết quả này. Bạn có thể xem danh sách ngành để tìm hiểu thêm.
+			91 heading Mentor có chuyên môn liên quan, Value: 3
+				92 text Mentor có chuyên môn liên quan
+			93 text Danh sách dựa trên chuyên môn liên quan đến hướng đi gợi ý. Xem hồ sơ, lịch và nội dung tư vấn trước khi chọn mentor.
+			94 text Career Orientation Fullstack Product
+			95 text Chưa tìm thấy mentor khớp trực tiếp. Bạn có thể xem toàn bộ danh sách mentor bên dưới.
+			96 link Description: Xem tất cả mentor, Value: 127.0.0.1:54015/mentors
+			97 link Description: Đi tới lịch hẹn, Value: 127.0.0.1:54015/bookings
+			98 heading Nghề nghiệp liên quan, Value: 3
+				99 text Nghề nghiệp liên quan
+			100 text Full-stack Explorer Technical Consultant Product Generalist
+			101 link Description: Thực hiện lại bài đánh giá, Value: 127.0.0.1:54015/test/quiz
+			102 heading Khám phá lộ trình, Value: 3
+				103 text Khám phá lộ trình
+			104 text Chưa có ngành học gợi ý.
+			105 link Description: Tìm hiểu các ngành học, Value: 127.0.0.1:54015/majors
+		13 container
+			14 link Description: IT Compass, Value: 127.0.0.1:54015/
+			15 text Khám phá hướng đi CNTT qua sở thích, thông tin nghề nghiệp, bài viết và trao đổi với mentor. Gợi ý để bạn tìm hiểu thêm.
+			16 heading Khám phá, Value: 3
+				17 text Khám phá
+			18 content list
+				19 link Description: Trắc nghiệm, Value: 127.0.0.1:54015/test
+				20 link Description: Blog, Value: 127.0.0.1:54015/blog
+				21 link Description: Mentor, Value: 127.0.0.1:54015/mentors
+				22 link Description: Ngành học, Value: 127.0.0.1:54015/majors
+				23 link Description: Về chúng tôi, Value: 127.0.0.1:54015/about
+			24 heading Liên hệ, Value: 3
+				25 text Liên hệ
+			26 content list
+				27 text contact@itcompass.vn
+				28 text TP. Hồ Chí Minh, Việt Nam
+				29 link Description: GitHub, Value: github.com/
+			30 text ©  2026  IT Compass. Được phát triển với ❤️ cho cộng đồng IT Việt Nam.
+
+The focused UI element is 0 AXWebArea Chưa có hướng nổi bật — Kết quả bài định hướng IT Compass, URL: 127.0.0.1:54015/test/result
+
+Browser tab: 6, Title: "Bài trắc nghiệm định hướng IT — IT Compass", URL: "http://127.0.0.1:54015/test".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~				47 text Để bạn tìm hiểu thêm
+The focused UI element is 6 link Description: Trắc nghiệm, URL: 127.0.0.1:54015/test
+
+Browser tab: 6, Title: "IT Compass — La Bàn Nghề Nghiệp IT", URL: "http://127.0.0.1:54015/".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
++			104 link Value: 127.0.0.1:54015/blog/ic008-test-post, Description: Bài viết tổng hợp kiểm thử IC-008 Bài viết tổng hợp cho QA local. IC008 Học viên kiểm thử · 0 lượt xem
++			105 link Description: IC008 Mentor kiểm thử Mentor IT Frontend 0 đánh giá Chưa cập nhật, Value: 127.0.0.1:54015/mentors/ic008-test-mentor
+The focused UI element is 5 link Description: Trang chủ, URL: 127.0.0.1:54015/

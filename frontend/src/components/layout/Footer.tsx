@@ -27,7 +27,7 @@ export function Footer() {
                             </span>
                         </Link>
                         <p className="mt-3 max-w-sm text-sm text-muted-foreground leading-relaxed">
-                            Định hướng nghề nghiệp CNTT cho thế hệ trẻ Việt Nam. Trắc nghiệm khoa học Holland, mentor thực chiến, tài nguyên chất lượng.
+                            Khám phá hướng đi CNTT qua sở thích, thông tin nghề nghiệp, bài viết và trao đổi với mentor. Gợi ý để bạn tìm hiểu thêm.
                         </p>
                     </div>
 

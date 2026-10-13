@@ -1,0 +1,20 @@
+{
+  "ctas": [
+    {
+      "bottom": 402.6000061035156,
+      "href": "/test",
+      "label": "Khám phá bản thân"
+    },
+    {
+      "bottom": 462.6000061035156,
+      "href": "/majors",
+      "label": "Xem các hướng đi IT"
+    }
+  ],
+  "headingTop": 61.60000228881836,
+  "height": 844,
+  "overflow": false,
+  "scrollY": 0,
+  "unsupportedClaims": [],
+  "width": 390
+}

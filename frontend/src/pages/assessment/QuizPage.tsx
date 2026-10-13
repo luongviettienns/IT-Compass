@@ -205,7 +205,7 @@ export default function QuizPage() {
 
         savePendingQuizResult(payload);
         setPendingResult(payload);
-        toast.info('Chúng tôi đã giữ câu trả lời hiện tại. Đăng nhập để nộp và lưu kết quả chính thức.');
+        toast.info('Chúng tôi đã giữ câu trả lời hiện tại. Đăng nhập để nộp bài và lưu, xem gợi ý từ kết quả.');
         navigate('/auth/login?redirect=/test/quiz', {
             state: createQuizAuthState('login'),
             replace: false,
@@ -312,7 +312,7 @@ export default function QuizPage() {
                 <title>Làm bài trắc nghiệm IT — IT Compass</title>
                 <meta
                     name="description"
-                    content="Hoàn thành bài trắc nghiệm định hướng CNTT từng bước, tự động lưu tiến độ trong phiên và nhận kết quả chính thức sau khi đăng nhập nộp bài."
+                    content="Trả lời câu hỏi về sở thích và tình huống CNTT, lưu tiến độ trong phiên và đăng nhập để lưu, xem gợi ý tham khảo từ kết quả."
                 />
             </Helmet>
 
@@ -390,7 +390,7 @@ export default function QuizPage() {
 
                     {!isAuthenticated && isInitialized && (
                         <div className="rounded-[24px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-                            Bạn có thể làm quiz ngay lúc này. Khi tới bước nộp bài, hệ thống sẽ yêu cầu đăng nhập để lưu kết quả chính thức.
+                            Bạn có thể bắt đầu bài định hướng trước khi đăng nhập. Khi nộp bài, cần đăng nhập để lưu và xem gợi ý từ kết quả.
                         </div>
                     )}
 

@@ -1,0 +1,36 @@
+
+> frontend@0.0.0 test
+> vitest run tests/assessment-facts.test.tsx
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+ ❯ tests/assessment-facts.test.tsx (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/assessment-facts.test.tsx [ tests/assessment-facts.test.tsx ]
+Error: Failed to resolve import "../src/components/assessment/AssessmentFacts" from "tests/assessment-facts.test.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: C:/Users/ASUS/Desktop/ITCompass/frontend/tests/assessment-facts.test.tsx:4:32
+  2  |  import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
+  3  |  import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+  4  |  import { AssessmentFacts } from "../src/components/assessment/AssessmentFacts";
+     |                                   ^
+  5  |  import { assessmentApi } from "../src/lib/assessmentApi";
+  6  |  import { assessmentQueryKeys } from "../src/lib/assessmentQueryKeys";
+ ❯ TransformPluginContext._formatLog node_modules/vite/dist/node/chunks/node.js:30259:39
+ ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/node.js:30256:14
+ ❯ normalizeUrl node_modules/vite/dist/node/chunks/node.js:27544:18
+ ❯ node_modules/vite/dist/node/chunks/node.js:27607:30
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/node.js:27575:4
+ ❯ EnvironmentPluginContainer.transform node_modules/vite/dist/node/chunks/node.js:30048:14
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/node.js:24177:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  18:25:39
+   Duration  796ms (environment 99%, worker 1%)

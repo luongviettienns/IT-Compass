@@ -22,7 +22,6 @@ import {
     ClipboardCheck,
     Sparkles,
     ChevronRight,
-    Star,
     Code2,
     Database,
     Shield,
@@ -47,6 +46,7 @@ import { mentorQueryKeys } from '../lib/mentorQueryKeys';
 import { CAREER_PATHS } from '../data/careerPaths';
 import { toApiAssetUrl } from '../lib/authApi';
 import { cn } from '../lib/utils';
+import { AssessmentFacts } from '../components/assessment/AssessmentFacts';
 
 /* ─── Shared motion helpers ──────────────────────────────────────────── */
 
@@ -141,7 +141,7 @@ function HeroSection() {
                     >
                         <motion.div variants={fadeChild}>
                             <Badge variant="secondary" className="gap-1.5 px-4 py-2 text-sm font-semibold bg-primary/10 text-primary border border-primary/20 shadow-sm">
-                                <Sparkles size={15} className="text-primary" /> Nền tảng #1 định hướng nghề IT
+                                <Sparkles size={15} className="text-primary" /> Khám phá hướng đi CNTT
                             </Badge>
                         </motion.div>
 
@@ -149,7 +149,7 @@ function HeroSection() {
                             variants={fadeChild}
                             className="text-4xl font-black tracking-tight text-foreground sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]"
                         >
-                            Tìm ra con đường{' '}
+                            Khám phá hướng đi{' '}
                             <span className="relative">
                                 <span className="text-primary">CNTT</span>
                                 <motion.span
@@ -160,14 +160,14 @@ function HeroSection() {
                                     style={{ originX: 0 }}
                                 />
                             </span>{' '}
-                            phù hợp với bạn
+                            từ điều bạn thích
                         </motion.h1>
 
                         <motion.p
                             variants={fadeChild}
                             className="max-w-xl text-lg text-muted-foreground leading-relaxed mx-auto lg:mx-0"
                         >
-                            Bài trắc nghiệm Holland khoa học giúp bạn khám phá thế mạnh, gợi ý ngành học và nghề nghiệp — kết nối với mentor thực chiến trong ngành.
+                            Tìm hiểu công việc CNTT, ghi nhận sở thích và chọn một bước để khám phá tiếp. Bạn có thể bắt đầu mà chưa biết lập trình.
                         </motion.p>
 
                         <motion.div
@@ -181,32 +181,21 @@ function HeroSection() {
                                     'gap-2 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-shadow',
                                 )}
                             >
-                                Bắt đầu trắc nghiệm <ArrowRight size={18} />
+                                Khám phá bản thân <ArrowRight size={18} />
                             </Link>
-                            <a
-                                href="#how-it-works"
+                            <Link
+                                to="/majors"
                                 className={cn(buttonVariants({ variant: 'ghost', size: 'lg' }), 'gap-1')}
                             >
-                                Tìm hiểu cách hoạt động <ChevronRight size={16} />
-                            </a>
+                                Xem các hướng đi IT <ChevronRight size={16} />
+                            </Link>
                         </motion.div>
 
                         <motion.div
                             variants={fadeChild}
-                            className="flex items-center justify-center gap-8 text-sm text-muted-foreground pt-2 lg:justify-start"
+                            className="text-sm leading-6 text-muted-foreground max-w-xl mx-auto lg:mx-0"
                         >
-                            <div className="flex items-center gap-1.5">
-                                <div className="flex -space-x-1.5">
-                                    {['bg-blue-400', 'bg-green-400', 'bg-amber-400'].map((c) => (
-                                        <div key={c} className={cn('h-5 w-5 rounded-full border-2 border-background', c)} />
-                                    ))}
-                                </div>
-                                <span>500+ học sinh đã thử</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <Star size={14} className="fill-amber-400 text-amber-400" />
-                                <span>4.8/5</span>
-                            </div>
+                            Bài định hướng gợi ý từ câu trả lời, không phải đánh giá năng lực hay kết luận nghề nghiệp.
                         </motion.div>
                     </motion.div>
 
@@ -299,31 +288,28 @@ function HeroSection() {
 const FEATURES = [
     {
         icon: ClipboardCheck,
-        title: 'Trắc nghiệm Holland',
-        desc: 'Dựa trên mô hình RIASEC — tiêu chuẩn vàng trong tư vấn nghề nghiệp quốc tế.',
-        stat: '30',
-        statLabel: 'câu hỏi',
+        title: 'Bài định hướng sở thích',
+        desc: 'Ghi nhận sở thích qua câu hỏi theo nhóm Holland và lựa chọn trong tình huống CNTT.',
+        assessmentFacts: true,
+        detail: 'Xem bộ câu hỏi',
     },
     {
         icon: BarChart3,
         title: 'Phân tích chi tiết',
-        desc: 'Biểu đồ 6 nhóm tính cách, gợi ý ngành học cụ thể và vị trí công việc phù hợp.',
-        stat: '6',
-        statLabel: 'nhóm phân tích',
+        desc: 'Xem điểm các nhóm sở thích cùng hướng nghề và ngành học liên quan để tìm hiểu thêm.',
+        detail: 'Gợi ý tham khảo',
     },
     {
         icon: Users,
-        title: 'Mentor thực chiến',
-        desc: 'Kết nối 1:1 với anh chị đi trước — từ sinh viên đến senior trong ngành IT.',
-        stat: '20+',
-        statLabel: 'mentor',
+        title: 'Trao đổi với mentor',
+        desc: 'Xem hồ sơ, chuyên môn và lịch tư vấn của mentor trước khi gửi yêu cầu đặt lịch.',
+        detail: 'Tư vấn 1:1',
     },
     {
         icon: BookOpen,
-        title: 'Tài nguyên chất lượng',
-        desc: 'Blog chuyên sâu về lộ trình, kinh nghiệm thực tập, và xu hướng ngành IT.',
-        stat: '50+',
-        statLabel: 'bài viết',
+        title: 'Kiến thức nhập môn',
+        desc: 'Đọc các bài viết đang được công bố về học tập, công việc và kinh nghiệm trong CNTT.',
+        detail: 'Khám phá blog',
     },
 ];
 
@@ -365,8 +351,7 @@ function FeaturesSection() {
                             <h3 className="text-lg font-semibold text-foreground mb-2">{f.title}</h3>
                             <p className="text-sm text-muted-foreground leading-relaxed mb-4">{f.desc}</p>
                             <div className="border-t pt-3">
-                                <span className="text-2xl font-bold text-primary">{f.stat}</span>
-                                <span className="text-sm text-muted-foreground ml-1.5">{f.statLabel}</span>
+                                <span className="text-sm font-semibold text-primary">{f.assessmentFacts ? <AssessmentFacts /> : f.detail}</span>
                             </div>
                         </motion.div>
                     ))}
@@ -396,10 +381,10 @@ function CareerPathsSection() {
                         Khám phá lĩnh vực
                     </motion.p>
                     <motion.h2 variants={fadeChild} className="text-3xl font-bold text-foreground sm:text-4xl">
-                        6 hướng đi trong ngành CNTT
+                        {CAREER_PATHS.length} hướng đi trong ngành CNTT
                     </motion.h2>
                     <motion.p variants={fadeChild} className="mt-3 text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Mỗi hướng đi phù hợp với một khuynh hướng tính cách khác nhau
+                        So sánh công việc, hoạt động và kiến thức nhập môn để chọn hướng tìm hiểu.
                     </motion.p>
                 </motion.div>
 
@@ -468,7 +453,7 @@ const STEPS = [
         number: '01',
         Icon: ClipboardList,
         title: 'Làm bài trắc nghiệm',
-        desc: '15 phút, 30 câu hỏi — trả lời theo trực giác. Không có đáp án đúng sai, chỉ có sự khác biệt.',
+        desc: 'Trả lời câu hỏi về điều bạn thích và cách bạn lựa chọn trong tình huống. Thông tin số câu và thời gian tham khảo nằm ở trang bài định hướng.',
         color: 'from-blue-500/10 to-blue-600/5',
         iconColor: 'text-blue-600',
     },
@@ -476,7 +461,7 @@ const STEPS = [
         number: '02',
         Icon: PieChart,
         title: 'Nhận kết quả chi tiết',
-        desc: 'Biểu đồ Holland 6 nhóm tính cách, ngành học gợi ý, nghề nghiệp phù hợp và lộ trình cụ thể.',
+        desc: 'Xem điểm các nhóm sở thích và hướng đi gợi ý. Kết quả phản ánh câu trả lời, không đo năng lực hay dự đoán thành công trong nghề.',
         color: 'from-emerald-500/10 to-emerald-600/5',
         iconColor: 'text-emerald-600',
     },
@@ -484,7 +469,7 @@ const STEPS = [
         number: '03',
         Icon: Rocket,
         title: 'Lên kế hoạch hành động',
-        desc: 'Kết nối mentor, đọc blog chuyên sâu, xây dựng roadmap cá nhân cho hành trình IT của bạn.',
+        desc: 'Tìm hiểu ngành học, đọc blog và cân nhắc trao đổi với mentor để chọn bước tiếp theo.',
         color: 'from-amber-500/10 to-amber-600/5',
         iconColor: 'text-amber-600',
     },
@@ -790,9 +775,8 @@ function FeaturedMentorsSection() {
                                         <div className="mt-5 pt-4 border-t border-border/50 flex items-center justify-between">
                                             <div className="flex flex-col gap-1 text-xs text-muted-foreground">
                                                 <div className="flex items-center gap-1 font-medium text-foreground">
-                                                    <Star size={13} className="fill-amber-400 text-amber-400" />
-                                                    <span>5.0</span>
-                                                    <span className="text-muted-foreground font-normal">({mentor.reviewCount})</span>
+                                                    <Users size={13} />
+                                                    <span>{mentor.reviewCount} đánh giá</span>
                                                 </div>
                                                 <div className="flex items-center gap-1.5">
                                                     <Clock size={13} />
@@ -855,7 +839,7 @@ function FinalCTASection() {
                         variants={fadeChild}
                         className="relative z-10 mt-4 text-lg text-muted-foreground max-w-xl mx-auto"
                     >
-                        Chỉ cần 15 phút để khám phá con đường CNTT phù hợp nhất. Hàng trăm bạn trẻ đã tìm được hướng đi — bạn thì sao?
+                        Ghi nhận điều bạn thích, xem các hướng đi gợi ý và chọn một lĩnh vực để tìm hiểu thêm. Bạn có thể bắt đầu bài định hướng trước khi đăng nhập; cần đăng nhập để lưu và xem kết quả.
                     </motion.p>
                     <motion.div variants={fadeChild} className="relative z-10 mt-8">
                         <Link
@@ -885,20 +869,22 @@ export default function LandingPage() {
                 <title>IT Compass — La Bàn Nghề Nghiệp IT</title>
                 <meta
                     name="description"
-                    content="Khám phá con đường Công nghệ thông tin phù hợp với bạn. Trắc nghiệm Holland khoa học, mentor thực chiến, blog chuyên sâu."
+                    content="Khám phá sở thích, tìm hiểu công việc CNTT, xem gợi ý tham khảo và trao đổi với mentor. Bắt đầu mà chưa cần biết lập trình."
                 />
             </Helmet>
-            <HeroSection />
-            <FeaturesSection />
-            <CareerPathsSection />
-            <StepsSection />
-            <ErrorBoundary>
-                <FeaturedBlogSection />
-            </ErrorBoundary>
-            <ErrorBoundary>
-                <FeaturedMentorsSection />
-            </ErrorBoundary>
-            <FinalCTASection />
+            <main className="overflow-x-clip">
+                <HeroSection />
+                <FeaturesSection />
+                <CareerPathsSection />
+                <StepsSection />
+                <ErrorBoundary>
+                    <FeaturedBlogSection />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                    <FeaturedMentorsSection />
+                </ErrorBoundary>
+                <FinalCTASection />
+            </main>
         </>
     );
 }

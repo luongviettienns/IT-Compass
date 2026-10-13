@@ -1,0 +1,11 @@
+{
+  "schema": "itcompass_ic008_browser_test",
+  "originalAttemptUnchanged": true,
+  "attempts": 3,
+  "fallbackId": "3",
+  "storedFallbackTitle": "Hồ sơ đa năng",
+  "expectedDisplayTitle": "Chưa có hướng nổi bật",
+  "questionCount": 29,
+  "estimatedMinutes": 3,
+  "mentorReviewCount": 0
+}

@@ -1,6 +1,6 @@
 import { Badge } from '../ui/Badge';
 import { cn } from '../../lib/utils';
-import { getBookingStatusLabel, type BookingStatus } from '../../lib/bookingApi';
+import { getBookingStatusLabel, type BookingCancellationActor, type BookingStatus } from '../../lib/bookingApi';
 
 const statusClassName: Record<BookingStatus, string> = {
     REQUESTED: 'border-amber-500/20 bg-amber-500/10 text-amber-700',
@@ -15,14 +15,15 @@ type BookingStatusBadgeProps = {
     status: BookingStatus;
     outcomeReviewRequired?: boolean;
     requestExpired?: boolean;
+    cancelledBy?: BookingCancellationActor | null;
     className?: string;
 };
 
-export function BookingStatusBadge({ status, outcomeReviewRequired = false, requestExpired = false, className }: BookingStatusBadgeProps) {
+export function BookingStatusBadge({ status, outcomeReviewRequired = false, requestExpired = false, cancelledBy, className }: BookingStatusBadgeProps) {
     const needsReview = status === 'CONFIRMED' && outcomeReviewRequired;
     return (
         <Badge variant="outline" className={cn('px-3 py-1', statusClassName[requestExpired ? 'CANCELLED_BY_STUDENT' : needsReview ? 'REQUESTED' : status], className)}>
-            {getBookingStatusLabel(status, needsReview, requestExpired)}
+            {getBookingStatusLabel(status, needsReview, requestExpired, cancelledBy)}
         </Badge>
     );
 }

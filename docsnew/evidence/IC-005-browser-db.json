@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-13",
+  "schema": "itcompass_ic005_browser_test",
+  "backendHostTimezone": "UTC",
+  "verified": [
+    "confirm retains detail",
+    "real conflict rejected",
+    "admin cancellation stores reason/actor",
+    "complete",
+    "reviewed no-show",
+    "expired history retained"
+  ],
+  "conversationCount": 1,
+  "notificationCount": 6,
+  "records": [
+    {
+      "id": "4001",
+      "status": "CONFIRMED",
+      "startAt": "2026-10-15T03:00:00.000Z",
+      "endAt": "2026-10-15T04:00:00.000Z",
+      "confirmedAt": "2026-10-13T09:48:23.000Z",
+      "completedAt": null,
+      "cancelledBy": null,
+      "cancelReason": null,
+      "expiredAt": null
+    },
+    {
+      "id": "4002",
+      "status": "COMPLETED",
+      "startAt": "2026-10-13T07:45:14.000Z",
+      "endAt": "2026-10-13T08:45:14.000Z",
+      "confirmedAt": "2026-10-12T09:45:14.000Z",
+      "completedAt": "2026-10-13T09:52:15.000Z",
+      "cancelledBy": null,
+      "cancelReason": null,
+      "expiredAt": null
+    },
+    {
+      "id": "4003",
+      "status": "CANCELLED_BY_MENTOR",
+      "startAt": "2026-10-15T06:00:00.000Z",
+      "endAt": "2026-10-15T07:00:00.000Z",
+      "confirmedAt": null,
+      "completedAt": null,
+      "cancelledBy": "SYSTEM",
+      "cancelReason": "Trùng lịch cũ; hủy để học viên đặt lại.",
+      "expiredAt": null
+    },
+    {
+      "id": "4004",
+      "status": "CONFIRMED",
+      "startAt": "2026-10-15T06:00:00.000Z",
+      "endAt": "2026-10-15T07:00:00.000Z",
+      "confirmedAt": "2026-10-13T09:45:14.000Z",
+      "completedAt": null,
+      "cancelledBy": null,
+      "cancelReason": null,
+      "expiredAt": null
+    },
+    {
+      "id": "4005",
+      "status": "CANCELLED_BY_STUDENT",
+      "startAt": "2026-10-15T08:00:00.000Z",
+      "endAt": "2026-10-15T09:00:00.000Z",
+      "confirmedAt": null,
+      "completedAt": null,
+      "cancelledBy": "STUDENT",
+      "cancelReason": "Học viên chủ động hủy.",
+      "expiredAt": null
+    },
+    {
+      "id": "4006",
+      "status": "REQUESTED",
+      "startAt": "2026-10-15T10:00:00.000Z",
+      "endAt": "2026-10-15T11:00:00.000Z",
+      "confirmedAt": null,
+      "completedAt": null,
+      "cancelledBy": null,
+      "cancelReason": null,
+      "expiredAt": "2026-10-13T09:46:53.000Z"
+    },
+    {
+      "id": "4007",
+      "status": "NO_SHOW",
+      "startAt": "2026-10-11T09:45:14.000Z",
+      "endAt": "2026-10-11T10:45:14.000Z",
+      "confirmedAt": null,
+      "completedAt": null,
+      "cancelledBy": null,
+      "cancelReason": null,
+      "expiredAt": null
+    },
+    {
+      "id": "4008",
+      "status": "NO_SHOW",
+      "startAt": "2026-10-12T09:53:08.000Z",
+      "endAt": "2026-10-12T10:53:08.000Z",
+      "confirmedAt": "2026-10-11T09:53:08.000Z",
+      "completedAt": null,
+      "cancelledBy": null,
+      "cancelReason": null,
+      "expiredAt": null
+    }
+  ]
+}

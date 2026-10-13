@@ -15,6 +15,6 @@ export const formatBookingInstant = (value: string) => new Date(value).toLocaleS
     timeZone: BOOKING_TIMEZONE,
 });
 
-export const isBookingRequestExpired = (booking: Pick<MentorBooking, 'status' | 'requestExpired' | 'expiredAt' | 'responseDueAt'>) =>
+export const isBookingRequestExpired = (booking: Pick<MentorBooking, 'status' | 'requestExpired' | 'expiredAt' | 'responseDueAt'>, now = Date.now()) =>
     booking.status === 'REQUESTED' && (booking.requestExpired === true || Boolean(booking.expiredAt)
-        || Boolean(booking.responseDueAt && new Date(booking.responseDueAt).getTime() <= Date.now()));
+        || Boolean(booking.responseDueAt && new Date(booking.responseDueAt).getTime() <= now));

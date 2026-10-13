@@ -1,0 +1,45 @@
+
+> frontend@0.0.0 test
+> vitest run tests/admin-booking-actions.test.tsx -t deadline passes while
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+stderr | tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > does not submit after the deadline passes while the review dialog stays open
+You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+
+ ❯ tests/admin-booking-actions.test.tsx (18 tests | 1 failed | 17 skipped) 527ms
+   ❯ admin booking state and transaction UX (18)
+     × does not submit after the deadline passes while the review dialog stays open 526ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > does not submit after the deadline passes while the review dialog stays open
+AssertionError: expected "adminConfirmBooking" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st adminConfirmBooking call:
+
+    Array [
+      "1",
+    ]
+
+
+Number of calls: 1
+
+ ❯ tests/admin-booking-actions.test.tsx:211:22
+    209|     vi.setSystemTime(new Date('2026-10-13T09:00:01Z'));
+    210|     await user.click(within(dialog).getByRole('button', { name: 'Xác n…
+    211|     expect(save).not.toHaveBeenCalled();
+       |                      ^
+    212|     expect(await within(dialog).findByRole('alert')).toHaveProperty('t…
+    213|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 17 skipped (18)
+   Start at  16:54:34
+   Duration  2.37s (import 42%, environment 28%, tests 23%, transform 6%)

@@ -330,14 +330,15 @@ export const bookingApi = {
         }, 'Không thể xác nhận lịch không tham dự'),
 };
 
-export const getBookingStatusLabel = (status: BookingStatus, outcomeReviewRequired = false, requestExpired = false) => {
+export const getBookingStatusLabel = (status: BookingStatus, outcomeReviewRequired = false, requestExpired = false, cancelledBy?: BookingCancellationActor | null) => {
     if (status === 'REQUESTED' && requestExpired) return 'Hết hạn xác nhận';
     if (status === 'CONFIRMED' && outcomeReviewRequired) return 'Chờ xác nhận kết quả';
     switch (status) {
         case 'REQUESTED': return 'Chờ mentor xác nhận';
         case 'CONFIRMED': return 'Đã xác nhận';
         case 'CANCELLED_BY_STUDENT': return 'Học viên đã hủy';
-        case 'CANCELLED_BY_MENTOR': return 'Mentor đã hủy';
+        case 'CANCELLED_BY_MENTOR': return cancelledBy === 'SYSTEM' ? 'Quản trị viên đã hủy'
+            : cancelledBy === 'MENTOR' ? 'Mentor đã hủy' : 'Mentor hoặc quản trị viên hủy';
         case 'COMPLETED': return 'Đã hoàn thành';
         case 'NO_SHOW': return 'Không tham dự';
         default: return status;

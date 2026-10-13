@@ -91,7 +91,7 @@ function BookingCard({
                     <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                             <h2 className="text-lg font-bold text-foreground">{booking.student.fullName}</h2>
-                            <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} requestExpired={isBookingRequestExpired(booking)} />
+                            <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} requestExpired={isBookingRequestExpired(booking)} cancelledBy={booking.cancelledBy} />
                             <Badge variant="outline" className={cn(
                                 'border-border/70 px-3 py-1 text-xs font-semibold',
                                 booking.requestType === 'CUSTOM_TIME' ? 'border-primary/30 bg-primary/10 text-primary' : 'bg-surface/50 text-muted-foreground',

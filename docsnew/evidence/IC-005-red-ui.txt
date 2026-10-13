@@ -1,0 +1,1115 @@
+
+> frontend@0.0.0 test
+> vitest run tests/admin-booking-actions.test.tsx
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+stderr | tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > COMPLETED is read only
+You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+
+ ❯ tests/admin-booking-actions.test.tsx (12 tests | 12 failed) 5754ms
+   ❯ admin booking state and transaction UX (12)
+     × COMPLETED is read only 333ms
+     × NO_SHOW is read only 168ms
+     × CANCELLED_BY_STUDENT is read only 169ms
+     × CANCELLED_BY_MENTOR is read only 172ms
+     × makes an expired pending request read only 154ms
+     × only exposes confirmation and cancellation for a live request 159ms
+     × only allows cancellation before a confirmed session has ended 156ms
+     × allows reviewed outcomes after a confirmed session ends 157ms
+     × does not act on the stale list record when loading detail fails 1130ms
+     × keeps cancellation reason and detail on failure, then permits retry 1791ms
+     × locks duplicate confirmation and closing, then keeps the updated detail visible 1235ms
+     × defaults to the pending work queue 129ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > COMPLETED is read only
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > NO_SHOW is read only
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > CANCELLED_BY_STUDENT is read only
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > CANCELLED_BY_MENTOR is read only
+AssertionError: expected <button …(1)>…(1)</button> to be null
+
+- Expected:
+null
+
++ Received:
+<button
+  class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white border-transparent w-full"
+>
+  <svg
+    aria-hidden="true"
+    class="lucide lucide-circle-check"
+    fill="none"
+    height="16"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="16"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      cx="12"
+      cy="12"
+      r="10"
+    />
+    <path
+      d="m9 12 2 2 4-4"
+    />
+  </svg>
+   Xác nhận
+</button>
+
+ ❯ expectNoActions tests/admin-booking-actions.test.tsx:44:65
+     42| const expectNoActions = () => {
+     43|   for (const name of ['Xác nhận', 'Hoàn thành', 'Không tham dự', 'Hủy …
+     44|     expect(screen.queryByRole('button', { name, exact: true })).toBeNu…
+       |                                                                 ^
+     45|   }
+     46| };
+ ❯ tests/admin-booking-actions.test.tsx:52:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > makes an expired pending request read only
+AssertionError: expected <button …(2)>…(1)</button> to be null
+
+- Expected:
+null
+
++ Received:
+<button
+  class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white border-transparent w-full"
+  disabled=""
+>
+  <svg
+    aria-hidden="true"
+    class="lucide lucide-circle-check"
+    fill="none"
+    height="16"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="16"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      cx="12"
+      cy="12"
+      r="10"
+    />
+    <path
+      d="m9 12 2 2 4-4"
+    />
+  </svg>
+   Xác nhận
+</button>
+
+ ❯ expectNoActions tests/admin-booking-actions.test.tsx:44:65
+     42| const expectNoActions = () => {
+     43|   for (const name of ['Xác nhận', 'Hoàn thành', 'Không tham dự', 'Hủy …
+     44|     expect(screen.queryByRole('button', { name, exact: true })).toBeNu…
+       |                                                                 ^
+     45|   }
+     46| };
+ ❯ tests/admin-booking-actions.test.tsx:58:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > only exposes confirmation and cancellation for a live request
+AssertionError: expected <button …(2)>…(1)</button> to be null
+
+- Expected:
+null
+
++ Received:
+<button
+  class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+  disabled=""
+>
+  <svg
+    aria-hidden="true"
+    class="lucide lucide-circle-check"
+    fill="none"
+    height="16"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="16"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      cx="12"
+      cy="12"
+      r="10"
+    />
+    <path
+      d="m9 12 2 2 4-4"
+    />
+  </svg>
+   Hoàn thành
+</button>
+
+ ❯ tests/admin-booking-actions.test.tsx:65:79
+     63|     expect(screen.getByRole('button', { name: 'Xác nhận', exact: true …
+     64|     expect(screen.getByRole('button', { name: 'Hủy lịch', exact: true …
+     65|     expect(screen.queryByRole('button', { name: 'Hoàn thành', exact: t…
+       |                                                                               ^
+     66|     expect(screen.queryByRole('button', { name: 'Không tham dự', exact…
+     67|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > only allows cancellation before a confirmed session has ended
+AssertionError: expected <button …(1)>…(1)</button> to be null
+
+- Expected:
+null
+
++ Received:
+<button
+  class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white border-transparent w-full"
+>
+  <svg
+    aria-hidden="true"
+    class="lucide lucide-circle-check"
+    fill="none"
+    height="16"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="16"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      cx="12"
+      cy="12"
+      r="10"
+    />
+    <path
+      d="m9 12 2 2 4-4"
+    />
+  </svg>
+   Xác nhận
+</button>
+
+ ❯ tests/admin-booking-actions.test.tsx:73:129
+     71|     await openDetails();
+     72|     expect(screen.getByRole('button', { name: 'Hủy lịch', exact: true …
+     73|     for (const name of ['Xác nhận', 'Hoàn thành', 'Không tham dự']) ex…
+       |                                                                                                                                 ^
+     74|   });
+     75|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > allows reviewed outcomes after a confirmed session ends
+AssertionError: expected <button …(1)>…(1)</button> to be null
+
+- Expected:
+null
+
++ Received:
+<button
+  class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white border-transparent w-full"
+>
+  <svg
+    aria-hidden="true"
+    class="lucide lucide-circle-check"
+    fill="none"
+    height="16"
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+    width="16"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      cx="12"
+      cy="12"
+      r="10"
+    />
+    <path
+      d="m9 12 2 2 4-4"
+    />
+  </svg>
+   Xác nhận
+</button>
+
+ ❯ tests/admin-booking-actions.test.tsx:79:77
+     77|     booking = { ...booking, status: 'CONFIRMED', endAt: '2020-10-12T09…
+     78|     await openDetails();
+     79|     expect(screen.queryByRole('button', { name: 'Xác nhận', exact: tru…
+       |                                                                             ^
+     80|     expect(screen.getByRole('button', { name: 'Hoàn thành', exact: tru…
+     81|     expect(screen.getByRole('button', { name: 'Không tham dự', exact: …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > does not act on the stale list record when loading detail fails
+TestingLibraryElementError: Unable to find role="alert"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-6"
+      style="opacity: 1; transform: none;"
+    >
+      <div
+        class="flex items-center justify-between gap-4"
+      >
+        <div>
+          <h1
+            class="text-2xl font-bold tracking-tight"
+          >
+            Quản lý Lịch tư vấn
+          </h1>
+          <p
+            class="text-sm text-muted-foreground"
+          >
+            Theo dõi, triage và can thiệp luồng tư vấn giữa mentor và student.
+          </p>
+        </div>
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-secondary hover:text-secondary-foreground h-10 px-4 py-2"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-download h-4 w-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 15V3"
+            />
+            <path
+              d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+            />
+            <path
+              d="m7 10 5 5 5-5"
+            />
+          </svg>
+           Export
+        </button>
+      </div>
+      <div
+        class="flex flex-col gap-3 rounded-[20px] border bg-background p-3 shadow-sm lg:flex-row lg:items-center lg:justify-between"
+      >
+        <div
+          class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center"
+        >
+          <div
+            class="relative w-full sm:max-w-[240px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m21 21-4.34-4.34"
+              />
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+            </svg>
+            <input
+              class="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2"
+              placeholder="Tìm kiếm booking..."
+              value=""
+            />
+          </div>
+          <div
+            class="relative w-full sm:max-w-[200px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-funnel pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
+              />
+            </svg>
+            <select
+              class="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm font-medium outline-none ring-primary/20 focus:ring-2 cursor-pointer text-foreground"
+            >
+              <option
+                value="all"
+              >
+                Tất cả trạng thái
+              </option>
+              <option
+                value="REQUESTED"
+              >
+                Chờ xác nhận
+              </option>
+              <option
+                value="CONFIRMED"
+              >
+                Đã xác nhận
+              </option>
+              <option
+                value="COMPLETED"
+              >
+                Hoàn thành
+              </option>
+              <option
+                value="CANCELLED_BY_STUDENT"
+              >
+                Học viên hủy
+              </option>
+              <option
+                value="CANCELLED_BY_MENTOR"
+              >
+                Mentor hủy
+              </option>
+              <option
+                value="NO_SHOW"
+              >
+                Không tham dự
+              </option>
+            </select>
+            <div
+              class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"[3...
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-6"
+      style="opacity: 1; transform: none;"
+    >
+      <div
+        class="flex items-center justify-between gap-4"
+      >
+        <div>
+          <h1
+            class="text-2xl font-bold tracking-tight"
+          >
+            Quản lý Lịch tư vấn
+          </h1>
+          <p
+            class="text-sm text-muted-foreground"
+          >
+            Theo dõi, triage và can thiệp luồng tư vấn giữa mentor và student.
+          </p>
+        </div>
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-secondary hover:text-secondary-foreground h-10 px-4 py-2"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-download h-4 w-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 15V3"
+            />
+            <path
+              d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+            />
+            <path
+              d="m7 10 5 5 5-5"
+            />
+          </svg>
+           Export
+        </button>
+      </div>
+      <div
+        class="flex flex-col gap-3 rounded-[20px] border bg-background p-3 shadow-sm lg:flex-row lg:items-center lg:justify-between"
+      >
+        <div
+          class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center"
+        >
+          <div
+            class="relative w-full sm:max-w-[240px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m21 21-4.34-4.34"
+              />
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+            </svg>
+            <input
+              class="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2"
+              placeholder="Tìm kiếm booking..."
+              value=""
+            />
+          </div>
+          <div
+            class="relative w-full sm:max-w-[200px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-funnel pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
+              />
+            </svg>
+            <select
+              class="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm font-medium outline-none ring-primary/20 focus:ring-2 cursor-pointer text-foreground"
+            >
+              <option
+                value="all"
+              >
+                Tất cả trạng thái
+              </option>
+              <option
+                value="REQUESTED"
+              >
+                Chờ xác nhận
+              </option>
+              <option
+                value="CONFIRMED"
+              >
+                Đã xác nhận
+              </option>
+              <option
+                value="COMPLETED"
+              >
+                Hoàn thành
+              </option>
+              <option
+                value="CANCELLED_BY_STUDENT"
+              >
+                Học viên hủy
+              </option>
+              <option
+                value="CANCELLED_BY_MENTOR"
+              >
+                Mentor hủy
+              </option>
+              <option
+                value="NO_SHOW"
+              >
+                Không tham dự
+              </option>
+            </select>
+            <div
+              class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"[3...
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ tests/admin-booking-actions.test.tsx:87:25
+     85|     vi.mocked(bookingApi.adminGetBookingDetail).mockRejectedValue(new …
+     86|     await openDetails();
+     87|     expect(await screen.findByRole('alert')).toHaveProperty('textConte…
+       |                         ^
+     88|     expect((screen.getByRole('button', { name: 'Xác nhận', exact: true…
+     89|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/12]⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > keeps cancellation reason and detail on failure, then permits retry
+TestingLibraryElementError: Unable to find role="alert"
+
+Ignored nodes: comments, script, style
+<div
+  aria-busy="false"
+  aria-labelledby="_r_1d_"
+  aria-modal="true"
+  class="w-full max-w-md rounded-[28px] border bg-card shadow-2xl"
+  role="dialog"
+  style="opacity: 1; transform: none;"
+>
+  <div
+    class="flex items-start justify-between gap-4 border-b p-6"
+  >
+    <div
+      class="space-y-1"
+    >
+      <h2
+        class="text-xl font-black"
+        id="_r_1d_"
+      >
+        Hủy booking
+      </h2>
+      <p
+        class="text-sm text-muted-foreground"
+      >
+        Nhập lý do hủy để tiếp tục.
+      </p>
+    </div>
+    <button
+      aria-label="Đóng"
+      class="rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/70"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-x h-4 w-4"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M18 6 6 18"
+        />
+        <path
+          d="m6 6 12 12"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="space-y-2 p-6 pb-0"
+  >
+    <label
+      class="text-xs font-bold uppercase tracking-widest text-muted-foreground"
+      for="_r_1e_"
+    >
+      Lý do
+    </label>
+    <textarea
+      class="w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-primary resize-none"
+      id="_r_1e_"
+      maxlength="500"
+      minlength="3"
+      rows="4"
+    >
+      Lịch này cần được dời lại.
+    </textarea>
+  </div>
+  <div
+    class="flex items-center justify-end gap-3 p-6"
+  >
+    <button
+      class="rounded-xl bg-secondary px-5 py-2.5 text-sm font-bold transition-colors hover:bg-secondary/70"
+    >
+      Hủy
+    </button>
+    <button
+      class="rounded-xl px-5 py-2.5 text-sm font-bold transition-all disabled:opacity-50 hover:scale-105 active:scale-95 bg-destructive text-white hover:bg-destructive/90"
+    >
+      Hủy booking
+    </button>
+  </div>
+</div>
+
+Ignored nodes: comments, script, style
+<div
+  aria-busy="false"
+  aria-labelledby="_r_1d_"
+  aria-modal="true"
+  class="w-full max-w-md rounded-[28px] border bg-card shadow-2xl"
+  role="dialog"
+  style="opacity: 1; transform: none;"
+>
+  <div
+    class="flex items-start justify-between gap-4 border-b p-6"
+  >
+    <div
+      class="space-y-1"
+    >
+      <h2
+        class="text-xl font-black"
+        id="_r_1d_"
+      >
+        Hủy booking
+      </h2>
+      <p
+        class="text-sm text-muted-foreground"
+      >
+        Nhập lý do hủy để tiếp tục.
+      </p>
+    </div>
+    <button
+      aria-label="Đóng"
+      class="rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/70"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-x h-4 w-4"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M18 6 6 18"
+        />
+        <path
+          d="m6 6 12 12"
+        />
+      </svg>
+    </button>
+  </div>
+  <div
+    class="space-y-2 p-6 pb-0"
+  >
+    <label
+      class="text-xs font-bold uppercase tracking-widest text-muted-foreground"
+      for="_r_1e_"
+    >
+      Lý do
+    </label>
+    <textarea
+      class="w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-primary resize-none"
+      id="_r_1e_"
+      maxlength="500"
+      minlength="3"
+      rows="4"
+    >
+      Lịch này cần được dời lại.
+    </textarea>
+  </div>
+  <div
+    class="flex items-center justify-end gap-3 p-6"
+  >
+    <button
+      class="rounded-xl bg-secondary px-5 py-2.5 text-sm font-bold transition-colors hover:bg-secondary/70"
+    >
+      Hủy
+    </button>
+    <button
+      class="rounded-xl px-5 py-2.5 text-sm font-bold transition-all disabled:opacity-50 hover:scale-105 active:scale-95 bg-destructive text-white hover:bg-destructive/90"
+    >
+      Hủy booking
+    </button>
+  </div>
+</div>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ tests/admin-booking-actions.test.tsx:99:33
+     97|     await user.type(reason, 'Lịch này cần được dời lại.');
+     98|     await user.click(within(dialog).getByRole('button', { name: /Hủy (…
+     99|     expect(await within(dialog).findByRole('alert')).toHaveProperty('t…
+       |                                 ^
+    100|     expect(reason).toHaveProperty('value', 'Lịch này cần được dời lại.…
+    101|     expect(screen.getByRole('heading', { name: /Chi tiết (Booking|lịch…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/12]⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > locks duplicate confirmation and closing, then keeps the updated detail visible
+TestingLibraryElementError: Unable to find role="dialog" and name "Xác nhận lịch tư vấn"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-6"
+      style="opacity: 1; transform: none;"
+    >
+      <div
+        class="flex items-center justify-between gap-4"
+      >
+        <div>
+          <h1
+            class="text-2xl font-bold tracking-tight"
+          >
+            Quản lý Lịch tư vấn
+          </h1>
+          <p
+            class="text-sm text-muted-foreground"
+          >
+            Theo dõi, triage và can thiệp luồng tư vấn giữa mentor và student.
+          </p>
+        </div>
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-secondary hover:text-secondary-foreground h-10 px-4 py-2"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-download h-4 w-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 15V3"
+            />
+            <path
+              d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+            />
+            <path
+              d="m7 10 5 5 5-5"
+            />
+          </svg>
+           Export
+        </button>
+      </div>
+      <div
+        class="flex flex-col gap-3 rounded-[20px] border bg-background p-3 shadow-sm lg:flex-row lg:items-center lg:justify-between"
+      >
+        <div
+          class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center"
+        >
+          <div
+            class="relative w-full sm:max-w-[240px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m21 21-4.34-4.34"
+              />
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+            </svg>
+            <input
+              class="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2"
+              placeholder="Tìm kiếm booking..."
+              value=""
+            />
+          </div>
+          <div
+            class="relative w-full sm:max-w-[200px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-funnel pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
+              />
+            </svg>
+            <select
+              class="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm font-medium outline-none ring-primary/20 focus:ring-2 cursor-pointer text-foreground"
+            >
+              <option
+                value="all"
+              >
+                Tất cả trạng thái
+              </option>
+              <option
+                value="REQUESTED"
+              >
+                Chờ xác nhận
+              </option>
+              <option
+                value="CONFIRMED"
+              >
+                Đã xác nhận
+              </option>
+              <option
+                value="COMPLETED"
+              >
+                Hoàn thành
+              </option>
+              <option
+                value="CANCELLED_BY_STUDENT"
+              >
+                Học viên hủy
+              </option>
+              <option
+                value="CANCELLED_BY_MENTOR"
+              >
+                Mentor hủy
+              </option>
+              <option
+                value="NO_SHOW"
+              >
+                Không tham dự
+              </option>
+            </select>
+            <div
+              class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"[3...
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-6"
+      style="opacity: 1; transform: none;"
+    >
+      <div
+        class="flex items-center justify-between gap-4"
+      >
+        <div>
+          <h1
+            class="text-2xl font-bold tracking-tight"
+          >
+            Quản lý Lịch tư vấn
+          </h1>
+          <p
+            class="text-sm text-muted-foreground"
+          >
+            Theo dõi, triage và can thiệp luồng tư vấn giữa mentor và student.
+          </p>
+        </div>
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-secondary hover:text-secondary-foreground h-10 px-4 py-2"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-download h-4 w-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 15V3"
+            />
+            <path
+              d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+            />
+            <path
+              d="m7 10 5 5 5-5"
+            />
+          </svg>
+           Export
+        </button>
+      </div>
+      <div
+        class="flex flex-col gap-3 rounded-[20px] border bg-background p-3 shadow-sm lg:flex-row lg:items-center lg:justify-between"
+      >
+        <div
+          class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center"
+        >
+          <div
+            class="relative w-full sm:max-w-[240px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m21 21-4.34-4.34"
+              />
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+            </svg>
+            <input
+              class="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2"
+              placeholder="Tìm kiếm booking..."
+              value=""
+            />
+          </div>
+          <div
+            class="relative w-full sm:max-w-[200px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-funnel pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
+              />
+            </svg>
+            <select
+              class="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm font-medium outline-none ring-primary/20 focus:ring-2 cursor-pointer text-foreground"
+            >
+              <option
+                value="all"
+              >
+                Tất cả trạng thái
+              </option>
+              <option
+                value="REQUESTED"
+              >
+                Chờ xác nhận
+              </option>
+              <option
+                value="CONFIRMED"
+              >
+                Đã xác nhận
+              </option>
+              <option
+                value="COMPLETED"
+              >
+                Hoàn thành
+              </option>
+              <option
+                value="CANCELLED_BY_STUDENT"
+              >
+                Học viên hủy
+              </option>
+              <option
+                value="CANCELLED_BY_MENTOR"
+              >
+                Mentor hủy
+              </option>
+              <option
+                value="NO_SHOW"
+              >
+                Không tham dự
+              </option>
+            </select>
+            <div
+              class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"[3...
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ tests/admin-booking-actions.test.tsx:110:33
+    108|     const user = await openDetails();
+    109|     await user.click(screen.getByRole('button', { name: 'Xác nhận', ex…
+    110|     const dialog = await screen.findByRole('dialog', { name: 'Xác nhận…
+       |                                 ^
+    111|     await user.click(within(dialog).getByRole('button', { name: 'Xác n…
+    112|     await waitFor(() => expect((within(dialog).getByRole('button', { n…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/12]⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > defaults to the pending work queue
+AssertionError: expected "adminListBookings" to be called with arguments: [ ObjectContaining{…} ]
+
+Received:
+
+  1st adminListBookings call:
+
+  [
+-   ObjectContaining {
+-     "status": "REQUESTED",
++   {
++     "from": undefined,
++     "limit": 15,
++     "page": 1,
++     "search": undefined,
++     "status": undefined,
++     "to": undefined,
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ tests/admin-booking-actions.test.tsx:128:42
+    126|   it('defaults to the pending work queue', async () => {
+    127|     await openDetails();
+    128|     expect(bookingApi.adminListBookings).toHaveBeenCalledWith(expect.o…
+       |                                          ^
+    129|   });
+    130| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/12]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  12 failed (12)
+   Start at  16:26:38
+   Duration  7.53s (tests 78%, import 12%, environment 9%, transform 2%)

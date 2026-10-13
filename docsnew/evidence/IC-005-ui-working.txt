@@ -1,0 +1,12 @@
+
+> frontend@0.0.0 test
+> vitest run
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+
+ Test Files  4 passed (4)
+      Tests  28 passed (28)
+   Start at  16:41:52
+   Duration  8.82s (tests 59%, import 20%, environment 19%, transform 2%)

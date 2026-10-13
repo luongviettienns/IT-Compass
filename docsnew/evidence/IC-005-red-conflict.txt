@@ -1,0 +1,37 @@
+
+> frontend@0.0.0 test
+> vitest run tests/admin-booking-actions.test.tsx -t rejected expired request
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+stderr | tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > refreshes a rejected expired request and blocks replay of its obsolete action
+You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+
+ ❯ tests/admin-booking-actions.test.tsx (15 tests | 1 failed | 14 skipped) 555ms
+   ❯ admin booking state and transaction UX (15)
+     × refreshes a rejected expired request and blocks replay of its obsolete action 553ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > refreshes a rejected expired request and blocks replay of its obsolete action
+AssertionError: expected <p id="_r_2_" role="alert" …(1)></p> to have property "textContent" with value 'Yêu cầu đặt lịch đã hết hạn xác nhận.'
+
+Expected: "Yêu cầu đặt lịch đã hết hạn xác nhận."
+Received: "Booking request has expired"
+
+ ❯ tests/admin-booking-actions.test.tsx:168:54
+    166|     const dialog = await screen.findByRole('dialog', { name: 'Xác nhận…
+    167|     await user.click(within(dialog).getByRole('button', { name: 'Xác n…
+    168|     expect(await within(dialog).findByRole('alert')).toHaveProperty('t…
+       |                                                      ^
+    169|     await waitFor(() => expect((within(dialog).getByRole('button', { n…
+    170|     await user.click(within(dialog).getByRole('button', { name: 'Xác n…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 14 skipped (15)
+   Start at  16:37:24
+   Duration  2.35s (import 42%, environment 29%, tests 25%, transform 4%)

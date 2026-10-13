@@ -247,7 +247,7 @@ export default function StudentBookingsPage() {
                                                         </Badge>
                                                     </div>
                                                 </div>
-                                                <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} requestExpired={isBookingRequestExpired(booking)} />
+                                                <BookingStatusBadge status={booking.status} outcomeReviewRequired={booking.outcomeReviewRequired} requestExpired={isBookingRequestExpired(booking)} cancelledBy={booking.cancelledBy} />
                                             </div>
                                             <BookingRequestDeadline booking={booking} />
 

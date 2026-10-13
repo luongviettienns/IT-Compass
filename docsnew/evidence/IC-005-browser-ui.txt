@@ -1,0 +1,201 @@
+- region "Notifications alt+T"
+- banner:
+  - button "Mở menu":
+  - navigation:
+    - generic: Lịch tư vấn
+- main:
+  - heading "Quản lý Lịch tư vấn" [level=1]
+  - paragraph: Theo dõi và xử lý lịch tư vấn. Mặc định hiển thị yêu cầu cần xác nhận.
+  - button "Xuất dữ liệu":
+    - text: Xuất dữ liệu
+  - textbox "Tìm kiếm lịch tư vấn..."
+  - combobox "Trạng thái lịch tư vấn":
+    - option "Tất cả trạng thái" [selected]
+    - option "Chờ mentor xác nhận"
+    - option "Đã xác nhận"
+    - option "Đã hoàn thành"
+    - option "Học viên đã hủy"
+    - option "Mentor hoặc quản trị viên hủy"
+    - option "Không tham dự"
+  - textbox "Từ ngày"
+  - generic: "-"
+  - textbox "Đến ngày"
+  - table:
+    - rowgroup:
+      - row "Mã / Loại Mentor Học viên Trạng thái Thời gian Thao tác":
+        - columnheader "Mã / Loại"
+        - columnheader "Mentor"
+        - columnheader "Học viên"
+        - columnheader "Trạng thái"
+        - columnheader "Thời gian"
+        - columnheader "Thao tác"
+    - rowgroup:
+      - row "#4006 Theo lịch mentor IC005 Browser Mentor @ic005-browser-mentor IC005 Browser Student student@ic005.example.test Hết hạn xác nhận Yêu cầu đã hết hạn xác nhận. Bạn có thể chọn một lịch mới. 2026-10-15 17:00 - 18:00 · Asia/Ho_Chi_Minh (UTC+07:00) Chi tiết":
+        - cell "#4006 Theo lịch mentor":
+          - generic: "#4006"
+          - generic: Theo lịch mentor
+        - cell "IC005 Browser Mentor @ic005-browser-mentor":
+          - generic: IC005 Browser Mentor
+          - generic: "@ic005-browser-mentor"
+        - cell "IC005 Browser Student student@ic005.example.test":
+          - generic "IC005 Browser Student"
+          - generic "student@ic005.example.test"
+        - cell "Hết hạn xác nhận Yêu cầu đã hết hạn xác nhận. Bạn có thể chọn một lịch mới.":
+          - generic: Hết hạn xác nhận
+          - paragraph: Yêu cầu đã hết hạn xác nhận. Bạn có thể chọn một lịch mới.
+        - cell "2026-10-15 17:00 - 18:00 · Asia/Ho_Chi_Minh (UTC+07:00)":
+          - generic: 2026-10-15
+          - text: 17:00 - 18:00 · Asia/Ho_Chi_Minh (UTC+07:00)
+        - cell "Chi tiết":
+          - button "Chi tiết"
+      - row "#4005 Theo lịch mentor IC005 Browser Mentor @ic005-browser-mentor IC005 Browser Student student@ic005.example.test Học viên đã hủy 2026-10-15 15:00 - 16:00 · Asia/Ho_Chi_Minh (UTC+07:00) Chi tiết":
+        - cell "#4005 Theo lịch mentor":
+          - generic: "#4005"
+          - generic: Theo lịch mentor
+        - cell "IC005 Browser Mentor @ic005-browser-mentor":
+          - generic: IC005 Browser Mentor
+          - generic: "@ic005-browser-mentor"
+        - cell "IC005 Browser Student student@ic005.example.test":
+          - generic "IC005 Browser Student"
+          - generic "student@ic005.example.test"
+        - cell "Học viên đã hủy":
+          - generic: Học viên đã hủy
+        - cell "2026-10-15 15:00 - 16:00 · Asia/Ho_Chi_Minh (UTC+07:00)":
+          - generic: 2026-10-15
+          - text: 15:00 - 16:00 · Asia/Ho_Chi_Minh (UTC+07:00)
+        - cell "Chi tiết":
+          - button "Chi tiết"
+      - row "#4004 Theo lịch mentor IC005 Browser Mentor @ic005-browser-mentor IC005 Browser Student student@ic005.example.test Đã xác nhận 2026-10-15 13:00 - 14:00 · Asia/Ho_Chi_Minh (UTC+07:00) Chi tiết":
+        - cell "#4004 Theo lịch mentor":
+          - generic: "#4004"
+          - generic: Theo lịch mentor
+        - cell "IC005 Browser Mentor @ic005-browser-mentor":
+          - generic: IC005 Browser Mentor
+          - generic: "@ic005-browser-mentor"
+        - cell "IC005 Browser Student student@ic005.example.test":
+          - generic "IC005 Browser Student"
+          - generic "student@ic005.example.test"
+        - cell "Đã xác nhận":
+          - generic: Đã xác nhận
+        - cell "2026-10-15 13:00 - 14:00 · Asia/Ho_Chi_Minh (UTC+07:00)":
+          - generic: 2026-10-15
+          - text: 13:00 - 14:00 · Asia/Ho_Chi_Minh (UTC+07:00)
+        - cell "Chi tiết":
+          - button "Chi tiết"
+      - row "#4003 Theo lịch mentor IC005 Browser Mentor @ic005-browser-mentor IC005 Browser Student student@ic005.example.test Quản trị viên đã hủy 2026-10-15 13:00 - 14:00 · Asia/Ho_Chi_Minh (UTC+07:00) Chi tiết":
+        - cell "#4003 Theo lịch mentor":
+          - generic: "#4003"
+          - generic: Theo lịch mentor
+        - cell "IC005 Browser Mentor @ic005-browser-mentor":
+          - generic: IC005 Browser Mentor
+          - generic: "@ic005-browser-mentor"
+        - cell "IC005 Browser Student student@ic005.example.test":
+          - generic "IC005 Browser Student"
+          - generic "student@ic005.example.test"
+        - cell "Quản trị viên đã hủy":
+          - generic: Quản trị viên đã hủy
+        - cell "2026-10-15 13:00 - 14:00 · Asia/Ho_Chi_Minh (UTC+07:00)":
+          - generic: 2026-10-15
+          - text: 13:00 - 14:00 · Asia/Ho_Chi_Minh (UTC+07:00)
+        - cell "Chi tiết":
+          - button "Chi tiết"
+      - row "#4001 Theo lịch mentor IC005 Browser Mentor @ic005-browser-mentor IC005 Browser Student student@ic005.example.test Đã xác nhận 2026-10-15 10:00 - 11:00 · Asia/Ho_Chi_Minh (UTC+07:00) Chi tiết":
+        - cell "#4001 Theo lịch mentor":
+          - generic: "#4001"
+          - generic: Theo lịch mentor
+        - cell "IC005 Browser Mentor @ic005-browser-mentor":
+          - generic: IC005 Browser Mentor
+          - generic: "@ic005-browser-mentor"
+        - cell "IC005 Browser Student student@ic005.example.test":
+          - generic "IC005 Browser Student"
+          - generic "student@ic005.example.test"
+        - cell "Đã xác nhận":
+          - generic: Đã xác nhận
+        - cell "2026-10-15 10:00 - 11:00 · Asia/Ho_Chi_Minh (UTC+07:00)":
+          - generic: 2026-10-15
+          - text: 10:00 - 11:00 · Asia/Ho_Chi_Minh (UTC+07:00)
+        - cell "Chi tiết":
+          - button "Chi tiết"
+      - row "#4002 Theo lịch mentor IC005 Browser Mentor @ic005-browser-mentor IC005 Browser Student student@ic005.example.test Đã hoàn thành 2026-10-13 14:45 - 15:45 · Asia/Ho_Chi_Minh (UTC+07:00) Chi tiết":
+        - cell "#4002 Theo lịch mentor":
+          - generic: "#4002"
+          - generic: Theo lịch mentor
+        - cell "IC005 Browser Mentor @ic005-browser-mentor":
+          - generic: IC005 Browser Mentor
+          - generic: "@ic005-browser-mentor"
+        - cell "IC005 Browser Student student@ic005.example.test":
+          - generic "IC005 Browser Student"
+          - generic "student@ic005.example.test"
+        - cell "Đã hoàn thành":
+          - generic: Đã hoàn thành
+        - cell "2026-10-13 14:45 - 15:45 · Asia/Ho_Chi_Minh (UTC+07:00)":
+          - generic: 2026-10-13
+          - text: 14:45 - 15:45 · Asia/Ho_Chi_Minh (UTC+07:00)
+        - cell "Chi tiết":
+          - button "Chi tiết"
+      - row "#4008 Theo lịch mentor IC005 Browser Mentor @ic005-browser-mentor IC005 Browser Student student@ic005.example.test Không tham dự 2026-10-12 16:53 - 17:53 · Asia/Ho_Chi_Minh (UTC+07:00) Chi tiết":
+        - cell "#4008 Theo lịch mentor":
+          - generic: "#4008"
+          - generic: Theo lịch mentor
+        - cell "IC005 Browser Mentor @ic005-browser-mentor":
+          - generic: IC005 Browser Mentor
+          - generic: "@ic005-browser-mentor"
+        - cell "IC005 Browser Student student@ic005.example.test":
+          - generic "IC005 Browser Student"
+          - generic "student@ic005.example.test"
+        - cell "Không tham dự":
+          - generic: Không tham dự
+        - cell "2026-10-12 16:53 - 17:53 · Asia/Ho_Chi_Minh (UTC+07:00)":
+          - generic: 2026-10-12
+          - text: 16:53 - 17:53 · Asia/Ho_Chi_Minh (UTC+07:00)
+        - cell "Chi tiết":
+          - button "Chi tiết"
+      - row "#4007 Theo lịch mentor IC005 Browser Mentor @ic005-browser-mentor IC005 Browser Student student@ic005.example.test Không tham dự 2026-10-11 16:45 - 17:45 · Asia/Ho_Chi_Minh (UTC+07:00) Chi tiết":
+        - cell "#4007 Theo lịch mentor":
+          - generic: "#4007"
+          - generic: Theo lịch mentor
+        - cell "IC005 Browser Mentor @ic005-browser-mentor":
+          - generic: IC005 Browser Mentor
+          - generic: "@ic005-browser-mentor"
+        - cell "IC005 Browser Student student@ic005.example.test":
+          - generic "IC005 Browser Student"
+          - generic "student@ic005.example.test"
+        - cell "Không tham dự":
+          - generic: Không tham dự
+        - cell "2026-10-11 16:45 - 17:45 · Asia/Ho_Chi_Minh (UTC+07:00)":
+          - generic: 2026-10-11
+          - text: 16:45 - 17:45 · Asia/Ho_Chi_Minh (UTC+07:00)
+        - cell "Chi tiết":
+          - button "Chi tiết"
+- dialog "Chi tiết lịch tư vấn":
+  - banner:
+    - heading "Chi tiết lịch tư vấn" [level=2]
+    - paragraph: "Mã lịch: 4004"
+    - generic: Đã xác nhận
+    - button "Đóng chi tiết":
+  - button "Tải lại chi tiết"
+  - heading "Thời gian tư vấn" [level=3]
+  - paragraph: 2026-10-15 · 13:00–14:00 · 60 phút
+  - paragraph: Asia/Ho_Chi_Minh (UTC+07:00)
+  - heading "Mentor" [level=3]
+  - paragraph: IC005 Browser Mentor
+  - heading "Học viên" [level=3]
+  - paragraph: IC005 Browser Student
+  - paragraph: student@ic005.example.test
+  - heading "Ghi chú từ học viên" [level=3]
+  - paragraph: Dữ liệu tổng hợp kiểm thử IC-005.
+  - heading "Lịch sử xử lý" [level=3]
+  - list:
+    - listitem: "Tạo yêu cầu: 16:45:14 13/10/2026"
+    - listitem: "Đã xác nhận: 16:45:14 13/10/2026"
+  - contentinfo:
+    - button "Hủy lịch"
+    - paragraph: Các thao tác ghi nhận kết quả chỉ xuất hiện sau khi buổi tư vấn kết thúc.
+- dialog "Hủy lịch tư vấn":
+  - heading "Hủy lịch tư vấn" [level=2]
+  - paragraph: Lịch sẽ được hủy bởi quản trị viên và người tham gia nhận thông báo. Nhập lý do hủy để tiếp tục.
+  - button "Đóng":
+  - text: Lý do hủy
+  - textbox "Lý do hủy" [active]
+  - button "Hủy"
+  - button "Hủy lịch tư vấn" [disabled]

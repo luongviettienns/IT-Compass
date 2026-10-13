@@ -1,0 +1,188 @@
+
+> frontend@0.0.0 test
+> vitest run tests/admin-booking-outcome.test.tsx -t blocks duplicate submission
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+stderr | tests/admin-booking-outcome.test.tsx > admin attendance review > blocks duplicate submission and closing while saving, then displays the reviewed result
+You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+
+ ❯ tests/admin-booking-outcome.test.tsx (5 tests | 1 failed | 4 skipped) 1567ms
+   ❯ admin attendance review (5)
+     × blocks duplicate submission and closing while saving, then displays the reviewed result 1566ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/admin-booking-outcome.test.tsx > admin attendance review > blocks duplicate submission and closing while saving, then displays the reviewed result
+TestingLibraryElementError: Unable to find an element with the text: Cập nhật kết quả không tham dự. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body
+  style="overflow: hidden;"
+>
+  <div>
+    <div
+      class="space-y-6"
+      style="opacity: 1; transform: none;"
+    >
+      <div
+        class="flex items-center justify-between gap-4"
+      >
+        <div>
+          <h1
+            class="text-2xl font-bold tracking-tight"
+          >
+            Quản lý Lịch tư vấn
+          </h1>
+          <p
+            class="text-sm text-muted-foreground"
+          >
+            Theo dõi và xử lý lịch tư vấn. Mặc định hiển thị yêu cầu cần xác nhận.
+          </p>
+        </div>
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-secondary hover:text-secondary-foreground h-10 px-4 py-2"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-download h-4 w-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 15V3"
+            />
+            <path
+              d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+            />
+            <path
+              d="m7 10 5 5 5-5"
+            />
+          </svg>
+           Xuất dữ liệu
+        </button>
+      </div>
+      <div
+        class="flex flex-col gap-3 rounded-[20px] border bg-background p-3 shadow-sm lg:flex-row lg:items-center lg:justify-between"
+      >
+        <div
+          class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center"
+        >
+          <div
+            class="relative w-full sm:max-w-[240px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m21 21-4.34-4.34"
+              />
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+            </svg>
+            <input
+              class="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2"
+              placeholder="Tìm kiếm lịch tư vấn..."
+              value=""
+            />
+          </div>
+          <div
+            class="relative w-full sm:max-w-[200px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-funnel pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
+              />
+            </svg>
+            <select
+              aria-label="Trạng thái lịch tư vấn"
+              class="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm font-medium outline-none ring-primary/20 focus:ring-2 cursor-pointer text-foreground"
+            >
+              <option
+                value="all"
+              >
+                Tất cả trạng thái
+              </option>
+              <option
+                value="REQUESTED"
+              >
+                Chờ mentor xác nhận
+              </option>
+              <option
+                value="CONFIRMED"
+              >
+                Đã xác nhận
+              </option>
+              <option
+                value="COMPLETED"
+              >
+                Đã hoàn thành
+              </option>
+              <option
+                value="CANCELLED_BY_STUDENT"
+              >
+                Học viên đã hủy
+              </option>
+              <option
+                value="CANCELLED_BY_MENTOR"
+              >
+                Mentor hoặc quản trị viên hủy
+              </option>
+              <option
+                value="NO_SHOW"
+              >
+                Không tham dự
+              </option>
+       ...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/admin-booking-outcome.test.tsx:124:27
+    122|     expect(save).toHaveBeenCalledExactlyOnceWith('1', 'Mentor xác nhận…
+    123|     expect(screen.getAllByText('Không tham dự').length).toBeGreaterTha…
+    124|     const update = screen.getByText('Cập nhật kết quả không tham dự').…
+       |                           ^
+    125|     expect(update).toHaveProperty('textContent', expect.stringContaini…
+    126|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 skipped (5)
+   Start at  16:57:20
+   Duration  3.43s (tests 47%, import 29%, environment 19%, transform 4%)

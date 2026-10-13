@@ -54,7 +54,7 @@ const openDetails = async () => {
     </HelmetProvider>,
   );
   await user.click(await screen.findByRole('button', { name: 'Chi tiết' }));
-  await screen.findByRole('heading', { name: 'Chi tiết Booking' });
+  await screen.findByRole('heading', { name: 'Chi tiết lịch tư vấn' });
   return user;
 };
 
@@ -82,11 +82,11 @@ describe('admin attendance review', () => {
     expect(screen.getAllByText('Chờ xác nhận kết quả').length).toBeGreaterThan(0);
   });
 
-  it('disables attendance decisions for future sessions', async () => {
+  it('does not expose attendance decisions for future sessions', async () => {
     booking = { ...booking, endAt: '2099-10-12T09:00:00Z', outcomeReviewRequired: false };
     await openDetails();
-    expect((screen.getByRole('button', { name: /No-show|Không tham dự/ }) as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByRole('button', { name: 'Hoàn thành' }) as HTMLButtonElement).disabled).toBe(true);
+    expect(screen.queryByRole('button', { name: 'Không tham dự' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Hoàn thành' })).toBeNull();
   });
 
   it('preserves the entered review and dialog when the API rejects the decision', async () => {
@@ -100,7 +100,7 @@ describe('admin attendance review', () => {
 
     expect(await within(dialog).findByRole('alert')).toHaveProperty('textContent', 'Không thể lưu kết quả.');
     expect(input).toHaveProperty('value', 'Đã trao đổi với mentor và học viên.');
-    expect(screen.getByRole('heading', { name: 'Chi tiết Booking' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Chi tiết lịch tư vấn' })).toBeTruthy();
   });
 
   it('blocks duplicate submission and closing while saving, then displays the reviewed result', async () => {
@@ -116,10 +116,12 @@ describe('admin attendance review', () => {
     await user.keyboard('{Escape}');
     expect(screen.getByRole('dialog', { name: 'Xác nhận không tham dự' })).toBeTruthy();
 
-    booking = { ...booking, status: 'NO_SHOW', outcomeReviewRequired: false };
+    booking = { ...booking, status: 'NO_SHOW', outcomeReviewRequired: false, updatedAt: '2026-10-13T06:00:00Z' };
     finishSave({ message: 'Saved', booking });
     await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Xác nhận không tham dự' })).toBeNull());
     expect(save).toHaveBeenCalledExactlyOnceWith('1', 'Mentor xác nhận học viên không tham dự.');
     expect(screen.getAllByText('Không tham dự').length).toBeGreaterThan(0);
+    const update = screen.getByText('Cập nhật kết quả không tham dự').closest('li');
+    expect(update).toHaveProperty('textContent', expect.stringContaining('13:00:00 13/10/2026'));
   });
 });

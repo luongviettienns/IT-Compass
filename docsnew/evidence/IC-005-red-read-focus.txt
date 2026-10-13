@@ -1,0 +1,1045 @@
+
+> frontend@0.0.0 test
+> vitest run tests/admin-booking-actions.test.tsx -t failed list load|returns keyboard focus
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+stderr | tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > shows a failed list load as an error rather than an empty queue
+You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+
+ ❯ tests/admin-booking-actions.test.tsx (17 tests | 2 failed | 15 skipped) 1844ms
+   ❯ admin booking state and transaction UX (17)
+     × shows a failed list load as an error rather than an empty queue 1052ms
+     × returns keyboard focus to the filter when a successful action removes the queue row 790ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > shows a failed list load as an error rather than an empty queue
+TestingLibraryElementError: Unable to find role="alert"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-6"
+      style="opacity: 1; transform: none;"
+    >
+      <div
+        class="flex items-center justify-between gap-4"
+      >
+        <div>
+          <h1
+            class="text-2xl font-bold tracking-tight"
+          >
+            Quản lý Lịch tư vấn
+          </h1>
+          <p
+            class="text-sm text-muted-foreground"
+          >
+            Theo dõi và xử lý lịch tư vấn. Mặc định hiển thị yêu cầu cần xác nhận.
+          </p>
+        </div>
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-secondary hover:text-secondary-foreground h-10 px-4 py-2"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-download h-4 w-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 15V3"
+            />
+            <path
+              d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+            />
+            <path
+              d="m7 10 5 5 5-5"
+            />
+          </svg>
+           Xuất dữ liệu
+        </button>
+      </div>
+      <div
+        class="flex flex-col gap-3 rounded-[20px] border bg-background p-3 shadow-sm lg:flex-row lg:items-center lg:justify-between"
+      >
+        <div
+          class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center"
+        >
+          <div
+            class="relative w-full sm:max-w-[240px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m21 21-4.34-4.34"
+              />
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+            </svg>
+            <input
+              class="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2"
+              placeholder="Tìm kiếm lịch tư vấn..."
+              value=""
+            />
+          </div>
+          <div
+            class="relative w-full sm:max-w-[200px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-funnel pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
+              />
+            </svg>
+            <select
+              aria-label="Trạng thái lịch tư vấn"
+              class="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm font-medium outline-none ring-primary/20 focus:ring-2 cursor-pointer text-foreground"
+            >
+              <option
+                value="all"
+              >
+                Tất cả trạng thái
+              </option>
+              <option
+                value="REQUESTED"
+              >
+                Chờ mentor xác nhận
+              </option>
+              <option
+                value="CONFIRMED"
+              >
+                Đã xác nhận
+              </option>
+              <option
+                value="COMPLETED"
+              >
+                Đã hoàn thành
+              </option>
+              <option
+                value="CANCELLED_BY_STUDENT"
+              >
+                Học viên đã hủy
+              </option>
+              <option
+                value="CANCELLED_BY_MENTOR"
+              >
+                Mentor đã hủy
+              </option>
+              <option
+                value="NO_SHOW"
+              >
+                Không tham dự
+              </option>
+            </select>
+            <div
+              class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            >
+              <svg
+                fill="none"
+                height="12"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="12"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-2 border-t pt-3 lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0"
+        >
+          <div
+            class="flex items-center rounded-lg bg-secondary/30 p-1"
+          >
+            <div
+              class="flex items-center gap-2 pl-2 pr-1 text-xs text-muted-foreground font-medium"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-calendar"
+                fill="none"
+                height="14"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="14"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 2v4"
+                />
+                <path
+                  d="M16 2v4"
+                />
+                <rect
+                  height="18"
+                  rx="2"
+                  width="18"
+                  x="3"
+                  y="4"
+                />
+                <path
+                  d="M3 10h18"
+                />
+              </svg>
+            </div>
+            <input
+              class="rounded-md border-none bg-background px-2 py-1.5 text-xs font-medium outline-none ring-primary/20 focus:ring-2 text-foreground"
+              title="Từ ngày"
+              type="date"
+              value=""
+            />
+            <span
+              class="px-1 text-muted-foreground text-xs"
+            >
+              -
+            </span>
+            <input
+              class="rounded-md border-none bg-background px-2 py-1.5 text-xs font-medium outline-none ring-primary/20 focus:ring-2 text-foreground"
+              title="Đến ngày"
+              type="date"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex flex-col gap-6"
+      >
+        <div
+          class="overflow-hidden rounded-[24px] border bg-background shadow-sm relative min-h-[400px] flex flex-col"
+        >
+          <div
+            class="overflow-x-auto flex-1"
+          >
+            <table
+              class="w-full text-left text-sm whitespace-nowrap"
+            >
+              <thead
+                class="border-b bg-secondary/30 text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+              >
+                <tr>
+                  <th
+                    class="px-5 py-4"
+                  >
+                    Mã / Loại
+                  </th>
+                  <th
+                    class="px-5 py-4"
+                  >
+                    Mentor
+                  </th>
+                  <th
+                    class="px-5 py-4"
+                  >
+                    Học viên
+                  </th>
+                  <th
+                    class="px-5 py-4"
+                  >
+                    Trạng thái
+                  </th>
+                  <th
+                    class="px-5 py-4"
+                  >
+                    Thời gian
+                  </th>
+                  <th
+                    class="px-5 py-4 text-right"
+                  >
+                    Thao tác
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    colspan="6"
+                  >
+                    <div
+                      class="flex flex-col items-center justify-center py-16 text-center"
+                    >
+                      <div
+                        class="mb-4 text-muted-foreground"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-calendar opacity-20"
+                          fill="none"
+                          height="48"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="48"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 2v4"
+                          />
+                          <path
+                            d="M16 2v4"
+                          />
+                          <rect
+                            height="18"
+                            rx="2"
+                            width="18"
+                            x="3"
+                            y="4"
+                          />
+                          <path
+                            d="M3 10h18"
+                          />
+                        </svg>
+                      </div>
+                      <h3
+                        class="text-lg font-semibold text-foreground"
+                      >
+                        Không tìm thấy lịch hẹn
+                      </h3>
+                      <p
+                        class="mt-1 max-w-sm text-sm text-muted-foreground"
+                      >
+                        Chưa có dữ liệu hoặc không khớp với bộ lọc.
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-6"
+      style="opacity: 1; transform: none;"
+    >
+      <div
+        class="flex items-center justify-between gap-4"
+      >
+        <div>
+          <h1
+            class="text-2xl font-bold tracking-tight"
+          >
+            Quản lý Lịch tư vấn
+          </h1>
+          <p
+            class="text-sm text-muted-foreground"
+          >
+            Theo dõi và xử lý lịch tư vấn. Mặc định hiển thị yêu cầu cần xác nhận.
+          </p>
+        </div>
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-secondary hover:text-secondary-foreground h-10 px-4 py-2"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-download h-4 w-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 15V3"
+            />
+            <path
+              d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+            />
+            <path
+              d="m7 10 5 5 5-5"
+            />
+          </svg>
+           Xuất dữ liệu
+        </button>
+      </div>
+      <div
+        class="flex flex-col gap-3 rounded-[20px] border bg-background p-3 shadow-sm lg:flex-row lg:items-center lg:justify-between"
+      >
+        <div
+          class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center"
+        >
+          <div
+            class="relative w-full sm:max-w-[240px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m21 21-4.34-4.34"
+              />
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+              />
+            </svg>
+            <input
+              class="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2"
+              placeholder="Tìm kiếm lịch tư vấn..."
+              value=""
+            />
+          </div>
+          <div
+            class="relative w-full sm:max-w-[200px]"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-funnel pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              fill="none"
+              height="14"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
+              />
+            </svg>
+            <select
+              aria-label="Trạng thái lịch tư vấn"
+              class="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm font-medium outline-none ring-primary/20 focus:ring-2 cursor-pointer text-foreground"
+            >
+              <option
+                value="all"
+              >
+                Tất cả trạng thái
+              </option>
+              <option
+                value="REQUESTED"
+              >
+                Chờ mentor xác nhận
+              </option>
+              <option
+                value="CONFIRMED"
+              >
+                Đã xác nhận
+              </option>
+              <option
+                value="COMPLETED"
+              >
+                Đã hoàn thành
+              </option>
+              <option
+                value="CANCELLED_BY_STUDENT"
+              >
+                Học viên đã hủy
+              </option>
+              <option
+                value="CANCELLED_BY_MENTOR"
+              >
+                Mentor đã hủy
+              </option>
+              <option
+                value="NO_SHOW"
+              >
+                Không tham dự
+              </option>
+            </select>
+            <div
+              class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            >
+              <svg
+                fill="none"
+                height="12"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="12"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex shrink-0 items-center gap-2 border-t pt-3 lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0"
+        >
+          <div
+            class="flex items-center rounded-lg bg-secondary/30 p-1"
+          >
+            <div
+              class="flex items-center gap-2 pl-2 pr-1 text-xs text-muted-foreground font-medium"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-calendar"
+                fill="none"
+                height="14"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="14"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 2v4"
+                />
+                <path
+                  d="M16 2v4"
+                />
+                <rect
+                  height="18"
+                  rx="2"
+                  width="18"
+                  x="3"
+                  y="4"
+                />
+                <path
+                  d="M3 10h18"
+                />
+              </svg>
+            </div>
+            <input
+              class="rounded-md border-none bg-background px-2 py-1.5 text-xs font-medium outline-none ring-primary/20 focus:ring-2 text-foreground"
+              title="Từ ngày"
+              type="date"
+              value=""
+            />
+            <span
+              class="px-1 text-muted-foreground text-xs"
+            >
+              -
+            </span>
+            <input
+              class="rounded-md border-none bg-background px-2 py-1.5 text-xs font-medium outline-none ring-primary/20 focus:ring-2 text-foreground"
+              title="Đến ngày"
+              type="date"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex flex-col gap-6"
+      >
+        <div
+          class="overflow-hidden rounded-[24px] border bg-background shadow-sm relative min-h-[400px] flex flex-col"
+        >
+          <div
+            class="overflow-x-auto flex-1"
+          >
+            <table
+              class="w-full text-left text-sm whitespace-nowrap"
+            >
+              <thead
+                class="border-b bg-secondary/30 text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+              >
+                <tr>
+                  <th
+                    class="px-5 py-4"
+                  >
+                    Mã / Loại
+                  </th>
+                  <th
+                    class="px-5 py-4"
+                  >
+                    Mentor
+                  </th>
+                  <th
+                    class="px-5 py-4"
+                  >
+                    Học viên
+                  </th>
+                  <th
+                    class="px-5 py-4"
+                  >
+                    Trạng thái
+                  </th>
+                  <th
+                    class="px-5 py-4"
+                  >
+                    Thời gian
+                  </th>
+                  <th
+                    class="px-5 py-4 text-right"
+                  >
+                    Thao tác
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    colspan="6"
+                  >
+                    <div
+                      class="flex flex-col items-center justify-center py-16 text-center"
+                    >
+                      <div
+                        class="mb-4 text-muted-foreground"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-calendar opacity-20"
+                          fill="none"
+                          height="48"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="48"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 2v4"
+                          />
+                          <path
+                            d="M16 2v4"
+                          />
+                          <rect
+                            height="18"
+                            rx="2"
+                            width="18"
+                            x="3"
+                            y="4"
+                          />
+                          <path
+                            d="M3 10h18"
+                          />
+                        </svg>
+                      </div>
+                      <h3
+                        class="text-lg font-semibold text-foreground"
+                      >
+                        Không tìm thấy lịch hẹn
+                      </h3>
+                      <p
+                        class="mt-1 max-w-sm text-sm text-muted-foreground"
+                      >
+                        Chưa có dữ liệu hoặc không khớp với bộ lọc.
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ tests/admin-booking-actions.test.tsx:179:25
+    177|     vi.mocked(bookingApi.adminListBookings).mockRejectedValue(new Erro…
+    178|     render(<HelmetProvider><QueryClientProvider client={client}><Motio…
+    179|     expect(await screen.findByRole('alert')).toHaveProperty('textConte…
+       |                         ^
+    180|     expect(screen.queryByText('Không tìm thấy lịch hẹn')).toBeNull();
+    181|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/admin-booking-actions.test.tsx > admin booking state and transaction UX > returns keyboard focus to the filter when a successful action removes the queue row
+AssertionError: expected <body style><div>…(1)</div></body> to be <select …(2)>…(7)</select> // Object.is equality
+
+- Expected
++ Received
+
+@@ -1,5 +1,114 @@
++ <body
++   style=""
++ >
++   <div>
++     <div
++       class="space-y-6"
++       style="opacity: 1; transform: none;"
++     >
++       <div
++         class="flex items-center justify-between gap-4"
++       >
++         <div>
++           <h1
++             class="text-2xl font-bold tracking-tight"
++           >
++             Quản lý Lịch tư vấn
++           </h1>
++           <p
++             class="text-sm text-muted-foreground"
++           >
++             Theo dõi và xử lý lịch tư vấn. Mặc định hiển thị yêu cầu cần xác nhận.
++           </p>
++         </div>
++         <button
++           class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-secondary hover:text-secondary-foreground h-10 px-4 py-2"
++         >
++           <svg
++             aria-hidden="true"
++             class="lucide lucide-download h-4 w-4"
++             fill="none"
++             height="24"
++             stroke="currentColor"
++             stroke-linecap="round"
++             stroke-linejoin="round"
++             stroke-width="2"
++             viewBox="0 0 24 24"
++             width="24"
++             xmlns="http://www.w3.org/2000/svg"
++           >
++             <path
++               d="M12 15V3"
++             />
++             <path
++               d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
++             />
++             <path
++               d="m7 10 5 5 5-5"
++             />
++           </svg>
++            Xuất dữ liệu
++         </button>
++       </div>
++       <div
++         class="flex flex-col gap-3 rounded-[20px] border bg-background p-3 shadow-sm lg:flex-row lg:items-center lg:justify-between"
++       >
++         <div
++           class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center"
++         >
++           <div
++             class="relative w-full sm:max-w-[240px]"
++           >
++             <svg
++               aria-hidden="true"
++               class="lucide lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
++               fill="none"
++               height="14"
++               stroke="currentColor"
++               stroke-linecap="round"
++               stroke-linejoin="round"
++               stroke-width="2"
++               viewBox="0 0 24 24"
++               width="14"
++               xmlns="http://www.w3.org/2000/svg"
++             >
++               <path
++                 d="m21 21-4.34-4.34"
++               />
++               <circle
++                 cx="11"
++                 cy="11"
++                 r="8"
++               />
++             </svg>
++             <input
++               class="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2"
++               placeholder="Tìm kiếm lịch tư vấn..."
++               value=""
++             />
++           </div>
++           <div
++             class="relative w-full sm:max-w-[200px]"
++           >
++             <svg
++               aria-hidden="true"
++               class="lucide lucide-funnel pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
++               fill="none"
++               height="14"
++               stroke="currentColor"
++               stroke-linecap="round"
++               stroke-linejoin="round"
++               stroke-width="2"
++               viewBox="0 0 24 24"
++               width="14"
++               xmlns="http://www.w3.org/2000/svg"
++             >
++               <path
++                 d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
++               />
++             </svg>
+              <select
+                aria-label="Trạng thái lịch tư vấn"
+                class="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm font-medium outline-none ring-primary/20 focus:ring-2 cursor-pointer text-foreground"
+              >
+                <option
+@@ -36,5 +145,196 @@
+                  value="NO_SHOW"
+                >
+                  Không tham dự
+                </option>
+              </select>
++             <div
++               class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
++             >
++               <svg
++                 fill="none"
++                 height="12"
++                 stroke="currentColor"
++                 stroke-linecap="round"
++                 stroke-linejoin="round"
++                 stroke-width="2"
++                 viewBox="0 0 24 24"
++                 width="12"
++               >
++                 <path
++                   d="m6 9 6 6 6-6"
++                 />
++               </svg>
++             </div>
++           </div>
++         </div>
++         <div
++           class="flex shrink-0 items-center gap-2 border-t pt-3 lg:border-l lg:border-t-0 lg:pl-3 lg:pt-0"
++         >
++           <div
++             class="flex items-center rounded-lg bg-secondary/30 p-1"
++           >
++             <div
++               class="flex items-center gap-2 pl-2 pr-1 text-xs text-muted-foreground font-medium"
++             >
++               <svg
++                 aria-hidden="true"
++                 class="lucide lucide-calendar"
++                 fill="none"
++                 height="14"
++                 stroke="currentColor"
++                 stroke-linecap="round"
++                 stroke-linejoin="round"
++                 stroke-width="2"
++                 viewBox="0 0 24 24"
++                 width="14"
++                 xmlns="http://www.w3.org/2000/svg"
++               >
++                 <path
++                   d="M8 2v4"
++                 />
++                 <path
++                   d="M16 2v4"
++                 />
++                 <rect
++                   height="18"
++                   rx="2"
++                   width="18"
++                   x="3"
++                   y="4"
++                 />
++                 <path
++                   d="M3 10h18"
++                 />
++               </svg>
++             </div>
++             <input
++               class="rounded-md border-none bg-background px-2 py-1.5 text-xs font-medium outline-none ring-primary/20 focus:ring-2 text-foreground"
++               title="Từ ngày"
++               type="date"
++               value=""
++             />
++             <span
++               class="px-1 text-muted-foreground text-xs"
++             >
++               -
++             </span>
++             <input
++               class="rounded-md border-none bg-background px-2 py-1.5 text-xs font-medium outline-none ring-primary/20 focus:ring-2 text-foreground"
++               title="Đến ngày"
++               type="date"
++               value=""
++             />
++           </div>
++         </div>
++       </div>
++       <div
++         class="flex flex-col gap-6"
++       >
++         <div
++           class="overflow-hidden rounded-[24px] border bg-background shadow-sm relative min-h-[400px] flex flex-col"
++         >
++           <div
++             class="overflow-x-auto flex-1"
++           >
++             <table
++               class="w-full text-left text-sm whitespace-nowrap"
++             >
++               <thead
++                 class="border-b bg-secondary/30 text-[11px] font-black uppercase tracking-widest text-muted-foreground"
++               >
++                 <tr>
++                   <th
++                     class="px-5 py-4"
++                   >
++                     Mã / Loại
++                   </th>
++                   <th
++                     class="px-5 py-4"
++                   >
++                     Mentor
++                   </th>
++                   <th
++                     class="px-5 py-4"
++                   >
++                     Học viên
++                   </th>
++                   <th
++                     class="px-5 py-4"
++                   >
++                     Trạng thái
++                   </th>
++                   <th
++                     class="px-5 py-4"
++                   >
++                     Thời gian
++                   </th>
++                   <th
++                     class="px-5 py-4 text-right"
++                   >
++                     Thao tác
++                   </th>
++                 </tr>
++               </thead>
++               <tbody>
++                 <tr>
++                   <td
++                     colspan="6"
++                   >
++                     <div
++                       class="flex flex-col items-center justify-center py-16 text-center"
++                     >
++                       <div
++                         class="mb-4 text-muted-foreground"
++                       >
++                         <svg
++                           aria-hidden="true"
++                           class="lucide lucide-calendar opacity-20"
++                           fill="none"
++                           height="48"
++                           stroke="currentColor"
++                           stroke-linecap="round"
++                           stroke-linejoin="round"
++                           stroke-width="2"
++                           viewBox="0 0 24 24"
++                           width="48"
++                           xmlns="http://www.w3.org/2000/svg"
++                         >
++                           <path
++                             d="M8 2v4"
++                           />
++                           <path
++                             d="M16 2v4"
++                           />
++                           <rect
++                             height="18"
++                             rx="2"
++                             width="18"
++                             x="3"
++                             y="4"
++                           />
++                           <path
++                             d="M3 10h18"
++                           />
++                         </svg>
++                       </div>
++                       <h3
++                         class="text-lg font-semibold text-foreground"
++                       >
++                         Không tìm thấy lịch hẹn
++                       </h3>
++                       <p
++                         class="mt-1 max-w-sm text-sm text-muted-foreground"
++                       >
++                         Chưa có dữ liệu hoặc không khớp với bộ lọc.
++                       </p>
++                     </div>
++                   </td>
++                 </tr>
++               </tbody>
++             </table>
++           </div>
++         </div>
++       </div>
++     </div>
++   </div>
++ </body>
+
+ ❯ tests/admin-booking-actions.test.tsx:198:36
+    196|     expect(screen.getByRole('heading', { name: 'Chi tiết lịch tư vấn' …
+    197|     await user.click(screen.getByRole('button', { name: 'Đóng chi tiết…
+    198|     expect(document.activeElement).toBe(screen.getByRole('combobox', {…
+       |                                    ^
+    199|   });
+    200| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 15 skipped (17)
+   Start at  16:41:17
+   Duration  3.83s (tests 53%, import 26%, environment 17%, transform 3%)

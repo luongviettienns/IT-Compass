@@ -18,6 +18,7 @@ type AdminActionDialogProps = {
     cancelText?: string;
     tone?: 'primary' | 'destructive' | 'warning' | 'success';
     isPending?: boolean;
+    isConfirmDisabled?: boolean;
     errorMessage?: string | null;
     overlayZIndex?: number;
     inputLabel?: string;
@@ -46,6 +47,7 @@ export const AdminActionDialog: React.FC<AdminActionDialogProps> = ({
     cancelText = 'Hủy',
     tone = 'primary',
     isPending = false,
+    isConfirmDisabled = false,
     errorMessage,
     overlayZIndex = 120,
     inputLabel,
@@ -69,7 +71,7 @@ export const AdminActionDialog: React.FC<AdminActionDialogProps> = ({
     const isValueMissing = requireInput && normalizedValue.length === 0;
     const isValueTooShort = typeof inputMinLength === 'number' && normalizedValue.length > 0 && normalizedValue.length < inputMinLength;
     const isValueTooLong = typeof inputMaxLength === 'number' && normalizedValue.length > inputMaxLength;
-    const isConfirmDisabled = isPending || isValueMissing || isValueTooShort || isValueTooLong;
+    const confirmDisabled = isConfirmDisabled || isPending || isValueMissing || isValueTooShort || isValueTooLong;
 
     useEffect(() => {
         if (!isOpen) return;
@@ -189,7 +191,7 @@ export const AdminActionDialog: React.FC<AdminActionDialogProps> = ({
                                 </button>
                                 <button
                                     onClick={() => onConfirm(value)}
-                                    disabled={isConfirmDisabled}
+                                    disabled={confirmDisabled}
                                     className={`rounded-xl px-5 py-2.5 text-sm font-bold transition-all disabled:opacity-50 hover:scale-105 active:scale-95 ${toneClassMap[tone]}`}
                                 >
                                     {isPending ? 'Đang xử lý...' : confirmText}

@@ -17,6 +17,7 @@ import { ScrollToTop } from './components/shared/ScrollToTop';
 import { SmoothScroll } from './components/shared/SmoothScroll';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Loader } from './components/ui/Loader';
+import { MotionConfig } from 'motion/react';
 
 // ── Lazy-loaded pages ────────────────────────────────────────────────────────
 const LandingPage = lazy(() => import('./pages/LandingPage'));
@@ -145,9 +146,9 @@ function AppShell() {
 
 export default function App() {
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <ScrollToTop />
       <AppShell />
-    </>
+    </MotionConfig>
   );
 }

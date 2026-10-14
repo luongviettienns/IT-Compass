@@ -1,15 +1,27 @@
-import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
+import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../lib/utils';
 
 export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
     label?: string;
     error?: string;
+    helperText?: string;
     icon?: ReactNode;
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-    ({ className, label, error, icon, id, ...props }, ref) => {
-        const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
+    ({ className, label, error, helperText, icon, id, 'aria-describedby': customDescribedBy, ...props }, ref) => {
+        const generatedId = useId();
+        const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : generatedId);
+        const errorId = `${inputId}-error`;
+        const helperId = `${inputId}-helper`;
+
+        const describedBy = [
+            error ? errorId : null,
+            helperText ? helperId : null,
+            customDescribedBy,
+        ]
+            .filter(Boolean)
+            .join(' ') || undefined;
 
         return (
             <div className="space-y-1.5">
@@ -26,6 +38,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                     )}
                     <input
                         id={inputId}
+                        aria-invalid={error ? true : undefined}
+                        aria-describedby={describedBy}
                         className={cn(
                             'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background',
                             'placeholder:text-muted-foreground',
@@ -39,7 +53,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                         {...props}
                     />
                 </div>
-                {error && <p className="text-sm text-destructive">{error}</p>}
+                {error && (
+                    <p id={errorId} role="alert" className="text-sm text-destructive">
+                        {error}
+                    </p>
+                )}
+                {!error && helperText && (
+                    <p id={helperId} className="text-sm text-muted-foreground">
+                        {helperText}
+                    </p>
+                )}
             </div>
         );
     },

@@ -1,0 +1,12 @@
+
+> backend@1.0.0 test:integration
+> vitest run --config vitest.integration.config.ts tests/integration/auth-permissions.test.ts
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/backend
+
+
+ Test Files  1 passed (1)
+      Tests  19 passed (19)
+   Start at  07:07:35
+   Duration  5.70s (tests 79%, import 11%, transform 10%, worker 1%)

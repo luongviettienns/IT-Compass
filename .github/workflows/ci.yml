@@ -40,6 +40,9 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run typecheck:tests
+      - name: Typecheck browser tests
+        if: matrix.workspace == 'frontend'
+        run: npm run typecheck:e2e
       - run: npm test
       - run: npm run build
 
@@ -74,11 +77,62 @@ jobs:
       - run: npm ci
       - run: npm run prisma:generate
       - run: npm run test:prepare-db
-      - name: Booking integration on UTC host
+      - name: Auth, permissions and booking integration on UTC host
         run: npm run test:integration
         env:
           TZ: UTC
-      - name: Booking integration on Vietnam host
+      - name: Auth, permissions and booking integration on Vietnam host
         run: npm run test:integration
         env:
           TZ: Asia/Ho_Chi_Minh
+
+  critical-e2e:
+    name: Chromium role E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci-test-only
+          MYSQL_DATABASE: itcompass_ic010_e2e_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -u root -pci-test-only"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    env:
+      TEST_DATABASE_URL: mysql://root:ci-test-only@127.0.0.1:3306/itcompass_ic010_e2e_test
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+      - run: npm ci
+        working-directory: backend
+      - run: npm run prisma:generate
+        working-directory: backend
+      - run: npm ci
+        working-directory: frontend
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - run: npm run test:e2e
+        working-directory: frontend
+      - run: npm run test:verify-e2e
+        working-directory: backend
+      # Traces may contain synthetic login credentials; never run this on real PII.
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: failure()
+        with:
+          name: critical-e2e-failure
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/
+          retention-days: 3
+          if-no-files-found: ignore

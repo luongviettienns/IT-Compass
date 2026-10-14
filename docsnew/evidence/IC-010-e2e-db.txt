@@ -1,0 +1,5 @@
+
+> backend@1.0.0 test:verify-e2e
+> node scripts/verify-e2e.mjs
+
+E2E DB verification PASS: student cancellation/reason; mentor notice=3; admin confirmation, one chat, one student confirmation notification and one mentor cancellation notification.

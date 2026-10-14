@@ -1,0 +1,91 @@
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/backend
+
+stdout | tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > student → /admin/bookings returns 403
+{"timestamp":"2026-10-14T00:10:24.729Z","level":"info","message":"HTTP request completed","requestId":"fc57d970-484f-4f2d-89f6-3e869283ef60","method":"GET","path":"/bookings","route":"GET /api/admin/bookings","statusCode":200,"durationMs":6.96,"userId":"115","ipAddress":"127.0.0.1","environment":"test","slowRequestThresholdMs":1000}
+
+stdout | tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > mentor → /admin/bookings returns 403
+{"timestamp":"2026-10-14T00:10:24.760Z","level":"info","message":"HTTP request completed","requestId":"f9f10be7-405d-4582-92c4-1c28e4d9046f","method":"GET","path":"/bookings","route":"GET /api/admin/bookings","statusCode":200,"durationMs":5.91,"userId":"121","ipAddress":"127.0.0.1","environment":"test","slowRequestThresholdMs":1000}
+
+stdout | tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > student → /mentor/bookings returns 403
+{"timestamp":"2026-10-14T00:10:24.822Z","level":"info","message":"HTTP request completed","requestId":"35b6cb55-b8c4-44dc-bb82-31952dc5814b","method":"GET","path":"/bookings","route":"GET /api/mentor/bookings","statusCode":200,"durationMs":6.62,"userId":"127","ipAddress":"127.0.0.1","environment":"test","slowRequestThresholdMs":1000}
+
+stdout | tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > admin → /users/me/bookings returns 403
+{"timestamp":"2026-10-14T00:10:24.849Z","level":"info","message":"HTTP request completed","requestId":"0d6d498a-e67a-4438-a48d-ba1f87f9156e","method":"GET","path":"/me/bookings","route":"GET /api/users/me/bookings","statusCode":200,"durationMs":2.4,"userId":"134","ipAddress":"127.0.0.1","environment":"test","slowRequestThresholdMs":1000}
+
+stdout | tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > uses the new DB role after an admin token was issued
+{"timestamp":"2026-10-14T00:10:24.916Z","level":"info","message":"HTTP request completed","requestId":"ecd45f27-4f41-4130-b13d-5314d753e82b","method":"GET","path":"/bookings","route":"GET /api/admin/bookings","statusCode":200,"durationMs":5.79,"userId":"142","ipAddress":"127.0.0.1","environment":"test","slowRequestThresholdMs":1000}
+
+stdout | tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > uses the new DB role after an admin token was issued
+{"timestamp":"2026-10-14T00:10:24.931Z","level":"info","message":"HTTP request completed","requestId":"767d0ae6-0be6-4a77-a7f0-79ceebf21bbf","method":"GET","path":"/bookings","route":"GET /api/admin/bookings","statusCode":200,"durationMs":5.13,"userId":"142","ipAddress":"127.0.0.1","environment":"test","slowRequestThresholdMs":1000}
+
+ ❯ tests/integration/auth-permissions.test.ts (19 tests | 5 failed) 4168ms
+   ❯ real route authorization and booking ownership (11)
+     × student → /admin/bookings returns 403 27ms
+     × mentor → /admin/bookings returns 403 25ms
+     × student → /mentor/bookings returns 403 39ms
+     × admin → /users/me/bookings returns 403 22ms
+     × uses the new DB role after an admin token was issued 52ms
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 14 passed (19)
+   Start at  07:10:20
+   Duration  4.96s (tests 86%, import 10%, transform 4%)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > student → /admin/bookings returns 403
+ FAIL  tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > mentor → /admin/bookings returns 403
+ FAIL  tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > student → /mentor/bookings returns 403
+ FAIL  tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > admin → /users/me/bookings returns 403
+AssertionError: expected 200 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 200
+
+ ❯ tests/integration/auth-permissions.test.ts:174:75
+    172|     ['student', '/mentor/bookings', 403], ['admin', '/users/me/booking…
+    173|   ] as const)('%s → %s returns %s', async (role, route, status) => {
+    174|     expect((await request(route, { token: bearer(users[role]) })).stat…
+       |                                                                           ^
+    175|   });
+    176|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/integration/auth-permissions.test.ts > real route authorization and booking ownership > uses the new DB role after an admin token was issued
+AssertionError: expected { status: 200, body: { …(2) }, …(2) } to match object { status: 403, …(1) }
+(8 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "body": {
+-     "code": "AUTH_INSUFFICIENT_PERMISSIONS",
++     "bookings": [],
++     "pagination": {
++       "limit": 20,
++       "page": 1,
++       "total": 0,
++       "totalPages": 1,
+      },
+-   "status": 403,
++   },
++   "status": 200,
+  }
+
+ ❯ tests/integration/auth-permissions.test.ts:181:57
+    179|     expect((await request('/admin/bookings', { token })).status).toBe(…
+    180|     await prisma.user.update({ where: { id: users.admin.id }, data: { …
+    181|     expect(await request('/admin/bookings', { token })).toMatchObject(…
+       |                                                         ^
+    182|   });
+    183|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯

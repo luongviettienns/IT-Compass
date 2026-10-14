@@ -1,0 +1,28 @@
+backend server: PASS rejected non-test schema before seed/server startup
+file:///C:/Users/ASUS/Desktop/ITCompass/backend/scripts/test-database-url.mjs:6
+    throw new Error('Integration tests require a local MySQL database named itcompass_*_test.');
+          ^
+
+Error: Integration tests require a local MySQL database named itcompass_*_test.
+    at requireTestDatabaseUrl (file:///C:/Users/ASUS/Desktop/ITCompass/backend/scripts/test-database-url.mjs:6:11)
+    at requireE2EDatabaseUrl (file:///C:/Users/ASUS/Desktop/ITCompass/backend/scripts/e2e-database-url.mjs:4:23)
+    at <anonymous> (C:\Users\ASUS\Desktop\ITCompass\backend\scripts\serve-e2e.mjs:6:17)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:643:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.19.0
+
+Playwright config: PASS rejected non-test schema before seed/server startup
+Error: Integration tests require a local MySQL database named itcompass_*_test.
+    at requireTestDatabaseUrl (file:///C:/Users/ASUS/Desktop/ITCompass/backend/scripts/test-database-url.mjs:6:11)
+    at requireE2EDatabaseUrl (file:///C:/Users/ASUS/Desktop/ITCompass/backend/scripts/e2e-database-url.mjs:4:23)
+    at file:///C:/Users/ASUS/Desktop/ITCompass/frontend/playwright.config.ts:5:21
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at node:internal/modules/esm/loader:643:26
+    at requireOrImport (C:\Users\ASUS\Desktop\ITCompass\frontend\node_modules\playwright\lib\common\index.js:1096:12)
+    at loadUserConfig (C:\Users\ASUS\Desktop\ITCompass\frontend\node_modules\playwright\lib\common\index.js:1283:46)
+    at loadConfig (C:\Users\ASUS\Desktop\ITCompass\frontend\node_modules\playwright\lib\common\index.js:1290:22)
+    at Object.loadConfigFromFile (C:\Users\ASUS\Desktop\ITCompass\frontend\node_modules\playwright\lib\common\index.js:1508:10)
+    at runTests (C:\Users\ASUS\Desktop\ITCompass\frontend\node_modules\playwright\lib\cli\testActions.js:44:18)
+    at _Command.<anonymous> (C:\Users\ASUS\Desktop\ITCompass\frontend\node_modules\playwright\lib\program.js:55:7)

@@ -1,0 +1,31 @@
+
+> frontend@0.0.0 test:e2e
+> playwright test
+
+[E2E backend] (node:2460) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[E2E backend] (Use `node --trace-warnings ...` to show where the warning was created)
+[E2E backend] (node:2460) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[E2E backend] (Use `node --trace-warnings ...` to show where the warning was created)
+[E2E frontend] (node:25656) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[E2E frontend] (Use `node --trace-warnings ...` to show where the warning was created)
+[E2E frontend] Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+[E2E frontend]   npx update-browserslist-db@latest
+[E2E frontend]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[E2E frontend] [plugin builtin:vite-reporter]
+[E2E frontend] (!) Some chunks are larger than 500 kB after minification. Consider:
+[E2E frontend] - Using dynamic import() to code-split the application
+[E2E frontend] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[E2E frontend] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[E2E frontend] (node:29204) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[E2E frontend] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:7100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chromium] › e2e\critical-roles.spec.ts:11:1 › guest must log in before opening student bookings (794ms)
+  ok 2 [chromium] › e2e\critical-roles.spec.ts:17:1 › student cancels own request and sees persisted cancellation after refresh (2.3s)
+  ok 3 [chromium] › e2e\critical-roles.spec.ts:28:1 › mentor saves booking notice and reads it back after refresh (3.0s)
+  ok 4 [chromium] › e2e\critical-roles.spec.ts:41:1 › admin confirms a request and sees persisted confirmed detail after refresh (3.4s)
+
+  4 passed (22.3s)

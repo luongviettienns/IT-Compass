@@ -12,6 +12,8 @@
     "test:watch": "vitest",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:prepare-db": "node scripts/prepare-test-database.mjs",
+    "test:serve-e2e": "node --import tsx scripts/serve-e2e.mjs",
+    "test:verify-e2e": "node scripts/verify-e2e.mjs",
     "build": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "start": "node dist/server.js",

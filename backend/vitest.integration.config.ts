@@ -9,6 +9,10 @@ export default defineConfig({
     testTimeout: 30_000,
     hookTimeout: 30_000,
     clearMocks: true,
-    env: { DATABASE_URL: requireTestDatabaseUrl(), JWT_ACCESS_SECRET: 'ic003-integration-test-only', RATE_LIMIT_USE_REDIS: 'false' },
+    env: {
+      DATABASE_URL: requireTestDatabaseUrl(), JWT_ACCESS_SECRET: 'ic003-integration-test-only',
+      RATE_LIMIT_USE_REDIS: 'false', AUTH_DEBUG_EXPOSE_TOKENS: 'false',
+      REFRESH_TOKEN_COOKIE_NAME: 'itcompass_integration_refresh', COOKIE_SECURE: 'false',
+    },
   },
 });

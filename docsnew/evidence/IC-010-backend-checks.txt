@@ -1,0 +1,29 @@
+IC-010 local backend checks, 2026-10-14
+
+> backend@1.0.0 lint
+> eslint .
+
+
+> backend@1.0.0 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> backend@1.0.0 typecheck:tests
+> tsc -p tsconfig.test.json
+
+
+> backend@1.0.0 test
+> vitest run
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/backend
+
+
+ Test Files  9 passed (9)
+      Tests  90 passed (90)
+   Start at  07:13:17
+   Duration  2.53s (tests 65%, import 25%, transform 9%, worker 1%)
+
+
+> backend@1.0.0 build
+> tsc -p tsconfig.json

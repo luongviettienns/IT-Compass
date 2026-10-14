@@ -1,0 +1,63 @@
+
+> frontend@0.0.0 test:e2e
+> playwright test
+
+[E2E backend] (node:7108) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[E2E backend] (Use `node --trace-warnings ...` to show where the warning was created)
+[E2E backend] (node:7108) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[E2E backend] (Use `node --trace-warnings ...` to show where the warning was created)
+[E2E frontend] (node:17892) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[E2E frontend] (Use `node --trace-warnings ...` to show where the warning was created)
+[E2E frontend] [plugin builtin:vite-reporter]
+[E2E frontend] (!) Some chunks are larger than 500 kB after minification. Consider:
+[E2E frontend] - Using dynamic import() to code-split the application
+[E2E frontend] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[E2E frontend] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[E2E frontend] (node:15064) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[E2E frontend] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:27860) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [chromium] › e2e\critical-roles.spec.ts:11:1 › guest must log in before opening student bookings (8.1s)
+  ok 2 [chromium] › e2e\critical-roles.spec.ts:17:1 › student cancels own request and sees persisted cancellation after refresh (2.3s)
+  ok 3 [chromium] › e2e\critical-roles.spec.ts:28:1 › mentor saves booking notice and reads it back after refresh (3.1s)
+  x  4 [chromium] › e2e\critical-roles.spec.ts:41:1 › admin confirms a request and sees persisted confirmed detail after refresh (30.3s)
+
+
+  1) [chromium] › e2e\critical-roles.spec.ts:41:1 › admin confirms a request and sees persisted confirmed detail after refresh
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Xác nhận lịch', exact: true })
+
+
+      44 |   await row.getByRole('button', { name: 'Chi tiết', exact: true }).click();
+      45 |   await page.getByRole('button', { name: 'Xác nhận', exact: true }).click();
+    > 46 |   await page.getByRole('button', { name: 'Xác nhận lịch', exact: true }).click();
+         |                                                                          ^
+      47 |   await expect(page.getByText('Đã xác nhận lịch tư vấn.', { exact: true })).toBeVisible();
+      48 |   await page.reload();
+      49 |   // Default queue filters REQUESTED; choose confirmed to read the persisted result.
+        at C:\Users\ASUS\Desktop\ITCompass\frontend\e2e\critical-roles.spec.ts:46:74
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\critical-roles-admin-confi-fdeaf-firmed-detail-after-refresh-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\critical-roles-admin-confi-fdeaf-firmed-detail-after-refresh-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\critical-roles-admin-confi-fdeaf-firmed-detail-after-refresh-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\critical-roles-admin-confi-fdeaf-firmed-detail-after-refresh-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e\critical-roles.spec.ts:41:1 › admin confirms a request and sees persisted confirmed detail after refresh
+  3 passed (58.1s)

@@ -1,0 +1,40 @@
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/backend
+
+stdout | tests/integration/auth-permissions.test.ts > real HTTP auth lifecycle on isolated MySQL > registers a student with a hashed password/token and a scoped HttpOnly refresh cookie
+{"timestamp":"2026-10-14T00:17:01.520Z","level":"info","message":"HTTP request completed","requestId":"1ad25973-71d3-4822-90fa-fbdb8f5d1968","method":"POST","path":"/register","route":"POST /api/auth/register","statusCode":201,"durationMs":242.8,"userId":null,"ipAddress":"127.0.0.1","environment":"test","slowRequestThresholdMs":1000}
+
+ ❯ tests/integration/auth-permissions.test.ts (21 tests | 1 failed | 20 skipped) 790ms
+   ❯ real HTTP auth lifecycle on isolated MySQL (9)
+     × registers a student with a hashed password/token and a scoped HttpOnly refresh cookie 547ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 20 skipped (21)
+   Start at  07:17:00
+   Duration  1.57s (tests 54%, import 32%, transform 14%)
+
+
+stderr | tests/integration/auth-permissions.test.ts > real HTTP auth lifecycle on isolated MySQL > registers a student with a hashed password/token and a scoped HttpOnly refresh cookie
+{"timestamp":"2026-10-14T00:17:01.773Z","level":"warn","message":"HTTP request completed with warning","requestId":"41fad8ff-b7c8-402a-92e1-af0999e213cf","method":"POST","path":"/api/auth/login","route":"POST /login","statusCode":401,"durationMs":229.76,"userId":null,"ipAddress":"127.0.0.1","environment":"test"}
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/auth-permissions.test.ts > real HTTP auth lifecycle on isolated MySQL > registers a student with a hashed password/token and a scoped HttpOnly refresh cookie
+AssertionError: expected 401 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 401
+
+ ❯ tests/integration/auth-permissions.test.ts:90:36
+     88|     // Prove registration hashed the submitted password, not merely so…
+     89|     const registeredLogin = await request('/auth/login', { method: 'PO…
+     90|     expect(registeredLogin.status).toBe(200);
+       |                                    ^
+     91|     expect(registeredLogin.body.user?.id).toBe(String(stored.id));
+     92|     expect(await request('/auth/me', { token: registeredLogin.body.acc…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

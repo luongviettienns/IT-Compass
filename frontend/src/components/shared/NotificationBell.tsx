@@ -141,7 +141,7 @@ export function NotificationBell({ className, align = 'end' }: { className?: str
         }
     }, [navigate, user?.role]);
 
-    // Close on outside click
+    // Close on outside click or Escape
     useEffect(() => {
         if (!open) return;
         const handleClick = (event: MouseEvent) => {
@@ -149,8 +149,18 @@ export function NotificationBell({ className, align = 'end' }: { className?: str
                 setOpen(false);
             }
         };
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                event.stopPropagation();
+                setOpen(false);
+            }
+        };
         document.addEventListener('mousedown', handleClick);
-        return () => document.removeEventListener('mousedown', handleClick);
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('mousedown', handleClick);
+            window.removeEventListener('keydown', handleKeyDown);
+        };
     }, [open]);
 
     if (!isAuthenticated) return null;
@@ -162,8 +172,10 @@ export function NotificationBell({ className, align = 'end' }: { className?: str
         <div className={cn('relative', className)} ref={panelRef}>
             <button
                 onClick={() => setOpen(!open)}
-                className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 aria-label={`Thông báo${unreadCount > 0 ? ` (${unreadCount} chưa đọc)` : ''}`}
+                aria-expanded={open}
+                aria-haspopup="dialog"
             >
                 {unreadCount > 0 ? <BellDot size={20} /> : <Bell size={20} />}
                 {unreadCount > 0 && (
@@ -176,6 +188,8 @@ export function NotificationBell({ className, align = 'end' }: { className?: str
             <AnimatePresence>
                 {open && (
                     <motion.div
+                        role="dialog"
+                        aria-label="Hộp thông báo"
                         initial={{ opacity: 0, y: -8, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.96 }}
@@ -193,12 +207,16 @@ export function NotificationBell({ className, align = 'end' }: { className?: str
                                     <button
                                         onClick={() => markAllReadMutation.mutate()}
                                         disabled={markAllReadMutation.isPending}
-                                        className="text-xs font-medium text-primary hover:text-primary/80 transition-colors disabled:opacity-50 px-2 py-1 rounded-lg hover:bg-primary/5"
+                                        className="text-xs font-medium text-primary hover:text-primary/80 transition-colors disabled:opacity-50 px-2 py-1 rounded-lg hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                     >
                                         {markAllReadMutation.isPending ? 'Đang xử lý...' : 'Đọc tất cả'}
                                     </button>
                                 )}
-                                <button onClick={() => setOpen(false)} className="rounded-lg p-1 text-muted-foreground hover:bg-secondary transition-colors">
+                                <button
+                                    onClick={() => setOpen(false)}
+                                    className="rounded-lg p-1 text-muted-foreground hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                    aria-label="Đóng bảng thông báo"
+                                >
                                     <X size={16} />
                                 </button>
                             </div>

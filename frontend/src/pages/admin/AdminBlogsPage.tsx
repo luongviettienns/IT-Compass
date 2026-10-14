@@ -492,16 +492,27 @@ export default function AdminBlogsPage() {
                                         )}
                                     </td>
                                     <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
-                                        <button onClick={() => openEditForm(post)} className="text-primary hover:bg-primary/10 p-1.5 rounded-lg transition-colors" title="Sửa bài viết">
+                                        <button
+                                            onClick={() => openEditForm(post)}
+                                            className="text-primary hover:bg-primary/10 p-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                            aria-label={`Sửa bài viết ${post.title}`}
+                                            title={`Sửa bài viết ${post.title}`}
+                                        >
                                             <Settings className="w-4 h-4" />
                                         </button>
-                                        <button onClick={() => openPreviewForm(post.id)} className="text-indigo-500 hover:bg-indigo-500/10 p-1.5 rounded-lg transition-colors" title="Xem trước">
+                                        <button
+                                            onClick={() => openPreviewForm(post.id)}
+                                            className="text-indigo-500 hover:bg-indigo-500/10 p-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                            aria-label={`Xem trước bài viết ${post.title}`}
+                                            title={`Xem trước bài viết ${post.title}`}
+                                        >
                                             <Eye className="w-4 h-4" />
                                         </button>
                                         <button
                                             onClick={() => navigate(`/admin/blog-comments?postId=${post.id}`)}
-                                            className="text-secondary-foreground hover:bg-secondary p-1.5 rounded-lg transition-colors"
-                                            title="Xem bình luận của bài viết"
+                                            className="text-secondary-foreground hover:bg-secondary p-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                            aria-label={`Xem bình luận của bài viết ${post.title}`}
+                                            title={`Xem bình luận của bài viết ${post.title}`}
                                         >
                                             <MessageSquareText className="w-4 h-4" />
                                         </button>

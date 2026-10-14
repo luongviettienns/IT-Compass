@@ -112,7 +112,8 @@ export function MentorSidebar({ mobileOpen = false, onMobileClose, collapsed = f
                     {!collapsed && (
                         <button
                             onClick={() => onCollapsedChange?.(true)}
-                            className="rounded-lg p-1.5 hover:bg-secondary text-muted-foreground transition-colors hidden md:block"
+                            className="rounded-lg p-1.5 hover:bg-secondary text-muted-foreground transition-colors hidden md:block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            aria-label="Thu gọn sidebar"
                         >
                             <ChevronLeft size={18} />
                         </button>
@@ -124,7 +125,8 @@ export function MentorSidebar({ mobileOpen = false, onMobileClose, collapsed = f
             {collapsed && (
                 <button
                     onClick={() => onCollapsedChange?.(false)}
-                    className="absolute -right-3 top-20 hidden md:flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-md hover:text-primary transition-colors z-50"
+                    className="absolute -right-3 top-20 hidden md:flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-md hover:text-primary transition-colors z-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    aria-label="Mở rộng sidebar"
                 >
                     <ChevronLeft size={12} className="rotate-180" />
                 </button>

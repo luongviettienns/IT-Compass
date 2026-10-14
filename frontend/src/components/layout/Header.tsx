@@ -97,7 +97,10 @@ export function Header() {
                             <div className="relative">
                                 <button
                                     onClick={() => setUserMenuOpen(!userMenuOpen)}
-                                    className="flex items-center gap-2 rounded-full p-1 hover:bg-secondary transition-colors"
+                                    aria-expanded={userMenuOpen}
+                                    aria-haspopup="menu"
+                                    aria-label="Menu tài khoản"
+                                    className="flex items-center gap-2 rounded-full p-1 hover:bg-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[40px] min-w-[40px]"
                                 >
                                     <Avatar src={user.profile?.avatarUrl} alt={user.fullName} size="sm" />
                                     <span className="hidden sm:block text-sm font-medium text-foreground max-w-[120px] truncate">

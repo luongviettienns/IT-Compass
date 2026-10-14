@@ -1,0 +1,171 @@
+CHECK: lint EXIT: 0
+
+> frontend@0.0.0 lint
+> eslint .
+
+CHECK: typecheck EXIT: 0
+
+> frontend@0.0.0 typecheck
+> tsc -b --noEmit
+
+CHECK: typecheck:tests EXIT: 0
+
+> frontend@0.0.0 typecheck:tests
+> tsc -p tsconfig.test.json
+
+CHECK: test EXIT: 0
+
+> frontend@0.0.0 test
+> vitest run
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+
+ Test Files  8 passed (8)
+      Tests  47 passed (47)
+   Start at  22:56:46
+   Duration  10.70s (tests 50%, environment 26%, import 23%, transform 1%)
+
+CHECK: build EXIT: 0
+
+> frontend@0.0.0 build
+> tsc -b && vite build
+
+vite v8.0.3 building client environment for production...
+[2K
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+transforming...✓ 3124 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                   1.59 kB │ gzip:   0.71 kB
+dist/assets/index-BBTWvy7_.css                   79.05 kB │ gzip:  13.53 kB
+dist/assets/chevron-left-BJVQp_lq.js              0.13 kB │ gzip:   0.14 kB
+dist/assets/chevron-right-DQGQpe9B.js             0.13 kB │ gzip:   0.14 kB
+dist/assets/blogQueryKeys-DIP9ybfn.js             0.13 kB │ gzip:   0.10 kB
+dist/assets/arrow-left-hBJj2BKF.js                0.16 kB │ gzip:   0.16 kB
+dist/assets/arrow-right-ZpPPbESs.js               0.16 kB │ gzip:   0.16 kB
+dist/assets/clock-3-D-ZYkA3I.js                   0.16 kB │ gzip:   0.16 kB
+dist/assets/search-DbVRB0yt.js                    0.17 kB │ gzip:   0.16 kB
+dist/assets/trending-up-CsdHU8Ng.js               0.17 kB │ gzip:   0.17 kB
+dist/assets/circle-check-C6jP_esG.js              0.17 kB │ gzip:   0.16 kB
+dist/assets/user-round-CuJPo_in.js                0.18 kB │ gzip:   0.17 kB
+dist/assets/assessmentQueryKeys-CLyUGcs2.js       0.18 kB │ gzip:   0.13 kB
+dist/assets/menu-DLtEPq3q.js                      0.18 kB │ gzip:   0.15 kB
+dist/assets/holland-UsZJFOZV.js                   0.20 kB │ gzip:   0.20 kB
+dist/assets/briefcase-z9ZmGsc4.js                 0.22 kB │ gzip:   0.19 kB
+dist/assets/Skeleton-CLOZu95s.js                  0.22 kB │ gzip:   0.19 kB
+dist/assets/target-B1YJKDRm.js                    0.22 kB │ gzip:   0.16 kB
+dist/assets/square-check-big-CHoTicfZ.js          0.22 kB │ gzip:   0.19 kB
+dist/assets/mentorQueryKeys-BnEG2cOb.js           0.23 kB │ gzip:   0.13 kB
+dist/assets/message-circle-BdojngXA.js            0.24 kB │ gzip:   0.21 kB
+dist/assets/chart-column-cNnY_7i7.js              0.25 kB │ gzip:   0.19 kB
+dist/assets/compass-DwnVLXpz.js                   0.25 kB │ gzip:   0.20 kB
+dist/assets/eye-Dbx-0NUh.js                       0.25 kB │ gzip:   0.20 kB
+dist/assets/funnel-CaJzxog9.js                    0.25 kB │ gzip:   0.21 kB
+dist/assets/calendar-C5v9I35N.js                  0.25 kB │ gzip:   0.20 kB
+dist/assets/shield-DNAFrDUm.js                    0.27 kB │ gzip:   0.22 kB
+dist/assets/chart-pie-CimnOYoj.js                 0.27 kB │ gzip:   0.22 kB
+dist/assets/send-horizontal-CaW8GjnK.js           0.28 kB │ gzip:   0.22 kB
+dist/assets/authNavigation-X9UTADh5.js            0.30 kB │ gzip:   0.23 kB
+dist/assets/badge-check-HwaAMt1z.js               0.31 kB │ gzip:   0.21 kB
+dist/assets/shield-check-Ck4sqh5i.js              0.32 kB │ gzip:   0.24 kB
+dist/assets/save-vljJEBQ_.js                      0.32 kB │ gzip:   0.22 kB
+dist/assets/calendar-check-2-DoFm4_TY.js          0.32 kB │ gzip:   0.22 kB
+dist/assets/trash-2-DANLgYpQ.js                   0.32 kB │ gzip:   0.21 kB
+dist/assets/graduation-cap-CKPnN_4x.js            0.33 kB │ gzip:   0.24 kB
+dist/assets/server-CR01dfJ7.js                    0.33 kB │ gzip:   0.21 kB
+dist/assets/user-pen-vooMcnj2.js                  0.34 kB │ gzip:   0.25 kB
+dist/assets/message-square-text-CeKnZscw.js       0.34 kB │ gzip:   0.24 kB
+dist/assets/shield-alert-DvS9cju1.js              0.35 kB │ gzip:   0.26 kB
+dist/assets/key-round-CK6D3IL2.js                 0.35 kB │ gzip:   0.26 kB
+dist/assets/file-text-Dae_1pT8.js                 0.38 kB │ gzip:   0.25 kB
+dist/assets/earth-DiTr8nDA.js                     0.39 kB │ gzip:   0.26 kB
+dist/assets/database-gzMt6hac.js                  0.39 kB │ gzip:   0.26 kB
+dist/assets/clipboard-list-CtFZb60t.js            0.41 kB │ gzip:   0.26 kB
+dist/assets/user-check-6Mjymskk.js                0.42 kB │ gzip:   0.29 kB
+dist/assets/star-Bywx0RoU.js                      0.47 kB │ gzip:   0.29 kB
+dist/assets/settings-BWY6n0v4.js                  0.48 kB │ gzip:   0.26 kB
+dist/assets/sparkles-tgl6oRqg.js                  0.49 kB │ gzip:   0.28 kB
+dist/assets/bookingTime-t8Vlqnks.js               0.49 kB │ gzip:   0.34 kB
+dist/assets/palette-DxG4wj4u.js                   0.51 kB │ gzip:   0.27 kB
+dist/assets/userDisplay-kskeHy2L.js               0.51 kB │ gzip:   0.32 kB
+dist/assets/EmptyState-CHLkhDe1.js                0.52 kB │ gzip:   0.29 kB
+dist/assets/brain-BvwBoX7w.js                     0.57 kB │ gzip:   0.31 kB
+dist/assets/dist-8g6-Ijsn.js                      0.64 kB │ gzip:   0.39 kB
+dist/assets/languages-DHIVYJtS.js                 0.64 kB │ gzip:   0.33 kB
+dist/assets/adminQueryKeys-D4XvMKfi.js            0.67 kB │ gzip:   0.23 kB
+dist/assets/AssessmentFacts-pe4dTGut.js           0.70 kB │ gzip:   0.46 kB
+dist/assets/Badge-ufT0fJxJ.js                     0.75 kB │ gzip:   0.39 kB
+dist/assets/conversationApi-C4fdCV8l.js           0.77 kB │ gzip:   0.49 kB
+dist/assets/use-in-view-CCcMtUso.js               0.86 kB │ gzip:   0.49 kB
+dist/assets/adminMentorApi-CGPGWAuT.js            1.05 kB │ gzip:   0.52 kB
+dist/assets/Input-ByicmYJs.js                     1.07 kB │ gzip:   0.57 kB
+dist/assets/Card-CQId7mCa.js                      1.09 kB │ gzip:   0.42 kB
+dist/assets/adminUserApi-xVT-930k.js              1.12 kB │ gzip:   0.44 kB
+dist/assets/AdminQueryBoundary-DLe5N17T.js        1.16 kB │ gzip:   0.65 kB
+dist/assets/BookingStatusBadge-B_pNn2sU.js        1.20 kB │ gzip:   0.70 kB
+dist/assets/assessmentApi-iDdi1Asd.js             1.30 kB │ gzip:   0.50 kB
+dist/assets/mentorApi-32RXdvpR.js                 1.35 kB │ gzip:   0.73 kB
+dist/assets/AuthContext-LywxwC1m.js               1.78 kB │ gzip:   0.83 kB
+dist/assets/NotFoundPage-BxDGJ8Oc.js              1.84 kB │ gzip:   0.95 kB
+dist/assets/BookingCancelDialog-_LUQ29BG.js       2.73 kB │ gzip:   1.18 kB
+dist/assets/blogApi-Dc3ydhMV.js                   2.99 kB │ gzip:   0.88 kB
+dist/assets/AdminSettingsPage-Ca6mqFiC.js         3.15 kB │ gzip:   1.35 kB
+dist/assets/bookingApi-Djir452E.js                3.76 kB │ gzip:   1.20 kB
+dist/assets/ForgotPasswordPage-DoTFVzaw.js        3.92 kB │ gzip:   1.81 kB
+dist/assets/MajorsPage-blFdtWeV.js                3.94 kB │ gzip:   1.73 kB
+dist/assets/AdminActionDialog-Cn9oCOxN.js         4.37 kB │ gzip:   1.84 kB
+dist/assets/ResetPasswordPage-DC0IpUwv.js         4.72 kB │ gzip:   2.12 kB
+dist/assets/useMutation-K1g7ahMO.js               5.56 kB │ gzip:   1.78 kB
+dist/assets/MajorDetailPage-Csh65W3B.js           6.45 kB │ gzip:   2.04 kB
+dist/assets/MentorPreview-Oa3Lk-ux.js             7.69 kB │ gzip:   2.73 kB
+dist/assets/AuthPage--O-m7k7a.js                  8.67 kB │ gzip:   3.00 kB
+dist/assets/MentorPage-WIkPpJfD.js                9.96 kB │ gzip:   3.46 kB
+dist/assets/TestPage-BPJ0FBP8.js                  9.99 kB │ gzip:   3.39 kB
+dist/assets/MentorProfileEdit-BCbhbFsW.js        10.01 kB │ gzip:   3.48 kB
+dist/assets/MentorOverview-NpB0vftR.js           10.05 kB │ gzip:   3.44 kB
+dist/assets/majors-C8S7Y7If.js                   10.08 kB │ gzip:   4.21 kB
+dist/assets/createLucideIcon-CSj2gx0h.js         10.36 kB │ gzip:   4.12 kB
+dist/assets/MentorAvailabilityPage-Kkh9W4Xf.js   10.39 kB │ gzip:   3.55 kB
+dist/assets/BlogPage-DdMSVnBq.js                 10.52 kB │ gzip:   3.71 kB
+dist/assets/AboutUsPage-DW8yTF6E.js              10.57 kB │ gzip:   3.37 kB
+dist/assets/MentorBookingsPage-QKI9EEJD.js       10.92 kB │ gzip:   3.95 kB
+dist/assets/authApi-D7fubHbM.js                  11.61 kB │ gzip:   4.09 kB
+dist/assets/MessagesPage-Dsrh-Gr-.js             11.69 kB │ gzip:   4.12 kB
+dist/assets/AdminPage-DwdTUps0.js                12.38 kB │ gzip:   4.02 kB
+dist/assets/BlogDetailPage-CAbIYm2U.js           12.88 kB │ gzip:   3.94 kB
+dist/assets/BookingDialog-D1ar5KnF.js            13.52 kB │ gzip:   4.26 kB
+dist/assets/AdminBlogCommentsPage-CWWxuQKQ.js    13.88 kB │ gzip:   4.81 kB
+dist/assets/MentorPage-BKQty9A1.js               14.34 kB │ gzip:   4.35 kB
+dist/assets/StudentBookingsPage-DZppH3tw.js      14.36 kB │ gzip:   5.06 kB
+dist/assets/QuizPage-D71UF_F5.js                 15.35 kB │ gzip:   5.25 kB
+dist/assets/MentorDetailPage-ChONTOZz.js         17.02 kB │ gzip:   5.14 kB
+dist/assets/AdminAuditLogsPage-BiPN4eTF.js       19.03 kB │ gzip:   4.45 kB
+dist/assets/ResultPage-C1PinoX2.js               19.73 kB │ gzip:   5.36 kB
+dist/assets/ProfilePage-BNjHPhs2.js              20.65 kB │ gzip:   6.00 kB
+dist/assets/AdminBookingsPage-UNW_1DZh.js        21.57 kB │ gzip:   6.97 kB
+dist/assets/useQuery-C-qjrmM9.js                 22.33 kB │ gzip:   7.36 kB
+dist/assets/AdminMentorsPage-CvnSysDN.js         23.88 kB │ gzip:   6.41 kB
+dist/assets/AdminUsersPage-DwVDxp5U.js           25.33 kB │ gzip:   7.04 kB
+dist/assets/utils-D9-3p_sD.js                    26.41 kB │ gzip:   8.43 kB
+dist/assets/AdminDashboard-CkwGD4Pd.js           27.69 kB │ gzip:   8.05 kB
+dist/assets/AdminAssessmentsPage-yZNTVnWj.js     31.80 kB │ gzip:  10.17 kB
+dist/assets/dist-D-9bkLV6.js                     36.02 kB │ gzip:  10.26 kB
+dist/assets/LandingPage-BOG4WYhx.js              36.72 kB │ gzip:  11.23 kB
+dist/assets/chunk-UVKPFVEO-Crfp7GiN.js           41.70 kB │ gzip:  14.88 kB
+dist/assets/AdminBlogsPage-BeZd_G02.js           53.56 kB │ gzip:  14.31 kB
+dist/assets/proxy-D0H8xi_L.js                   120.77 kB │ gzip:  39.22 kB
+dist/assets/BlogContentRenderer-Conp6u3s.js     154.47 kB │ gzip:  46.18 kB
+dist/assets/index-UdcL-pY9.js                   305.76 kB │ gzip:  95.14 kB
+dist/assets/CartesianChart-TfaJQeGN.js          330.36 kB │ gzip:  97.77 kB
+dist/assets/adminExport-D21DdvNl.js             942.62 kB │ gzip: 261.55 kB
+
+✓ built in 1.57s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

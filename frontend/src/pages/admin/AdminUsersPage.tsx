@@ -8,6 +8,7 @@ import { useMemo, useState } from 'react';
 import { AdminUserEditModal } from '../../components/admin/AdminUserEditModal';
 import { AdminActionDialog } from '../../components/admin/AdminActionDialog';
 import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
+import { AdminQueryBoundary } from '../../components/admin/AdminQueryBoundary';
 import { Key, CheckSquare, Settings, Search, Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { getRoleBadge, getUserStatusLabel } from '../../lib/userDisplay';
@@ -77,10 +78,14 @@ export default function AdminUsersPage() {
         [page, search, statusFilter],
     );
 
-    const { data, isLoading } = useQuery({
+    const usersListQuery = useQuery({
         queryKey: adminQueryKeys.users(usersQuery),
         queryFn: () => adminUserApi.listUsers({ page, limit: 10, search: search || undefined, status: statusFilter === 'all' ? undefined : statusFilter.toUpperCase() as UserStatus }),
     });
+    const response = usersListQuery.isSuccess ? usersListQuery.data : undefined;
+    const listReady = !!response && Array.isArray(response.users) && !!response.pagination && Number.isFinite(response.summary?.total);
+    const data = listReady ? response : undefined;
+    const isLoading = usersListQuery.isPending;
 
     const invalidateUsersData = (userId?: string) => {
         queryClient.invalidateQueries({ queryKey: adminQueryKeys.usersRoot });
@@ -239,10 +244,10 @@ export default function AdminUsersPage() {
                         <h1 className="text-2xl font-bold tracking-tight">Quản lý Người dùng</h1>
                         <p className="text-sm text-muted-foreground">
                             Danh sách tài khoản và phân quyền trên hệ thống.
-                            Tổng cộng: <span className="font-bold">{data?.summary?.total || 0}</span> người dùng.
+                            Tổng cộng: <span className="font-bold">{data?.summary?.total ?? '—'}</span> người dùng.
                         </p>
                     </div>
-                    <button onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/15">
+                    <button disabled={!listReady} onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/15 disabled:opacity-50">
                         <Download className="h-4 w-4" /> Export
                     </button>
                 </div>
@@ -275,7 +280,7 @@ export default function AdminUsersPage() {
                 </div>
 
                 {/* Bulk Actions Toolbar */}
-                {selectedUserIds.length > 0 && (
+                {listReady && selectedUserIds.length > 0 && (
                     <div className="bg-primary/10 border-primary border p-4 rounded-2xl flex items-center justify-between animate-in fade-in slide-in-from-top-4">
                         <span className="font-bold text-sm text-primary flex items-center gap-2"><CheckSquare className="w-4 h-4" /> Đã chọn {selectedUserIds.length} người dùng</span>
                         <div className="flex items-center gap-2">
@@ -288,6 +293,7 @@ export default function AdminUsersPage() {
                     </div>
                 )}
 
+                <AdminQueryBoundary query={usersListQuery} label="danh sách người dùng" hasData={!!data}>
                 <div className="overflow-hidden rounded-[24px] border bg-background shadow-sm relative min-h-[300px]">
                     {(isLoading || statusMutation.isPending || bulkStatusMutation.isPending || bulkRevokeMutation.isPending) && (
                         <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-10 backdrop-blur-sm">
@@ -395,6 +401,7 @@ export default function AdminUsersPage() {
                     )}
                 </div>
 
+                </AdminQueryBoundary>
                 <AdminUserEditModal isOpen={!!editingUserId} userId={editingUserId} onClose={() => setEditingUserId(null)} />
                 <AdminActionDialog
                     isOpen={statusDialog.open}
@@ -468,6 +475,9 @@ export default function AdminUsersPage() {
                     onExport={handleExport}
                     config={{
                         moduleLabel: 'Users',
+                        dataUnavailable: !listReady,
+                        isReloading: usersListQuery.isFetching,
+                        onReload: () => { void usersListQuery.refetch(); },
                         filePrefix: 'users-export',
                         totalRows: data?.summary?.total || 0,
                         filteredRows: data?.pagination?.total || 0,

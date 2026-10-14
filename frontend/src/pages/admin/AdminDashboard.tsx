@@ -28,7 +28,7 @@ import { adminMentorApi } from '../../lib/adminMentorApi';
 import { blogApi } from '../../lib/blogApi';
 import { assessmentApi } from '../../lib/assessmentApi';
 import { adminQueryKeys } from '../../lib/adminQueryKeys';
-import { Loader } from '../../components/ui/Loader';
+import { AdminQueryBoundary } from '../../components/admin/AdminQueryBoundary';
 import { useAuth } from '../../contexts/AuthContext';
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -36,36 +36,36 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 export default function AdminDashboard() {
     const { user } = useAuth();
 
-    const { data: userStats, isLoading: loadingUsers } = useQuery({
+    const usersQuery = useQuery({
         queryKey: adminQueryKeys.userStats,
         queryFn: adminUserApi.getUserStats,
     });
 
-    const { data: mentorList, isLoading: loadingMentors } = useQuery({
+    const mentorsQuery = useQuery({
         queryKey: adminQueryKeys.mentors({ limit: 1 }),
         queryFn: () => adminMentorApi.listMentors({ limit: 1 }),
     });
 
-    const { data: blogStats, isLoading: loadingBlogs } = useQuery({
+    const blogsQuery = useQuery({
         queryKey: adminQueryKeys.blogStats,
         queryFn: blogApi.adminStats,
     });
 
-    const { data: assessmentStats, isLoading: loadingAssessments } = useQuery({
+    const assessmentsQuery = useQuery({
         queryKey: adminQueryKeys.assessmentStats,
         queryFn: assessmentApi.getAdminStats,
     });
+    const userStats = usersQuery.isSuccess ? usersQuery.data : undefined;
+    const mentorList = mentorsQuery.isSuccess ? mentorsQuery.data : undefined;
+    const blogStats = blogsQuery.isSuccess ? blogsQuery.data : undefined;
+    const assessmentStats = assessmentsQuery.isSuccess ? assessmentsQuery.data : undefined;
     const trendData = assessmentStats?.stats?.trend || [];
 
-    if (loadingUsers || loadingMentors || loadingBlogs || loadingAssessments) {
-        return <div className="flex h-[400px] items-center justify-center"><Loader /></div>;
-    }
-
     const statCards = [
-        { label: 'Tổng người dùng', value: userStats?.stats?.total || 0, icon: Users, color: 'blue' },
-        { label: 'Tổng Mentor', value: mentorList?.summary?.total || 0, icon: UserCheck, color: 'indigo' },
-        { label: 'Tổng bài viết', value: blogStats?.stats?.total || 0, icon: FileText, color: 'amber' },
-        { label: 'Lượt Assessment', value: assessmentStats?.stats?.totalAttempts || 0, icon: ClipboardList, color: 'emerald' },
+        { label: 'Tổng người dùng', value: userStats?.stats?.total, query: usersQuery, icon: Users, color: 'blue' },
+        { label: 'Tổng Mentor', value: mentorList?.summary?.total, query: mentorsQuery, icon: UserCheck, color: 'indigo' },
+        { label: 'Tổng bài viết', value: blogStats?.stats?.total, query: blogsQuery, icon: FileText, color: 'amber' },
+        { label: 'Lượt Assessment', value: assessmentStats?.stats?.totalAttempts, query: assessmentsQuery, icon: ClipboardList, color: 'emerald' },
     ];
 
     const colorMap: Record<string, { bg: string; text: string; iconBg: string }> = {
@@ -142,9 +142,9 @@ export default function AdminDashboard() {
                                         <stat.icon size={20} className={colors.text} />
                                     </div>
                                 </div>
-                                <h3 className={`mt-3 text-3xl font-black ${colors.text}`}>
-                                    {stat.value.toLocaleString('vi-VN')}
-                                </h3>
+                                <AdminQueryBoundary query={stat.query} label={stat.label.toLowerCase()} compact hasData={typeof stat.value === 'number'}>
+                                    <h3 className={`mt-3 text-3xl font-black ${colors.text}`}>{stat.value?.toLocaleString('vi-VN') ?? '—'}</h3>
+                                </AdminQueryBoundary>
                             </motion.div>
                         );
                     })}
@@ -165,22 +165,23 @@ export default function AdminDashboard() {
                             </div>
                             <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-muted-foreground">Người dùng</h3>
                         </div>
+                        <AdminQueryBoundary query={usersQuery} label="thống kê người dùng" hasData={!!userStats?.stats}>
                         <div className="space-y-3">
                             <div className="flex items-center justify-between py-2 border-b border-dashed">
                                 <span className="flex items-center gap-2 text-sm"><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Hoạt động</span>
-                                <span className="font-black text-emerald-600">{userStats?.stats?.byStatus?.active || 0}</span>
+                                <span className="font-black text-emerald-600">{userStats?.stats?.byStatus?.active ?? '—'}</span>
                             </div>
                             <div className="flex items-center justify-between py-2 border-b border-dashed">
                                 <span className="flex items-center gap-2 text-sm"><UserX className="w-3.5 h-3.5 text-destructive" /> Bị khóa</span>
-                                <span className="font-black text-destructive">{userStats?.stats?.byStatus?.blocked || 0}</span>
+                                <span className="font-black text-destructive">{userStats?.stats?.byStatus?.blocked ?? '—'}</span>
                             </div>
                             <div className="flex items-center justify-between py-2">
                                 <span className="flex items-center gap-2 text-sm"><Eye className="w-3.5 h-3.5 text-amber-500" /> Đã xác minh</span>
-                                <span className="font-black text-amber-600">{userStats?.stats?.verification?.verified || 0}</span>
+                                <span className="font-black text-amber-600">{userStats?.stats?.verification?.verified ?? '—'}</span>
                             </div>
                         </div>
+                        </AdminQueryBoundary>
                     </motion.div>
-
                     {/* Blog breakdown */}
                     <motion.div
                         initial={{ opacity: 0, y: 16 }}
@@ -194,24 +195,26 @@ export default function AdminDashboard() {
                             </div>
                             <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-muted-foreground">Nội dung</h3>
                         </div>
+                        <AdminQueryBoundary query={blogsQuery} label="thống kê nội dung" hasData={!!blogStats?.stats}>
                         <div className="space-y-3">
                             <div className="flex items-center justify-between py-2 border-b border-dashed">
                                 <span className="text-sm">Đã xuất bản</span>
-                                <span className="font-black text-emerald-600">{blogStats?.stats?.published || 0}</span>
+                                <span className="font-black text-emerald-600">{blogStats?.stats?.published ?? '—'}</span>
                             </div>
                             <div className="flex items-center justify-between py-2 border-b border-dashed">
                                 <span className="text-sm">Bản nháp</span>
-                                <span className="font-black text-amber-600">{blogStats?.stats?.draft || 0}</span>
+                                <span className="font-black text-amber-600">{blogStats?.stats?.draft ?? '—'}</span>
                             </div>
                             <div className="flex items-center justify-between py-2 border-b border-dashed">
                                 <span className="text-sm">Lên lịch đăng</span>
-                                <span className="font-black text-indigo-600">{blogStats?.stats?.scheduled || 0}</span>
+                                <span className="font-black text-indigo-600">{blogStats?.stats?.scheduled ?? '—'}</span>
                             </div>
                             <div className="flex items-center justify-between py-2">
                                 <span className="flex items-center gap-2 text-sm"><MessageSquare className="w-3.5 h-3.5" /> Bình luận</span>
-                                <span className="font-black">{blogStats?.stats?.totalComments || 0}</span>
+                                <span className="font-black">{blogStats?.stats?.totalComments ?? '—'}</span>
                             </div>
                         </div>
+                        </AdminQueryBoundary>
                     </motion.div>
 
                     {/* Mentor breakdown */}
@@ -227,20 +230,22 @@ export default function AdminDashboard() {
                             </div>
                             <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-muted-foreground">Mentor</h3>
                         </div>
+                        <AdminQueryBoundary query={mentorsQuery} label="thống kê mentor" hasData={!!mentorList?.summary}>
                         <div className="space-y-3">
                             <div className="flex items-center justify-between py-2 border-b border-dashed">
                                 <span className="text-sm">Hoạt động</span>
-                                <span className="font-black text-emerald-600">{mentorList?.summary?.active || 0}</span>
+                                <span className="font-black text-emerald-600">{mentorList?.summary?.active ?? '—'}</span>
                             </div>
                             <div className="flex items-center justify-between py-2 border-b border-dashed">
                                 <span className="text-sm">Tạm dừng</span>
-                                <span className="font-black text-amber-600">{mentorList?.summary?.paused || 0}</span>
+                                <span className="font-black text-amber-600">{mentorList?.summary?.paused ?? '—'}</span>
                             </div>
                             <div className="flex items-center justify-between py-2">
                                 <span className="text-sm">Đã xác thực</span>
-                                <span className="font-black text-blue-600">{mentorList?.summary?.verified || 0}</span>
+                                <span className="font-black text-blue-600">{mentorList?.summary?.verified ?? '—'}</span>
                             </div>
                         </div>
+                        </AdminQueryBoundary>
                     </motion.div>
                 </div>
 
@@ -256,6 +261,7 @@ export default function AdminDashboard() {
                             <p className="text-xs text-muted-foreground">6 tháng gần nhất</p>
                         </div>
                     </div>
+                    <AdminQueryBoundary query={assessmentsQuery} label="xu hướng bài định hướng" hasData={!!assessmentStats?.stats}>
                     <div className="h-[220px] w-full">
                         <ResponsiveContainer width="100%" height={220}>
                             <LineChart data={trendData}>
@@ -267,6 +273,7 @@ export default function AdminDashboard() {
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
+                    </AdminQueryBoundary>
                 </motion.section>
 
                 {/* ── Quick Actions ─────────────────────────────────── */}

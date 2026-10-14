@@ -1,0 +1,245 @@
+Browser tab: 1, Title: "Tổng quan — Admin Portal — IT Compass", URL: "http://127.0.0.1:54020/admin".
+0 AXWebArea Tổng quan — Admin Portal — IT Compass, URL: 127.0.0.1:54020/admin
+	1 container root
+		2 container Notifications alt+T
+		3 container
+			4 button Mở menu
+			5 text Tổng quan
+		6 container
+			7 container
+				8 heading Chào, IC009 Quản trị kiểm thử!, Value: 1
+					9 text Chào,  IC009 Quản trị kiểm thử !
+				10 text Đây là tổng quan hệ thống IT Compass.
+			11 text TỔNG NGƯỜI DÙNG
+			12 container
+				13 text Không thể tải  tổng người dùng .
+			14 text Lỗi API được gây ra có kiểm soát để kiểm thử IC-009.
+			15 button Thử lại
+			16 text TỔNG MENTOR
+			17 heading 0, Value: 3
+				18 text 0
+			19 text TỔNG BÀI VIẾT
+			20 heading 0, Value: 3
+				21 text 0
+			22 text LƯỢT ASSESSMENT
+			23 container
+				24 text Không thể tải  lượt assessment .
+			25 text Lỗi API được gây ra có kiểm soát để kiểm thử IC-009.
+			26 button Thử lại
+			27 heading NGƯỜI DÙNG, Value: 3
+				28 text NGƯỜI DÙNG
+			29 container
+				30 text Không thể tải  thống kê người dùng .
+			31 text Lỗi API được gây ra có kiểm soát để kiểm thử IC-009.
+			32 button Thử lại
+			33 heading NỘI DUNG, Value: 3
+				34 text NỘI DUNG
+			35 text Đã xuất bản 0 Bản nháp 0 Lên lịch đăng 0 Bình luận 0
+			36 heading MENTOR, Value: 3
+				37 text MENTOR
+			38 text Hoạt động 0 Tạm dừng 0 Đã xác thực 0
+			39 heading ASSESSMENT TREND, Value: 2
+				40 text ASSESSMENT TREND
+			41 text 6 tháng gần nhất
+			42 container
+				43 text Không thể tải  xu hướng bài định hướng . Lỗi API được gây ra có kiểm soát để kiểm thử IC-009.
+				44 button Thử lại
+			45 heading TRUY CẬP NHANH, Value: 2
+				46 text TRUY CẬP NHANH
+			47 link Description: Quản lý người dùng Phân quyền, khóa tài khoản, Value: 127.0.0.1:54020/admin/users
+			48 link Description: Lịch tư vấn Xử lý booking, Value: 127.0.0.1:54020/admin/bookings
+			49 link Description: Duyệt nội dung Bài viết, bình luận, Value: 127.0.0.1:54020/admin/blogs
+			50 link Description: Xem nhật ký Theo dõi hành động, Value: 127.0.0.1:54020/admin/audit-logs
+			51 link Description: Thống kê Assessment Phân tích kết quả, Value: 127.0.0.1:54020/admin/assessments
+
+The focused UI element is 0 AXWebArea Tổng quan — Admin Portal — IT Compass, URL: 127.0.0.1:54020/admin
+
+Browser tab: 1, Title: "Quản lý Assessment — Admin — IT Compass", URL: "http://127.0.0.1:54020/admin/assessments".
+0 AXWebArea Quản lý Assessment — Admin — IT Compass, URL: 127.0.0.1:54020/admin/assessments
+	1 container root
+		2 container Notifications alt+T
+		52 container
+			53 container
+				54 text IT COMPASS ADMINISTRATOR
+			55 button
+			56 link Description: Tổng quan, Value: 127.0.0.1:54020/admin
+			57 link Description: Người dùng, Value: 127.0.0.1:54020/admin/users
+			58 link Description: Mentor, Value: 127.0.0.1:54020/admin/mentors
+			59 link Description: Nội dung (CMS), Value: 127.0.0.1:54020/admin/blogs
+			60 link Description: Bình luận blog, Value: 127.0.0.1:54020/admin/blog-comments
+			61 link Description: Assessment, Value: 127.0.0.1:54020/admin/assessments
+			62 link Description: Lịch tư vấn, Value: 127.0.0.1:54020/admin/bookings
+			63 link Description: Nhật ký hệ thống, Value: 127.0.0.1:54020/admin/audit-logs
+			64 link Description: Cài đặt, Value: 127.0.0.1:54020/admin/settings
+			65 text IC009 Quản trị kiểm thử admin@ic009.example.test
+			66 link Description: Về trang chính, Value: 127.0.0.1:54020/
+			67 button Đăng xuất
+		3 container
+			68 text Admin / Assessment
+			69 text field (settable)
+			70 text IC009 Quản trị kiểm thử
+		6 container
+			71 heading Quản lý Assessment, Value: 1
+				72 text Quản lý Assessment
+			73 text Attempt list, filter, export theo range, trend dashboard.
+			74 button (disabled) Export
+			75 container
+				76 text Không thể tải  thống kê bài định hướng .
+			77 text Lỗi API được gây ra có kiểm soát để kiểm thử IC-009.
+			78 button Thử lại
+			79 text field (settable)
+			80 pop up button (collapsed, settable) Value: Tất cả trạng thái, Secondary Actions: Expand
+				81 menu
+					82 (selected) Tất cả trạng thái
+					83 SUBMITTED
+					84 DRAFT
+			85 pop up button (collapsed, settable) Value: Tất cả kết quả, Secondary Actions: Expand
+				86 menu
+					87 (selected) Tất cả kết quả
+					88 SE
+					89 Data
+					90 Cybersecurity
+					91 UXUI
+					92 QLDA
+					93 DevOps
+					94 Fallback
+			95 date field (settable)
+				96 container
+					97 stepper
+					98 stepper
+					99 stepper
+					100 stepper
+					101 stepper
+					102 stepper
+				103 pop up button Show local date and time picker
+			104 date field (settable)
+				105 container
+					106 stepper
+					107 stepper
+					108 stepper
+					109 stepper
+					110 stepper
+					111 stepper
+				112 pop up button Show local date and time picker
+			113 text No filters
+			114 table
+				115 row
+					116 cell
+						117 text USER
+					118 cell
+						119 text RESULT
+					120 cell
+						121 text SUBMITTED
+					122 cell
+						123 text DURATION
+					124 cell
+						125 text TRAITS
+				126 row
+					127 cell
+						128 text Không có assessment nào khớp bộ lọc.
+
+The focused UI element is 61 link Description: Assessment, URL: 127.0.0.1:54020/admin/assessments
+
+Browser tab: 1, Title: "Quản lý Người dùng — Admin — IT Compass", URL: "http://127.0.0.1:54020/admin/users".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 81
+~			75 text field (settable) <redacted>
+~			80 container
++				81 text Không thể tải  danh sách người dùng .
++			82 text Lỗi API được gây ra có kiểm soát để kiểm thử IC-009.
++			83 button Thử lại
+The focused UI element is 77 button Hoạt động
+
+Browser tab: 1, Title: "Quản lý Người dùng — Admin — IT Compass", URL: "http://127.0.0.1:54020/admin/users".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 82-83
+~			73 text Danh sách tài khoản và phân quyền trên hệ thống. Tổng cộng:  2  người dùng.
+~			74 button Export
+~			80 table
+~				81 row
++					82 cell
++						83 checkbox (settable, integer) 0
++					84 cell
++						85 text TÊN & EMAIL
++					86 cell
++						87 text VAI TRÒ
++					88 cell
++						89 text TRẠNG THÁI
++					90 cell
++						91 text NGÀY TẠO
++					92 cell
++						93 text THAO TÁC
++				94 container
++					95 row
++						96 cell
++							97 checkbox (settable, integer) 0
++						98 cell
++							99 text IC009 Học viên kiểm thử student@ic009.example.test
++						100 cell
++							101 text HỌC VIÊN
++						102 cell
++							103 text HOẠT ĐỘNG
++						104 cell
++							105 text 13/10/2026
++						106 cell
++							107 button Chỉnh sửa chi tiết
++							108 button Khóa
++					109 row
++						110 cell
++							111 checkbox (settable, integer) 0
++						112 cell
++							113 text IC009 Quản trị kiểm thử admin@ic009.example.test
++						114 cell
++							115 text QUẢN TRỊ VIÊN
++						116 cell
++							117 text HOẠT ĐỘNG
++						118 cell
++							119 text 13/10/2026
++						120 cell
++							121 button Chỉnh sửa chi tiết
++							122 button Khóa
+The focused UI element is 0 AXWebArea Quản lý Người dùng — Admin — IT Compass, URL: 127.0.0.1:54020/admin/users
+
+Browser tab: 1, Title: "Quản lý Lịch tư vấn — Admin — IT Compass", URL: "http://127.0.0.1:54020/admin/bookings".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 52-70
+~				28 button (disabled) Xuất dữ liệu
++				118 container
++					119 text Không thể tải  danh sách lịch tư vấn .
++				120 text Lỗi API được gây ra có kiểm soát để kiểm thử IC-009.
++				121 button Tải lại danh sách
++				122 text Nguồn dữ liệu chưa sẵn sàng. Tải lại dữ liệu trước khi xuất file; các lựa chọn của bạn vẫn được giữ.
++				123 button Tải lại dữ liệu
+~				78 checkbox XLSX, Value: 1
+~				79 checkbox CSV, Value: 0
+~				81 button Dữ liệu đang lọc — dòng trong bộ lọc
+~					83 text — dòng trong bộ lọc
+~				84 button Tất cả dữ liệu — dòng khả dụng
+~					86 text — dòng khả dụng
+~				87 button (disabled) Các dòng đã chọn — dòng đã chọn
+~					89 text — dòng đã chọn
+~					111 text Định:  XLSX
+~				113 text Bộ lọc hiện tại: — Tổng cộng: —
+~				115 text field (settable) bookings-export
+~				117 button (disabled) Xuất file
+The focused UI element is 95 button Mentor
+
+Browser tab: 1, Title: "Quản lý Lịch tư vấn — Admin — IT Compass", URL: "http://127.0.0.1:54020/admin/bookings".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 120-136
+~				28 button (disabled) Xuất dữ liệu
+~				118 container
+~					119 text Không thể tải  danh sách lịch tư vấn .
++				120 text Lỗi API được gây ra có kiểm soát để kiểm thử IC-009.
++				121 button Tải lại danh sách
++				122 text Nguồn dữ liệu chưa sẵn sàng. Tải lại dữ liệu trước khi xuất file; các lựa chọn của bạn vẫn được giữ.
++				123 button Tải lại dữ liệu
+~				81 button Dữ liệu đang lọc — dòng trong bộ lọc
+~					83 text — dòng trong bộ lọc
+~				84 button Tất cả dữ liệu — dòng khả dụng
+~					86 text — dòng khả dụng
+~				87 button (disabled) Các dòng đã chọn — dòng đã chọn
+~					89 text — dòng đã chọn
+~				113 text Bộ lọc hiện tại: — Tổng cộng: —
+~				117 button (disabled) Xuất file
+The focused UI element is 0 AXWebArea Quản lý Lịch tư vấn — Admin — IT Compass, URL: 127.0.0.1:54020/admin/bookings

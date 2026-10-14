@@ -12,6 +12,7 @@ import { Search, UserPlus, Settings, Download } from 'lucide-react';
 import { AdminMentorFormModal } from '../../components/admin/AdminMentorFormModal';
 import { AdminActionDialog } from '../../components/admin/AdminActionDialog';
 import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
+import { AdminQueryBoundary } from '../../components/admin/AdminQueryBoundary';
 import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
 
 const mentorExportColumns: ExportColumn[] = [
@@ -63,10 +64,15 @@ export default function AdminMentorsPage() {
         [page, search, statusFilter],
     );
 
-    const { data, isLoading } = useQuery({
+    const mentorListQuery = useQuery({
         queryKey: adminQueryKeys.mentors(mentorsQuery),
         queryFn: () => adminMentorApi.listMentors({ page, limit: 10, search: search || undefined, status: statusFilter === 'all' ? undefined : statusFilter.toUpperCase() as 'ACTIVE' | 'PAUSED' }),
     });
+    const response = mentorListQuery.isSuccess ? mentorListQuery.data : undefined;
+    const listReady = !!response && Array.isArray(response.mentors) && !!response.pagination
+        && [response.summary?.total, response.summary?.active, response.summary?.paused, response.summary?.verified].every(value => typeof value === 'number' && Number.isFinite(value));
+    const data = listReady ? response : undefined;
+    const isLoading = mentorListQuery.isPending;
 
     // Refresh danh sách và detail mentor sau khi đổi trạng thái.
     const invalidateMentorData = (mentorId?: string) => {
@@ -169,7 +175,7 @@ export default function AdminMentorsPage() {
                         </p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/15">
+                        <button disabled={!listReady} onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/15 disabled:opacity-50">
                             <Download className="h-4 w-4" /> Export
                         </button>
                         <button onClick={openCreateForm} className="bg-primary text-primary-foreground font-bold px-6 py-2.5 rounded-xl hover:scale-105 active:scale-95 transition-transform flex items-center gap-2">
@@ -184,6 +190,9 @@ export default function AdminMentorsPage() {
                     onExport={handleExport}
                     config={{
                         moduleLabel: 'Mentors',
+                        dataUnavailable: !listReady,
+                        isReloading: mentorListQuery.isFetching,
+                        onReload: () => { void mentorListQuery.refetch(); },
                         filePrefix: 'mentors-export',
                         totalRows: data?.summary?.total || 0,
                         filteredRows: data?.pagination?.total || 0,
@@ -215,6 +224,7 @@ export default function AdminMentorsPage() {
                 </div>
 
                 {/* Summary Cards */}
+                <AdminQueryBoundary query={mentorListQuery} label="danh sách mentor" hasData={!!data}>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="bg-secondary/30 rounded-2xl p-4 flex flex-col gap-1 border">
                         <span className="text-xs font-bold uppercase text-muted-foreground tracking-widest">Tổng Mentor</span>
@@ -321,6 +331,7 @@ export default function AdminMentorsPage() {
                     )}
                 </div>
 
+                </AdminQueryBoundary>
                 <AdminMentorFormModal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} mentorId={editingMentorId} />
                 <AdminActionDialog
                     isOpen={actionDialog.open}

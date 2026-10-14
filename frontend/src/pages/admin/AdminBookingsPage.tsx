@@ -12,6 +12,7 @@ import { Avatar } from '../../components/ui/Avatar';
 import { Button } from '../../components/ui/Button';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
+import { AdminQueryBoundary } from '../../components/admin/AdminQueryBoundary';
 import { AdminBookingDetailModal } from '../../components/admin/AdminBookingDetailModal';
 import { adminBookingActionCopy, getAdminBookingActions } from '../../lib/adminBookingPolicy';
 import { AdminActionDialog } from '../../components/admin/AdminActionDialog';
@@ -175,8 +176,9 @@ export default function AdminBookingsPage() {
         }
     };
 
-    const rows = bookingsQuery.data?.bookings ?? [];
-    const pagination = bookingsQuery.data?.pagination;
+    const listReady = bookingsQuery.isSuccess && Array.isArray(bookingsQuery.data?.bookings) && !!bookingsQuery.data?.pagination;
+    const rows = listReady ? bookingsQuery.data?.bookings ?? [] : [];
+    const pagination = listReady ? bookingsQuery.data?.pagination : undefined;
     const detail = selectedBooking ? detailQuery.data?.booking ?? selectedBooking : null;
     const loading = bookingsQuery.isLoading;
     const detailReliable = detailQuery.isSuccess && !detailQuery.isError && !detailQuery.isFetching;
@@ -195,7 +197,7 @@ export default function AdminBookingsPage() {
                         <h1 className="text-2xl font-bold tracking-tight">Quản lý Lịch tư vấn</h1>
                         <p className="text-sm text-muted-foreground">Theo dõi và xử lý lịch tư vấn. Mặc định hiển thị yêu cầu cần xác nhận.</p>
                     </div>
-                    <Button variant="outline" onClick={() => setExportOpen(true)}>
+                    <Button variant="outline" disabled={!listReady} onClick={() => setExportOpen(true)}>
                         <Download className="h-4 w-4" /> Xuất dữ liệu
                     </Button>
                 </div>
@@ -242,11 +244,8 @@ export default function AdminBookingsPage() {
 
                 <div className="flex flex-col gap-6">
                     {/* Table Area */}
+                    <AdminQueryBoundary query={bookingsQuery} label="danh sách lịch tư vấn" hasData={listReady} retryLabel="Tải lại danh sách">
                     <div className="overflow-hidden rounded-[24px] border bg-background shadow-sm relative min-h-[400px] flex flex-col">
-                        {bookingsQuery.isError && <div role="alert" className="space-y-2 border-b bg-destructive/5 p-4 text-sm text-destructive">
-                            <p>{getErrorMessage(bookingsQuery.error, 'Không thể tải danh sách lịch tư vấn.')}</p>
-                            <Button variant="outline" size="sm" disabled={bookingsQuery.isFetching} onClick={() => { void bookingsQuery.refetch(); }}>Tải lại danh sách</Button>
-                        </div>}
                         {loading && (
                             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/50 backdrop-blur-sm">
                                 <Loader />
@@ -334,6 +333,7 @@ export default function AdminBookingsPage() {
                             </div>
                         )}
                     </div>
+                    </AdminQueryBoundary>
                 </div>
             </motion.div>
 
@@ -361,6 +361,9 @@ export default function AdminBookingsPage() {
                 onExport={handleExport}
                 config={{
                     moduleLabel: 'Lịch tư vấn',
+                    dataUnavailable: !listReady,
+                    isReloading: bookingsQuery.isFetching,
+                    onReload: () => { void bookingsQuery.refetch(); },
                     filePrefix: 'bookings-export',
                     totalRows: pagination?.total || 0,
                     filteredRows: pagination?.total || 0,

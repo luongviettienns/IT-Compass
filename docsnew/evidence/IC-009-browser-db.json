@@ -1,0 +1,15 @@
+{
+  "schema": "itcompass_ic009_browser_test",
+  "counts": {
+    "users": 2,
+    "mentors": 0,
+    "attempts": 0,
+    "bookings": 0,
+    "posts": 0
+  },
+  "businessRecordsUnchanged": true,
+  "frontendPort": 54020,
+  "proxyPort": 54019,
+  "backendPort": 54018,
+  "testCookieName": "ic009_refresh_test"
+}

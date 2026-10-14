@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { ClipboardList, Users, TrendingUp, PieChart, Download, Search, Filter, Calendar } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
+import { AdminQueryBoundary } from '../../components/admin/AdminQueryBoundary';
 import { assessmentApi, type AdminAssessmentAttempt, type AdminAssessmentAttemptListQuery } from '../../lib/assessmentApi';
 import { Loader } from '../../components/ui/Loader';
 import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
@@ -83,9 +84,15 @@ export default function AdminAssessmentsPage() {
         queryFn: assessmentApi.getAdminStats,
     });
 
-    const stats = statsQuery.data?.stats;
-    const attempts = attemptsQuery.data?.attempts ?? [];
-    const pagination = attemptsQuery.data?.pagination;
+    const statsResponse = statsQuery.isSuccess ? statsQuery.data?.stats : undefined;
+    const statsReady = !!statsResponse && Array.isArray(statsResponse.resultDistribution)
+        && [statsResponse.totalAttempts, statsResponse.completedUsers, statsResponse.completionRate].every(value => typeof value === 'number' && Number.isFinite(value));
+    const stats = statsReady ? statsResponse : undefined;
+    const attemptsResponse = attemptsQuery.isSuccess ? attemptsQuery.data : undefined;
+    const attemptsReady = !!attemptsResponse && Array.isArray(attemptsResponse.attempts) && !!attemptsResponse.pagination;
+    const attempts = attemptsReady ? attemptsResponse.attempts : [];
+    const pagination = attemptsReady ? attemptsResponse.pagination : undefined;
+    const exportReady = attemptsReady && statsReady;
     const distributionData = stats?.resultDistribution?.map((item) => ({ name: item.resultCode, total: item.total })) || [];
     const trendData = stats?.trend || [];
 
@@ -138,10 +145,6 @@ export default function AdminAssessmentsPage() {
         }
     };
 
-    if (attemptsQuery.isLoading || statsQuery.isLoading) {
-        return <div className="flex h-[400px] items-center justify-center"><Loader /></div>;
-    }
-
     return (
         <>
             <Helmet><title>Quản lý Assessment — Admin — IT Compass</title></Helmet>
@@ -151,11 +154,12 @@ export default function AdminAssessmentsPage() {
                         <h1 className="text-2xl font-bold tracking-tight">Quản lý Assessment</h1>
                         <p className="text-sm text-muted-foreground">Attempt list, filter, export theo range, trend dashboard.</p>
                     </div>
-                    <button onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/15">
+                    <button disabled={!exportReady} onClick={() => setExportOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-bold text-primary hover:bg-primary/15 disabled:opacity-50">
                         <Download className="h-4 w-4" /> Export
                     </button>
                 </div>
 
+                <AdminQueryBoundary query={statsQuery} label="thống kê bài định hướng" hasData={!!stats}>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <div className="rounded-2xl border bg-background p-5 shadow-sm"><div className="flex items-center justify-between"><p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Tổng lượt làm</p><ClipboardList className="w-4 h-4 text-primary" /></div><h3 className="mt-2 text-3xl font-black text-primary">{stats?.totalAttempts?.toLocaleString() || 0}</h3></div>
                     <div className="rounded-2xl border bg-background p-5 shadow-sm"><div className="flex items-center justify-between"><p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Học viên hoàn thành</p><Users className="w-4 h-4 text-emerald-500" /></div><h3 className="mt-2 text-3xl font-black text-emerald-500">{stats?.completedUsers?.toLocaleString() || 0}</h3></div>
@@ -194,6 +198,7 @@ export default function AdminAssessmentsPage() {
                     </div>
                 </div>
 
+                </AdminQueryBoundary>
                 <div className="rounded-[20px] border bg-background p-3 shadow-sm lg:flex lg:items-center lg:justify-between">
                     <div className="grid gap-3 p-1 md:grid-cols-5 lg:flex-1">
                         <div className="relative w-full">
@@ -226,6 +231,7 @@ export default function AdminAssessmentsPage() {
                     </div>
                 </div>
 
+                <AdminQueryBoundary query={attemptsQuery} label="danh sách lượt làm bài" hasData={attemptsReady}>
                 <div className="overflow-hidden rounded-[24px] border bg-background shadow-sm relative min-h-[400px]">
                     <div className="border-b px-5 py-3 text-xs text-muted-foreground">{formatFilters(query)}</div>
                     {attemptsQuery.isLoading && <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/50 backdrop-blur-sm"><Loader /></div>}
@@ -268,12 +274,16 @@ export default function AdminAssessmentsPage() {
                     )}
                 </div>
 
+                </AdminQueryBoundary>
                 <AdminExportModal
                     isOpen={exportOpen}
                     onClose={() => setExportOpen(false)}
                     onExport={handleExport}
                     config={{
                         moduleLabel: 'Assessments',
+                        dataUnavailable: !exportReady,
+                        isReloading: attemptsQuery.isFetching || statsQuery.isFetching,
+                        onReload: () => { void Promise.all([attemptsQuery.refetch(), statsQuery.refetch()]); },
                         filePrefix: 'assessments-export',
                         totalRows: pagination?.total || 0,
                         filteredRows: pagination?.total || 0,

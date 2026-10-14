@@ -1,0 +1,40 @@
+
+> frontend@0.0.0 test
+> vitest run tests/admin-query-states.test.tsx -t export choices
+
+
+ RUN  v5.0.4 C:/Users/ASUS/Desktop/ITCompass/frontend
+
+stderr | tests/admin-query-states.test.tsx > admin query states > keeps export choices open when a background read fails and permits retry
+You have Reduced Motion enabled on your device. Animations may not appear as expected.. For more information and steps for solving, visit https://motion.dev/troubleshooting/reduced-motion-disabled
+
+ ❯ tests/admin-query-states.test.tsx (11 tests | 1 failed | 10 skipped) 837ms
+   ❯ admin query states (11)
+     × keeps export choices open when a background read fails and permits retry 836ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/admin-query-states.test.tsx > admin query states > keeps export choices open when a background read fails and permits retry
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/admin-query-states.test.tsx:135:99
+    133|     await waitFor(()=>expect(screen.getByRole('dialog')).toBe(dialog));
+    134|     expect((within(dialog).getByPlaceholderText('Nhập tên file...') as…
+    135|     expect((within(dialog).getByRole('button',{name:'Xuất file'}) as H…
+       |                                                                                                   ^
+    136|     api.mockResolvedValue(payload);await user.click(within(dialog).get…
+    137|     await waitFor(()=>expect((within(dialog).getByRole('button',{name:…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 skipped (11)
+   Start at  22:51:55
+   Duration  2.53s (import 36%, tests 35%, environment 25%, transform 5%)

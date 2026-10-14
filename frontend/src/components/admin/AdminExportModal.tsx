@@ -23,6 +23,9 @@ export type ExportModalConfig = {
   isGenerating?: boolean;
   errorMessage?: string | null;
   warningMessage?: string | null;
+  dataUnavailable?: boolean;
+  isReloading?: boolean;
+  onReload?: () => void;
 };
 
 type AdminExportModalProps = {
@@ -75,6 +78,7 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
   };
 
   const submit = async () => {
+    if (config.dataUnavailable || config.isGenerating) return;
     await onExport({ format, scope, selectedColumnKeys: selectedColumns, filePrefix });
   };
 
@@ -82,7 +86,9 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
   const supportsDateRange = config.supportsDateRange ?? false;
   const warning = config.warningMessage ?? (config.filteredRows > 1000 ? 'Dữ liệu lớn. Xuất bằng CSV có thể sẽ nhanh hơn.' : null);
 
-  const isNoData = (scope === 'current' && config.filteredRows === 0) || (scope === 'all' && config.totalRows === 0);
+  const isNoData = !config.dataUnavailable && ((scope === 'current' && config.filteredRows === 0) || (scope === 'all' && config.totalRows === 0));
+  const errorMessage = config.dataUnavailable ? 'Nguồn dữ liệu chưa sẵn sàng. Tải lại dữ liệu trước khi xuất file; các lựa chọn của bạn vẫn được giữ.' : config.errorMessage;
+  const countLabel = (count: number) => config.dataUnavailable ? '—' : count;
 
   return createPortal(
     <AnimatePresence>
@@ -121,9 +127,10 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
                 </button>
               </div>
 
-              {(config.errorMessage || warning) ? (
-                <div className={`border-b px-6 py-3 text-sm ${config.errorMessage ? 'border-destructive/20 bg-destructive/5 text-destructive' : 'border-amber-500/20 bg-amber-500/5 text-amber-700'}`}>
-                  {config.errorMessage ?? warning}
+              {(errorMessage || warning) ? (
+                <div role={errorMessage ? 'alert' : undefined} className={`space-y-2 border-b px-6 py-3 text-sm ${errorMessage ? 'border-destructive/20 bg-destructive/5 text-destructive' : 'border-amber-500/20 bg-amber-500/5 text-amber-700'}`}>
+                  <p>{errorMessage ?? warning}</p>
+                  {config.dataUnavailable && config.onReload && <Button variant="outline" size="sm" disabled={config.isReloading} onClick={config.onReload}>{config.isReloading ? 'Đang tải lại…' : 'Tải lại dữ liệu'}</Button>}
                 </div>
               ) : null}
 
@@ -143,6 +150,7 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
                             key={key} 
                             type="button" 
                             onClick={() => setFormat(key)} 
+                            aria-pressed={active}
                             className={`inline-flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${active ? 'border-primary bg-primary/10 text-primary' : 'bg-secondary/20 hover:bg-secondary/40'}`}
                           >
                             {item.icon}
@@ -170,9 +178,9 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
                           >
                             <div className="text-sm font-bold">{scopeLabels[item]}</div>
                             <div className="mt-1 text-xs text-muted-foreground">
-                              {item === 'current' && `${config.filteredRows} dòng trong bộ lọc`}
-                              {item === 'all' && `${config.totalRows} dòng khả dụng`}
-                              {item === 'selected' && `${config.selectedRows ?? 0} dòng đã chọn`}
+                              {item === 'current' && `${countLabel(config.filteredRows)} dòng trong bộ lọc`}
+                              {item === 'all' && `${countLabel(config.totalRows)} dòng khả dụng`}
+                              {item === 'selected' && `${countLabel(config.selectedRows ?? 0)} dòng đã chọn`}
                               {item === 'range' && (config.dateRangeLabel || 'Khoảng thời gian')}
                             </div>
                           </button>
@@ -216,9 +224,9 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
 
                   <div className="rounded-2xl border bg-background p-4 text-sm text-muted-foreground">
                     <div className="mb-2 font-bold text-foreground">Số lượng dòng</div>
-                    <div className="flex justify-between"><span>Bộ lọc hiện tại:</span> <span>{config.filteredRows}</span></div>
-                    <div className="flex justify-between"><span>Tổng cộng:</span> <span>{config.totalRows}</span></div>
-                    {typeof config.selectedRows === 'number' ? <div className="flex justify-between font-medium text-primary"><span>Đã chọn:</span> <span>{config.selectedRows}</span></div> : null}
+                    <div className="flex justify-between"><span>Bộ lọc hiện tại:</span> <span>{countLabel(config.filteredRows)}</span></div>
+                    <div className="flex justify-between"><span>Tổng cộng:</span> <span>{countLabel(config.totalRows)}</span></div>
+                    {typeof config.selectedRows === 'number' ? <div className="flex justify-between font-medium text-primary"><span>Đã chọn:</span> <span>{countLabel(config.selectedRows)}</span></div> : null}
                   </div>
 
                   <div className="rounded-2xl border bg-background p-4 text-sm text-muted-foreground">
@@ -236,7 +244,7 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
                   <Button 
                     type="button" 
                     onClick={submit} 
-                    disabled={config.isGenerating || selectedColumns.length === 0 || isNoData || !filePrefix.trim()} 
+                    disabled={config.dataUnavailable || config.isGenerating || selectedColumns.length === 0 || isNoData || !filePrefix.trim()}
                     className="w-full rounded-2xl py-6 font-bold"
                   >
                     {config.isGenerating ? 'Đang tạo file...' : <><Download className="mr-2 h-4 w-4" /> Xuất file</>}

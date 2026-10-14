@@ -14,7 +14,7 @@
 |---|---|---|---|---|---|
 | **Phase 0** | Khởi tạo môi trường & Baseline | 0 | 0 | 0 | **Hoàn thành** |
 | **Phase 1 (P0)** | Tính đúng đắn nghiệp vụ, bảo mật & độ tin cậy | 10 | 9 (IC-002 -> IC-010) | 1 (IC-001) | **Đang hoàn thiện (90%)** |
-| **Phase 2 (P1)** | Trải nghiệm người dùng, Admin & Đánh giá V2 | 9 (IC-011 -> IC-019) | 0 | 9 | **Chờ thực hiện (Backlog)** |
+| **Phase 2 (P1)** | Trải nghiệm người dùng, Admin & Đánh giá V2 | 9 (IC-011 -> IC-019) | 1 (IC-018) | 8 | **Đang thực hiện (11%)** |
 | **Phase 3 (P2)** | Khám phá nghề nghiệp, Game MVP & Marketing V2 | 7 (IC-020 -> IC-026) | 0 | 7 | **Chờ thực hiện (Backlog)** |
 | **Phase 4 (P3)** | Cá nhân hóa dựa trên dữ liệu & Thử nghiệm ML | 3 (IC-027 -> IC-029) | 0 | 3 | **Chờ thực hiện (Backlog)** |
 
@@ -47,7 +47,7 @@
 - [ ] **IC-015:** Admin action inbox dashboard (hàng đợi công việc, duyệt mentor, moderation)
 - [ ] **IC-016:** Mentor approval & form grouping (quy trình duyệt mentor minh bạch)
 - [ ] **IC-017:** Mentor scheduling language & student booking transparency
-- [🔄] **IC-018:** Accessibility/design system baseline (đang triển khai theo [IC-018-IMPLEMENTATION-PLAN.md](docsnew/IC-018-IMPLEMENTATION-PLAN.md))
+- [x] **IC-018:** Accessibility/design system baseline (hoàn thành 8/8 tasks: reduced-motion, skip link/single main, useDialogA11y hook, modals/drawers migration, Input/Textarea primitives, multi-signal badges & accessible tables, Vietnamese accessible labels, axe-core E2E tests — xem [IC-018-EXECUTION-REPORT.md](docsnew/IC-018-EXECUTION-REPORT.md))
 - [ ] **IC-019:** Privacy and user data lifecycle (chính sách dữ liệu, xóa/xuất tài khoản)
 
 ---

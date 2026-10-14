@@ -5,6 +5,7 @@
  * Desktop: sidebar cố định, có thể collapse thành icon-only.
  */
 
+import { useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -50,6 +51,18 @@ const getMenuBadge = (path: string, pendingBookingCount: number) => {
 
 export function MentorSidebar({ mobileOpen = false, onMobileClose, collapsed = false, onCollapsedChange }: MentorSidebarProps) {
     const { logout, user } = useAuth();
+
+    useEffect(() => {
+        if (!mobileOpen || !onMobileClose) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                e.stopPropagation();
+                onMobileClose();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [mobileOpen, onMobileClose]);
     const pendingBookingsQuery = useQuery({
         queryKey: bookingQueryKeys.mentorBookings({ status: 'REQUESTED', limit: 1 }),
         queryFn: () => bookingApi.listMentorBookings({ status: 'REQUESTED', limit: 1 }),
@@ -224,9 +237,15 @@ export function MentorSidebar({ mobileOpen = false, onMobileClose, collapsed = f
                     <div
                         className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in"
                         onClick={onMobileClose}
+                        aria-hidden="true"
                     />
                     {/* Drawer */}
-                    <div className="relative animate-in slide-in-from-left duration-300">
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Menu điều hướng mentor"
+                        className="relative animate-in slide-in-from-left duration-300"
+                    >
                         {SidebarContent}
                     </div>
                 </div>

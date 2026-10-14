@@ -5,10 +5,11 @@
  * Supports 4 tones (primary/destructive/warning/success), text/textarea/datetime inputs.
  */
 
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { X } from 'lucide-react';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
 
 type AdminActionDialogProps = {
     isOpen: boolean;
@@ -61,10 +62,9 @@ export const AdminActionDialog: React.FC<AdminActionDialogProps> = ({
     onConfirm,
 }) => {
     const [value, setValue] = useState(inputDefaultValue);
-    const dialogRef = useRef<HTMLDivElement>(null);
-    const titleId = useId();
     const inputId = useId();
     const errorId = useId();
+    const descId = useId();
     const normalizedValue = value.trim();
     const inputMinLength = typeof minLength === 'number' ? Math.max(minLength, requireInput ? 1 : 0) : requireInput ? 1 : undefined;
     const inputMaxLength = typeof maxLength === 'number' ? Math.max(maxLength, 0) : undefined;
@@ -73,41 +73,26 @@ export const AdminActionDialog: React.FC<AdminActionDialogProps> = ({
     const isValueTooLong = typeof inputMaxLength === 'number' && normalizedValue.length > inputMaxLength;
     const confirmDisabled = isConfirmDisabled || isPending || isValueMissing || isValueTooShort || isValueTooLong;
 
+    const hasUnsavedChanges = Boolean(normalizedValue && normalizedValue !== inputDefaultValue.trim());
+
+    const {
+        dialogRef,
+        titleId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen,
+        onClose,
+        isPending,
+        hasUnsavedChanges,
+        confirmDiscardMessage: 'Bạn có nội dung chưa gửi. Bạn có chắc chắn muốn đóng?',
+    });
+
     useEffect(() => {
         if (!isOpen) return;
         queueMicrotask(() => setValue(inputDefaultValue));
     }, [inputDefaultValue, isOpen]);
-
-    useEffect(() => {
-        if (!isOpen) return;
-        const previousFocus = document.activeElement as HTMLElement | null;
-        const initialFocus = dialogRef.current?.querySelector<HTMLElement>('input, textarea')
-            ?? dialogRef.current?.querySelector<HTMLElement>('button');
-        initialFocus?.focus();
-        return () => { previousFocus?.focus(); };
-    }, [isOpen]);
-
-    useEffect(() => {
-        if (!isOpen) return;
-        const handler = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                if (!isPending) onClose();
-            }
-            if (e.key !== 'Tab') return;
-            const focusable = dialogRef.current?.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), textarea:not(:disabled)');
-            if (!focusable?.length) { e.preventDefault(); return; }
-            const first = focusable[0];
-            const last = focusable[focusable.length - 1];
-            if (e.shiftKey && (document.activeElement === first || !dialogRef.current?.contains(document.activeElement))) {
-                e.preventDefault(); last.focus();
-            } else if (!e.shiftKey && (document.activeElement === last || !dialogRef.current?.contains(document.activeElement))) {
-                e.preventDefault(); first.focus();
-            }
-        };
-        window.addEventListener('keydown', handler);
-        return () => window.removeEventListener('keydown', handler);
-    }, [isOpen, isPending, onClose]);
 
     const inputBaseClass = 'w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-primary';
 
@@ -121,7 +106,7 @@ export const AdminActionDialog: React.FC<AdminActionDialogProps> = ({
                     transition={{ duration: 0.2 }}
                     className="fixed inset-0 bg-background/80 backdrop-blur-sm"
                     style={{ zIndex: overlayZIndex }}
-                    onClick={() => { if (!isPending) onClose(); }}
+                    onClick={handleBackdropClick}
                 >
                     <div className="flex min-h-screen items-center justify-center p-4">
                         <motion.div
@@ -131,18 +116,21 @@ export const AdminActionDialog: React.FC<AdminActionDialogProps> = ({
                             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                             className="w-full max-w-md rounded-[28px] border bg-card shadow-2xl"
                             ref={dialogRef}
-                            role="dialog"
-                            aria-modal="true"
-                            aria-labelledby={titleId}
-                            aria-busy={isPending}
+                            {...dialogProps}
+                            aria-describedby={description ? descId : undefined}
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex items-start justify-between gap-4 border-b p-6">
                                 <div className="space-y-1">
                                     <h2 id={titleId} className="text-xl font-black">{title}</h2>
-                                    {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
+                                    {description ? <p id={descId} className="text-sm text-muted-foreground">{description}</p> : null}
                                 </div>
-                                <button aria-label="Đóng" disabled={isPending} onClick={onClose} className="rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/70">
+                                <button
+                                    aria-label="Đóng"
+                                    disabled={isPending}
+                                    onClick={requestClose}
+                                    className="rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/70 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                >
                                     <X className="h-4 w-4" />
                                 </button>
                             </div>
@@ -183,9 +171,9 @@ export const AdminActionDialog: React.FC<AdminActionDialogProps> = ({
                             {errorMessage && <p id={errorId} role="alert" className="px-6 pt-4 text-sm text-destructive">{errorMessage}</p>}
                             <div className="flex items-center justify-end gap-3 p-6">
                                 <button
-                                    onClick={onClose}
+                                    onClick={requestClose}
                                     disabled={isPending}
-                                    className="rounded-xl bg-secondary px-5 py-2.5 text-sm font-bold transition-colors hover:bg-secondary/70"
+                                    className="rounded-xl bg-secondary px-5 py-2.5 text-sm font-bold transition-colors hover:bg-secondary/70 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                 >
                                     {cancelText}
                                 </button>

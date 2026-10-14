@@ -10,6 +10,58 @@ import { AdminExportModal, type ExportScope } from '../../components/admin/Admin
 import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
 import { Download, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
+
+function AuditLogDetailModal({
+    isOpen,
+    onClose,
+    title,
+    children,
+}: {
+    isOpen: boolean;
+    onClose: () => void;
+    title: string;
+    children: React.ReactNode;
+}) {
+    const {
+        dialogRef,
+        titleId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen,
+        onClose,
+    });
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-[140] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={handleBackdropClick}>
+            <div
+                ref={dialogRef}
+                {...dialogProps}
+                className="w-full max-w-xl rounded-[24px] border bg-background p-6 shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-start justify-between gap-4">
+                    <div>
+                        <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Chi tiết</div>
+                        <h3 id={titleId} className="mt-1 text-xl font-bold">{title}</h3>
+                    </div>
+                    <button
+                        onClick={requestClose}
+                        className="rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        aria-label="Đóng"
+                    >
+                        <X className="h-4 w-4" />
+                    </button>
+                </div>
+                {children}
+            </div>
+        </div>
+    );
+}
 
 const commentDeletionAuditLabel = 'Chuyển bình luận vào mục Đã xóa';
 const auditActionLabel = (action: string) => action === 'DELETE_COMMENT' ? commentDeletionAuditLabel : action;
@@ -414,13 +466,14 @@ export default function AdminAuditLogsPage() {
 
                     {activeTab === 'users' ? (
                         <table className="w-full text-left text-sm">
+                            <caption className="sr-only">Nhật ký kiểm toán người dùng</caption>
                             <thead className="bg-secondary/30 text-muted-foreground uppercase text-[10px] font-black tracking-widest border-b">
                                 <tr>
-                                    <th className="px-6 py-4">Thời gian</th>
-                                    <th className="px-6 py-4">Hành động</th>
-                                    <th className="px-6 py-4">Người thực hiện</th>
-                                    <th className="px-6 py-4">Mục tiêu</th>
-                                    <th className="px-6 py-4">Lý do</th>
+                                    <th scope="col" className="px-6 py-4">Thời gian</th>
+                                    <th scope="col" className="px-6 py-4">Hành động</th>
+                                    <th scope="col" className="px-6 py-4">Người thực hiện</th>
+                                    <th scope="col" className="px-6 py-4">Mục tiêu</th>
+                                    <th scope="col" className="px-6 py-4">Lý do</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y relative">
@@ -461,14 +514,15 @@ export default function AdminAuditLogsPage() {
                         </table>
                     ) : (
                         <table className="w-full text-left text-sm">
+                            <caption className="sr-only">Nhật ký kiểm toán bài viết blog</caption>
                             <thead className="bg-secondary/30 text-muted-foreground uppercase text-[10px] font-black tracking-widest border-b">
                                 <tr>
-                                    <th className="px-6 py-4">Thời gian</th>
-                                    <th className="px-6 py-4">Hành động</th>
-                                    <th className="px-6 py-4">Người thực hiện</th>
-                                    <th className="px-6 py-4">Đối tượng</th>
-                                    <th className="px-6 py-4">Target ID</th>
-                                    <th className="px-6 py-4">Lý do</th>
+                                    <th scope="col" className="px-6 py-4">Thời gian</th>
+                                    <th scope="col" className="px-6 py-4">Hành động</th>
+                                    <th scope="col" className="px-6 py-4">Người thực hiện</th>
+                                    <th scope="col" className="px-6 py-4">Đối tượng</th>
+                                    <th scope="col" className="px-6 py-4">Target ID</th>
+                                    <th scope="col" className="px-6 py-4">Lý do</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y relative">
@@ -536,48 +590,38 @@ export default function AdminAuditLogsPage() {
                 </div>
             </motion.div>
 
-            {selectedUserLog ? (
-                <div className="fixed inset-0 z-[140] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedUserLog(null)}>
-                    <div className="w-full max-w-xl rounded-[24px] border bg-background p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-start justify-between gap-4">
-                            <div>
-                                <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Drill-down</div>
-                                <h3 className="mt-1 text-xl font-bold">User audit detail</h3>
-                            </div>
-                            <button onClick={() => setSelectedUserLog(null)} className="rounded-full bg-secondary p-2"><X className="h-4 w-4" /></button>
-                        </div>
-                        <div className="mt-6 grid gap-3 text-sm">
-                            <div><span className="font-bold">Action:</span> {selectedUserLog.action}</div>
-                            <div><span className="font-bold">Actor:</span> {selectedUserLog.actorUser?.fullName || 'Hệ thống'} ({selectedUserLog.actorUser?.email || '—'})</div>
-                            <div><span className="font-bold">Target:</span> {selectedUserLog.targetUser?.fullName || 'N/A'} ({selectedUserLog.targetUser?.email || '—'})</div>
-                            <div><span className="font-bold">Time:</span> {new Date(selectedUserLog.createdAt).toLocaleString('vi-VN')}</div>
-                            <div><span className="font-bold">Reason:</span> {selectedUserLog.reason || '-'}</div>
-                        </div>
+            <AuditLogDetailModal
+                isOpen={Boolean(selectedUserLog)}
+                onClose={() => setSelectedUserLog(null)}
+                title="User audit detail"
+            >
+                {selectedUserLog ? (
+                    <div className="mt-6 grid gap-3 text-sm">
+                        <div><span className="font-bold">Action:</span> {selectedUserLog.action}</div>
+                        <div><span className="font-bold">Actor:</span> {selectedUserLog.actorUser?.fullName || 'Hệ thống'} ({selectedUserLog.actorUser?.email || '—'})</div>
+                        <div><span className="font-bold">Target:</span> {selectedUserLog.targetUser?.fullName || 'N/A'} ({selectedUserLog.targetUser?.email || '—'})</div>
+                        <div><span className="font-bold">Time:</span> {new Date(selectedUserLog.createdAt).toLocaleString('vi-VN')}</div>
+                        <div><span className="font-bold">Reason:</span> {selectedUserLog.reason || '-'}</div>
                     </div>
-                </div>
-            ) : null}
+                ) : null}
+            </AuditLogDetailModal>
 
-            {selectedBlogLog ? (
-                <div className="fixed inset-0 z-[140] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedBlogLog(null)}>
-                    <div className="w-full max-w-xl rounded-[24px] border bg-background p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-start justify-between gap-4">
-                            <div>
-                                <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Drill-down</div>
-                                <h3 className="mt-1 text-xl font-bold">Blog audit detail</h3>
-                            </div>
-                            <button onClick={() => setSelectedBlogLog(null)} className="rounded-full bg-secondary p-2"><X className="h-4 w-4" /></button>
-                        </div>
-                        <div className="mt-6 grid gap-3 text-sm">
-                            <div><span className="font-bold">Action:</span> {selectedBlogLog.action}</div>
-                            <div><span className="font-bold">Actor:</span> {selectedBlogLog.actorUser?.fullName || 'N/A'} ({selectedBlogLog.actorUser?.email || '—'})</div>
-                            <div><span className="font-bold">Target type:</span> {selectedBlogLog.targetType}</div>
-                            <div><span className="font-bold">Target ID:</span> {selectedBlogLog.targetId || '—'}</div>
-                            <div><span className="font-bold">Time:</span> {new Date(selectedBlogLog.createdAt).toLocaleString('vi-VN')}</div>
-                            <div><span className="font-bold">Reason:</span> {selectedBlogLog.reason || '-'}</div>
-                        </div>
+            <AuditLogDetailModal
+                isOpen={Boolean(selectedBlogLog)}
+                onClose={() => setSelectedBlogLog(null)}
+                title="Blog audit detail"
+            >
+                {selectedBlogLog ? (
+                    <div className="mt-6 grid gap-3 text-sm">
+                        <div><span className="font-bold">Action:</span> {selectedBlogLog.action}</div>
+                        <div><span className="font-bold">Actor:</span> {selectedBlogLog.actorUser?.fullName || 'N/A'} ({selectedBlogLog.actorUser?.email || '—'})</div>
+                        <div><span className="font-bold">Target type:</span> {selectedBlogLog.targetType}</div>
+                        <div><span className="font-bold">Target ID:</span> {selectedBlogLog.targetId || '—'}</div>
+                        <div><span className="font-bold">Time:</span> {new Date(selectedBlogLog.createdAt).toLocaleString('vi-VN')}</div>
+                        <div><span className="font-bold">Reason:</span> {selectedBlogLog.reason || '-'}</div>
                     </div>
-                </div>
-            ) : null}
+                ) : null}
+            </AuditLogDetailModal>
         </>
     );
 }

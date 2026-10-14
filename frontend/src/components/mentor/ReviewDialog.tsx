@@ -3,6 +3,7 @@ import { Star, X } from 'lucide-react';
 
 import type { MentorBooking } from '../../lib/bookingApi';
 import { Button } from '../ui/Button';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
 
 type ReviewDialogProps = {
     booking: MentorBooking | null;
@@ -20,6 +21,21 @@ function ReviewDialogContent({ booking, isPending = false, onClose, onConfirm }:
     const normalizedComment = comment.trim();
     const isDisabled = isPending || rating < 1 || rating > 5;
 
+    const {
+        dialogRef,
+        titleId,
+        descriptionId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen: true,
+        onClose,
+        isPending,
+        hasUnsavedChanges: Boolean(normalizedComment),
+        confirmDiscardMessage: 'Bạn có thay đổi chưa lưu trong nhận xét. Bạn có chắc chắn muốn đóng?',
+    });
+
     const submit = () => {
         if (rating < 1 || rating > 5) {
             setError('Vui lòng chọn số sao.');
@@ -31,15 +47,31 @@ function ReviewDialogContent({ booking, isPending = false, onClose, onConfirm }:
 
     return (
         <div className="fixed inset-0 z-[120] flex items-center justify-center px-4 py-6">
-            <button type="button" className="absolute inset-0 bg-slate-950/55 backdrop-blur-sm" onClick={isPending ? undefined : onClose} aria-label="Đóng đánh giá mentor" />
-            <section className="relative w-full max-w-lg rounded-[28px] border border-border bg-background p-6 shadow-2xl shadow-slate-950/20">
+            <button
+                type="button"
+                className="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"
+                onClick={handleBackdropClick}
+                aria-label="Đóng đánh giá mentor"
+            />
+            <section
+                ref={dialogRef}
+                {...dialogProps}
+                aria-describedby={descriptionId}
+                className="relative w-full max-w-lg rounded-[28px] border border-border bg-background p-6 shadow-2xl shadow-slate-950/20"
+            >
                 <div className="flex items-start justify-between gap-4">
                     <div>
                         <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Đánh giá mentor</p>
-                        <h2 className="mt-2 text-2xl font-black tracking-tight text-foreground">{booking.mentor.name}</h2>
-                        <p className="mt-2 text-sm leading-6 text-muted-foreground">Cho 1 nhận xét ngắn sau buổi tư vấn để giúp mentor và người học khác.</p>
+                        <h2 id={titleId} className="mt-2 text-2xl font-black tracking-tight text-foreground">{booking.mentor.name}</h2>
+                        <p id={descriptionId} className="mt-2 text-sm leading-6 text-muted-foreground">Cho 1 nhận xét ngắn sau buổi tư vấn để giúp mentor và người học khác.</p>
                     </div>
-                    <button type="button" onClick={onClose} disabled={isPending} className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-60" aria-label="Đóng">
+                    <button
+                        type="button"
+                        onClick={requestClose}
+                        disabled={isPending}
+                        className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        aria-label="Đóng"
+                    >
                         <X size={18} />
                     </button>
                 </div>

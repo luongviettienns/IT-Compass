@@ -8,6 +8,7 @@ import { adminQueryKeys } from '../../lib/adminQueryKeys';
 import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../ui/Loader';
 import { BlogContentRenderer } from '../blog/BlogContentRenderer';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
 
 const generateSlug = (text: string) => {
     return text
@@ -652,11 +653,41 @@ export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, 
         e.target.value = '';
     };
 
+    const isDirty = Boolean(
+        postToEdit
+            ? title !== postToEdit.title ||
+              slug !== postToEdit.slug ||
+              content !== postToEdit.content ||
+              excerpt !== (postToEdit.excerpt || '') ||
+              tag !== (postToEdit.tag || '') ||
+              coverImageUrl !== (postToEdit.coverImageUrl || '') ||
+              status !== postToEdit.status ||
+              metaTitle !== (postToEdit.metaTitle || '') ||
+              metaDescription !== (postToEdit.metaDescription || '')
+            : title || slug || content || excerpt || tag || coverImageUrl || metaTitle || metaDescription
+    );
+
+    const {
+        dialogRef,
+        titleId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen,
+        onClose: () => {
+            setErrorMessage(null);
+            onClose();
+        },
+        isPending: saveMutation.isPending || uploadMutation.isPending,
+        hasUnsavedChanges: !isPreviewMode && isDirty,
+        confirmDiscardMessage: 'Bạn có thay đổi chưa lưu trong bài viết. Bạn có chắc chắn muốn đóng?',
+    });
+
     if (!isOpen) return null;
 
     const handleClose = () => {
-        setErrorMessage(null);
-        onClose();
+        requestClose();
     };
 
     const stepIndex = FORM_STEPS.findIndex(step => step.key === currentStep);
@@ -999,15 +1030,26 @@ export const AdminBlogFormModal: React.FC<AdminBlogFormModalProps> = ({ isOpen, 
     };
 
     const modal = (
-        <div className="fixed inset-0 z-[120] bg-background/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[120] bg-background/80 backdrop-blur-sm" onClick={handleBackdropClick}>
             <div className="flex min-h-screen items-center justify-center p-4 lg:p-6">
-                <div className="relative flex h-[92vh] w-full max-w-7xl flex-col overflow-hidden rounded-[32px] border bg-card shadow-2xl">
+                <div
+                    ref={dialogRef}
+                    {...dialogProps}
+                    onClick={(e) => e.stopPropagation()}
+                    className="relative flex h-[92vh] w-full max-w-7xl flex-col overflow-hidden rounded-[32px] border bg-card shadow-2xl"
+                >
                     <div className="flex items-start justify-between gap-4 border-b bg-background px-6 py-5 shrink-0">
                         <div className="space-y-1">
-                            <h2 className="text-2xl font-black">{isPreviewMode ? 'Xem trước bài viết' : postToEdit ? 'Chỉnh sửa bài viết' : 'Tạo bài viết mới'}</h2>
+                            <h2 id={titleId} className="text-2xl font-black">{isPreviewMode ? 'Xem trước bài viết' : postToEdit ? 'Chỉnh sửa bài viết' : 'Tạo bài viết mới'}</h2>
                             <p className="text-sm font-medium text-muted-foreground">{isPreviewMode ? 'Kiểm tra nội dung render từ backend trước khi xuất bản.' : postToEdit ? 'Cập nhật nội dung hiện tại theo từng bước ngắn và có preview live.' : 'Tạo bài viết mới với công cụ format và preview trực tiếp.'}</p>
                         </div>
-                        <button onClick={handleClose} className="p-2 bg-secondary rounded-full hover:bg-secondary/70 transition-colors"><X className="w-5 h-5" /></button>
+                        <button
+                            onClick={handleClose}
+                            className="p-2 bg-secondary rounded-full hover:bg-secondary/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            aria-label="Đóng"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
                     </div>
 
                     {errorMessage ? (

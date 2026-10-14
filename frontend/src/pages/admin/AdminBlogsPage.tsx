@@ -15,6 +15,70 @@ import { AdminActionDialog } from '../../components/admin/AdminActionDialog';
 import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
 import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
 import { getErrorMessage } from '../../lib/appError';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
+
+function BlogPreviewModal({
+    isOpen,
+    onClose,
+    onSwitchToEdit,
+    content,
+}: {
+    isOpen: boolean;
+    onClose: () => void;
+    onSwitchToEdit: () => void;
+    content: string;
+}) {
+    const {
+        dialogRef,
+        titleId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen,
+        onClose,
+    });
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-[120] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={handleBackdropClick}>
+            <div
+                ref={dialogRef}
+                {...dialogProps}
+                className="w-full max-w-4xl rounded-[28px] border bg-card shadow-2xl overflow-hidden"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-center justify-between border-b p-4">
+                    <div>
+                        <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Preview</div>
+                        <h3 id={titleId} className="font-bold">Xem trước bài viết</h3>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={onSwitchToEdit}
+                            className="inline-flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-sm font-bold hover:bg-secondary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        >
+                            <ChevronDown className="h-4 w-4" /> Chỉnh sửa
+                        </button>
+                        <button
+                            onClick={requestClose}
+                            className="rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            aria-label="Đóng"
+                        >
+                            <X className="h-4 w-4" />
+                        </button>
+                    </div>
+                </div>
+                <div className="p-6 max-h-[75vh] overflow-y-auto">
+                    <div className="rounded-2xl border bg-background p-6">
+                        <BlogContentRenderer content={content} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 const blogExportColumns: ExportColumn[] = [
     { header: 'Post ID', key: 'id', width: 14 },
@@ -368,23 +432,36 @@ export default function AdminBlogsPage() {
                         </div>
                     )}
                     <table className="w-full text-left text-sm">
+                        <caption className="sr-only">Danh sách bài viết blog</caption>
                         <thead className="bg-secondary/30 text-muted-foreground uppercase text-[10px] font-black tracking-widest border-b">
                             <tr>
-                                <th className="px-6 py-4 w-[60px]">
-                                    <input type="checkbox" className="w-4 h-4 rounded accent-primary border-muted" onChange={handleSelectAll} checked={!!data?.posts?.length && selectedPostIds.length === data?.posts?.length} />
+                                <th scope="col" className="px-6 py-4 w-[60px]">
+                                    <input
+                                        type="checkbox"
+                                        aria-label="Chọn tất cả bài viết"
+                                        className="w-4 h-4 rounded accent-primary border-muted"
+                                        onChange={handleSelectAll}
+                                        checked={!!data?.posts?.length && selectedPostIds.length === data?.posts?.length}
+                                    />
                                 </th>
-                                <th className="px-6 py-4">Bài viết</th>
-                                <th className="px-6 py-4">Nội dung</th>
-                                <th className="px-6 py-4 text-center">Lượt xem</th>
-                                <th className="px-6 py-4">Trạng thái</th>
-                                <th className="px-6 py-4 text-right">Thao tác</th>
+                                <th scope="col" className="px-6 py-4">Bài viết</th>
+                                <th scope="col" className="px-6 py-4">Nội dung</th>
+                                <th scope="col" className="px-6 py-4 text-center">Lượt xem</th>
+                                <th scope="col" className="px-6 py-4">Trạng thái</th>
+                                <th scope="col" className="px-6 py-4 text-right">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y relative">
                             {data?.posts?.map((post: BlogPost) => (
                                 <tr key={post.id} className={`transition-colors ${selectedPostIds.includes(post.id) ? 'bg-primary/5' : 'hover:bg-secondary/10'} ${post.deletedAt ? 'opacity-50' : ''}`}>
                                     <td className="px-6 py-4">
-                                        <input type="checkbox" className="w-4 h-4 rounded accent-primary border-muted" checked={selectedPostIds.includes(post.id)} onChange={() => handleSelect(post.id)} />
+                                        <input
+                                            type="checkbox"
+                                            aria-label={`Chọn bài viết ${post.title}`}
+                                            className="w-4 h-4 rounded accent-primary border-muted"
+                                            checked={selectedPostIds.includes(post.id)}
+                                            onChange={() => handleSelect(post.id)}
+                                        />
                                     </td>
                                     <td className="px-6 py-4 max-w-[250px]">
                                         <div className="flex flex-col gap-1">
@@ -487,25 +564,12 @@ export default function AdminBlogsPage() {
                 </div>
 
                 <AdminBlogFormModal isOpen={isFormOpen} onClose={closeForm} postId={editingPostId ?? previewPostId} initialMode={formMode} />
-                {isFormOpen && previewTab === 'preview' && previewPostId ? (
-                    <div className="fixed inset-0 z-[120] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={closeForm}>
-                        <div className="w-full max-w-4xl rounded-[28px] border bg-card shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
-                            <div className="flex items-center justify-between border-b p-4">
-                                <div>
-                                    <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Preview</div>
-                                    <div className="font-bold">Xem trước bài viết</div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <button onClick={() => setPreviewTab('edit')} className="inline-flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-sm font-bold hover:bg-secondary/70"><ChevronDown className="h-4 w-4" /> Chỉnh sửa</button>
-                                    <button onClick={closeForm} className="rounded-full bg-secondary p-2"><X className="h-4 w-4" /></button>
-                                </div>
-                            </div>
-                            <div className="p-6">
-                                <div className="rounded-2xl border bg-background p-6"><BlogContentRenderer content={data?.posts?.find((p) => p.id === previewPostId)?.content || ''} /></div>
-                            </div>
-                        </div>
-                    </div>
-                ) : null}
+                <BlogPreviewModal
+                    isOpen={isFormOpen && previewTab === 'preview' && Boolean(previewPostId)}
+                    onClose={closeForm}
+                    onSwitchToEdit={() => setPreviewTab('edit')}
+                    content={data?.posts?.find((p) => p.id === previewPostId)?.content || ''}
+                />
                 <AdminActionDialog
                     isOpen={actionDialog.open}
                     title={actionDialog.type === 'delete' ? 'Lưu trữ bài viết' : actionDialog.type === 'restore' ? 'Khôi phục bài viết' : actionDialog.type === 'publish' ? 'Xuất bản bài viết' : actionDialog.type === 'bulkDelete' ? 'Lưu trữ hàng loạt' : actionDialog.type === 'bulkRestore' ? 'Khôi phục hàng loạt' : 'Xuất bản hàng loạt'}

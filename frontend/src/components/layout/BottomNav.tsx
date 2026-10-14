@@ -25,13 +25,26 @@ export function BottomNav() {
     const { user, isAuthenticated, logout } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
 
+    const closeMenu = () => setMenuOpen(false);
+
     useEffect(() => {
         queueMicrotask(() => setMenuOpen(false));
     }, [pathname]);
 
+    useEffect(() => {
+        if (!menuOpen) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                e.stopPropagation();
+                closeMenu();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [menuOpen]);
+
     const TABS = getTabs(user?.role);
     const menuOffset = 'calc(4rem + env(safe-area-inset-bottom))';
-    const closeMenu = () => setMenuOpen(false);
 
     const isActive = (path: string) => {
         if (path === '/') return pathname === '/';
@@ -58,6 +71,9 @@ export function BottomNav() {
                         <button
                             key={tab.path}
                             onClick={() => setMenuOpen(!menuOpen)}
+                            aria-expanded={menuOpen}
+                            aria-haspopup="dialog"
+                            aria-label="Tài khoản và menu mở rộng"
                             className={cn(
                                 'flex flex-col items-center justify-center gap-0.5 min-w-0 flex-1 py-1 transition-colors outline-none',
                                 active || menuOpen ? 'text-primary' : 'text-muted-foreground',
@@ -93,9 +109,13 @@ export function BottomNav() {
                             exit={{ opacity: 0 }}
                             className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm"
                             onClick={closeMenu}
+                            aria-hidden="true"
                             style={{ bottom: menuOffset }}
                         />
                         <motion.div
+                            role="dialog"
+                            aria-modal="true"
+                            aria-label="Menu tài khoản"
                             initial={{ y: '100%' }}
                             animate={{ y: 0 }}
                             exit={{ y: '100%' }}

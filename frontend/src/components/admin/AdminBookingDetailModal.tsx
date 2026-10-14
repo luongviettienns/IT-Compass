@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, type RefObject } from 'react';
+import { useEffect, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import type { AdminBookingAction, MentorBooking } from '../../lib/bookingApi';
@@ -8,6 +8,7 @@ import { isBookingRequestExpired } from '../../lib/bookingTime';
 import { BookingStatusBadge } from '../mentor/BookingStatusBadge';
 import { BookingRequestDeadline } from '../mentor/BookingRequestDeadline';
 import { Button } from '../ui/Button';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
 
 type Props = {
     booking: MentorBooking;
@@ -26,42 +27,34 @@ type Props = {
 
 export function AdminBookingDetailModal({ booking, isPending, isLoading, isRefreshing, isReliable,
     actionOpen, fallbackFocusRef, errorMessage, successMessage, onClose, onReload, onAction }: Props) {
-    const titleId = useId();
-    const dialogRef = useRef<HTMLElement>(null);
     const actions = getAdminBookingActions(booking);
+
+    const {
+        dialogRef,
+        titleId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen: true,
+        onClose,
+        isPending: isPending || actionOpen,
+        closeOnEscape: !actionOpen,
+        closeOnBackdropClick: !actionOpen,
+    });
+
     useEffect(() => {
-        const previousFocus = document.activeElement as HTMLElement | null;
+        if (!actionOpen) {
+            dialogRef.current?.focus();
+        }
+    }, [actionOpen, dialogRef]);
+
+    useEffect(() => {
         const fallbackFocus = fallbackFocusRef.current;
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-        dialogRef.current?.focus();
         return () => {
-            document.body.style.overflow = previousOverflow;
-            if (previousFocus?.isConnected) previousFocus.focus(); else fallbackFocus?.focus();
+            fallbackFocus?.focus();
         };
     }, [fallbackFocusRef]);
-    useEffect(() => { if (!actionOpen) dialogRef.current?.focus(); }, [actionOpen]);
-    useEffect(() => {
-        const handler = (event: KeyboardEvent) => {
-            if (actionOpen) return;
-            if (event.key === 'Escape') {
-                event.preventDefault();
-                if (!isPending) onClose();
-            }
-            if (event.key !== 'Tab') return;
-            const elements = dialogRef.current?.querySelectorAll<HTMLElement>('button:not(:disabled), a[href]');
-            if (!elements?.length) { event.preventDefault(); return; }
-            const first = elements[0];
-            const last = elements[elements.length - 1];
-            if (event.shiftKey && (document.activeElement === first || !dialogRef.current?.contains(document.activeElement))) {
-                event.preventDefault(); last.focus();
-            } else if (!event.shiftKey && (document.activeElement === last || document.activeElement === dialogRef.current || !dialogRef.current?.contains(document.activeElement))) {
-                event.preventDefault(); first.focus();
-            }
-        };
-        window.addEventListener('keydown', handler);
-        return () => window.removeEventListener('keydown', handler);
-    }, [actionOpen, isPending, onClose]);
 
     const timeline = [
         { label: 'Tạo yêu cầu', at: booking.createdAt },
@@ -76,8 +69,8 @@ export function AdminBookingDetailModal({ booking, isPending, isLoading, isRefre
 
     return createPortal(
         <div className="fixed inset-0 z-[130] flex items-center justify-center bg-black/50 p-3 backdrop-blur-sm sm:p-6"
-            onClick={() => { if (!isPending && !actionOpen) onClose(); }}>
-            <section ref={dialogRef} tabIndex={-1} role="dialog" aria-modal={!actionOpen} aria-labelledby={titleId}
+            onClick={handleBackdropClick}>
+            <section ref={dialogRef} {...dialogProps} aria-modal={!actionOpen}
                 inert={actionOpen}
                 aria-busy={isPending || isLoading} className="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border bg-background shadow-2xl outline-none"
                 onClick={(event) => event.stopPropagation()}>
@@ -89,8 +82,8 @@ export function AdminBookingDetailModal({ booking, isPending, isLoading, isRefre
                             requestExpired={isBookingRequestExpired(booking)} cancelledBy={booking.cancelledBy} />
                         <BookingRequestDeadline booking={booking} />
                     </div>
-                    <button type="button" aria-label="Đóng chi tiết" disabled={isPending} onClick={onClose}
-                        className="shrink-0 rounded-full p-2 text-muted-foreground hover:bg-secondary disabled:opacity-50"><X size={20} /></button>
+                    <button type="button" aria-label="Đóng chi tiết" disabled={isPending} onClick={requestClose}
+                        className="shrink-0 rounded-full p-2 text-muted-foreground hover:bg-secondary disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"><X size={20} /></button>
                 </header>
                 <div className="space-y-5 overflow-y-auto p-5">
                     {isLoading && <p role="status">Đang tải chi tiết mới nhất...</p>}

@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 
 import type { MentorBooking } from '../../lib/bookingApi';
 import { Button } from '../ui/Button';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
 
 type BookingCancelDialogProps = {
     booking: MentorBooking | null;
@@ -32,6 +33,21 @@ function BookingCancelDialogContent({
     const normalizedReason = reason.trim();
     const isConfirmDisabled = isPending || !normalizedReason;
 
+    const {
+        dialogRef,
+        titleId,
+        descriptionId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen: true,
+        onClose,
+        isPending,
+        hasUnsavedChanges: Boolean(normalizedReason),
+        confirmDiscardMessage: 'Bạn có thay đổi chưa lưu trong lý do hủy. Bạn có chắc chắn muốn đóng?',
+    });
+
     const handleConfirm = () => {
         if (!normalizedReason) {
             setError('Vui lòng nhập lý do hủy lịch.');
@@ -46,21 +62,26 @@ function BookingCancelDialogContent({
             <button
                 type="button"
                 className="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"
-                onClick={isPending ? undefined : onClose}
+                onClick={handleBackdropClick}
                 aria-label="Đóng hộp thoại hủy lịch"
             />
-            <section className="relative w-full max-w-lg rounded-[28px] border border-border bg-background p-6 shadow-2xl shadow-slate-950/20">
+            <section
+                ref={dialogRef}
+                {...dialogProps}
+                aria-describedby={descriptionId}
+                className="relative w-full max-w-lg rounded-[28px] border border-border bg-background p-6 shadow-2xl shadow-slate-950/20"
+            >
                 <div className="flex items-start justify-between gap-4">
                     <div>
                         <p className="text-xs font-bold uppercase tracking-[0.18em] text-destructive">Hủy lịch tư vấn</p>
-                        <h2 className="mt-2 text-2xl font-black tracking-tight text-foreground">{title}</h2>
-                        <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
+                        <h2 id={titleId} className="mt-2 text-2xl font-black tracking-tight text-foreground">{title}</h2>
+                        <p id={descriptionId} className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
                     </div>
                     <button
                         type="button"
-                        onClick={onClose}
+                        onClick={requestClose}
                         disabled={isPending}
-                        className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-60"
+                        className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         aria-label="Đóng"
                     >
                         <X size={18} />

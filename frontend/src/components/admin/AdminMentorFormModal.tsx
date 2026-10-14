@@ -8,7 +8,7 @@ import { adminQueryKeys } from '../../lib/adminQueryKeys';
 import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../ui/Loader';
 import type { MentorLevel, MentorStatus } from '../../lib/mentorApi';
-
+import { useDialogA11y } from '../../hooks/useDialogA11y';
 
 type AdminMentorFormModalProps = {
     isOpen: boolean;
@@ -41,6 +41,34 @@ export const AdminMentorFormModal: React.FC<AdminMentorFormModalProps> = ({ isOp
     const [isVerified, setIsVerified] = useState(false);
     const [status, setStatus] = useState<string>('ACTIVE');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const isDirty = Boolean(
+        mentorToEdit
+            ? name !== (mentorToEdit.name || '') ||
+              slug !== (mentorToEdit.slug || '') ||
+              title !== (mentorToEdit.title || '') ||
+              bio !== (mentorToEdit.bio || '') ||
+              expertiseArea !== (mentorToEdit.expertiseArea || '') ||
+              level !== (mentorToEdit.level || 'JUNIOR')
+            : name || slug || title || bio || expertiseArea
+    );
+
+    const {
+        dialogRef,
+        titleId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen,
+        onClose: () => {
+            setErrorMessage(null);
+            onClose();
+        },
+        isPending: false,
+        hasUnsavedChanges: isDirty,
+        confirmDiscardMessage: 'Bạn có thay đổi chưa lưu trong thông tin mentor. Bạn có chắc chắn muốn đóng?',
+    });
 
     const generateSlug = (text: string) => {
         return text
@@ -155,15 +183,26 @@ export const AdminMentorFormModal: React.FC<AdminMentorFormModalProps> = ({ isOp
 
     return (
         <div className="fixed inset-0 z-[60] flex justify-end animate-in fade-in">
-            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={onClose}></div>
-            <div className="relative bg-card w-full max-w-3xl h-full border-l shadow-2xl flex flex-col animate-in slide-in-from-right">
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={handleBackdropClick}></div>
+            <div
+                ref={dialogRef}
+                {...dialogProps}
+                onClick={(e) => e.stopPropagation()}
+                className="relative bg-card w-full max-w-3xl h-full border-l shadow-2xl flex flex-col animate-in slide-in-from-right"
+            >
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b shrink-0">
                     <div>
-                        <h2 className="text-2xl font-black">{mentorToEdit ? 'Sửa Mentor' : 'Tạo Mentor Mới'}</h2>
+                        <h2 id={titleId} className="text-2xl font-black">{mentorToEdit ? 'Sửa Mentor' : 'Tạo Mentor Mới'}</h2>
                         <p className="text-sm font-medium text-muted-foreground">{mentorToEdit ? 'Cập nhật hồ sơ mentor' : 'Thêm mentor mới vào hệ thống'}</p>
                     </div>
-                    <button onClick={onClose} className="p-2 bg-secondary rounded-full hover:bg-secondary/70 transition-colors"><X className="w-5 h-5" /></button>
+                    <button
+                        onClick={requestClose}
+                        className="p-2 bg-secondary rounded-full hover:bg-secondary/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        aria-label="Đóng"
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
                 </div>
 
                 {errorMessage ? (
@@ -292,7 +331,7 @@ export const AdminMentorFormModal: React.FC<AdminMentorFormModalProps> = ({ isOp
                 <div className="p-6 border-t font-mono bg-background flex items-center justify-between shrink-0">
                     <span className="text-xs text-muted-foreground">* Trường bắt buộc</span>
                     <div className="flex items-center gap-3">
-                        <button onClick={onClose} className="px-6 py-2.5 rounded-xl font-bold bg-secondary hover:bg-secondary/70 transition-colors">Hủy Bỏ</button>
+                        <button onClick={requestClose} className="px-6 py-2.5 rounded-xl font-bold bg-secondary hover:bg-secondary/70 transition-colors">Hủy Bỏ</button>
                         <button
                             disabled={saveMutation.isPending || !name.trim() || !slug.trim()}
                             onClick={() => {

@@ -5,6 +5,7 @@ import { Check, Download, FileSpreadsheet, FileText, X } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import type { ExportColumn, ExportFormat } from '../../lib/adminExport';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
 
 export type ExportScope = 'current' | 'all' | 'selected' | 'range';
 
@@ -54,6 +55,18 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
   const [selectedColumns, setSelectedColumns] = useState<string[]>(defaultColumns);
   const [filePrefix, setFilePrefix] = useState<string>(config.filePrefix);
 
+  const {
+    dialogRef,
+    titleId,
+    dialogProps,
+    handleBackdropClick,
+    requestClose,
+  } = useDialogA11y({
+    isOpen,
+    onClose,
+    isPending: config.isGenerating,
+  });
+
   useEffect(() => {
     if (!isOpen) return;
     queueMicrotask(() => {
@@ -63,15 +76,6 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
       setFilePrefix(config.filePrefix);
     });
   }, [config.defaultFormat, config.defaultScope, config.filePrefix, defaultColumns, isOpen]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [isOpen, onClose]);
 
   const toggleColumn = (key: string) => {
     setSelectedColumns((current) => current.includes(key) ? current.filter((item) => item !== key) : [...current, key]);
@@ -99,10 +103,7 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[130] bg-background/80 backdrop-blur-sm"
-          onClick={onClose}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="export-modal-title"
+          onClick={handleBackdropClick}
         >
           <div className="flex min-h-screen items-center justify-center p-4">
             <motion.div
@@ -111,17 +112,20 @@ export const AdminExportModal: React.FC<AdminExportModalProps> = ({ isOpen, onCl
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               className="w-full max-w-4xl overflow-hidden rounded-[32px] border bg-card shadow-2xl"
+              ref={dialogRef}
+              {...dialogProps}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-start justify-between gap-4 border-b bg-background p-6">
                 <div className="space-y-1">
-                  <h2 id="export-modal-title" className="text-2xl font-black">Xuất dữ liệu {config.moduleLabel}</h2>
+                  <h2 id={titleId} className="text-2xl font-black">Xuất dữ liệu {config.moduleLabel}</h2>
                   <p className="text-sm text-muted-foreground">Chọn định dạng, phạm vi và các cột trước khi tạo file.</p>
                 </div>
                 <button 
-                  onClick={onClose} 
-                  className="rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                  aria-label="Đóng modal"
+                  onClick={requestClose} 
+                  disabled={config.isGenerating}
+                  className="rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/70 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label="Đóng"
                 >
                   <X className="h-4 w-4" />
                 </button>

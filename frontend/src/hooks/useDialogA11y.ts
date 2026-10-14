@@ -85,6 +85,9 @@ export function useDialogA11y({
         }
     }, [closeOnBackdropClick, requestClose]);
 
+    const requestCloseRef = useRef(requestClose);
+    requestCloseRef.current = requestClose;
+
     // Body scroll lock with active counter to support stacked dialogs
     useEffect(() => {
         if (!isOpen) return;
@@ -115,7 +118,10 @@ export function useDialogA11y({
                 initialFocusRef.current.focus();
                 return;
             }
-            const firstFocusable = dialogRef.current.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+            const preferredInput = dialogRef.current.querySelector<HTMLElement>(
+                'input:not([disabled]), textarea:not([disabled]), select:not([disabled])'
+            );
+            const firstFocusable = preferredInput ?? dialogRef.current.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
             if (firstFocusable) {
                 firstFocusable.focus();
             } else {
@@ -130,7 +136,7 @@ export function useDialogA11y({
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape' && closeOnEscape) {
                 e.stopPropagation();
-                requestClose();
+                requestCloseRef.current();
                 return;
             }
 
@@ -169,10 +175,12 @@ export function useDialogA11y({
             window.removeEventListener('keydown', handleKeyDown);
 
             if (restoreFocus && previouslyFocused && typeof previouslyFocused.focus === 'function') {
-                previouslyFocused.focus();
+                if (previouslyFocused.isConnected !== false) {
+                    previouslyFocused.focus();
+                }
             }
         };
-    }, [isOpen, closeOnEscape, initialFocusRef, restoreFocus, requestClose]);
+    }, [isOpen, closeOnEscape, initialFocusRef, restoreFocus]);
 
     const dialogProps: UseDialogA11yReturn['dialogProps'] = {
         role: 'dialog',

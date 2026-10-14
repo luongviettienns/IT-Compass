@@ -9,6 +9,7 @@ import { adminQueryKeys } from '../../lib/adminQueryKeys';
 import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../ui/Loader';
 import { AdminActionDialog } from './AdminActionDialog';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
 
 type AdminUserEditModalProps = {
     isOpen: boolean;
@@ -42,31 +43,17 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
     const [revokeDialogOpen, setRevokeDialogOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (!isOpen) return;
-        queueMicrotask(() => {
-            if (user) {
-                setFullName(user.fullName || '');
-                setEmail(user.email || '');
-                setRole(user.role || 'STUDENT');
-                setEmailVerified(user.emailVerified || false);
-                setPhoneNumber(user.profile?.phoneNumber || '');
-                setLocation(user.profile?.location || '');
-                setJobTitle(user.profile?.jobTitle || '');
-                setReason('Admin update');
-            } else {
-                setFullName('');
-                setEmail('');
-                setRole('STUDENT');
-                setEmailVerified(false);
-                setPhoneNumber('');
-                setLocation('');
-                setJobTitle('');
-                setReason('Admin update');
-            }
-            setErrorMessage(null);
-        });
-    }, [isOpen, user]);
+    const isDirty = Boolean(
+        user && (
+            fullName !== (user.fullName || '') ||
+            email !== (user.email || '') ||
+            role !== (user.role || 'STUDENT') ||
+            emailVerified !== (user.emailVerified || false) ||
+            phoneNumber !== (user.profile?.phoneNumber || '') ||
+            location !== (user.profile?.location || '') ||
+            jobTitle !== (user.profile?.jobTitle || '')
+        )
+    );
 
     const invalidateUserData = () => {
         queryClient.invalidateQueries({ queryKey: adminQueryKeys.usersRoot });
@@ -109,6 +96,53 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
         },
         onError: (error) => toast.error(getErrorMessage(error, 'Không thể thu hồi phiên đăng nhập.')),
     });
+
+    const isPending = accountMutation.isPending || profileMutation.isPending || roleMutation.isPending || revokeMutation.isPending;
+
+    const {
+        dialogRef,
+        titleId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen: isOpen && !revokeDialogOpen,
+        onClose: () => {
+            setErrorMessage(null);
+            onClose();
+        },
+        isPending,
+        closeOnEscape: !revokeDialogOpen,
+        closeOnBackdropClick: !revokeDialogOpen,
+        hasUnsavedChanges: isDirty,
+        confirmDiscardMessage: 'Bạn có thay đổi chưa lưu trong thông tin người dùng. Bạn có chắc chắn muốn đóng?',
+    });
+
+    useEffect(() => {
+        if (!isOpen) return;
+        queueMicrotask(() => {
+            if (user) {
+                setFullName(user.fullName || '');
+                setEmail(user.email || '');
+                setRole(user.role || 'STUDENT');
+                setEmailVerified(user.emailVerified || false);
+                setPhoneNumber(user.profile?.phoneNumber || '');
+                setLocation(user.profile?.location || '');
+                setJobTitle(user.profile?.jobTitle || '');
+                setReason('Admin update');
+            } else {
+                setFullName('');
+                setEmail('');
+                setRole('STUDENT');
+                setEmailVerified(false);
+                setPhoneNumber('');
+                setLocation('');
+                setJobTitle('');
+                setReason('Admin update');
+            }
+            setErrorMessage(null);
+        });
+    }, [isOpen, user]);
 
     if (!isOpen) return null;
 
@@ -178,16 +212,28 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
     };
 
     return createPortal(
-        <div className="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm" onClick={handleBackdropClick}>
             <div className="flex min-h-screen items-center justify-center p-4">
-                <div className="bg-card w-full max-w-2xl rounded-[32px] border shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+                <div
+                    ref={dialogRef}
+                    {...dialogProps}
+                    inert={revokeDialogOpen}
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-card w-full max-w-2xl rounded-[32px] border shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
+                >
                     {/* Header */}
                     <div className="flex items-center justify-between p-6 border-b bg-background z-10">
                         <div>
-                            <h2 className="text-2xl font-black">Sửa Thông Tin</h2>
+                            <h2 id={titleId} className="text-2xl font-black">Sửa Thông Tin</h2>
                             <span className="text-sm font-medium text-muted-foreground">ID: <span className="font-mono">{user?.id ?? '—'}</span></span>
                         </div>
-                        <button onClick={onClose} className="p-2 bg-secondary rounded-full hover:scale-105 transition-transform"><X className="w-5 h-5" /></button>
+                        <button
+                            onClick={requestClose}
+                            className="p-2 bg-secondary rounded-full hover:scale-105 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            aria-label="Đóng"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
                     </div>
 
                     {errorMessage ? (
@@ -280,7 +326,7 @@ export const AdminUserEditModal: React.FC<AdminUserEditModalProps> = ({ isOpen, 
 
                     {/* Footer */}
                     <div className="p-4 border-t bg-background flex items-center justify-end z-10 gap-3">
-                        <button onClick={onClose} className="px-6 py-2.5 rounded-xl font-bold bg-secondary hover:bg-secondary/70 transition-colors">Hủy</button>
+                        <button onClick={requestClose} className="px-6 py-2.5 rounded-xl font-bold bg-secondary hover:bg-secondary/70 transition-colors">Hủy</button>
                         <button
                             disabled={!user || accountMutation.isPending || profileMutation.isPending || roleMutation.isPending}
                             onClick={handleSave}

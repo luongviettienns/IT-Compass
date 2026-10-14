@@ -11,6 +11,7 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { AvailableSlotList } from './AvailableSlotList';
 import { BOOKING_TIMEZONE, BOOKING_TIMEZONE_LABEL, todayBookingDate } from '../../lib/bookingTime';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
 
 type BookingDialogProps = {
     slug: string;
@@ -91,35 +92,6 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
     const canContinue = bookingMode === 'slot' ? Boolean(activeSlot) : customTimeValid;
     const mentorName = configQuery.data?.mentor.name ?? availabilityQuery.data?.mentor.name ?? 'mentor';
 
-    useEffect(() => {
-        if (!open) return;
-
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                onOpenChange(false);
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyDown);
-        document.body.style.overflow = 'hidden';
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = '';
-        };
-    }, [onOpenChange, open]);
-
-    useEffect(() => {
-        queueMicrotask(() => {
-            if (open) {
-                setStep('select');
-            } else {
-                setBookingMode('slot');
-                setCustomStartTime('');
-            }
-        });
-    }, [open]);
-
     const createBookingMutation = useMutation({
         mutationFn: () => {
             if (!selectedStartTime || !selectedEndTime) {
@@ -156,6 +128,31 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
         },
     });
 
+    const {
+        dialogRef,
+        titleId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen: open,
+        onClose: () => onOpenChange(false),
+        isPending: createBookingMutation.isPending,
+        hasUnsavedChanges: Boolean(note.trim() || customStartTime),
+        confirmDiscardMessage: 'Bạn có thông tin đặt lịch chưa gửi. Bạn có chắc chắn muốn đóng?',
+    });
+
+    useEffect(() => {
+        queueMicrotask(() => {
+            if (open) {
+                setStep('select');
+            } else {
+                setBookingMode('slot');
+                setCustomStartTime('');
+            }
+        });
+    }, [open]);
+
     if (!open) return null;
 
     const showSelectionStep = step === 'select';
@@ -165,13 +162,12 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
             <button
                 type="button"
                 className="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"
-                onClick={() => onOpenChange(false)}
+                onClick={handleBackdropClick}
                 aria-label="Đóng đặt lịch"
             />
             <section
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="booking-dialog-title"
+                ref={dialogRef}
+                {...dialogProps}
                 className="relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-[28px] border border-border bg-background shadow-2xl shadow-slate-950/20"
             >
                 <header className="flex items-start justify-between gap-4 border-b border-border/70 p-5 sm:p-6">
@@ -179,7 +175,7 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
                         <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-primary">
                             <CalendarClock size={14} /> Đặt lịch tư vấn
                         </div>
-                        <h2 id="booking-dialog-title" className="mt-3 text-2xl font-black tracking-tight text-foreground">
+                        <h2 id={titleId} className="mt-3 text-2xl font-black tracking-tight text-foreground">
                             {showSelectionStep ? 'Chọn thời gian phù hợp' : 'Xác nhận yêu cầu đặt lịch'}
                         </h2>
                         <p className="mt-1 text-sm leading-6 text-muted-foreground">
@@ -193,8 +189,9 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
                     </div>
                     <button
                         type="button"
-                        onClick={() => onOpenChange(false)}
-                        className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                        onClick={requestClose}
+                        disabled={createBookingMutation.isPending}
+                        className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         aria-label="Đóng"
                     >
                         <X size={18} />
@@ -375,7 +372,7 @@ export function BookingDialog({ slug, open, onOpenChange }: BookingDialogProps) 
                 <footer className="flex flex-col-reverse gap-3 border-t border-border/70 p-5 sm:flex-row sm:justify-end sm:p-6">
                     {showSelectionStep ? (
                         <>
-                            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                            <Button type="button" variant="outline" onClick={requestClose}>
                                 Để sau
                             </Button>
                             <Button type="button" disabled={!canContinue} onClick={() => setStep('confirm')}>

@@ -11,6 +11,7 @@ import { Loader } from '../../components/ui/Loader';
 import { AdminActionDialog } from './AdminActionDialog';
 import { AdminExportModal, type ExportScope } from './AdminExportModal';
 import { buildExportFileName, collectPagedItems, exportWorkbook, type ExportColumn } from '../../lib/adminExport';
+import { useDialogA11y } from '../../hooks/useDialogA11y';
 
 const commentExportColumns: ExportColumn[] = [
     { header: 'Comment ID', key: 'id', width: 14 },
@@ -47,6 +48,9 @@ type AdminBlogCommentsManagerProps = {
     description?: string;
     onClose?: () => void;
     showCloseButton?: boolean;
+    dialogRef?: React.RefObject<HTMLDivElement | null>;
+    dialogProps?: Record<string, unknown>;
+    titleId?: string;
 };
 
 const FILTER_LABEL: Record<CommentFilterStatus, string> = {
@@ -66,6 +70,9 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
     description = 'Quản lý nội dung thảo luận trên toàn bộ blog.',
     onClose,
     showCloseButton = true,
+    dialogRef,
+    dialogProps,
+    titleId,
 }) => {
     const [page, setPage] = useState(1);
     const [filterStatus, setFilterStatus] = useState<CommentFilterStatus>('all');
@@ -182,14 +189,19 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
 
     return (
         <>
-            <div className={shellClassName}>
+            <div
+                className={shellClassName}
+                ref={dialogRef}
+                {...(dialogProps || {})}
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="flex items-center justify-between p-6 border-b shrink-0 bg-background z-10 gap-4">
                     <div className="flex items-center gap-3 min-w-0">
                         <div className="p-3 bg-primary/10 text-primary rounded-xl shrink-0">
                             <ShieldAlert className="w-6 h-6" />
                         </div>
                         <div className="min-w-0">
-                            <h2 className="text-xl font-black">{title}</h2>
+                            <h2 id={titleId} className="text-xl font-black">{title}</h2>
                             <p className="text-sm font-medium text-muted-foreground">{description}</p>
                             {postId ? (
                                 <div className="mt-2 inline-flex items-center gap-2 rounded-full border bg-secondary/40 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
@@ -208,7 +220,13 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
                             <Download className="h-4 w-4" /> Export
                         </button>
                         {showCloseButton && onClose ? (
-                            <button onClick={onClose} className="p-2 bg-secondary rounded-full hover:bg-secondary/70 transition-colors shrink-0"><X className="w-5 h-5" /></button>
+                            <button
+                                onClick={onClose}
+                                className="p-2 bg-secondary rounded-full hover:bg-secondary/70 transition-colors shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                aria-label="Đóng"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
                         ) : null}
                     </div>
                 </div>
@@ -269,12 +287,13 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
                     )}
 
                     <table className="w-full text-left text-sm">
+                        <caption className="sr-only">Danh sách bình luận bài viết</caption>
                         <thead className="bg-secondary/30 text-muted-foreground uppercase text-[10px] font-black tracking-widest border-b sticky top-0 z-10 bg-background">
                             <tr>
-                                <th className="px-6 py-4">Người dùng</th>
-                                <th className="px-6 py-4 w-[40%]">Bình luận</th>
-                                <th className="px-6 py-4">Bài viết</th>
-                                <th className="px-6 py-4 text-right">Thao tác</th>
+                                <th scope="col" className="px-6 py-4">Người dùng</th>
+                                <th scope="col" className="px-6 py-4 w-[40%]">Bình luận</th>
+                                <th scope="col" className="px-6 py-4">Bài viết</th>
+                                <th scope="col" className="px-6 py-4 text-right">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y relative">
@@ -303,14 +322,15 @@ export const AdminBlogCommentsManager: React.FC<AdminBlogCommentsManagerProps> =
                                             <div className="flex items-center justify-end gap-2">
                                                 <button
                                                     onClick={() => handleToggleHide(comment)}
-                                                    className={`p-1.5 rounded-lg transition-colors ${comment.status === 'VISIBLE' ? 'text-amber-500 hover:bg-amber-500/10' : 'text-emerald-500 hover:bg-emerald-500/10'}`}
+                                                    className={`p-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${comment.status === 'VISIBLE' ? 'text-amber-500 hover:bg-amber-500/10' : 'text-emerald-500 hover:bg-emerald-500/10'}`}
                                                     title={comment.status === 'VISIBLE' ? 'Ẩn bình luận' : 'Hiển thị lại'}
+                                                    aria-label={comment.status === 'VISIBLE' ? 'Ẩn bình luận' : 'Hiển thị lại'}
                                                 >
                                                     {comment.status === 'VISIBLE' ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                                 </button>
                                                 <button
                                                     onClick={() => handleDelete(comment)}
-                                                    className="text-destructive hover:bg-destructive/10 p-1.5 rounded-lg transition-colors"
+                                                    className="text-destructive hover:bg-destructive/10 p-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                                     title="Xóa bình luận"
                                                     aria-label="Xóa bình luận"
                                                 >
@@ -387,6 +407,17 @@ export const AdminBlogCommentsModal: React.FC<AdminBlogCommentsModalProps> = ({
     description,
     showCloseButton = true,
 }) => {
+    const {
+        dialogRef,
+        titleId,
+        dialogProps,
+        handleBackdropClick,
+        requestClose,
+    } = useDialogA11y({
+        isOpen: isOpen && !embedded,
+        onClose,
+    });
+
     if (!isOpen) return null;
 
     const content = (
@@ -396,8 +427,11 @@ export const AdminBlogCommentsModal: React.FC<AdminBlogCommentsModalProps> = ({
             embedded={embedded}
             title={title}
             description={description}
-            onClose={onClose}
+            onClose={requestClose}
             showCloseButton={showCloseButton}
+            dialogRef={!embedded ? dialogRef : undefined}
+            dialogProps={!embedded ? dialogProps : undefined}
+            titleId={!embedded ? titleId : undefined}
         />
     );
 
@@ -406,7 +440,10 @@ export const AdminBlogCommentsModal: React.FC<AdminBlogCommentsModalProps> = ({
     }
 
     return createPortal(
-        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 animate-in fade-in">
+        <div
+            className="fixed inset-0 z-[110] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 animate-in fade-in"
+            onClick={handleBackdropClick}
+        >
             {content}
         </div>,
         document.body,

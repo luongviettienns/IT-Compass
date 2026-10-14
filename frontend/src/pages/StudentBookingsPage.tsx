@@ -169,7 +169,7 @@ export default function StudentBookingsPage() {
                 <meta name="description" content="Theo dõi lịch tư vấn với mentor, quản lý các buổi hẹn đã đặt và sắp tới." />
             </Helmet>
 
-            <main className="mx-auto max-w-5xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
+            <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
                 <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
                     <Card className="rounded-[32px] border-border/70 shadow-xl shadow-primary/5">
                         <CardHeader className="space-y-4">
@@ -355,7 +355,7 @@ export default function StudentBookingsPage() {
                         </CardContent>
                     </Card>
                 </motion.div>
-            </main>
+            </div>
 
             {bookingToCancel && (
                 <BookingCancelDialog

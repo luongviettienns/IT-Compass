@@ -143,7 +143,7 @@ export default function MessagesPage() {
                         )}
                     </aside>
 
-                    <main className={cn('min-h-0 lg:block', showThreadPane ? 'block' : 'hidden')}>
+                    <div className={cn('min-h-0 lg:block', showThreadPane ? 'block' : 'hidden')}>
                         {conversationsQuery.isLoading || selectedConversation ? (
                             <ChatThread
                                 conversation={selectedConversation}
@@ -164,7 +164,7 @@ export default function MessagesPage() {
                                 />
                             </div>
                         )}
-                    </main>
+                    </div>
                 </Card>
             </div>
         </>

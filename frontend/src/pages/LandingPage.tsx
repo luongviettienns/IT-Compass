@@ -872,7 +872,7 @@ export default function LandingPage() {
                     content="Khám phá sở thích, tìm hiểu công việc CNTT, xem gợi ý tham khảo và trao đổi với mentor. Bắt đầu mà chưa cần biết lập trình."
                 />
             </Helmet>
-            <main className="overflow-x-clip">
+            <div className="overflow-x-clip">
                 <HeroSection />
                 <FeaturesSection />
                 <CareerPathsSection />
@@ -884,7 +884,7 @@ export default function LandingPage() {
                     <FeaturedMentorsSection />
                 </ErrorBoundary>
                 <FinalCTASection />
-            </main>
+            </div>
         </>
     );
 }

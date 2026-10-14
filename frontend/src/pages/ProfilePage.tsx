@@ -99,7 +99,7 @@ const createFormState = (user: AuthUser): ProfileFormState => ({
 
 function ProfileSkeleton() {
     return (
-        <main className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
             <div className="space-y-8">
                 <Skeleton className="h-72 rounded-[36px]" />
                 <div className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_380px]">
@@ -110,7 +110,7 @@ function ProfileSkeleton() {
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }
 
@@ -254,7 +254,7 @@ export default function ProfilePage() {
                 />
             </Helmet>
 
-            <main className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
+            <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
                 <div className="space-y-8">
                     <section className="relative overflow-hidden rounded-[36px] border border-border/60 bg-background shadow-lg shadow-primary/5">
                         <div
@@ -648,7 +648,7 @@ export default function ProfilePage() {
                         </Card>
                     </motion.section>
                 </div>
-            </main>
+            </div>
 
         </>
     );

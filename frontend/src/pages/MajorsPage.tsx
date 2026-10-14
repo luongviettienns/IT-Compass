@@ -17,7 +17,7 @@ export default function MajorsPage() {
                 <meta name="description" content="Khám phá chi tiết các chuyên ngành trong lĩnh vực Công nghệ thông tin để tìm ra hướng đi phù hợp nhất với bạn." />
             </Helmet>
 
-            <main className="bg-background">
+            <div className="bg-background">
                 {/* Hero Section */}
                 <section className="relative overflow-hidden border-b border-border/60 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.08),transparent_40%),linear-gradient(180deg,#f8fafc,#ffffff)] px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
                     <div className="mx-auto max-w-5xl text-center">
@@ -96,7 +96,7 @@ export default function MajorsPage() {
                         ))}
                     </motion.div>
                 </section>
-            </main>
+            </div>
         </>
     );
 }

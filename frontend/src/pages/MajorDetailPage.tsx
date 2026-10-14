@@ -19,7 +19,7 @@ export default function MajorDetailPage() {
 
     if (!data) {
         return (
-            <main className="mx-auto max-w-4xl px-4 py-20 text-center">
+            <div className="mx-auto max-w-4xl px-4 py-20 text-center">
                 <Helmet><title>Không tìm thấy ngành học — IT Compass</title></Helmet>
                 <Database size={48} className="mx-auto text-muted-foreground opacity-50" />
                 <h1 className="mt-8 text-3xl font-bold">Không tìm thấy ngành học</h1>
@@ -27,7 +27,7 @@ export default function MajorDetailPage() {
                 <Link to="/majors" className={cn(buttonVariants({ variant: 'default' }), "mt-8")}>
                     Quay lại danh sách
                 </Link>
-            </main>
+            </div>
         );
     }
 
@@ -38,7 +38,7 @@ export default function MajorDetailPage() {
                 <meta name="description" content={data.description} />
             </Helmet>
 
-            <main className="bg-background">
+            <article className="bg-background">
                 {/* Header Banner */}
                 <section className="border-b border-border/60 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.06),transparent_35%),linear-gradient(180deg,#f8fafc,#ffffff)]">
                     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
@@ -147,7 +147,7 @@ export default function MajorDetailPage() {
 
                     </div>
                 </section>
-            </main>
+            </article>
         </>
     );
 }

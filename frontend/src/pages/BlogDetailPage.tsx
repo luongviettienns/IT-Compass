@@ -167,7 +167,7 @@ export default function BlogDetailPage() {
                 {post?.ogImageUrl && <meta property="og:image" content={toApiAssetUrl(post.ogImageUrl) ?? post.ogImageUrl} />}
             </Helmet>
 
-            <main className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
+            <article className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
                 {isLoading ? (
                     <PostSkeleton />
                 ) : hasPostError || !post ? (
@@ -421,7 +421,7 @@ export default function BlogDetailPage() {
                         </aside>
                     </div>
                 )}
-            </main>
+            </article>
         </>
     );
 }

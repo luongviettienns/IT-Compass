@@ -90,7 +90,7 @@ export default function TestPage() {
                 />
             </Helmet>
 
-            <main className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
+            <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
                 {templateQuery.isLoading ? (
                     <HeroSkeleton />
                 ) : templateQuery.error || !template ? (
@@ -250,7 +250,7 @@ export default function TestPage() {
                         </section>
                     </div>
                 )}
-            </main>
+            </div>
         </>
     );
 }

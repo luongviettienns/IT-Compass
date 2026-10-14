@@ -156,7 +156,7 @@ export default function MentorDetailPage() {
 
             <BookingDialog slug={slug} open={bookingOpen} onOpenChange={setBookingOpen} />
 
-            <main className="mx-auto max-w-6xl px-4 pb-28 pt-10 sm:px-6 sm:pt-14 lg:pt-16">
+            <div className="mx-auto max-w-6xl px-4 pb-28 pt-10 sm:px-6 sm:pt-14 lg:pt-16">
                 {isLoading ? (
                     <DetailSkeleton />
                 ) : error || !mentor ? (
@@ -507,7 +507,7 @@ export default function MentorDetailPage() {
                         </div>
                     </div>
                 )}
-            </main>
+            </div>
 
             {/* ══════════════════════════════════════════
              * STICKY FLOATING CTA

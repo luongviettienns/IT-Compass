@@ -99,9 +99,15 @@ function AppShell() {
   return (
     <SmoothScroll>
       <div className="min-h-screen bg-background font-sans pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0 flex flex-col">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-xl focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          Chuyển đến nội dung chính
+        </a>
         {showLayout && <Header />}
         {/* min-h-0 flex-1 ensures Footer stays at bottom during lazy load without shifting */}
-        <main className="flex-1">
+        <main className="flex-1" id="main-content" tabIndex={-1}>
           <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Public pages */}

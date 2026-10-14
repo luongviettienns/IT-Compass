@@ -171,7 +171,7 @@ export default function ResultPage() {
 
             <BookingDialog slug={bookingMentor?.slug ?? ''} open={Boolean(bookingMentor)} onOpenChange={(open) => !open && setBookingMentorSlug('')} />
 
-            <main className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
+            <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
                 {latestAttemptQuery.isLoading && !attempt ? (
                     <ResultSkeleton />
                 ) : latestAttemptQuery.error ? (
@@ -483,7 +483,7 @@ export default function ResultPage() {
                         </div>
                     </div>
                 )}
-            </main>
+            </div>
         </>
     );
 }

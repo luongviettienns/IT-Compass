@@ -74,7 +74,7 @@ export default function AboutUsPage() {
                 />
             </Helmet>
 
-            <main className="bg-background">
+            <div className="bg-background">
                 <section className="border-b border-border/60 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.14),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(6,182,212,0.12),transparent_24%),linear-gradient(180deg,#f8fafc,#ffffff)]">
                     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
                         <motion.div
@@ -236,7 +236,7 @@ export default function AboutUsPage() {
                         </motion.aside>
                     </div>
                 </section>
-            </main>
+            </div>
         </>
     );
 }

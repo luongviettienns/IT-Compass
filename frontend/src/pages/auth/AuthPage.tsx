@@ -151,7 +151,7 @@ export default function AuthPage() {
                 <meta name="description" content="Đăng nhập hoặc đăng ký tài khoản IT Compass." />
             </Helmet>
 
-            <main className="relative min-h-screen w-full flex items-center justify-center bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.08),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(16,185,129,0.08),transparent_40%),linear-gradient(180deg,#ffffff,rgba(248,250,252,0.98))] px-4 py-12 overflow-hidden">
+            <div className="relative min-h-screen w-full flex items-center justify-center bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.08),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(16,185,129,0.08),transparent_40%),linear-gradient(180deg,#ffffff,rgba(248,250,252,0.98))] px-4 py-12 overflow-hidden">
                 {/* Decorative Grid */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(15,23,42,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.04)_1px,transparent_1px)] bg-[size:48px_48px] opacity-70 pointer-events-none" />
 
@@ -326,7 +326,7 @@ export default function AuthPage() {
                         )}
                     </AnimatePresence>
                 </div>
-            </main>
+            </div>
         </>
     );
 }

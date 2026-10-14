@@ -199,7 +199,7 @@ export default function BlogPage() {
                 />
             </Helmet>
 
-            <main className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
+            <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
                 <section className="relative overflow-hidden rounded-[32px] border border-border/60 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.14),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(6,182,212,0.14),transparent_24%),linear-gradient(180deg,#ffffff,rgba(248,250,252,0.96))] px-6 py-10 sm:px-10 sm:py-14">
                     <div className="absolute inset-0 bg-[linear-gradient(rgba(37,99,235,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(37,99,235,0.04)_1px,transparent_1px)] bg-[size:28px_28px] opacity-60" />
                     <div className="relative grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
@@ -341,7 +341,7 @@ export default function BlogPage() {
                         </Link>
                     </div>
                 </section>
-            </main>
+            </div>
         </>
     );
 }

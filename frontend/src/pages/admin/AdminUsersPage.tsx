@@ -9,7 +9,7 @@ import { AdminUserEditModal } from '../../components/admin/AdminUserEditModal';
 import { AdminActionDialog } from '../../components/admin/AdminActionDialog';
 import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
 import { AdminQueryBoundary } from '../../components/admin/AdminQueryBoundary';
-import { Key, CheckSquare, Settings, Search, Download } from 'lucide-react';
+import { Key, CheckSquare, Settings, Search, Download, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { getRoleBadge, getUserStatusLabel } from '../../lib/userDisplay';
 import { getErrorMessage } from '../../lib/appError';
@@ -301,16 +301,17 @@ export default function AdminUsersPage() {
                         </div>
                     )}
                     <table className="w-full text-left text-sm">
+                        <caption className="sr-only">Danh sách tài khoản người dùng</caption>
                         <thead className="bg-secondary/30 text-muted-foreground uppercase text-[10px] font-black tracking-widest border-b">
                             <tr>
-                                <th className="px-6 py-4 w-[60px]">
-                                    <input type="checkbox" className="w-4 h-4 rounded accent-primary border-muted" onChange={handleSelectAll} checked={!!data?.users?.length && selectedUserIds.length === data?.users?.length} />
+                                <th scope="col" className="px-6 py-4 w-[60px]">
+                                    <input type="checkbox" aria-label="Chọn tất cả người dùng" className="w-4 h-4 rounded accent-primary border-muted" onChange={handleSelectAll} checked={!!data?.users?.length && selectedUserIds.length === data?.users?.length} />
                                 </th>
-                                <th className="px-6 py-4">Tên & Email</th>
-                                <th className="px-6 py-4">Vai trò</th>
-                                <th className="px-6 py-4">Trạng thái</th>
-                                <th className="px-6 py-4">Ngày tạo</th>
-                                <th className="px-6 py-4 text-right">Thao tác</th>
+                                <th scope="col" className="px-6 py-4">Tên & Email</th>
+                                <th scope="col" className="px-6 py-4">Vai trò</th>
+                                <th scope="col" className="px-6 py-4">Trạng thái</th>
+                                <th scope="col" className="px-6 py-4">Ngày tạo</th>
+                                <th scope="col" className="px-6 py-4 text-right">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y relative">
@@ -320,7 +321,7 @@ export default function AdminUsersPage() {
                                 return (
                                     <tr key={user.id} className={`transition-colors ${selectedUserIds.includes(user.id) ? 'bg-primary/5' : 'hover:bg-secondary/10'}`}>
                                         <td className="px-6 py-4">
-                                            <input type="checkbox" className="w-4 h-4 rounded accent-primary border-muted" checked={selectedUserIds.includes(user.id)} onChange={() => handleSelect(user.id)} />
+                                            <input type="checkbox" aria-label={`Chọn người dùng ${user.fullName}`} className="w-4 h-4 rounded accent-primary border-muted" checked={selectedUserIds.includes(user.id)} onChange={() => handleSelect(user.id)} />
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex flex-col">
@@ -337,7 +338,13 @@ export default function AdminUsersPage() {
                                             <span className={`inline-flex items-center gap-1.5 font-bold ${user.status === 'ACTIVE' ? 'text-emerald-500' :
                                                 user.status === 'SUSPENDED' ? 'text-amber-500' : 'text-destructive'
                                                 }`}>
-                                                <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                                                {user.status === 'ACTIVE' ? (
+                                                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                                                ) : user.status === 'SUSPENDED' ? (
+                                                    <AlertTriangle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                                                ) : (
+                                                    <XCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                                                )}
                                                 {getUserStatusLabel(user.status)}
                                             </span>
                                         </td>
@@ -347,7 +354,10 @@ export default function AdminUsersPage() {
                                         <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
                                             <button
                                                 onClick={() => setEditingUserId(user.id)}
-                                                className="text-primary hover:bg-primary/10 p-1.5 rounded-lg transition-colors" title="Chỉnh sửa chi tiết">
+                                                className="text-primary hover:bg-primary/10 p-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                                aria-label={`Chỉnh sửa ${user.fullName}`}
+                                                title={`Chỉnh sửa ${user.fullName}`}
+                                            >
                                                 <Settings className="w-4 h-4" />
                                             </button>
                                             {user.status === 'ACTIVE' ? (

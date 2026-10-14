@@ -8,7 +8,7 @@ import { adminQueryKeys } from '../../lib/adminQueryKeys';
 import { getErrorMessage } from '../../lib/appError';
 import { Loader } from '../../components/ui/Loader';
 import { useMemo, useState } from 'react';
-import { Search, UserPlus, Settings, Download } from 'lucide-react';
+import { Search, UserPlus, Settings, Download, CheckCircle2, Clock } from 'lucide-react';
 import { AdminMentorFormModal } from '../../components/admin/AdminMentorFormModal';
 import { AdminActionDialog } from '../../components/admin/AdminActionDialog';
 import { AdminExportModal, type ExportScope } from '../../components/admin/AdminExportModal';
@@ -210,6 +210,7 @@ export default function AdminMentorsPage() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                         <input
                             type="text"
+                            aria-label="Tìm mentor theo tên"
                             placeholder="Tìm mentor theo tên..."
                             className="w-full bg-secondary/50 rounded-xl py-2 pl-10 pr-4 text-sm outline-none ring-primary/20 focus:ring-2 border-none"
                             value={search}
@@ -252,13 +253,14 @@ export default function AdminMentorsPage() {
                         </div>
                     )}
                     <table className="w-full text-left text-sm">
+                        <caption className="sr-only">Danh sách mentor</caption>
                         <thead className="bg-secondary/30 text-muted-foreground uppercase text-[10px] font-black tracking-widest border-b">
                             <tr>
-                                <th className="px-6 py-4">Mentor</th>
-                                <th className="px-6 py-4">Lĩnh vực / Chức danh</th>
-                                <th className="px-6 py-4">Cấp độ</th>
-                                <th className="px-6 py-4">Xác thực</th>
-                                <th className="px-6 py-4 text-right">Thao tác</th>
+                                <th scope="col" className="px-6 py-4">Mentor</th>
+                                <th scope="col" className="px-6 py-4">Lĩnh vực / Chức danh</th>
+                                <th scope="col" className="px-6 py-4">Cấp độ</th>
+                                <th scope="col" className="px-6 py-4">Xác thực</th>
+                                <th scope="col" className="px-6 py-4 text-right">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y relative">
@@ -283,14 +285,14 @@ export default function AdminMentorsPage() {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         {mentor.isVerified ? (
-                                            <span className="text-emerald-500 font-bold text-xs uppercase flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Đã xác thực</span>
+                                            <span className="text-emerald-500 font-bold text-xs uppercase flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 shrink-0" aria-hidden="true" /> Đã xác thực</span>
                                         ) : (
-                                            <span className="text-amber-500 font-bold text-xs uppercase flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Chờ duyệt</span>
+                                            <span className="text-amber-500 font-bold text-xs uppercase flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 shrink-0" aria-hidden="true" /> Chờ duyệt</span>
                                         )}
                                     </td>
                                     <td className="px-6 py-4 text-right whitespace-nowrap">
                                         <div className="flex items-center justify-end gap-2">
-                                            <button onClick={() => openEditForm(mentor)} className="text-primary hover:bg-primary/10 p-1.5 rounded-lg transition-colors" title="Sửa mentor">
+                                            <button onClick={() => openEditForm(mentor)} className="text-primary hover:bg-primary/10 p-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" aria-label={`Sửa mentor ${mentor.name}`} title={`Sửa mentor ${mentor.name}`}>
                                                 <Settings className="w-4 h-4" />
                                             </button>
                                             {mentor.isVerified ? (

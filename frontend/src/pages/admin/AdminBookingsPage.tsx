@@ -207,7 +207,7 @@ export default function AdminBookingsPage() {
                     <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
                         <div className="relative w-full sm:max-w-[240px]">
                             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
-                            <input value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Tìm kiếm lịch tư vấn..." className="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2" />
+                            <input aria-label="Tìm kiếm lịch tư vấn" value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Tìm kiếm lịch tư vấn..." className="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2" />
                         </div>
 
                         <div className="relative w-full sm:max-w-[200px]">
@@ -235,9 +235,9 @@ export default function AdminBookingsPage() {
                             <div className="flex items-center gap-2 pl-2 pr-1 text-xs text-muted-foreground font-medium">
                                 <Calendar size={14} />
                             </div>
-                            <input type="date" value={from} onChange={(e) => { setFrom(e.target.value); setPage(1); }} className="rounded-md border-none bg-background px-2 py-1.5 text-xs font-medium outline-none ring-primary/20 focus:ring-2 text-foreground" title="Từ ngày" />
+                            <input aria-label="Từ ngày" type="date" value={from} onChange={(e) => { setFrom(e.target.value); setPage(1); }} className="rounded-md border-none bg-background px-2 py-1.5 text-xs font-medium outline-none ring-primary/20 focus:ring-2 text-foreground" title="Từ ngày" />
                             <span className="px-1 text-muted-foreground text-xs">-</span>
-                            <input type="date" value={to} onChange={(e) => { setTo(e.target.value); setPage(1); }} className="rounded-md border-none bg-background px-2 py-1.5 text-xs font-medium outline-none ring-primary/20 focus:ring-2 text-foreground" title="Đến ngày" />
+                            <input aria-label="Đến ngày" type="date" value={to} onChange={(e) => { setTo(e.target.value); setPage(1); }} className="rounded-md border-none bg-background px-2 py-1.5 text-xs font-medium outline-none ring-primary/20 focus:ring-2 text-foreground" title="Đến ngày" />
                         </div>
                     </div>
                 </div>
@@ -253,14 +253,15 @@ export default function AdminBookingsPage() {
                         )}
                         <div className="overflow-x-auto flex-1">
                             <table className="w-full text-left text-sm whitespace-nowrap">
+                                <caption className="sr-only">Danh sách lịch tư vấn</caption>
                                 <thead className="border-b bg-secondary/30 text-[11px] font-black uppercase tracking-widest text-muted-foreground">
                                     <tr>
-                                        <th className="px-5 py-4">Mã / Loại</th>
-                                        <th className="px-5 py-4">Mentor</th>
-                                        <th className="px-5 py-4">Học viên</th>
-                                        <th className="px-5 py-4">Trạng thái</th>
-                                        <th className="px-5 py-4">Thời gian</th>
-                                        <th className="px-5 py-4 text-right">Thao tác</th>
+                                        <th scope="col" className="px-5 py-4">Mã / Loại</th>
+                                        <th scope="col" className="px-5 py-4">Mentor</th>
+                                        <th scope="col" className="px-5 py-4">Học viên</th>
+                                        <th scope="col" className="px-5 py-4">Trạng thái</th>
+                                        <th scope="col" className="px-5 py-4">Thời gian</th>
+                                        <th scope="col" className="px-5 py-4 text-right">Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>

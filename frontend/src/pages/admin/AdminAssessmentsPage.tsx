@@ -203,11 +203,11 @@ export default function AdminAssessmentsPage() {
                     <div className="grid gap-3 p-1 md:grid-cols-5 lg:flex-1">
                         <div className="relative w-full">
                             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
-                            <input className="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2" value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Search user/email..." />
+                            <input aria-label="Tìm kiếm theo người dùng hoặc email" className="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2" value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} placeholder="Search user/email..." />
                         </div>
                         <div className="relative w-full">
                             <Filter className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
-                            <select className="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm outline-none ring-primary/20 focus:ring-2" value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }}>
+                            <select aria-label="Lọc theo trạng thái bài làm" className="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm outline-none ring-primary/20 focus:ring-2" value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }}>
                                 <option value="all">Tất cả trạng thái</option>
                                 <option value="SUBMITTED">SUBMITTED</option>
                                 <option value="DRAFT">DRAFT</option>
@@ -215,18 +215,18 @@ export default function AdminAssessmentsPage() {
                         </div>
                         <div className="relative w-full">
                             <Filter className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
-                            <select className="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm outline-none ring-primary/20 focus:ring-2" value={resultCode} onChange={(e) => { setResultCode(e.target.value); setPage(1); }}>
+                            <select aria-label="Lọc theo kết quả đánh giá" className="w-full appearance-none rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-8 text-sm outline-none ring-primary/20 focus:ring-2" value={resultCode} onChange={(e) => { setResultCode(e.target.value); setPage(1); }}>
                                 <option value="all">Tất cả kết quả</option>
                                 {resultOptions.map((item) => <option key={item} value={item}>{item}</option>)}
                             </select>
                         </div>
                         <div className="relative w-full">
                             <Calendar className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
-                            <input type="datetime-local" className="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2" value={createdFrom} onChange={(e) => { setCreatedFrom(e.target.value); setPage(1); }} />
+                            <input aria-label="Thời gian bắt đầu" type="datetime-local" className="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2" value={createdFrom} onChange={(e) => { setCreatedFrom(e.target.value); setPage(1); }} />
                         </div>
                         <div className="relative w-full">
                             <Calendar className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={14} />
-                            <input type="datetime-local" className="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2" value={createdTo} onChange={(e) => { setCreatedTo(e.target.value); setPage(1); }} />
+                            <input aria-label="Thời gian kết thúc" type="datetime-local" className="w-full rounded-lg border-none bg-secondary/50 py-2 pl-9 pr-4 text-sm outline-none ring-primary/20 focus:ring-2" value={createdTo} onChange={(e) => { setCreatedTo(e.target.value); setPage(1); }} />
                         </div>
                     </div>
                 </div>
@@ -237,13 +237,14 @@ export default function AdminAssessmentsPage() {
                     {attemptsQuery.isLoading && <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/50 backdrop-blur-sm"><Loader /></div>}
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm whitespace-nowrap">
+                            <caption className="sr-only">Danh sách lượt làm bài đánh giá</caption>
                             <thead className="bg-secondary/30 text-muted-foreground uppercase text-[10px] font-black tracking-widest border-b">
                                 <tr>
-                                    <th className="px-5 py-4">User</th>
-                                    <th className="px-5 py-4">Result</th>
-                                    <th className="px-5 py-4">Submitted</th>
-                                    <th className="px-5 py-4">Duration</th>
-                                    <th className="px-5 py-4">Traits</th>
+                                    <th scope="col" className="px-5 py-4">User</th>
+                                    <th scope="col" className="px-5 py-4">Result</th>
+                                    <th scope="col" className="px-5 py-4">Submitted</th>
+                                    <th scope="col" className="px-5 py-4">Duration</th>
+                                    <th scope="col" className="px-5 py-4">Traits</th>
                                 </tr>
                             </thead>
                             <tbody>

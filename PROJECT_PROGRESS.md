@@ -48,6 +48,7 @@
 - [ ] **IC-016:** Mentor approval & form grouping (quy trình duyệt mentor minh bạch)
 - [ ] **IC-017:** Mentor scheduling language & student booking transparency
 - [x] **IC-018:** Accessibility/design system baseline (hoàn thành 8/8 tasks: reduced-motion, skip link/single main, useDialogA11y hook, modals/drawers migration, Input/Textarea primitives, multi-signal badges & accessible tables, Vietnamese accessible labels, axe-core E2E tests — xem [IC-018-EXECUTION-REPORT.md](docsnew/IC-018-EXECUTION-REPORT.md))
+- [x] **Đồng bộ:** Đã merge chuỗi commits IC-018 lên `main` và đồng bộ với `origin/main`
 - [ ] **IC-019:** Privacy and user data lifecycle (chính sách dữ liệu, xóa/xuất tài khoản)
 
 ---
